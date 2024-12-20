@@ -13,5 +13,5 @@ import {it} from '@jest/globals';
 import {render, waitFor} from '@testing-library/react-native';
 
 it('renders correctly', async () => {
-  await waitFor(() => render(<App />))
+  await waitFor(() => render(<App />));
 });
