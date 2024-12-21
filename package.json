@@ -1,6 +1,7 @@
 {
 	"name": "kimai_time_tracker",
 	"version": "0.0.1",
+	"license": "GPL-3.0-only",
 	"private": true,
 	"scripts": {
 		"android": "react-native run-android",
