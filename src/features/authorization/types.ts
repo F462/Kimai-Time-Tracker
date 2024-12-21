@@ -1,3 +1,3 @@
 export type AuthorizationState = {
-  value: string;
+  apiKey: string | undefined;
 };
