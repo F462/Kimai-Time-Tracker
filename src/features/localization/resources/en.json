@@ -1,3 +1,4 @@
 {
-	"test": "Test"
+	"enterApiKey": "Enter the API key here:",
+	"save": "Save"
 }

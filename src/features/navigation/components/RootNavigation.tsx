@@ -1,15 +1,26 @@
 import React from 'react';
-import {createStaticNavigation} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {AuthorizationScreen} from 'src/features/authorization/components/AuthorizationScreen';
+import {useSelector} from 'react-redux';
+import {selectApiKey} from 'src/features/authorization/context/authorizationSelectors';
+import {screens} from '../screens';
+import {ScreenParameters} from '../ScreenParameters';
 
-const drawer = createDrawerNavigator({
-	screens: {
-		Authorization: AuthorizationScreen,
-	},
-});
-const Navigation = createStaticNavigation(drawer);
+const RootDrawer = createDrawerNavigator();
+
+const useInitialRouteName = () => {
+	const apiKey = useSelector(selectApiKey);
+
+	return apiKey === undefined ? 'Authorization' : 'Home';
+}
 
 export const RootNavigation = () => {
-	return <Navigation />;
+	const initialRouteName: keyof ScreenParameters = useInitialRouteName();
+
+	return (
+		<RootDrawer.Navigator initialRouteName={initialRouteName}>
+			{screens.map((screen) => (
+				<RootDrawer.Screen key={screen.name} name={screen.name} component={screen.component} options={screen.options} />
+			))}
+		</RootDrawer.Navigator>
+	);
 };
