@@ -1,12 +1,15 @@
 import React from 'react';
 import {RootNavigation} from 'src/features/navigation/components/RootNavigation';
 import {Provider} from 'react-redux';
-import {store} from 'src/features/data/context/store';
+import {persistor, store} from 'src/features/data/context/store';
+import {PersistGate} from 'redux-persist/integration/react';
 
 function App() {
   return (
     <Provider store={store}>
-      <RootNavigation />
+      <PersistGate loading={null} persistor={persistor}>
+        <RootNavigation />
+      </PersistGate>
     </Provider>
   );
 }
