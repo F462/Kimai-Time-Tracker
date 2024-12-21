@@ -6,7 +6,7 @@ import en from '../resources/en.json';
 const resources = {
 	en: {translation: en},
 };
-const fallbackLanguageTag = 'en';
+const fallbackLanguageTag: keyof typeof resources = 'en';
 
 const i18nextOptions: InitOptions = {
 	resources: resources,
