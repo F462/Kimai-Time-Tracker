@@ -4,12 +4,12 @@ import {createDrawerNavigator} from '@react-navigation/drawer';
 import {AuthorizationScreen} from 'src/features/authorization/components/AuthorizationScreen';
 
 const drawer = createDrawerNavigator({
-  screens: {
-    Authorization: AuthorizationScreen,
-  },
+	screens: {
+		Authorization: AuthorizationScreen,
+	},
 });
 const Navigation = createStaticNavigation(drawer);
 
 export const RootNavigation = () => {
-  return <Navigation />;
+	return <Navigation />;
 };
