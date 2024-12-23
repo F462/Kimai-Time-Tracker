@@ -3,8 +3,8 @@ import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {Button, Text, TextInput} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
-import {apiKeyReceived} from '../context/authorizationSlice';
-import {selectApiKey} from '../context/authorizationSelectors';
+import {apiKeyReceived} from '../context/accountSlice';
+import {selectApiKey} from '../context/accountSelectors';
 
 const styles = StyleSheet.create({
 	mainContainer: {
@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 	}
 })
 
-export const AuthorizationScreen = () => {
+export const AccountScreen = () => {
 	const {t} = useTranslation();
 	const dispatch = useDispatch();
 	const [apiKey, setApiKey] = useState(useSelector(selectApiKey));

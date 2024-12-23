@@ -1,4 +1,4 @@
-import {AuthorizationScreen} from '../authorization/components/AuthorizationScreen';
+import {AccountScreen} from 'src/features/account/components/AccountScreen';
 import {ScreenParameters} from './ScreenParameters';
 
 export const screens: Array<{
@@ -7,11 +7,11 @@ export const screens: Array<{
 	options?: any;
 }> = [
 	{
-		name: 'Authorization',
-		component: AuthorizationScreen,
+		name: 'Account',
+		component: AccountScreen,
 	},
 	{
 		name: 'Home',
-		component: AuthorizationScreen,
+		component: AccountScreen,
 	},
 ];

@@ -1,5 +1,5 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
-import {authorizationReducer} from '../../authorization/context/authorizationSlice';
+import {accountReducer} from 'src/features/account/context/accountSlice';
 import AsyncStorage from '@react-native-community/async-storage';
 import {
 	FLUSH,
@@ -18,7 +18,7 @@ const persistConfig = {
 };
 
 const rootReducer = combineReducers({
-	authorization: authorizationReducer,
+	account: accountReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

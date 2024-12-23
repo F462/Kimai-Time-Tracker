@@ -1,9 +1,9 @@
 import {createSelector} from '@reduxjs/toolkit';
 import {RootState} from 'src/features/data/types';
 
-const selectAuthorization = (state: RootState) => state.authorization;
+const selectAccount = (state: RootState) => state.account;
 
 export const selectApiKey = createSelector(
-	[selectAuthorization],
-	authorization => authorization.apiKey,
+	[selectAccount],
+	account => account.apiKey,
 );

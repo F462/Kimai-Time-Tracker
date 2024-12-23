@@ -1,4 +1,4 @@
 export type ScreenParameters = {
-	Authorization: undefined;
+	Account: undefined;
 	Home: undefined;
 };
