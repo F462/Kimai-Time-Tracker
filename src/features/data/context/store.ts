@@ -22,6 +22,7 @@ import {activitiesReducer} from 'src/features/activities/context/activitiesSlice
 import {customersReducer} from 'src/features/customers/context/customersSlice';
 import {projectsReducer} from 'src/features/projects/context/projectsSlice';
 import {startRootListener} from '../middleware/rootListener';
+import {timesheetsReducer} from 'src/features/timesheets/context/timesheetsSlice';
 
 const persistConfig = {
 	key: 'root',
@@ -32,7 +33,8 @@ const rootReducer = combineReducers({
 	account: accountReducer,
 	activities: activitiesReducer,
 	customers: customersReducer,
-	projects: projectsReducer
+	projects: projectsReducer,
+	timesheets: timesheetsReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -4,4 +4,5 @@ export type ScreenParameters = {
 	Activities: undefined;
 	Customers: undefined;
 	Projects: undefined;
+	Timesheets: undefined;
 };

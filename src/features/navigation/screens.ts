@@ -3,6 +3,7 @@ import {ActivitiesScreen} from '../activities/components/ActivitiesScreen';
 import {CustomersScreen} from 'src/features/customers/components/CustomersScreen';
 import {ProjectsScreen} from 'src/features/projects/components/ProjectsScreen';
 import {ScreenParameters} from './ScreenParameters';
+import {TimesheetsScreen} from 'src/features/timesheets/components/TimesheetsScreen';
 
 export const screens: Array<{
 	name: keyof ScreenParameters;
@@ -28,5 +29,9 @@ export const screens: Array<{
 	{
 		name: 'Projects',
 		component: ProjectsScreen
+	},
+	{
+		name: 'Timesheets',
+		component: TimesheetsScreen
 	}
 ];
