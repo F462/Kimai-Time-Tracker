@@ -11,7 +11,7 @@ const RootDrawer = createDrawerNavigator();
 const useInitialRouteName = () => {
 	const apiKey = useSelector(selectApiKey);
 
-	return apiKey === undefined ? 'Account' : 'Home';
+	return apiKey === undefined ? 'Account' : 'ActiveTimesheet';
 };
 
 export const RootNavigation = () => {

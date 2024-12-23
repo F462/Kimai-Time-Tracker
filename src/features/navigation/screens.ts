@@ -1,5 +1,6 @@
 import {AccountScreen} from 'src/features/account/components/AccountScreen';
-import {ActivitiesScreen} from '../activities/components/ActivitiesScreen';
+import {ActiveTimesheetScreen} from 'src/features/timesheets/components/ActiveTimesheetScreen';
+import {ActivitiesScreen} from 'src/features/activities/components/ActivitiesScreen';
 import {CustomersScreen} from 'src/features/customers/components/CustomersScreen';
 import {ProjectsScreen} from 'src/features/projects/components/ProjectsScreen';
 import {ScreenParameters} from './ScreenParameters';
@@ -15,8 +16,8 @@ export const screens: Array<{
 		component: AccountScreen
 	},
 	{
-		name: 'Home',
-		component: AccountScreen
+		name: 'ActiveTimesheet',
+		component: ActiveTimesheetScreen
 	},
 	{
 		name: 'Activities',

@@ -1,22 +1,34 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {TimesheetsState} from '../types';
+import {Timesheet, TimesheetsState} from '../types';
 
 const initialState: TimesheetsState = {
-	timesheetList: []
+	timesheets: [],
+	activeTimesheet: undefined
 };
 
 const timesheetsSlice = createSlice({
 	name: 'timesheets',
 	initialState,
 	reducers: {
-		timesheetsReceived: (
+		timesheetsReceived: (state, {payload}: PayloadAction<Array<Timesheet>>) => {
+			state.timesheets = payload.reduce(
+				(container, element) => ({...container, [element.id]: element}),
+				{}
+			);
+		},
+		activeTimesheetReceived: (
 			state,
-			{payload}: PayloadAction<TimesheetsState['timesheetList']>
+			{payload}: PayloadAction<Timesheet | undefined>
 		) => {
-			state.timesheetList = payload;
+			if (payload !== undefined && state.timesheets[payload.id] === undefined) {
+				state.timesheets[payload.id] = payload;
+			}
+
+			state.activeTimesheet = payload?.id;
 		}
 	}
 });
 
-export const {timesheetsReceived} = timesheetsSlice.actions;
+export const {timesheetsReceived, activeTimesheetReceived} =
+	timesheetsSlice.actions;
 export const timesheetsReducer = timesheetsSlice.reducer;

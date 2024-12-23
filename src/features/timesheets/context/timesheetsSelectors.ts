@@ -6,5 +6,13 @@ const selectTimesheets = (state: RootState) => state.timesheets;
 
 export const selectTimesheetList = createSelector(
 	[selectTimesheets],
-	timesheets => timesheets.timesheetList
+	timesheets => Object.values(timesheets.timesheets)
+);
+
+export const selectActiveTimesheet = createSelector(
+	[selectTimesheets],
+	timesheets =>
+		timesheets.activeTimesheet !== undefined
+			? timesheets.timesheets[timesheets.activeTimesheet]
+			: undefined
 );

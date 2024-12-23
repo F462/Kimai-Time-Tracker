@@ -16,5 +16,6 @@ export type Timesheet = {
 };
 
 export type TimesheetsState = {
-	timesheetList: Array<Timesheet>;
+	timesheets: {[id: number]: Timesheet};
+	activeTimesheet: number | undefined;
 };

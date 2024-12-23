@@ -1,6 +1,6 @@
 export type ScreenParameters = {
 	Account: undefined;
-	Home: undefined;
+	ActiveTimesheet: undefined;
 	Activities: undefined;
 	Customers: undefined;
 	Projects: undefined;

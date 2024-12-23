@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {NavigationContainer} from '@react-navigation/native';
+import {PaperProvider} from 'react-native-paper';
 import {PersistGate} from 'redux-persist/integration/react';
 import {Provider} from 'react-redux';
 
@@ -15,9 +16,11 @@ function App() {
 	return (
 		<Provider store={store}>
 			<PersistGate loading={null} persistor={persistor}>
-				<NavigationContainer>
-					<RootNavigation />
-				</NavigationContainer>
+				<PaperProvider>
+					<NavigationContainer>
+						<RootNavigation />
+					</NavigationContainer>
+				</PaperProvider>
 			</PersistGate>
 		</Provider>
 	);
