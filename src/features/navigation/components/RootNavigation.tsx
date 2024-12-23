@@ -1,9 +1,10 @@
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {useSelector} from 'react-redux';
-import {selectApiKey} from 'src/features/account/context/accountSelectors';
-import {screens} from '../screens';
+
 import {ScreenParameters} from '../ScreenParameters';
+import {screens} from '../screens';
+import {selectApiKey} from 'src/features/account/context/accountSelectors';
 
 const RootDrawer = createDrawerNavigator();
 

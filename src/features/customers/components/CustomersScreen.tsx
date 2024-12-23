@@ -1,9 +1,11 @@
 import React from 'react';
+
 import {FlatList, View} from 'react-native';
-import {useAppSelector} from '../../data/context/store';
-import {selectCustomerList} from '../context/customersSelectors';
-import {Customer} from '../types';
 import {Text} from 'react-native-paper';
+
+import {Customer} from '../types';
+import {selectCustomerList} from '../context/customersSelectors';
+import {useAppSelector} from 'src/features/data/context/store';
 
 const CustomerItem = ({customer}: {customer: Customer}) => {
 	return <View>

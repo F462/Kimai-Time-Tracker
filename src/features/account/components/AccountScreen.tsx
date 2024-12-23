@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
-import {useTranslation} from 'react-i18next';
-import {StyleSheet, View} from 'react-native';
+
 import {Button, Text, TextInput} from 'react-native-paper';
+import {StyleSheet, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
+import {useTranslation} from 'react-i18next';
+
 import {apiKeyReceived, serverUrlReceived} from '../context/accountActions';
 import {selectApiKey, selectServerUrl} from '../context/accountSelectors';
 

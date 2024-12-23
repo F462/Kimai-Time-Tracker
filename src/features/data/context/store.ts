@@ -1,24 +1,25 @@
 import {
-	combineReducers,
-	configureStore,
-	createListenerMiddleware,
-	TypedStartListening
-} from '@reduxjs/toolkit';
-import {accountReducer} from 'src/features/account/context/accountSlice';
-import {customersReducer} from 'src/features/customers/context/customersSlice';
-import AsyncStorage from '@react-native-community/async-storage';
-import {
 	FLUSH,
 	PAUSE,
 	PERSIST,
-	persistReducer,
-	persistStore,
 	PURGE,
 	REGISTER,
-	REHYDRATE
+	REHYDRATE,
+	persistReducer,
+	persistStore
 } from 'redux-persist';
-import {startRootListener} from '../middleware/rootListener';
+import {
+	TypedStartListening,
+	combineReducers,
+	configureStore,
+	createListenerMiddleware
+} from '@reduxjs/toolkit';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
+import AsyncStorage from '@react-native-community/async-storage';
+
+import {accountReducer} from 'src/features/account/context/accountSlice';
+import {customersReducer} from 'src/features/customers/context/customersSlice';
+import {startRootListener} from '../middleware/rootListener';
 
 const persistConfig = {
 	key: 'root',

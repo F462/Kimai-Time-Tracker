@@ -1,6 +1,6 @@
 import {AccountScreen} from 'src/features/account/components/AccountScreen';
-import {ScreenParameters} from './ScreenParameters';
 import {CustomersScreen} from '../customers/components/CustomersScreen';
+import {ScreenParameters} from './ScreenParameters';
 
 export const screens: Array<{
 	name: keyof ScreenParameters;

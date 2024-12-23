@@ -1,6 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {AccountState} from '../types';
+
 import {apiKeyReceived, serverUrlReceived} from './accountActions';
+import {AccountState} from '../types';
 
 const initialState: AccountState = {
 	apiKey: undefined,

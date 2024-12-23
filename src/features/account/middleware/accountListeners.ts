@@ -1,9 +1,10 @@
-import {AppStartListening} from 'src/features/data/context/store';
-import {apiKeyReceived, axiosHeadersSet} from '../context/accountActions';
 import axios from 'axios';
 
+import {apiKeyReceived, axiosHeadersSet} from '../context/accountActions';
+import {AppStartListening} from 'src/features/data/context/store';
+
 export const setAxiosHeadersOnApiKeyReceived = (
-	startListening: AppStartListening,
+	startListening: AppStartListening
 ) => {
 	startListening({
 		actionCreator: apiKeyReceived,
