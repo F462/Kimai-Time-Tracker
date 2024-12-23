@@ -11,7 +11,7 @@ const useInitialRouteName = () => {
 	const apiKey = useSelector(selectApiKey);
 
 	return apiKey === undefined ? 'Account' : 'Home';
-}
+};
 
 export const RootNavigation = () => {
 	const initialRouteName: keyof ScreenParameters = useInitialRouteName();

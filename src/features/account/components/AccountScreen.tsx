@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
 	submitButton: {
 		margin: 10
 	}
-})
+});
 
 export const AccountScreen = () => {
 	const {t} = useTranslation();

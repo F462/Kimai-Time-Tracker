@@ -4,7 +4,7 @@ import {apiKeyReceived, serverUrlReceived} from './accountActions';
 
 const initialState: AccountState = {
 	apiKey: undefined,
-	serverUrl: undefined,
+	serverUrl: undefined
 };
 
 const accountSlice = createSlice({
@@ -19,7 +19,7 @@ const accountSlice = createSlice({
 			.addCase(apiKeyReceived, (state, {payload: apiKey}) => {
 				state.apiKey = apiKey;
 			});
-	},
+	}
 });
 
 export const {} = accountSlice.actions;

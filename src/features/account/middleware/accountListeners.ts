@@ -10,7 +10,7 @@ export const setAxiosHeadersOnApiKeyReceived = (
 		effect: async ({payload: apiKey}, listenerApi) => {
 			axios.defaults.headers.common.Authorization = `Bearer ${apiKey}`;
 			listenerApi.dispatch(axiosHeadersSet());
-		},
+		}
 	});
 };
 

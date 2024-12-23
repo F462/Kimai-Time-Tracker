@@ -2,7 +2,7 @@ import {
 	combineReducers,
 	configureStore,
 	createListenerMiddleware,
-	TypedStartListening,
+	TypedStartListening
 } from '@reduxjs/toolkit';
 import {accountReducer} from 'src/features/account/context/accountSlice';
 import {customersReducer} from 'src/features/customers/context/customersSlice';
@@ -15,19 +15,19 @@ import {
 	persistStore,
 	PURGE,
 	REGISTER,
-	REHYDRATE,
+	REHYDRATE
 } from 'redux-persist';
 import {startRootListener} from '../middleware/rootListener';
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 
 const persistConfig = {
 	key: 'root',
-	storage: AsyncStorage,
+	storage: AsyncStorage
 };
 
 const rootReducer = combineReducers({
 	account: accountReducer,
-	customers: customersReducer,
+	customers: customersReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
@@ -41,9 +41,9 @@ export const store = configureStore({
 		getDefaultMiddleware({
 			serializableCheck: {
 				// ignore redux persist actions in serializable check
-				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-			},
-		}).concat(middlewares),
+				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
+			}
+		}).concat(middlewares)
 });
 
 export const persistor = persistStore(store, null, () => {});

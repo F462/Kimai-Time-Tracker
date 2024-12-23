@@ -2,7 +2,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {CustomersState} from '../types';
 
 const initialState: CustomersState = {
-	customerList: [],
+	customerList: []
 };
 
 const customersSlice = createSlice({
@@ -14,8 +14,8 @@ const customersSlice = createSlice({
 			{payload}: PayloadAction<CustomersState['customerList']>,
 		) => {
 			state.customerList = payload;
-		},
-	},
+		}
+	}
 });
 
 export const {customersReceived} = customersSlice.actions;

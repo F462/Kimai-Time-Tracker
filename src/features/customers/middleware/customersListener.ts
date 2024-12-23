@@ -6,8 +6,8 @@ const fetchCustomersOnApiKeyReceived = (startListening: AppStartListening) => {
 	startListening({
 		actionCreator: axiosHeadersSet,
 		effect: async (_, listenerApi) => {
-			listenerApi.dispatch(fetchCustomers());
-		},
+			await listenerApi.dispatch(fetchCustomers());
+		}
 	});
 };
 

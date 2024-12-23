@@ -9,14 +9,14 @@ export const screens: Array<{
 }> = [
 	{
 		name: 'Account',
-		component: AccountScreen,
+		component: AccountScreen
 	},
 	{
 		name: 'Home',
-		component: AccountScreen,
+		component: AccountScreen
 	},
 	{
 		name: 'Customers',
-		component: CustomersScreen,
-	},
+		component: CustomersScreen
+	}
 ];

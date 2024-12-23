@@ -7,7 +7,7 @@ import en from '../resources/en.json';
 
 const resources = {
 	de: {translation: de},
-	en: {translation: en},
+	en: {translation: en}
 };
 
 const fallbackLanguageTag: keyof typeof resources = 'en';
@@ -23,9 +23,9 @@ const i18nextOptions: InitOptions = {
 	fallbackLng: fallbackLanguageTag,
 	interpolation: {
 		escapeValue: false,
-		skipOnVariables: false,
+		skipOnVariables: false
 	},
-	compatibilityJSON: 'v4',
+	compatibilityJSON: 'v4'
 };
 
 i18n.use(initReactI18next).init(i18nextOptions).catch(console.error);

@@ -9,10 +9,10 @@ jest.mock('react-i18next', () => ({
 	useTranslation: () => ({t: key => key}),
 	initReactI18next: {
 		type: '3rdParty',
-		init: () => {},
+		init: () => {}
 	}
 }));
 
-jest.mock("react-native-localize", () => ({
+jest.mock('react-native-localize', () => ({
 	findBestLanguageTag: jest.fn()
 }));
