@@ -2,5 +2,7 @@
 	"enterApiKey": "Enter the API key here:",
 	"enterServerUrl": "Enter Server URL:",
 	"refresh": "Refresh",
-	"save": "Save"
+	"save": "Save",
+	"selectActivity": "Select Activity",
+	"selectProject": "Select Project"
 }

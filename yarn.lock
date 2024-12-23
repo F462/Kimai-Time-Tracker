@@ -6496,6 +6496,11 @@ react-native-localize@^3.3.0:
   resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-3.3.0.tgz#aa40c9e15262bd7295b4b73bc7fcb9b01c1afbf3"
   integrity sha512-pbxiL0sL9hv3dRRcDRHEcsLGfuQavFfsK0dK5RNVjmTI8x3hiojRJHcppzqKOAUjZusehbA7Hnzdjz/7LkZsgw==
 
+react-native-paper-select@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-paper-select/-/react-native-paper-select-1.2.0.tgz#678eaac4f567a9800c3b3fce173c5a03c93e9f18"
+  integrity sha512-3xYocZO9awTLRHsgU5Rq9Dtj2Scc6Yxzm8Mzk/SLkzBg9AIVj49WqGBrqu1CXCHEKitqmpkgs4ro09YMIxBH2A==
+
 react-native-paper@^5.12.5:
   version "5.12.5"
   resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-5.12.5.tgz#e255c47f7bf2deb2dd90eaf3831473ef33e400b8"
