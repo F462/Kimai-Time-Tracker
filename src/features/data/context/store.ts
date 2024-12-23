@@ -19,6 +19,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import {accountReducer} from 'src/features/account/context/accountSlice';
 import {customersReducer} from 'src/features/customers/context/customersSlice';
+import {projectsReducer} from 'src/features/projects/context/projectsSlice';
 import {startRootListener} from '../middleware/rootListener';
 
 const persistConfig = {
@@ -28,7 +29,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
 	account: accountReducer,
-	customers: customersReducer
+	customers: customersReducer,
+	projects: projectsReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -8,7 +8,7 @@ export type Customer = {
 	currency: string;
 	metaFields: Array<unknown>;
 	teams: Array<unknown>;
-	color: string;
+	color: string | null;
 };
 
 export type CustomersState = {
