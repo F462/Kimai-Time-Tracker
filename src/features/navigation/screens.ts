@@ -1,4 +1,5 @@
 import {AccountScreen} from 'src/features/account/components/AccountScreen';
+import {ActivitiesScreen} from '../activities/components/ActivitiesScreen';
 import {CustomersScreen} from 'src/features/customers/components/CustomersScreen';
 import {ProjectsScreen} from 'src/features/projects/components/ProjectsScreen';
 import {ScreenParameters} from './ScreenParameters';
@@ -15,6 +16,10 @@ export const screens: Array<{
 	{
 		name: 'Home',
 		component: AccountScreen
+	},
+	{
+		name: 'Activities',
+		component: ActivitiesScreen
 	},
 	{
 		name: 'Customers',

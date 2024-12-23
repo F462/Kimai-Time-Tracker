@@ -18,6 +18,7 @@ import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import {accountReducer} from 'src/features/account/context/accountSlice';
+import {activitiesReducer} from 'src/features/activities/context/activitiesSlice';
 import {customersReducer} from 'src/features/customers/context/customersSlice';
 import {projectsReducer} from 'src/features/projects/context/projectsSlice';
 import {startRootListener} from '../middleware/rootListener';
@@ -29,6 +30,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
 	account: accountReducer,
+	activities: activitiesReducer,
 	customers: customersReducer,
 	projects: projectsReducer
 });
