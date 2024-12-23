@@ -1,5 +1,5 @@
 import {createSelector} from '@reduxjs/toolkit';
-import {RootState} from 'src/features/data/types';
+import {RootState} from 'src/features/data/context/store';
 
 const selectAccount = (state: RootState) => state.account;
 

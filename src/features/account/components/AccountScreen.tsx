@@ -3,7 +3,7 @@ import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {Button, Text, TextInput} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
-import {apiKeyReceived} from '../context/accountSlice';
+import {apiKeyReceived} from '../context/accountActions';
 import {selectApiKey, selectServerUrl} from '../context/accountSelectors';
 
 const styles = StyleSheet.create({
