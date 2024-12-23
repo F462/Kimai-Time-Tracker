@@ -1,5 +1,6 @@
 import {combineReducers, configureStore} from '@reduxjs/toolkit';
 import {accountReducer} from 'src/features/account/context/accountSlice';
+import {customersReducer} from '../../customers/context/customersSlice';
 import AsyncStorage from '@react-native-community/async-storage';
 import {
 	FLUSH,
@@ -19,6 +20,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
 	account: accountReducer,
+	customers: customersReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
