@@ -3,7 +3,7 @@ import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {Button, Text, TextInput} from 'react-native-paper';
 import {useDispatch, useSelector} from 'react-redux';
-import {apiKeyReceived} from '../context/accountActions';
+import {apiKeyReceived, serverUrlReceived} from '../context/accountActions';
 import {selectApiKey, selectServerUrl} from '../context/accountSelectors';
 
 const styles = StyleSheet.create({
@@ -28,6 +28,7 @@ export const AccountScreen = () => {
 			<Text>{t('enterApiKey')}</Text>
 			<TextInput value={apiKey} onChangeText={setApiKey} />
 			<Button style={styles.submitButton} mode="contained" onPress={() => {
+				dispatch(serverUrlReceived(serverUrl));
 				dispatch(apiKeyReceived(apiKey));
 			}}>{t('save')}</Button>
 		</View>

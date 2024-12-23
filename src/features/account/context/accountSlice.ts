@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {AccountState} from '../types';
-import {apiKeyReceived} from './accountActions';
+import {apiKeyReceived, serverUrlReceived} from './accountActions';
 
 const initialState: AccountState = {
 	apiKey: undefined,
@@ -12,9 +12,13 @@ const accountSlice = createSlice({
 	initialState,
 	reducers: {},
 	extraReducers: builder => {
-		builder.addCase(apiKeyReceived, (state, {payload: apiKey}) => {
-			state.apiKey = apiKey;
-		});
+		builder
+			.addCase(serverUrlReceived, (state, {payload: serverUrl}) => {
+				state.serverUrl = serverUrl;
+			})
+			.addCase(apiKeyReceived, (state, {payload: apiKey}) => {
+				state.apiKey = apiKey;
+			});
 	},
 });
 
