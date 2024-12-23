@@ -12,5 +12,5 @@ export type Customer = {
 };
 
 export type CustomersState = {
-	customerList: Array<Customer>;
+	customers: {[id: number]: Customer};
 };

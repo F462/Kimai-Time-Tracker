@@ -13,7 +13,7 @@ import {Timesheet} from '../types';
 import {parseSelectedId} from '../utils/functions';
 import {selectActiveTimesheet} from '../context/timesheetsSelectors';
 import {selectActivityList} from 'src/features/activities/context/activitiesSelectors';
-import {selectProjectList} from 'src/features/projects/context/projectsSelectors';
+import {selectProjects} from 'src/features/projects/context/projectsSelectors';
 
 const styles = StyleSheet.create({
 	mainContainer: {
@@ -54,10 +54,10 @@ const StartButton = ({project, activity}: StartButtonProps) => {
 const NonActiveTimesheetContent = () => {
 	const {t} = useTranslation();
 
-	const projects = useAppSelector(selectProjectList);
+	const projects = useAppSelector(selectProjects);
 	const [project, setProject] = useState({
 		value: '',
-		list: projects.map((p) => ({_id: p.id.toString(), value: p.name})),
+		list: Object.values(projects ?? {}).map((p) => ({_id: p.id.toString(), value: p.name})),
 		selectedList: [] as Array<ListItem>,
 		error: ''
 	});
@@ -66,7 +66,7 @@ const NonActiveTimesheetContent = () => {
 	const activities = useAppSelector(selectActivityList);
 	const [activity, setActivity] = useState({
 		value: '',
-		list: activities.map((a) => ({_id: a.id.toString(), value: a.name})),
+		list: Object.values(activities ?? {}).map((a) => ({_id: a.id.toString(), value: a.name})),
 		selectedList: [] as Array<ListItem>,
 		error: ''
 	});

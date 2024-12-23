@@ -2,7 +2,7 @@ import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {Timesheet, TimesheetsState} from '../types';
 
 const initialState: TimesheetsState = {
-	timesheets: [],
+	timesheets: {},
 	activeTimesheet: undefined
 };
 

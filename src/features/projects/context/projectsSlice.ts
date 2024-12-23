@@ -1,19 +1,19 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {ProjectsState} from '../types';
+import {Project, ProjectsState} from '../types';
 
 const initialState: ProjectsState = {
-	projectList: []
+	projects: {}
 };
 
 const projectsSlice = createSlice({
 	name: 'projects',
 	initialState,
 	reducers: {
-		projectsReceived: (
-			state,
-			{payload}: PayloadAction<ProjectsState['projectList']>
-		) => {
-			state.projectList = payload;
+		projectsReceived: (state, {payload}: PayloadAction<Array<Project>>) => {
+			state.projects = payload.reduce(
+				(container, element) => ({...container, [element.id]: element}),
+				{}
+			);
 		}
 	}
 });

@@ -2,9 +2,13 @@ import {createSelector} from '@reduxjs/toolkit';
 
 import {RootState} from 'src/features/data/context/store';
 
-const selectCustomers = (state: RootState) => state.customers;
+const selectCustomersState = (state: RootState) => state.customers;
 
-export const selectCustomerList = createSelector(
-	[selectCustomers],
-	customers => customers.customerList
+const selectCustomers = createSelector(
+	[selectCustomersState],
+	customers => customers.customers
+);
+
+export const selectCustomerList = createSelector([selectCustomers], customers =>
+	Object.values(customers)
 );

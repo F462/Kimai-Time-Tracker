@@ -2,15 +2,15 @@ import {createSelector} from '@reduxjs/toolkit';
 
 import {RootState} from 'src/features/data/context/store';
 
-const selectTimesheets = (state: RootState) => state.timesheets;
+const selectTimesheetsState = (state: RootState) => state.timesheets;
 
 export const selectTimesheetList = createSelector(
-	[selectTimesheets],
+	[selectTimesheetsState],
 	timesheets => Object.values(timesheets.timesheets)
 );
 
 export const selectActiveTimesheet = createSelector(
-	[selectTimesheets],
+	[selectTimesheetsState],
 	timesheets =>
 		timesheets.activeTimesheet !== undefined
 			? timesheets.timesheets[timesheets.activeTimesheet]

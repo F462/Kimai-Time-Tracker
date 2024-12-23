@@ -12,5 +12,5 @@ export type Activity = {
 };
 
 export type ActivitiesState = {
-	activityList: Array<Activity>;
+	activities: {[id: number]: Activity};
 };

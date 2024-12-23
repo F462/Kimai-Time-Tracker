@@ -1,20 +1,20 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import {ActivitiesState} from '../types';
+import {ActivitiesState, Activity} from '../types';
 
 const initialState: ActivitiesState = {
-	activityList: []
+	activities: {}
 };
 
 const activitiesSlice = createSlice({
 	name: 'activities',
 	initialState,
 	reducers: {
-		activitiesReceived: (
-			state,
-			{payload}: PayloadAction<ActivitiesState['activityList']>
-		) => {
-			state.activityList = payload;
+		activitiesReceived: (state, {payload}: PayloadAction<Array<Activity>>) => {
+			state.activities = payload.reduce(
+				(container, element) => ({...container, [element.id]: element}),
+				{}
+			);
 		}
 	}
 });

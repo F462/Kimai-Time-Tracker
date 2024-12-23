@@ -16,5 +16,5 @@ export type Project = {
 };
 
 export type ProjectsState = {
-	projectList: Array<Project>;
+	projects: {[id: number]: Project};
 };
