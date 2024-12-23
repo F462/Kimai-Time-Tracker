@@ -7,3 +7,8 @@ export const selectApiKey = createSelector(
 	[selectAccount],
 	account => account.apiKey,
 );
+
+export const selectServerUrl = createSelector(
+	[selectAccount],
+	account => account.serverUrl,
+);

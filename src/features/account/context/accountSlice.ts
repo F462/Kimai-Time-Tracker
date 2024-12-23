@@ -3,6 +3,7 @@ import {AccountState} from '../types';
 
 const initialState: AccountState = {
 	apiKey: undefined,
+	serverUrl: undefined,
 };
 
 const accountSlice = createSlice({
