@@ -4,12 +4,12 @@ import {useSelector} from 'react-redux';
 
 import {ScreenParameters} from '../ScreenParameters';
 import {screens} from '../screens';
-import {selectApiKey} from 'src/features/account/context/accountSelectors';
+import {selectServerUrl} from 'src/features/account/context/accountSelectors';
 
 const RootDrawer = createDrawerNavigator();
 
 const useInitialRouteName = () => {
-	const apiKey = useSelector(selectApiKey);
+	const apiKey = useSelector(selectServerUrl);
 
 	return apiKey === undefined ? 'Account' : 'ActiveTimesheet';
 };

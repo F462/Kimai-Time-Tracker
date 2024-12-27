@@ -6,7 +6,8 @@ import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 
 import {apiKeyReceived, serverUrlReceived} from '../context/accountActions';
-import {selectApiKey, selectServerUrl} from '../context/accountSelectors';
+import {selectServerUrl} from '../context/accountSelectors';
+import {storeApiKey} from '../utils/accountPersistor';
 
 const styles = StyleSheet.create({
 	mainContainer: {
@@ -20,7 +21,7 @@ const styles = StyleSheet.create({
 export const AccountScreen = () => {
 	const {t} = useTranslation();
 	const dispatch = useDispatch();
-	const [apiKey, setApiKey] = useState(useSelector(selectApiKey));
+	const [apiKey, setApiKey] = useState('');
 	const [serverUrl, setServerUrl] = useState(useSelector(selectServerUrl));
 
 	return (
@@ -30,8 +31,10 @@ export const AccountScreen = () => {
 			<Text>{t('enterApiKey')}</Text>
 			<TextInput value={apiKey} onChangeText={setApiKey} />
 			<Button style={styles.submitButton} mode="contained" onPress={() => {
-				dispatch(serverUrlReceived(serverUrl));
-				dispatch(apiKeyReceived(apiKey));
+				storeApiKey(apiKey).then(() => {
+					dispatch(serverUrlReceived(serverUrl));
+					dispatch(apiKeyReceived());
+				}).catch(console.error);
 			}}>{t('save')}</Button>
 		</View>
 	);
