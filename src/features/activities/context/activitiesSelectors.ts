@@ -13,3 +13,16 @@ export const selectActivityList = createSelector(
 	[selectActivities],
 	activities => Object.values(activities)
 );
+
+export const selectSelectedActivityId = createSelector(
+	[selectActivitiesState],
+	activitiesState => activitiesState.selectedActivityId
+);
+
+export const selectSelectedActivity = createSelector(
+	[selectActivities, selectSelectedActivityId],
+	(activities, selectedActivityId) =>
+		selectedActivityId !== undefined
+			? activities[selectedActivityId]
+			: undefined
+);

@@ -12,3 +12,14 @@ export const selectProjects = createSelector(
 export const selectProjectList = createSelector([selectProjects], projects =>
 	Object.values(projects)
 );
+
+export const selectSelectedProjectId = createSelector(
+	[selectProjectsState],
+	projectState => projectState.selectedProjectId
+);
+
+export const selectSelectedProject = createSelector(
+	[selectProjects, selectSelectedProjectId],
+	(projects, selectedProjectId) =>
+		selectedProjectId !== undefined ? projects[selectedProjectId] : undefined
+);

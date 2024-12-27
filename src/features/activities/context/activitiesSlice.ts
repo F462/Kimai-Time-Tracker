@@ -3,7 +3,8 @@ import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {ActivitiesState, Activity} from '../types';
 
 const initialState: ActivitiesState = {
-	activities: {}
+	activities: {},
+	selectedActivityId: undefined
 };
 
 const activitiesSlice = createSlice({
@@ -15,9 +16,15 @@ const activitiesSlice = createSlice({
 				(container, element) => ({...container, [element.id]: element}),
 				{}
 			);
+		},
+		activitySelected: (
+			state,
+			{payload: activityId}: PayloadAction<number | undefined>
+		) => {
+			state.selectedActivityId = activityId;
 		}
 	}
 });
 
-export const {activitiesReceived} = activitiesSlice.actions;
+export const {activitiesReceived, activitySelected} = activitiesSlice.actions;
 export const activitiesReducer = activitiesSlice.reducer;

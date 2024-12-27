@@ -17,4 +17,5 @@ export type Project = {
 
 export type ProjectsState = {
 	projects: {[id: number]: Project};
+	selectedProjectId: number | undefined;
 };

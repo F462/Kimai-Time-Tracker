@@ -13,4 +13,5 @@ export type Activity = {
 
 export type ActivitiesState = {
 	activities: {[id: number]: Activity};
+	selectedActivityId: number | undefined;
 };
