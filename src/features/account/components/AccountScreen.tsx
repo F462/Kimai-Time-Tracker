@@ -29,7 +29,7 @@ export const AccountScreen = () => {
 			<Text>{t('enterServerUrl')}</Text>
 			<TextInput value={serverUrl} onChangeText={setServerUrl} />
 			<Text>{t('enterApiKey')}</Text>
-			<TextInput value={apiKey} onChangeText={setApiKey} />
+			<TextInput value={apiKey} onChangeText={setApiKey} secureTextEntry />
 			<Button style={styles.submitButton} mode="contained" onPress={() => {
 				storeApiKey(apiKey).then(() => {
 					dispatch(serverUrlReceived(serverUrl));
