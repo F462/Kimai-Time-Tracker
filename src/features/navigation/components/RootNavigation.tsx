@@ -1,6 +1,8 @@
+import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {useSelector} from 'react-redux';
+import {useTheme} from 'react-native-paper';
 
 import {ScreenParameters} from '../ScreenParameters';
 import {screens} from '../screens';
@@ -16,12 +18,15 @@ const useInitialRouteName = () => {
 
 export const RootNavigation = () => {
 	const initialRouteName: keyof ScreenParameters = useInitialRouteName();
+	const theme = useTheme<any>();
 
 	return (
-		<RootDrawer.Navigator initialRouteName={initialRouteName}>
-			{screens.map((screen) => (
-				<RootDrawer.Screen key={screen.name} name={screen.name} component={screen.component} options={screen.options} />
-			))}
-		</RootDrawer.Navigator>
+		<NavigationContainer theme={theme}>
+			<RootDrawer.Navigator initialRouteName={initialRouteName}>
+				{screens.map((screen) => (
+					<RootDrawer.Screen key={screen.name} name={screen.name} component={screen.component} options={screen.options} />
+				))}
+			</RootDrawer.Navigator>
+		</NavigationContainer>
 	);
 };
