@@ -1,7 +1,7 @@
 
 import React, {useMemo} from 'react';
 
-import {Button, IconButton, Text} from 'react-native-paper';
+import {Button, IconButton, Text, useTheme} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 import {PaperSelect} from 'react-native-paper-select';
 import {useTranslation} from 'react-i18next';
@@ -87,11 +87,12 @@ const StartButton = () => {
 	const dispatch = useAppDispatch();
 	const selectedProjectId = useAppSelector(selectSelectedProjectId);
 	const selectedActivityId = useAppSelector(selectSelectedActivityId);
+	const theme = useTheme();
 
 	return selectedProjectId !== undefined && selectedActivityId !== undefined ? (<IconButton
 		icon="play"
 		style={styles.startButton}
-		iconColor="green"
+		iconColor={theme.colors.primary}
 		size={200}
 		onPress={() => {
 			dispatch(startNewTimesheet({
