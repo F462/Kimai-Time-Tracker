@@ -1,8 +1,8 @@
 
 import React, {useMemo} from 'react';
 
-import {Button, IconButton, Text, useTheme} from 'react-native-paper';
-import {StyleSheet, View} from 'react-native';
+import {IconButton, Text, useTheme} from 'react-native-paper';
+import {RefreshControl, ScrollView, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {PaperSelect} from 'react-native-paper-select';
 import {useTranslation} from 'react-i18next';
 
@@ -56,7 +56,8 @@ function Selector<T extends {id: number; name: string;}> ({
 			multiEnable={false}
 			hideSearchBox={true}
 			textInputMode="outlined"
-		/>);
+		/>
+	);
 }
 
 const ActivitySelector = () => {
@@ -114,20 +115,33 @@ const NonActiveTimesheetContent = () => {
 	);
 };
 
-export const ActiveTimesheetScreen = () => {
+type RefreshViewProps = React.PropsWithChildren<{
+	style: StyleProp<ViewStyle>
+}>;
+const RefreshView = ({children, style}: RefreshViewProps) => {
 	const dispatch = useAppDispatch();
-	const {t} = useTranslation();
 
+	const [refreshing, setRefreshing] = React.useState(false);
+	const onRefresh = React.useCallback(() => {
+		setRefreshing(true);
+		dispatch(fetchActiveTimesheet()).then(() => setRefreshing(false)).catch(console.warn);
+	}, [dispatch]);
+
+	return (
+		<ScrollView style={style} refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}>
+			{children}
+		</ScrollView>
+	);
+};
+
+export const ActiveTimesheetScreen = () => {
 	const timesheet = useAppSelector(selectActiveTimesheet);
 
 	return (
-		<View style={styles.mainContainer}>
-			<Button mode="contained" onPress={() => {
-				dispatch(fetchActiveTimesheet()).catch(console.warn);
-			}}>{t('refresh')}</Button>
+		<RefreshView style={styles.mainContainer}>
 			{timesheet !== undefined ? (
 				<ActiveTimesheetContent timesheet={timesheet} />
 			) : <NonActiveTimesheetContent />}
-		</View>
+		</RefreshView>
 	);
 };
