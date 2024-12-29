@@ -17,5 +17,4 @@ export type Timesheet = {
 
 export type TimesheetsState = {
 	timesheets: {[id: number]: Timesheet};
-	activeTimesheet: number | undefined;
 };

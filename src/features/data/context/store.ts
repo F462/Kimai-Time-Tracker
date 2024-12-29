@@ -18,6 +18,7 @@ import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 
 import {accountReducer} from 'src/features/account/context/accountSlice';
+import {activeTimesheetReducer} from 'src/features/activeTimesheet/context/activeTimesheetSlice';
 import {activitiesReducer} from 'src/features/activities/context/activitiesSlice';
 import {customersReducer} from 'src/features/customers/context/customersSlice';
 import {projectsReducer} from 'src/features/projects/context/projectsSlice';
@@ -31,6 +32,7 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
 	account: accountReducer,
+	activeTimesheet: activeTimesheetReducer,
 	activities: activitiesReducer,
 	customers: customersReducer,
 	projects: projectsReducer,

@@ -1,9 +1,10 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+
 import {Timesheet, TimesheetsState} from '../types';
+import {activeTimesheetReceived} from 'src/features/activeTimesheet/context/activeTimesheetSlice';
 
 const initialState: TimesheetsState = {
-	timesheets: {},
-	activeTimesheet: undefined
+	timesheets: {}
 };
 
 const timesheetsSlice = createSlice({
@@ -15,20 +16,22 @@ const timesheetsSlice = createSlice({
 				(container, element) => ({...container, [element.id]: element}),
 				{}
 			);
-		},
-		activeTimesheetReceived: (
-			state,
-			{payload}: PayloadAction<Timesheet | undefined>
-		) => {
-			if (payload !== undefined && state.timesheets[payload.id] === undefined) {
-				state.timesheets[payload.id] = payload;
-			}
-
-			state.activeTimesheet = payload?.id;
 		}
+	},
+	extraReducers: builder => {
+		builder.addCase(
+			activeTimesheetReceived,
+			(state, {payload}: PayloadAction<Timesheet | undefined>) => {
+				if (
+					payload !== undefined &&
+					state.timesheets[payload.id] === undefined
+				) {
+					state.timesheets[payload.id] = payload;
+				}
+			}
+		);
 	}
 });
 
-export const {timesheetsReceived, activeTimesheetReceived} =
-	timesheetsSlice.actions;
+export const {timesheetsReceived} = timesheetsSlice.actions;
 export const timesheetsReducer = timesheetsSlice.reducer;

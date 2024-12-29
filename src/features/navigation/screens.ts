@@ -1,5 +1,5 @@
 import {AccountScreen} from 'src/features/account/components/AccountScreen';
-import {ActiveTimesheetScreen} from 'src/features/timesheets/components/ActiveTimesheetScreen';
+import {ActiveTimesheetScreen} from 'src/features/activeTimesheet/components/ActiveTimesheetScreen';
 import {ActivitiesScreen} from 'src/features/activities/components/ActivitiesScreen';
 import {CustomersScreen} from 'src/features/customers/components/CustomersScreen';
 import {ProjectsScreen} from 'src/features/projects/components/ProjectsScreen';

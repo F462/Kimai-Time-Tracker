@@ -9,15 +9,15 @@ import {PaperSelect} from 'react-native-paper-select';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
 
-import {fetchActiveTimesheet, startNewTimesheet} from '../middleware/timesheetsThunks';
-import {isValidDate, parseSelectedId} from '../utils/functions';
+import {fetchActiveTimesheet, startNewTimesheet} from 'src/features/activeTimesheet/middleware/activeTimesheetThunks';
+import {isValidDate, parseSelectedId} from 'src/features/timesheets/utils/functions';
 import {selectActivityList, selectSelectedActivity, selectSelectedActivityId} from 'src/features/activities/context/activitiesSelectors';
 import {selectProjectList, selectSelectedProject, selectSelectedProjectId} from 'src/features/projects/context/projectsSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
-import {Timesheet} from '../types';
+import {Timesheet} from 'src/features/timesheets/types';
 import {activitySelected} from 'src/features/activities/context/activitiesSlice';
 import {projectSelected} from 'src/features/projects/context/projectsSlice';
-import {selectActiveTimesheet} from '../context/timesheetsSelectors';
+import {selectActiveTimesheet} from 'src/features/timesheets/context/timesheetsSelectors';
 
 const styles = StyleSheet.create({
 	mainContainer: {
