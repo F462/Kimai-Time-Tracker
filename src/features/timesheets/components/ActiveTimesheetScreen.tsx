@@ -1,18 +1,21 @@
 
-import React, {useMemo} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
-import {IconButton, Text, useTheme} from 'react-native-paper';
+import {Checkbox, IconButton, Text, TextInput, useTheme} from 'react-native-paper';
+import {DatePickerModal, TimePickerModal} from 'react-native-paper-dates';
 import {RefreshControl, ScrollView, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {CalendarDate} from 'react-native-paper-dates/lib/typescript/Date/Calendar';
 import {PaperSelect} from 'react-native-paper-select';
+import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
 
 import {fetchActiveTimesheet, startNewTimesheet} from '../middleware/timesheetsThunks';
+import {isValidDate, parseSelectedId} from '../utils/functions';
 import {selectActivityList, selectSelectedActivity, selectSelectedActivityId} from 'src/features/activities/context/activitiesSelectors';
 import {selectProjectList, selectSelectedProject, selectSelectedProjectId} from 'src/features/projects/context/projectsSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {Timesheet} from '../types';
 import {activitySelected} from 'src/features/activities/context/activitiesSlice';
-import {parseSelectedId} from '../utils/functions';
 import {projectSelected} from 'src/features/projects/context/projectsSlice';
 import {selectActiveTimesheet} from '../context/timesheetsSelectors';
 
@@ -23,6 +26,17 @@ const styles = StyleSheet.create({
 	},
 	startButton: {
 		alignSelf: 'center'
+	},
+	datetimePickerContainer: {
+		flexDirection: 'row',
+		marginVertical: 10,
+		gap: 10
+	},
+	datePicker: {
+		flex: 2
+	},
+	timePicker: {
+		flex: 1
 	}
 });
 
@@ -59,6 +73,85 @@ function Selector<T extends {id: number; name: string;}> ({
 		/>
 	);
 }
+
+const DatetimeSelector = () => {
+	const {t} = useTranslation();
+	const [useCurrentTime, setUseCurrentTime] = useState(true);
+
+	const [date, setDate] = React.useState<CalendarDate>(dayjs().toDate());
+	const dayjsDate = useMemo(() => date !== undefined ? dayjs(date) : undefined, [date]);
+
+	const [datePickerVisible, setDatePickerVisible] = useState(false);
+	const [timePickerVisible, setTimePickerVisible] = useState(false);
+
+	const [dateTextInputValue, setDateTextInputValue] = useState<string>();
+	const updateDateTextInput = useCallback(() => setDateTextInputValue(dayjsDate?.format('YYYY-MM-DD')), [dayjsDate]);
+	useEffect(() => {
+		updateDateTextInput();
+	}, [dayjsDate, updateDateTextInput]);
+	const [timeTextInputValue, setTimeTextInputValue] = useState<string>();
+	const updateTimeTextInput = useCallback(() => setTimeTextInputValue(dayjsDate?.format('HH:mm')), [dayjsDate]);
+	useEffect(() => {
+		updateTimeTextInput();
+	}, [dayjsDate, updateTimeTextInput]);
+
+	useEffect(() => {
+		if (useCurrentTime) {
+			setDate(dayjs().toDate());
+		}
+	}, [useCurrentTime]);
+
+	return (
+		<View>
+			<Checkbox.Item label={t('useCurrentDateTime')} status={useCurrentTime ? 'checked' : 'unchecked'} onPress={() => setUseCurrentTime(!useCurrentTime)} />
+			{useCurrentTime === false ? (
+				<View style={styles.datetimePickerContainer}>
+					<TextInput style={styles.datePicker} value={dateTextInputValue} onChangeText={(text) => setDateTextInputValue(text)} onEndEditing={(event) => {
+						const newDateAsDayJs = dayjs(event.nativeEvent.text);
+						const newDate = (dayjsDate === undefined ? newDateAsDayJs : newDateAsDayJs.hour(dayjsDate.hour()).minute(dayjsDate.minute())).toDate();
+
+						if (isValidDate(newDate)) {
+							setDate(newDate);
+						} else {
+							updateDateTextInput();
+						}
+					}} label={'YYYY-MM-DD'} right={<TextInput.Icon icon="calendar" onPress={() => setDatePickerVisible(true)} />} />
+					<TextInput style={styles.timePicker} value={timeTextInputValue} onChangeText={(text) => setTimeTextInputValue(text)} onEndEditing={(event) => {
+						const newDateAsDayJs = dayjs(event.nativeEvent.text);
+						const newDate = (dayjsDate === undefined ? newDateAsDayJs : newDateAsDayJs.year(dayjsDate.year()).month(dayjsDate.month()).day(dayjsDate.day())).toDate();
+
+						if (isValidDate(newDate)) {
+							setDate(newDate);
+						} else {
+							updateDateTextInput();
+						}
+					}} label={'HH:MM'} right={<TextInput.Icon icon="clock" onPress={() => setTimePickerVisible(true)} />} />
+				</View>
+			) : null}
+			<TimePickerModal
+				visible={timePickerVisible}
+				onDismiss={() => setTimePickerVisible(false)}
+				onConfirm={(value) => {
+					setDate(dayjsDate?.set('hour', value.hours).set('minute', value.minutes).toDate());
+					setTimePickerVisible(false);
+				}}
+				hours={parseInt(dayjsDate?.format('HH') ?? '0', 10)}
+				minutes={parseInt(dayjsDate?.format('mm') ?? '0', 10)}
+			/>
+			<DatePickerModal
+				locale="en"
+				mode="single"
+				visible={datePickerVisible}
+				onDismiss={() => setDatePickerVisible(false)}
+				date={date}
+				onConfirm={(value) => {
+					setDate(value.date);
+					setDatePickerVisible(false);
+				}}
+			/>
+		</View>
+	);
+};
 
 const ActivitySelector = () => {
 	const {t} = useTranslation();
@@ -108,6 +201,7 @@ const StartButton = () => {
 const NonActiveTimesheetContent = () => {
 	return (
 		<View>
+			<DatetimeSelector />
 			<ProjectSelector />
 			<ActivitySelector />
 			<StartButton />

@@ -3499,7 +3499,7 @@ data-view-byte-offset@^1.0.0:
     es-errors "^1.3.0"
     is-data-view "^1.0.1"
 
-dayjs@^1.8.15:
+dayjs@^1.11.13, dayjs@^1.8.15:
   version "1.11.13"
   resolved "https://registry.yarnpkg.com/dayjs/-/dayjs-1.11.13.tgz#92430b0139055c3ebb60150aa13e860a4b5a366c"
   integrity sha512-oaMBel6gjolK862uaPQOVTA7q3TZhuSvuMQAAglQDOWYO9A91IrAOUJEyKVlqJlHE0vq5p5UXxzdPfMH/x6xNg==
@@ -6500,6 +6500,13 @@ react-native-localize@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/react-native-localize/-/react-native-localize-3.3.0.tgz#aa40c9e15262bd7295b4b73bc7fcb9b01c1afbf3"
   integrity sha512-pbxiL0sL9hv3dRRcDRHEcsLGfuQavFfsK0dK5RNVjmTI8x3hiojRJHcppzqKOAUjZusehbA7Hnzdjz/7LkZsgw==
+
+react-native-paper-dates@^0.22.28:
+  version "0.22.28"
+  resolved "https://registry.yarnpkg.com/react-native-paper-dates/-/react-native-paper-dates-0.22.28.tgz#7852c7c41c2f5d9d41e471df55e838138db51ee1"
+  integrity sha512-pU6YZuiFctR8A1dkmOK9QpcUhKitKKzEhgQVEg7qXEhPzKpsmI/vOqGB5W+NtaIH4UpXTtoftr9iLyooFi/lyQ==
+  dependencies:
+    color "^4.2.3"
 
 react-native-paper-select@^1.2.0:
   version "1.2.0"

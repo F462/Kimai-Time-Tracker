@@ -3,5 +3,6 @@
 	"enterServerUrl": "Enter Server URL:",
 	"save": "Save",
 	"selectActivity": "Select Activity",
-	"selectProject": "Select Project"
+	"selectProject": "Select Project",
+	"useCurrentDateTime": "Use current date and time"
 }
