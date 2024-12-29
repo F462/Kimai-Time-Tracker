@@ -185,6 +185,8 @@ const StartButton = () => {
 	const selectedProjectId = useAppSelector(selectSelectedProjectId);
 	const selectedActivityId = useAppSelector(selectSelectedActivityId);
 	const theme = useTheme();
+	const nextTimesheetStartDatetime = useAppSelector(selectNextTimesheetStartDate);
+	const begin = useMemo(() => (nextTimesheetStartDatetime ? dayjs.unix(nextTimesheetStartDatetime) : new Date()).toISOString(), [nextTimesheetStartDatetime]);
 
 	return selectedProjectId !== undefined && selectedActivityId !== undefined ? (<IconButton
 		icon="play"
@@ -193,7 +195,7 @@ const StartButton = () => {
 		size={200}
 		onPress={() => {
 			dispatch(startNewTimesheet({
-				begin: new Date().toISOString(),
+				begin,
 				project: selectedProjectId,
 				activity: selectedActivityId
 			})).catch(console.warn);
