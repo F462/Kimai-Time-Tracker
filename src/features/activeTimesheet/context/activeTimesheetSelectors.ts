@@ -8,3 +8,8 @@ export const selectActiveTimesheetId = createSelector(
 	[selectActiveTimesheetState],
 	activeTimesheetState => activeTimesheetState.activeTimesheetId
 );
+
+export const selectNextTimesheetStartDate = createSelector(
+	[selectActiveTimesheetState],
+	activeTimesheetState => activeTimesheetState.nextTimesheetStartDatetime
+);

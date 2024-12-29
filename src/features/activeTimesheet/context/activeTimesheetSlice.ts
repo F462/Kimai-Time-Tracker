@@ -15,9 +15,16 @@ const activeTimesheetSlice = createSlice({
 			{payload}: PayloadAction<Timesheet | undefined>
 		) => {
 			state.activeTimesheetId = payload?.id;
+		},
+		nextTimesheetStartDatetimeSet: (
+			state,
+			{payload}: PayloadAction<number | undefined>
+		) => {
+			state.nextTimesheetStartDatetime = payload;
 		}
 	}
 });
 
-export const {activeTimesheetReceived} = activeTimesheetSlice.actions;
+export const {activeTimesheetReceived, nextTimesheetStartDatetimeSet} =
+	activeTimesheetSlice.actions;
 export const activeTimesheetReducer = activeTimesheetSlice.reducer;

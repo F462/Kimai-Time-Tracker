@@ -4,7 +4,6 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Checkbox, IconButton, Text, TextInput, useTheme} from 'react-native-paper';
 import {DatePickerModal, TimePickerModal} from 'react-native-paper-dates';
 import {RefreshControl, ScrollView, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
-import {CalendarDate} from 'react-native-paper-dates/lib/typescript/Date/Calendar';
 import {PaperSelect} from 'react-native-paper-select';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
@@ -16,8 +15,10 @@ import {selectProjectList, selectSelectedProject, selectSelectedProjectId} from 
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {Timesheet} from 'src/features/timesheets/types';
 import {activitySelected} from 'src/features/activities/context/activitiesSlice';
+import {nextTimesheetStartDatetimeSet} from '../context/activeTimesheetSlice';
 import {projectSelected} from 'src/features/projects/context/projectsSlice';
 import {selectActiveTimesheet} from 'src/features/timesheets/context/timesheetsSelectors';
+import {selectNextTimesheetStartDate} from '../context/activeTimesheetSelectors';
 
 const styles = StyleSheet.create({
 	mainContainer: {
@@ -75,10 +76,12 @@ function Selector<T extends {id: number; name: string;}> ({
 }
 
 const DatetimeSelector = () => {
+	const dispatch = useAppDispatch();
 	const {t} = useTranslation();
 	const [useCurrentTime, setUseCurrentTime] = useState(true);
 
-	const [date, setDate] = React.useState<CalendarDate>(dayjs().toDate());
+	const dateUnixTimestamp = useAppSelector(selectNextTimesheetStartDate);
+	const date = useMemo(() => dateUnixTimestamp !== undefined ? dayjs.unix(dateUnixTimestamp).toDate() : undefined, [dateUnixTimestamp]);
 	const dayjsDate = useMemo(() => date !== undefined ? dayjs(date) : undefined, [date]);
 
 	const [datePickerVisible, setDatePickerVisible] = useState(false);
@@ -97,9 +100,9 @@ const DatetimeSelector = () => {
 
 	useEffect(() => {
 		if (useCurrentTime) {
-			setDate(dayjs().toDate());
+			dispatch(nextTimesheetStartDatetimeSet(dayjs().unix()));
 		}
-	}, [useCurrentTime]);
+	}, [dispatch, useCurrentTime]);
 
 	return (
 		<View>
@@ -107,21 +110,21 @@ const DatetimeSelector = () => {
 			{useCurrentTime === false ? (
 				<View style={styles.datetimePickerContainer}>
 					<TextInput style={styles.datePicker} value={dateTextInputValue} onChangeText={(text) => setDateTextInputValue(text)} onEndEditing={(event) => {
-						const newDateAsDayJs = dayjs(event.nativeEvent.text);
-						const newDate = (dayjsDate === undefined ? newDateAsDayJs : newDateAsDayJs.hour(dayjsDate.hour()).minute(dayjsDate.minute())).toDate();
+						let newDate = dayjs(event.nativeEvent.text);
+						newDate = (dayjsDate === undefined ? newDate : newDate.hour(dayjsDate.hour()).minute(dayjsDate.minute()));
 
-						if (isValidDate(newDate)) {
-							setDate(newDate);
+						if (isValidDate(newDate.toDate())) {
+							dispatch(nextTimesheetStartDatetimeSet(newDate.unix()));
 						} else {
 							updateDateTextInput();
 						}
 					}} label={'YYYY-MM-DD'} right={<TextInput.Icon icon="calendar" onPress={() => setDatePickerVisible(true)} />} />
 					<TextInput style={styles.timePicker} value={timeTextInputValue} onChangeText={(text) => setTimeTextInputValue(text)} onEndEditing={(event) => {
-						const newDateAsDayJs = dayjs(event.nativeEvent.text);
-						const newDate = (dayjsDate === undefined ? newDateAsDayJs : newDateAsDayJs.year(dayjsDate.year()).month(dayjsDate.month()).day(dayjsDate.day())).toDate();
+						let newDate = dayjs(event.nativeEvent.text);
+						newDate = (dayjsDate === undefined ? newDate : newDate.year(dayjsDate.year()).month(dayjsDate.month()).day(dayjsDate.day()));
 
-						if (isValidDate(newDate)) {
-							setDate(newDate);
+						if (isValidDate(newDate.toDate())) {
+							dispatch(nextTimesheetStartDatetimeSet(newDate.unix()));
 						} else {
 							updateDateTextInput();
 						}
@@ -132,7 +135,7 @@ const DatetimeSelector = () => {
 				visible={timePickerVisible}
 				onDismiss={() => setTimePickerVisible(false)}
 				onConfirm={(value) => {
-					setDate(dayjsDate?.set('hour', value.hours).set('minute', value.minutes).toDate());
+					dispatch(nextTimesheetStartDatetimeSet(dayjsDate?.set('hour', value.hours).set('minute', value.minutes).unix()));
 					setTimePickerVisible(false);
 				}}
 				hours={parseInt(dayjsDate?.format('HH') ?? '0', 10)}
@@ -145,7 +148,7 @@ const DatetimeSelector = () => {
 				onDismiss={() => setDatePickerVisible(false)}
 				date={date}
 				onConfirm={(value) => {
-					setDate(value.date);
+					dispatch(nextTimesheetStartDatetimeSet(dayjs(value.date).unix()));
 					setDatePickerVisible(false);
 				}}
 			/>
