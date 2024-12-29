@@ -15,6 +15,12 @@ export type Timesheet = {
 	metaFields: Array<unknown>;
 };
 
+export type OfflineTimesheet = Pick<
+	Timesheet,
+	'id' | 'activity' | 'project' | 'begin'
+>;
+
 export type TimesheetsState = {
 	timesheets: {[id: number]: Timesheet};
+	offlineTimesheets: {[id: number]: OfflineTimesheet};
 };

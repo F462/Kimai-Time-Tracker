@@ -1,10 +1,11 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 
-import {Timesheet, TimesheetsState} from '../types';
+import {OfflineTimesheet, Timesheet, TimesheetsState} from '../types';
 import {activeTimesheetReceived} from 'src/features/activeTimesheet/context/activeTimesheetSlice';
 
 const initialState: TimesheetsState = {
-	timesheets: {}
+	timesheets: {},
+	offlineTimesheets: {}
 };
 
 const timesheetsSlice = createSlice({
@@ -16,6 +17,12 @@ const timesheetsSlice = createSlice({
 				(container, element) => ({...container, [element.id]: element}),
 				{}
 			);
+		},
+		offlineTimesheetAdded: (
+			state,
+			{payload}: PayloadAction<OfflineTimesheet>
+		) => {
+			state.offlineTimesheets[payload.id] = payload;
 		}
 	},
 	extraReducers: builder => {
@@ -33,5 +40,6 @@ const timesheetsSlice = createSlice({
 	}
 });
 
-export const {timesheetsReceived} = timesheetsSlice.actions;
+export const {timesheetsReceived, offlineTimesheetAdded} =
+	timesheetsSlice.actions;
 export const timesheetsReducer = timesheetsSlice.reducer;

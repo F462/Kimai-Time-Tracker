@@ -4,7 +4,9 @@ import path from 'path';
 import {Timesheet} from 'src/features/timesheets/types';
 import {activeTimesheetReceived} from 'src/features/activeTimesheet/context/activeTimesheetSlice';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
+import {offlineTimesheetAdded} from 'src/features/timesheets/context/timesheetsSlice';
 import {selectActiveTimesheetId} from '../context/activeTimesheetSelectors';
+import {selectNextOfflineTimesheetId} from 'src/features/timesheets/context/timesheetsSelectors';
 import {selectServerUrl} from 'src/features/account/context/accountSelectors';
 
 export const fetchActiveTimesheet = createAppAsyncThunk(
@@ -45,6 +47,12 @@ export const startNewTimesheet = createAppAsyncThunk<
 		await axios.post(path.join(serverUrl, 'api/timesheets'), payload);
 		await dispatch(fetchActiveTimesheet());
 	} catch (error: any) {
+		dispatch(
+			offlineTimesheetAdded({
+				id: selectNextOfflineTimesheetId(getState()),
+				...payload
+			})
+		);
 		console.warn('Got error on axios request: ', error.toString());
 	}
 });

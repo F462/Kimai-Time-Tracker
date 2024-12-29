@@ -14,6 +14,25 @@ export const selectActiveTimesheet = createSelector(
 	[selectTimesheetsState, selectActiveTimesheetId],
 	(timesheets, activeTimesheetId) =>
 		activeTimesheetId !== undefined
-			? timesheets.timesheets[activeTimesheetId]
+			? timesheets.timesheets[activeTimesheetId] ??
+			  timesheets.offlineTimesheets[activeTimesheetId]
 			: undefined
+);
+
+export const selectNextOfflineTimesheetId = createSelector(
+	[selectTimesheetsState],
+	timesheets => {
+		const offlineIds = Object.keys(timesheets.offlineTimesheets).map(key =>
+			parseInt(key, 10)
+		);
+		let nextId = offlineIds[offlineIds.length - 1];
+
+		while (true) {
+			nextId += 1;
+
+			if (timesheets.offlineTimesheets[nextId] === undefined) {
+				return nextId;
+			}
+		}
+	}
 );
