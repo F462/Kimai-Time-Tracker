@@ -8,7 +8,7 @@ import {PaperSelect} from 'react-native-paper-select';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
 
-import {fetchActiveTimesheet, startNewTimesheet} from 'src/features/activeTimesheet/middleware/activeTimesheetThunks';
+import {fetchActiveTimesheet, startNewTimesheet, stopActiveTimesheet} from 'src/features/activeTimesheet/middleware/activeTimesheetThunks';
 import {isValidDate, parseSelectedId} from 'src/features/timesheets/utils/functions';
 import {selectActivityList, selectSelectedActivity, selectSelectedActivityId} from 'src/features/activities/context/activitiesSelectors';
 import {selectProjectList, selectSelectedProject, selectSelectedProjectId} from 'src/features/projects/context/projectsSelectors';
@@ -41,8 +41,30 @@ const styles = StyleSheet.create({
 	}
 });
 
+const StopButton = () => {
+	const dispatch = useAppDispatch();
+	const theme = useTheme();
+
+	return <IconButton
+		icon="stop"
+		style={styles.startButton}
+		iconColor={theme.colors.primary}
+		size={200}
+		onPress={() => {
+			dispatch(stopActiveTimesheet()).catch(console.warn);
+		}}
+	/>;
+};
+
 const ActiveTimesheetContent = ({timesheet}: {timesheet: Timesheet}) => {
-	return <Text>{timesheet.end} - {timesheet.begin} ({Math.round(timesheet.duration / 3600 * 10) / 10}h)</Text>;
+	const beginUiDisplay = useMemo(() => dayjs(timesheet.begin).format('YYYY-MM-DD HH:mm'), [timesheet.begin]);
+
+	return (
+		<View>
+			<Text>{beginUiDisplay} ({Math.round(timesheet.duration / 3600 * 10) / 10}h)</Text>
+			<StopButton />
+		</View>
+	);
 };
 
 type SelectorProps<T extends {id: number; name: string;}> = {
