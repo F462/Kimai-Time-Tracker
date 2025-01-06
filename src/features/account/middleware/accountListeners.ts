@@ -27,7 +27,7 @@ export const setAxiosHeadersOnAppStart = (
 		effect: async (_, listenerApi) => {
 			const apiKey = await getApiKey();
 
-			if (apiKey === undefined) {
+			if (apiKey === null || apiKey === undefined) {
 				return;
 			}
 

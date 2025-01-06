@@ -5,7 +5,7 @@ export type TimesheetFromApi = {
 	user: number;
 	tags: Array<unknown>;
 	begin: string;
-	end: string;
+	end: string | null;
 	duration: number;
 	description: null;
 	rate: number;

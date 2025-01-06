@@ -19,7 +19,8 @@ jest.mock('react-native-localize', () => ({
 
 jest.mock('react-native-encrypted-storage', () => ({
 	setItem: jest.fn(() => Promise.resolve()),
-	getItem: jest.fn(() => Promise.resolve('{ "foo": 1 }')),
+	getItem: jest.fn(() => Promise.resolve(null)),
 	removeItem: jest.fn(() => Promise.resolve()),
 	clear: jest.fn(() => Promise.resolve())
 }));
+

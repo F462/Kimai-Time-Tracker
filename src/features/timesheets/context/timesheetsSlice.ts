@@ -1,4 +1,5 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import _ from 'lodash';
 import dayjs from 'dayjs';
 import {v4 as uuidv4} from 'uuid';
 
@@ -21,11 +22,32 @@ const timesheetsSlice = createSlice({
 			state,
 			{payload}: PayloadAction<Array<TimesheetFromApi>>
 		) => {
+			const knownRemoteTimesheetIds = _.invert(state.timesheetIdTable);
+
 			state.timesheets = payload.reduce((container, element) => {
-				const id = uuidv4();
+				const id = knownRemoteTimesheetIds[element.id] ?? uuidv4();
 				state.timesheetIdTable[id] = element.id;
 				return {...container, [id]: {...element, isSynced: true}};
 			}, {});
+		},
+		timesheetSynced: (
+			state,
+			{
+				payload: {localId, remoteId}
+			}: PayloadAction<{
+				localId: string;
+				remoteId: number;
+			}>
+		) => {
+			const timesheet = state.timesheets[localId];
+
+			if (timesheet === undefined) {
+				console.warn(`Timesheet with ID ${localId} not found`);
+				return;
+			}
+
+			timesheet.isSynced = true;
+			state.timesheetIdTable[localId] = remoteId;
 		}
 	},
 	extraReducers: builder => {
@@ -48,5 +70,5 @@ const timesheetsSlice = createSlice({
 	}
 });
 
-export const {timesheetsReceived} = timesheetsSlice.actions;
+export const {timesheetsReceived, timesheetSynced} = timesheetsSlice.actions;
 export const timesheetsReducer = timesheetsSlice.reducer;
