@@ -57,11 +57,13 @@ const StopButton = () => {
 };
 
 const ActiveTimesheetContent = ({timesheet}: {timesheet: Timesheet}) => {
-	const beginUiDisplay = useMemo(() => dayjs(timesheet.begin).format('YYYY-MM-DD HH:mm'), [timesheet.begin]);
+	const timesheetBegin = useMemo(() => dayjs(timesheet.begin), [timesheet.begin]);
+	const beginUiDisplay = useMemo(() => timesheetBegin.format('YYYY-MM-DD HH:mm'), [timesheetBegin]);
+	const duration = dayjs().diff(timesheetBegin) / 1000;
 
 	return (
 		<View>
-			<Text>{beginUiDisplay} ({Math.round(timesheet.duration / 3600 * 10) / 10}h)</Text>
+			<Text>{beginUiDisplay} ({Math.round(duration / 3600 * 10) / 10}h)</Text>
 			<StopButton />
 		</View>
 	);
