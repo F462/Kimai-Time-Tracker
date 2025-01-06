@@ -7,18 +7,20 @@ import {RefreshControl, ScrollView, StyleProp, StyleSheet, View, ViewStyle} from
 import {PaperSelect} from 'react-native-paper-select';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
+import {v4 as uuidv4} from 'uuid';
 
-import {fetchActiveTimesheet, startNewTimesheet, stopActiveTimesheet} from 'src/features/activeTimesheet/middleware/activeTimesheetThunks';
 import {isValidDate, parseSelectedId} from 'src/features/timesheets/utils/functions';
+import {newTimesheetStarted, nextTimesheetStartDatetimeSet} from '../context/activeTimesheetSlice';
 import {selectActivityList, selectSelectedActivity, selectSelectedActivityId} from 'src/features/activities/context/activitiesSelectors';
 import {selectProjectList, selectSelectedProject, selectSelectedProjectId} from 'src/features/projects/context/projectsSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {Timesheet} from 'src/features/timesheets/types';
 import {activitySelected} from 'src/features/activities/context/activitiesSlice';
-import {nextTimesheetStartDatetimeSet} from '../context/activeTimesheetSlice';
+import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
 import {projectSelected} from 'src/features/projects/context/projectsSlice';
 import {selectActiveTimesheet} from 'src/features/timesheets/context/timesheetsSelectors';
 import {selectNextTimesheetStartDate} from '../context/activeTimesheetSelectors';
+import {stopActiveTimesheet} from 'src/features/activeTimesheet/middleware/activeTimesheetThunks';
 
 const styles = StyleSheet.create({
 	mainContainer: {
@@ -218,11 +220,12 @@ const StartButton = () => {
 		iconColor={theme.colors.primary}
 		size={200}
 		onPress={() => {
-			dispatch(startNewTimesheet({
+			dispatch(newTimesheetStarted({
+				id: uuidv4(),
 				begin,
 				project: selectedProjectId,
 				activity: selectedActivityId
-			})).catch(console.warn);
+			}));
 		}}
 	/>) : null;
 };
@@ -247,7 +250,7 @@ const RefreshView = ({children, style}: RefreshViewProps) => {
 	const [refreshing, setRefreshing] = React.useState(false);
 	const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
-		dispatch(fetchActiveTimesheet()).then(() => setRefreshing(false)).catch(console.warn);
+		dispatch(fetchTimesheets()).then(() => setRefreshing(false)).catch(console.warn);
 	}, [dispatch]);
 
 	return (

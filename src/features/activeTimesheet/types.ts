@@ -1,4 +1,4 @@
 export type ActiveTimesheetState = {
-	activeTimesheetId: number | undefined;
+	activeTimesheetId: string | undefined;
 	nextTimesheetStartDatetime?: number;
 };

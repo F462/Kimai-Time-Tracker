@@ -1,9 +1,9 @@
-export type Timesheet = {
+export type TimesheetFromApi = {
+	id: number;
 	activity: number;
 	project: number;
 	user: number;
 	tags: Array<unknown>;
-	id: number;
 	begin: string;
 	end: string;
 	duration: number;
@@ -15,6 +15,12 @@ export type Timesheet = {
 	metaFields: Array<unknown>;
 };
 
+export type Timesheet = Partial<Omit<TimesheetFromApi, 'id'>> & {
+	id: string;
+	isSynced?: boolean;
+};
+
 export type TimesheetsState = {
-	timesheets: {[id: number]: Timesheet};
+	timesheets: {[id: string]: Timesheet};
+	timesheetIdTable: {[id: string]: number};
 };

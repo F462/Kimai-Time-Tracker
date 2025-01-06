@@ -27,6 +27,7 @@
 		"react-native": "0.76.5",
 		"react-native-encrypted-storage": "^4.0.3",
 		"react-native-gesture-handler": "^2.21.2",
+		"react-native-get-random-values": "^1.11.0",
 		"react-native-localize": "^3.3.0",
 		"react-native-paper": "^5.12.5",
 		"react-native-paper-dates": "^0.22.28",
@@ -37,7 +38,8 @@
 		"react-native-vector-icons": "10.1.0",
 		"react-redux": "^9.2.0",
 		"redux-persist": "^6.0.0",
-		"src": "link:./src"
+		"src": "link:./src",
+		"uuid": "^11.0.4"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.25.2",
