@@ -125,9 +125,7 @@ const DatetimeSelector = () => {
 	}, [dayjsDate, updateTimeTextInput]);
 
 	useEffect(() => {
-		if (useCurrentTime) {
-			dispatch(nextTimesheetStartDatetimeSet(dayjs().unix()));
-		}
+		dispatch(nextTimesheetStartDatetimeSet(useCurrentTime ? undefined : dayjs().unix()));
 	}, [dispatch, useCurrentTime]);
 
 	return (
@@ -212,7 +210,6 @@ const StartButton = () => {
 	const selectedActivityId = useAppSelector(selectSelectedActivityId);
 	const theme = useTheme();
 	const nextTimesheetStartDatetime = useAppSelector(selectNextTimesheetStartDate);
-	const begin = useMemo(() => (nextTimesheetStartDatetime ? dayjs.unix(nextTimesheetStartDatetime) : new Date()).toISOString(), [nextTimesheetStartDatetime]);
 
 	return selectedProjectId !== undefined && selectedActivityId !== undefined ? (<IconButton
 		icon="play"
@@ -222,7 +219,7 @@ const StartButton = () => {
 		onPress={() => {
 			dispatch(newTimesheetStarted({
 				id: uuidv4(),
-				begin,
+				begin: (nextTimesheetStartDatetime ? dayjs.unix(nextTimesheetStartDatetime) : new Date()).toISOString(),
 				project: selectedProjectId,
 				activity: selectedActivityId
 			}));
