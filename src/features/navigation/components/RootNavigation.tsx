@@ -1,5 +1,7 @@
-import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
+
+import BootSplash from 'react-native-bootsplash';
+import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {useSelector} from 'react-redux';
 import {useTheme} from 'react-native-paper';
@@ -21,7 +23,9 @@ export const RootNavigation = () => {
 	const theme = useTheme<any>();
 
 	return (
-		<NavigationContainer theme={theme}>
+		<NavigationContainer theme={theme} onReady={() => {
+			BootSplash.hide().catch(console.error);
+		}}>
 			<RootDrawer.Navigator initialRouteName={initialRouteName}>
 				{screens.map((screen) => (
 					<RootDrawer.Screen key={screen.name} name={screen.name} component={screen.component} options={screen.options} />
