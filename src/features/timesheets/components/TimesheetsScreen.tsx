@@ -1,20 +1,11 @@
 import React, {useMemo} from 'react';
 
 import {FlatList, View} from 'react-native';
-import {Text} from 'react-native-paper';
 import dayjs from 'dayjs';
 
-import {Timesheet} from '../types';
+import {TimesheetItem} from './TimesheetItem';
 import {selectTimesheetList} from '../context/timesheetsSelectors';
 import {useAppSelector} from 'src/features/data/context/store';
-
-const TimesheetItem = ({timesheet}: {timesheet: Timesheet}) => {
-	return (
-		<View>
-			<Text>{timesheet.end} - {timesheet.begin} ({Math.round((timesheet.duration ?? 0) / 3600 * 10) / 10}h)</Text>
-		</View>
-	);
-};
 
 const TimesheetList = () => {
 	const timesheetList = useAppSelector(selectTimesheetList);
