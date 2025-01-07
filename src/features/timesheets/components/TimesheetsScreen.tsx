@@ -10,7 +10,7 @@ import {useAppSelector} from 'src/features/data/context/store';
 const TimesheetItem = ({timesheet}: {timesheet: Timesheet}) => {
 	return (
 		<View>
-			<Text>{timesheet.end} - {timesheet.begin} ({Math.round(timesheet.duration ?? 0 / 3600 * 10) / 10}h)</Text>
+			<Text>{timesheet.end} - {timesheet.begin} ({Math.round((timesheet.duration ?? 0) / 3600 * 10) / 10}h)</Text>
 		</View>
 	);
 };
