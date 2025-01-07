@@ -272,13 +272,8 @@ const DayWorkingHours = () => {
 
 const TimesheetListOfCurrentDay = () => {
 	const timesheetList = useAppSelector(selectTimesheetListOfCurrentDay);
-	const sortedTimesheetList = useMemo(() => timesheetList.sort((a, b) => {
-		const aTimestamp = dayjs(a.begin);
-		const bTimestamp = dayjs(b.begin);
-		return bTimestamp.unix() - aTimestamp.unix();
-	}), [timesheetList]);
 
-	return <FlatList data={sortedTimesheetList} renderItem={({item}) => <TimesheetItem timesheet={item} />} />;
+	return <FlatList data={timesheetList} renderItem={({item}) => <TimesheetItem timesheet={item} />} />;
 };
 
 export const ActiveTimesheetScreen = () => {

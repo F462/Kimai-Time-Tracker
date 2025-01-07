@@ -19,7 +19,12 @@ const selectTimesheetIdTable = createSelector(
 
 export const selectTimesheetList = createSelector(
 	[selectTimesheets],
-	timesheets => Object.values(timesheets)
+	timesheets =>
+		Object.values(timesheets).sort((a, b) => {
+			const aTimestamp = dayjs(a.begin);
+			const bTimestamp = dayjs(b.begin);
+			return bTimestamp.unix() - aTimestamp.unix();
+		})
 );
 
 export const selectTimesheetListOfCurrentDay = createSelector(
