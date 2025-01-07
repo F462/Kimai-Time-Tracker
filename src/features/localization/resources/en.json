@@ -4,5 +4,6 @@
 	"save": "Save",
 	"selectActivity": "Select Activity",
 	"selectProject": "Select Project",
-	"useCurrentDateTime": "Use current date and time"
+	"useCurrentDateTime": "Use current date and time",
+	"workingTimeToday": "Working time today: {{workingTime}}"
 }

@@ -11,6 +11,7 @@ import {v4 as uuidv4} from 'uuid';
 
 import {isValidDate, parseSelectedId} from 'src/features/timesheets/utils/functions';
 import {newTimesheetStarted, nextTimesheetStartDatetimeSet} from '../context/activeTimesheetSlice';
+import {selectActiveTimesheet, selectWorkingHoursOfCurrentDayInSeconds} from 'src/features/timesheets/context/timesheetsSelectors';
 import {selectActivityList, selectSelectedActivity, selectSelectedActivityId} from 'src/features/activities/context/activitiesSelectors';
 import {selectProjectList, selectSelectedProject, selectSelectedProjectId} from 'src/features/projects/context/projectsSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
@@ -18,7 +19,6 @@ import {Timesheet} from 'src/features/timesheets/types';
 import {activitySelected} from 'src/features/activities/context/activitiesSlice';
 import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
 import {projectSelected} from 'src/features/projects/context/projectsSlice';
-import {selectActiveTimesheet} from 'src/features/timesheets/context/timesheetsSelectors';
 import {selectNextTimesheetStartDate} from '../context/activeTimesheetSelectors';
 import {stopActiveTimesheet} from 'src/features/activeTimesheet/middleware/activeTimesheetThunks';
 
@@ -61,11 +61,11 @@ const StopButton = () => {
 const ActiveTimesheetContent = ({timesheet}: {timesheet: Timesheet}) => {
 	const timesheetBegin = useMemo(() => dayjs(timesheet.begin), [timesheet.begin]);
 	const beginUiDisplay = useMemo(() => timesheetBegin.format('YYYY-MM-DD HH:mm'), [timesheetBegin]);
-	const duration = dayjs().diff(timesheetBegin) / 1000;
+	const activeTimesheetDuration = dayjs().diff(timesheetBegin) / 1000;
 
 	return (
 		<View>
-			<Text>{beginUiDisplay} ({Math.round(duration / 3600 * 10) / 10}h)</Text>
+			<Text>{beginUiDisplay} ({Math.round(activeTimesheetDuration / 3600 * 10) / 10}h)</Text>
 			<StopButton />
 		</View>
 	);
@@ -257,11 +257,24 @@ const RefreshView = ({children, style}: RefreshViewProps) => {
 	);
 };
 
+const DayWorkingHours = () => {
+	const {t} = useTranslation();
+	const workingHoursOfCurrentDayInSeconds = useAppSelector(selectWorkingHoursOfCurrentDayInSeconds);
+	const displayedWorkingHours = dayjs.duration(workingHoursOfCurrentDayInSeconds * 1000).format('HH:mm');
+
+	return (
+		<View>
+			<Text>{t('workingTimeToday', {workingTime: displayedWorkingHours})}</Text>
+		</View>
+	);
+};
+
 export const ActiveTimesheetScreen = () => {
 	const timesheet = useAppSelector(selectActiveTimesheet);
 
 	return (
 		<RefreshView style={styles.mainContainer}>
+			<DayWorkingHours />
 			{timesheet !== undefined ? (
 				<ActiveTimesheetContent timesheet={timesheet} />
 			) : <NonActiveTimesheetContent />}

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import {createSelector} from '@reduxjs/toolkit';
+import dayjs from 'dayjs';
 
 import {RootState} from 'src/features/data/context/store';
 import {selectActiveTimesheetId} from 'src/features/activeTimesheet/context/activeTimesheetSelectors';
@@ -19,6 +20,22 @@ const selectTimesheetIdTable = createSelector(
 export const selectTimesheetList = createSelector(
 	[selectTimesheets],
 	timesheets => Object.values(timesheets)
+);
+
+const selectTimesheetListOfCurrentDay = createSelector(
+	[selectTimesheetList],
+	timesheets => {
+		return timesheets.filter(
+			timesheet =>
+				dayjs(timesheet.begin).unix() - dayjs().startOf('day').unix() > 0
+		);
+	}
+);
+
+export const selectWorkingHoursOfCurrentDayInSeconds = createSelector(
+	[selectTimesheetListOfCurrentDay],
+	timesheets =>
+		timesheets.reduce((sum, timesheet) => sum + (timesheet.duration ?? 0), 0)
 );
 
 export const selectActiveTimesheet = createSelector(
