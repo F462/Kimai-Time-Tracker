@@ -11,7 +11,7 @@ export const TimesheetItem = ({timesheet}: {timesheet: Timesheet}) => {
 
 	return (
 		<View>
-			<Text>{timesheet.end} - {timesheet.begin} ({duration})</Text>
+			<Text>{timesheet.begin} - {timesheet.end} ({duration})</Text>
 		</View>
 	);
 };
