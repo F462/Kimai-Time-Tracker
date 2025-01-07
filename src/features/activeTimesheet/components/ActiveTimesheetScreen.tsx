@@ -3,7 +3,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {Checkbox, IconButton, Text, TextInput, useTheme} from 'react-native-paper';
 import {DatePickerModal, TimePickerModal} from 'react-native-paper-dates';
-import {FlatList, RefreshControl, ScrollView, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {FlatList, Pressable, RefreshControl, ScrollView, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {PaperSelect} from 'react-native-paper-select';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
@@ -23,13 +23,16 @@ import {projectSelected} from 'src/features/projects/context/projectsSlice';
 import {selectNextTimesheetStartDate} from '../context/activeTimesheetSelectors';
 import {stopActiveTimesheet} from 'src/features/activeTimesheet/middleware/activeTimesheetThunks';
 
+import AppIcon from 'src/assets/icon.svg';
+
 const styles = StyleSheet.create({
 	mainContainer: {
 		margin: 20,
 		gap: 20
 	},
 	startButton: {
-		alignSelf: 'center'
+		alignSelf: 'center',
+		padding: 20
 	},
 	datetimePickerContainer: {
 		flexDirection: 'row',
@@ -205,27 +208,36 @@ const ProjectSelector = () => {
 	}}/>;
 };
 
+const PressableOpacity = ({
+	style,
+	...props
+}: Omit<React.ComponentProps<typeof Pressable>, 'style'> & {style?: ViewStyle}) => {
+	return (
+		<Pressable
+			style={({pressed}) => [style, pressed ? {opacity: 0.25} : {}]}
+			{...props}
+		/>
+	);
+};
+
 const StartButton = () => {
 	const dispatch = useAppDispatch();
 	const selectedProjectId = useAppSelector(selectSelectedProjectId);
 	const selectedActivityId = useAppSelector(selectSelectedActivityId);
-	const theme = useTheme();
 	const nextTimesheetStartDatetime = useAppSelector(selectNextTimesheetStartDate);
 
-	return selectedProjectId !== undefined && selectedActivityId !== undefined ? (<IconButton
-		icon="play"
-		style={styles.startButton}
-		iconColor={theme.colors.primary}
-		size={200}
-		onPress={() => {
-			dispatch(newTimesheetStarted({
-				id: uuidv4(),
-				begin: (nextTimesheetStartDatetime ? dayjs.unix(nextTimesheetStartDatetime) : new Date()).toISOString(),
-				project: selectedProjectId,
-				activity: selectedActivityId
-			}));
-		}}
-	/>) : null;
+	const iconSize = 200;
+
+	return selectedProjectId !== undefined && selectedActivityId !== undefined ? (<PressableOpacity style={styles.startButton} onPress={() => {
+		dispatch(newTimesheetStarted({
+			id: uuidv4(),
+			begin: (nextTimesheetStartDatetime ? dayjs.unix(nextTimesheetStartDatetime) : new Date()).toISOString(),
+			project: selectedProjectId,
+			activity: selectedActivityId
+		}));
+	}}>
+		<AppIcon width={iconSize} height={iconSize} />
+	</PressableOpacity>) : null;
 };
 
 const NonActiveTimesheetContent = () => {
