@@ -3,7 +3,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {Checkbox, IconButton, Text, TextInput, useTheme} from 'react-native-paper';
 import {DatePickerModal, TimePickerModal} from 'react-native-paper-dates';
-import {RefreshControl, ScrollView, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {FlatList, RefreshControl, ScrollView, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {PaperSelect} from 'react-native-paper-select';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
@@ -11,11 +11,12 @@ import {v4 as uuidv4} from 'uuid';
 
 import {isValidDate, parseSelectedId} from 'src/features/timesheets/utils/functions';
 import {newTimesheetStarted, nextTimesheetStartDatetimeSet} from '../context/activeTimesheetSlice';
-import {selectActiveTimesheet, selectWorkingHoursOfCurrentDayInSeconds} from 'src/features/timesheets/context/timesheetsSelectors';
+import {selectActiveTimesheet, selectTimesheetListOfCurrentDay, selectWorkingHoursOfCurrentDayInSeconds} from 'src/features/timesheets/context/timesheetsSelectors';
 import {selectActivityList, selectSelectedActivity, selectSelectedActivityId} from 'src/features/activities/context/activitiesSelectors';
 import {selectProjectList, selectSelectedProject, selectSelectedProjectId} from 'src/features/projects/context/projectsSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {Timesheet} from 'src/features/timesheets/types';
+import {TimesheetItem} from 'src/features/timesheets/components/TimesheetItem';
 import {activitySelected} from 'src/features/activities/context/activitiesSlice';
 import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
 import {projectSelected} from 'src/features/projects/context/projectsSlice';
@@ -239,7 +240,7 @@ const NonActiveTimesheetContent = () => {
 };
 
 type RefreshViewProps = React.PropsWithChildren<{
-	style: StyleProp<ViewStyle>
+	style?: StyleProp<ViewStyle>
 }>;
 const RefreshView = ({children, style}: RefreshViewProps) => {
 	const dispatch = useAppDispatch();
@@ -269,15 +270,29 @@ const DayWorkingHours = () => {
 	);
 };
 
+const TimesheetListOfCurrentDay = () => {
+	const timesheetList = useAppSelector(selectTimesheetListOfCurrentDay);
+	const sortedTimesheetList = useMemo(() => timesheetList.sort((a, b) => {
+		const aTimestamp = dayjs(a.begin);
+		const bTimestamp = dayjs(b.begin);
+		return bTimestamp.unix() - aTimestamp.unix();
+	}), [timesheetList]);
+
+	return <FlatList data={sortedTimesheetList} renderItem={({item}) => <TimesheetItem timesheet={item} />} />;
+};
+
 export const ActiveTimesheetScreen = () => {
 	const timesheet = useAppSelector(selectActiveTimesheet);
 
 	return (
-		<RefreshView style={styles.mainContainer}>
-			<DayWorkingHours />
-			{timesheet !== undefined ? (
-				<ActiveTimesheetContent timesheet={timesheet} />
-			) : <NonActiveTimesheetContent />}
-		</RefreshView>
+		<View style={styles.mainContainer}>
+			<RefreshView>
+				<DayWorkingHours />
+				{timesheet !== undefined ? (
+					<ActiveTimesheetContent timesheet={timesheet} />
+				) : <NonActiveTimesheetContent />}
+			</RefreshView>
+			<TimesheetListOfCurrentDay />
+		</View>
 	);
 };

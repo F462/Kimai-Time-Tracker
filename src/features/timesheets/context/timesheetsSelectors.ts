@@ -22,7 +22,7 @@ export const selectTimesheetList = createSelector(
 	timesheets => Object.values(timesheets)
 );
 
-const selectTimesheetListOfCurrentDay = createSelector(
+export const selectTimesheetListOfCurrentDay = createSelector(
 	[selectTimesheetList],
 	timesheets => {
 		return timesheets.filter(
