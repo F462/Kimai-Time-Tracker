@@ -3,7 +3,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {Checkbox, IconButton, Text, TextInput, useTheme} from 'react-native-paper';
 import {DatePickerModal, TimePickerModal} from 'react-native-paper-dates';
-import {FlatList, Pressable, RefreshControl, ScrollView, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {Pressable, RefreshControl, ScrollView, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {PaperSelect} from 'react-native-paper-select';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
@@ -15,7 +15,7 @@ import {selectActiveTimesheet, selectTimesheetListOfCurrentDay, selectWorkingHou
 import {selectActivityList, selectSelectedActivity, selectSelectedActivityId} from 'src/features/activities/context/activitiesSelectors';
 import {selectProjectList, selectSelectedProject, selectSelectedProjectId} from 'src/features/projects/context/projectsSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
-import {TimesheetItem} from 'src/features/timesheets/components/TimesheetItem';
+import {TimesheetList} from 'src/features/timesheets/components/TimesheetList';
 import {activitySelected} from 'src/features/activities/context/activitiesSlice';
 import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
 import {projectSelected} from 'src/features/projects/context/projectsSlice';
@@ -279,7 +279,7 @@ const DayWorkingHours = () => {
 const TimesheetListOfCurrentDay = () => {
 	const timesheetList = useAppSelector(selectTimesheetListOfCurrentDay);
 
-	return <FlatList data={timesheetList} renderItem={({item}) => <TimesheetItem timesheet={item} />} />;
+	return <TimesheetList data={timesheetList} />;
 };
 
 export const ActiveTimesheetScreen = () => {
