@@ -1,16 +1,22 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 
 import {selectActivityList, selectSelectedActivityId} from '../context/activitiesSelectors';
+import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {Activity} from '../types';
 import {BaseScreen} from 'src/ui/BaseScreen';
 import {DividedList} from 'src/ui/DividedList';
 import {ListItem} from 'src/ui/ListItem';
 import {ListItemText} from 'src/ui/ListItemText';
-import {useAppSelector} from 'src/features/data/context/store';
+import {activitySelected} from '../context/activitiesSlice';
 
 const ActivityItem = ({activity, isSelected}: {activity: Activity; isSelected: boolean;}) => {
+	const dispatch = useAppDispatch();
+	const onProjectItemPress = useCallback(() => {
+		dispatch(activitySelected(activity.id));
+	}, [dispatch, activity.id]);
+
 	return (
-		<ListItem isSelected={isSelected}>
+		<ListItem isSelected={isSelected} onPress={onProjectItemPress}>
 			<ListItemText>{activity.name}</ListItemText>
 		</ListItem>
 	);
