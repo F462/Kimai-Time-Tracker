@@ -40,7 +40,14 @@ export const selectTimesheetListOfCurrentDay = createSelector(
 export const selectWorkingHoursOfCurrentDayInSeconds = createSelector(
 	[selectTimesheetListOfCurrentDay],
 	timesheets =>
-		timesheets.reduce((sum, timesheet) => sum + (timesheet.duration ?? 0), 0)
+		timesheets.reduce(
+			(sum, timesheet) =>
+				sum +
+				(timesheet.duration
+					? timesheet.duration
+					: dayjs().diff(dayjs(timesheet.begin)) / 1000),
+			0
+		)
 );
 
 export const selectActiveTimesheet = createSelector(
