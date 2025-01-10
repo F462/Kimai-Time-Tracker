@@ -1,13 +1,9 @@
-import React, {useCallback} from 'react';
+import React from 'react';
 
-import {Divider} from 'react-native-paper';
-import {FlatList} from 'react-native';
-
+import {DividedList} from 'src/ui/DividedList';
 import {Timesheet} from '../types';
 import {TimesheetItem} from './TimesheetItem';
 
 export const TimesheetList = ({data}: {data: Array<Timesheet>}) => {
-	const dividerCallback = useCallback(() => <Divider />, []);
-
-	return <FlatList data={data} renderItem={({item}) => <TimesheetItem timesheet={item} />} ItemSeparatorComponent={dividerCallback} />;
+	return <DividedList data={data} renderItem={({item}) => <TimesheetItem timesheet={item} />} />;
 };
