@@ -1,4 +1,5 @@
 import i18n, {InitOptions} from 'i18next';
+import dayjs from 'dayjs';
 import {findBestLanguageTag} from 'react-native-localize';
 import {initReactI18next} from 'react-i18next';
 
@@ -31,5 +32,8 @@ const i18nextOptions: InitOptions = {
 };
 
 i18n.use(initReactI18next).init(i18nextOptions).catch(console.error);
+
+require('./dayjs');
+dayjs.locale(appLanguage);
 
 export default i18n;
