@@ -1,37 +1,28 @@
 import React from 'react';
 
-import {StyleSheet, View} from 'react-native';
-import {Text} from 'react-native-paper';
-
+import {selectActivityList, selectSelectedActivityId} from '../context/activitiesSelectors';
 import {Activity} from '../types';
+import {BaseScreen} from 'src/ui/BaseScreen';
 import {DividedList} from 'src/ui/DividedList';
-import {selectActivityList} from '../context/activitiesSelectors';
+import {ListItem} from 'src/ui/ListItem';
+import {ListItemText} from 'src/ui/ListItemText';
 import {useAppSelector} from 'src/features/data/context/store';
 
-const styles = StyleSheet.create({
-	container: {
-		margin: 10
-	},
-	itemContainer: {
-		marginHorizontal: 10,
-		marginVertical: 5
-	}
-});
-
-const ActivityItem = ({activity}: {activity: Activity}) => {
+const ActivityItem = ({activity, isSelected}: {activity: Activity; isSelected: boolean;}) => {
 	return (
-		<View style={styles.itemContainer}>
-			<Text>{activity.name}</Text>
-		</View>
+		<ListItem isSelected={isSelected}>
+			<ListItemText>{activity.name}</ListItemText>
+		</ListItem>
 	);
 };
 
 const ActivityList = () => {
 	const activityList = useAppSelector(selectActivityList);
+	const selectedActivityId = useAppSelector(selectSelectedActivityId);
 
-	return <DividedList data={activityList} renderItem={({item}) => <ActivityItem activity={item} />} />;
+	return <DividedList data={activityList} renderItem={({item}) => <ActivityItem activity={item} isSelected={item.id === selectedActivityId} />} />;
 };
 
 export const ActivitiesScreen = () => {
-	return <View style={styles.container}><ActivityList /></View>;
+	return <BaseScreen><ActivityList /></BaseScreen>;
 };

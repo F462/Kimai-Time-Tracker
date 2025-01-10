@@ -1,11 +1,11 @@
 import React, {useMemo} from 'react';
 
 import {StyleSheet, View} from 'react-native';
-import {Text} from 'react-native-paper';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
 
 import {ListItem} from 'src/ui/ListItem';
+import {ListItemText} from 'src/ui/ListItemText';
 import {Timesheet} from '../types';
 
 const styles = StyleSheet.create({
@@ -26,11 +26,11 @@ export const TimesheetItem = ({timesheet}: {timesheet: Timesheet}) => {
 
 	return (
 		<ListItem>
-			<Text style={styles.datetimeText}>{displayedTimeStart}</Text>
-			<Text> - </Text>
-			<Text style={styles.datetimeText}>{displayedTimeEnd ?? t('now')}</Text>
+			<ListItemText style={styles.datetimeText}>{displayedTimeStart}</ListItemText>
+			<ListItemText> - </ListItemText>
+			<ListItemText style={styles.datetimeText}>{displayedTimeEnd ?? t('now')}</ListItemText>
 			<View />
-			<Text>({displayedDuration})</Text>
+			<ListItemText>({displayedDuration})</ListItemText>
 		</ListItem>
 	);
 };
