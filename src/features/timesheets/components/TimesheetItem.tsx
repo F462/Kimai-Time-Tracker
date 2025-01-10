@@ -7,11 +7,11 @@ import dayjs from 'dayjs';
 import {Timesheet} from '../types';
 
 export const TimesheetItem = ({timesheet}: {timesheet: Timesheet}) => {
-	const duration = useMemo(() => dayjs.duration((timesheet.duration ?? 0) * 1000).format('HH:mm'), [timesheet.duration]);
+	const displayedDuration = useMemo(() => dayjs.duration(timesheet.duration ? timesheet.duration * 1000 : dayjs().diff(dayjs(timesheet.begin))).format('HH:mm'), [timesheet.begin, timesheet.duration]);
 
 	return (
 		<View>
-			<Text>{timesheet.begin} - {timesheet.end} ({duration})</Text>
+			<Text>{timesheet.begin} - {timesheet.end} ({displayedDuration})</Text>
 		</View>
 	);
 };
