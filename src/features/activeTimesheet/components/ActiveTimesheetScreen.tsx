@@ -15,7 +15,6 @@ import {selectActiveTimesheet, selectTimesheetListOfCurrentDay, selectWorkingHou
 import {selectActivityList, selectSelectedActivity, selectSelectedActivityId} from 'src/features/activities/context/activitiesSelectors';
 import {selectProjectList, selectSelectedProject, selectSelectedProjectId} from 'src/features/projects/context/projectsSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
-import {Timesheet} from 'src/features/timesheets/types';
 import {TimesheetItem} from 'src/features/timesheets/components/TimesheetItem';
 import {activitySelected} from 'src/features/activities/context/activitiesSlice';
 import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
@@ -62,14 +61,9 @@ const StopButton = () => {
 	/>;
 };
 
-const ActiveTimesheetContent = ({timesheet}: {timesheet: Timesheet}) => {
-	const timesheetBegin = useMemo(() => dayjs(timesheet.begin), [timesheet.begin]);
-	const beginUiDisplay = useMemo(() => timesheetBegin.format('YYYY-MM-DD HH:mm'), [timesheetBegin]);
-	const activeTimesheetDuration = dayjs().diff(timesheetBegin) / 1000;
-
+const ActiveTimesheetContent = () => {
 	return (
 		<View>
-			<Text>{beginUiDisplay} ({Math.round(activeTimesheetDuration / 3600 * 10) / 10}h)</Text>
 			<StopButton />
 		</View>
 	);
@@ -296,7 +290,7 @@ export const ActiveTimesheetScreen = () => {
 			<RefreshView>
 				<DayWorkingHours />
 				{timesheet !== undefined ? (
-					<ActiveTimesheetContent timesheet={timesheet} />
+					<ActiveTimesheetContent />
 				) : <NonActiveTimesheetContent />}
 			</RefreshView>
 			<TimesheetListOfCurrentDay />
