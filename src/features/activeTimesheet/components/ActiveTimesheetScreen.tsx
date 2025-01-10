@@ -3,7 +3,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 
 import {Checkbox, IconButton, Text, TextInput, useTheme} from 'react-native-paper';
 import {DatePickerModal, TimePickerModal} from 'react-native-paper-dates';
-import {Pressable, RefreshControl, ScrollView, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {RefreshControl, ScrollView, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
 import {PaperSelect} from 'react-native-paper-select';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
@@ -15,6 +15,7 @@ import {selectActiveTimesheet, selectTimesheetListOfCurrentDay, selectWorkingHou
 import {selectActivityList, selectSelectedActivity, selectSelectedActivityId} from 'src/features/activities/context/activitiesSelectors';
 import {selectProjectList, selectSelectedProject, selectSelectedProjectId} from 'src/features/projects/context/projectsSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
+import {PressableOpacity} from 'src/ui/PressableOpacity';
 import {TimesheetList} from 'src/features/timesheets/components/TimesheetList';
 import {activitySelected} from 'src/features/activities/context/activitiesSlice';
 import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
@@ -200,18 +201,6 @@ const ProjectSelector = () => {
 	return <Selector elements={projects} selectedElement={selectedProject} label={t('selectProject')} onSelection={(value) => {
 		dispatch(projectSelected(parseSelectedId(value.selectedList[0])));
 	}}/>;
-};
-
-const PressableOpacity = ({
-	style,
-	...props
-}: Omit<React.ComponentProps<typeof Pressable>, 'style'> & {style?: ViewStyle}) => {
-	return (
-		<Pressable
-			style={({pressed}) => [style, pressed ? {opacity: 0.25} : {}]}
-			{...props}
-		/>
-	);
 };
 
 const StartButton = () => {
