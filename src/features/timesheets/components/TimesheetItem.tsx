@@ -5,14 +5,10 @@ import {Text} from 'react-native-paper';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
 
+import {ListItem} from 'src/ui/ListItem';
 import {Timesheet} from '../types';
 
 const styles = StyleSheet.create({
-	container: {
-		flexDirection: 'row',
-		marginHorizontal: 10,
-		marginVertical: 5
-	},
 	datetimeText: {
 		flex: 1,
 		textAlign: 'center'
@@ -29,12 +25,12 @@ export const TimesheetItem = ({timesheet}: {timesheet: Timesheet}) => {
 	const displayedTimeEnd = useDisplayedDatetime(timesheet.end);
 
 	return (
-		<View style={styles.container}>
+		<ListItem>
 			<Text style={styles.datetimeText}>{displayedTimeStart}</Text>
 			<Text> - </Text>
 			<Text style={styles.datetimeText}>{displayedTimeEnd ?? t('now')}</Text>
 			<View />
 			<Text>({displayedDuration})</Text>
-		</View>
+		</ListItem>
 	);
 };
