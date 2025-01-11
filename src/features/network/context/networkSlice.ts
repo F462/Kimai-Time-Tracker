@@ -3,7 +3,7 @@ import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {NetworkState} from '../types';
 
 const initialState: NetworkState = {
-	isInternetReachable: undefined
+	isInternetReachable: null
 };
 
 const networkSlice = createSlice({
@@ -12,7 +12,7 @@ const networkSlice = createSlice({
 	reducers: {
 		internetReachabilityChanged: (
 			state,
-			{payload: isInternetReachable}: PayloadAction<boolean | undefined>
+			{payload: isInternetReachable}: PayloadAction<boolean | null>
 		) => {
 			state.isInternetReachable = isInternetReachable;
 		}
