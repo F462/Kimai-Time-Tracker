@@ -1,5 +1,6 @@
 {
 	"appVersion": "App version {{version}}",
+	"createApiToken": "Create API token",
 	"enterApiKey": "Enter the API key here:",
 	"enterServerUrl": "Enter Server URL:",
 	"now": "Now",

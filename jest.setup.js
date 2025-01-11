@@ -6,7 +6,7 @@ jest.mock('@react-native-community/async-storage', () =>
 
 // see https://react.i18next.com/misc/testing
 jest.mock('react-i18next', () => ({
-	useTranslation: () => ({t: key => key}),
+	useTranslation: () => ({t: key => key, i18n: {language: 'en'}}),
 	initReactI18next: {
 		type: '3rdParty',
 		init: () => {}
