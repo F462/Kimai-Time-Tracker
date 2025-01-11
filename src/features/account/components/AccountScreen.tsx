@@ -10,7 +10,7 @@ import {BaseScreen} from 'src/ui/BaseScreen';
 import {loginUser} from '../middleware/accountThunks';
 import {selectIsUserLoggingIn} from 'src/features/appState/context/appStateSelectors';
 import {selectServerUrl} from '../context/accountSelectors';
-import {storeApiKey} from '../utils/accountPersistor';
+import {storeApiToken} from '../utils/accountPersistor';
 import {useAppSelector} from 'src/features/data/context/store';
 
 const styles = StyleSheet.create({
@@ -30,10 +30,10 @@ export const AccountScreen = () => {
 
 	const isUserLoggingIn = useAppSelector(selectIsUserLoggingIn);
 
-	const [apiKey, setApiKey] = useState('');
+	const [apiToken, setApiToken] = useState('');
 	const [serverUrl, setServerUrl] = useState(useSelector(selectServerUrl) ?? '');
 
-	const canApiKeyBeCreated = !!serverUrl;
+	const canApiTokenBeCreated = !!serverUrl;
 
 	const onCreateApiToken = useCallback(() => {
 		Linking.openURL(path.join(serverUrl, languageTag, 'profile/admin/api-token')).catch(console.error);
@@ -45,13 +45,13 @@ export const AccountScreen = () => {
 				<Text>{t('enterServerUrl')}</Text>
 				<TextInput value={serverUrl} onChangeText={setServerUrl} />
 			</View>
-			{canApiKeyBeCreated && <Button onPress={onCreateApiToken}>{t('createApiToken')}</Button>}
+			{canApiTokenBeCreated && <Button onPress={onCreateApiToken}>{t('createApiToken')}</Button>}
 			<View style={styles.inputContainer}>
-				<Text>{t('enterApiKey')}</Text>
-				<TextInput value={apiKey} onChangeText={setApiKey} secureTextEntry />
+				<Text>{t('enterApiToken')}</Text>
+				<TextInput value={apiToken} onChangeText={setApiToken} secureTextEntry />
 			</View>
 			<Button style={styles.submitButton} mode="contained" loading={isUserLoggingIn} onPress={() => {
-				storeApiKey(apiKey).then(() => {
+				storeApiToken(apiToken).then(() => {
 					dispatch(loginUser({serverUrl}) as any);
 				}).catch(console.error);
 			}}>{t('save')}</Button>

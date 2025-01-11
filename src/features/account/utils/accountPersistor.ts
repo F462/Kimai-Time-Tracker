@@ -1,19 +1,19 @@
 import EncryptedStorage from 'react-native-encrypted-storage';
 
-const API_KEY_STORE_KEY = 'apiKey';
+const API_TOKEN_STORE_KEY = 'apiToken';
 
-export async function storeApiKey(apiKey: string) {
+export async function storeApiToken(apiToken: string) {
 	try {
-		await EncryptedStorage.setItem(API_KEY_STORE_KEY, apiKey);
+		await EncryptedStorage.setItem(API_TOKEN_STORE_KEY, apiToken);
 	} catch (error: any) {
-		console.error(`Error storing API key: ${error.toString()}`);
+		console.error(`Error storing API token: ${error.toString()}`);
 	}
 }
 
-export async function getApiKey() {
+export async function getApiToken() {
 	try {
-		return await EncryptedStorage.getItem(API_KEY_STORE_KEY);
+		return await EncryptedStorage.getItem(API_TOKEN_STORE_KEY);
 	} catch (error: any) {
-		console.error(`Error reading API key: ${error.toString()}`);
+		console.error(`Error reading API token: ${error.toString()}`);
 	}
 }

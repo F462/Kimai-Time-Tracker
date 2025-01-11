@@ -14,9 +14,9 @@ import {selectServerUrl} from 'src/features/account/context/accountSelectors';
 const RootDrawer = createDrawerNavigator();
 
 const useInitialRouteName = () => {
-	const apiKey = useSelector(selectServerUrl);
+	const apiToken = useSelector(selectServerUrl);
 
-	return apiKey === undefined ? 'Account' : 'ActiveTimesheet';
+	return apiToken === undefined ? 'Account' : 'ActiveTimesheet';
 };
 
 export const RootNavigation = () => {
