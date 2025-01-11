@@ -28,7 +28,8 @@ import {timesheetsReducer} from 'src/features/timesheets/context/timesheetsSlice
 
 const persistConfig = {
 	key: 'root',
-	storage: AsyncStorage
+	storage: AsyncStorage,
+	blacklist: ['network']
 };
 
 const rootReducer = combineReducers({
