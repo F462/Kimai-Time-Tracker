@@ -61,6 +61,11 @@ export const selectUnsyncedTimesheets = createSelector(
 	timesheets => _.pickBy(timesheets, timesheet => !timesheet.isSynced)
 );
 
+export const selectAreAllTimesheetsInSync = createSelector(
+	[selectUnsyncedTimesheets],
+	unsyncedTimesheets => Object.keys(unsyncedTimesheets).length === 0
+);
+
 export const selectIsTimesheetKnownToServer = (timesheetId: string) =>
 	createSelector(
 		[selectTimesheetIdTable],
