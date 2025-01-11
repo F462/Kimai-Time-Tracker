@@ -40,3 +40,6 @@ jest.mock('react-native-bootsplash', () => {
 import mockRNDeviceInfo from 'react-native-device-info/jest/react-native-device-info-mock';
 jest.mock('react-native-device-info', () => mockRNDeviceInfo);
 
+// see https://www.npmjs.com/package/@react-native-community/netinfo
+import mockRNCNetInfo from '@react-native-community/netinfo/jest/netinfo-mock.js';
+jest.mock('@react-native-community/netinfo', () => mockRNCNetInfo);
