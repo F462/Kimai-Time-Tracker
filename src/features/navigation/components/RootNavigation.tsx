@@ -6,6 +6,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {useTheme} from 'react-native-paper';
 
+import {DefaultDrawerContent} from './DrawerContent';
 import {DefaultHeader} from './DefaultHeader';
 import {ScreenParameters} from '../ScreenParameters';
 import {screens} from '../screens';
@@ -29,7 +30,7 @@ export const RootNavigation = () => {
 		<NavigationContainer theme={theme} onReady={() => {
 			BootSplash.hide().catch(console.error);
 		}}>
-			<RootDrawer.Navigator initialRouteName={initialRouteName} screenOptions={{header}}>
+			<RootDrawer.Navigator initialRouteName={initialRouteName} screenOptions={{header}} drawerContent={DefaultDrawerContent}>
 				{screens.map((screen) => (
 					<RootDrawer.Screen key={screen.name} name={screen.name} component={screen.component} options={screen.options} />
 				))}

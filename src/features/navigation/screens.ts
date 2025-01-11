@@ -6,6 +6,7 @@ import {CustomersScreen} from 'src/features/customers/components/CustomersScreen
 import {ProjectsScreen} from 'src/features/projects/components/ProjectsScreen';
 import {ScreenParameters} from './ScreenParameters';
 import {TimesheetsScreen} from 'src/features/timesheets/components/TimesheetsScreen';
+import {createDrawerIconFunction} from './components/DrawerItemIcon';
 
 export const screens: Array<{
 	name: keyof ScreenParameters;
@@ -14,30 +15,51 @@ export const screens: Array<{
 }> = [
 	{
 		name: 'About',
-		component: AboutScreen
+		component: AboutScreen,
+		options: {
+			drawerIcon: createDrawerIconFunction('information-variant')
+		}
 	},
 	{
 		name: 'Account',
-		component: AccountScreen
+		component: AccountScreen,
+		options: {
+			drawerIcon: createDrawerIconFunction('account-outline')
+		}
 	},
 	{
 		name: 'ActiveTimesheet',
-		component: ActiveTimesheetScreen
+		component: ActiveTimesheetScreen,
+		options: {
+			drawerIcon: createDrawerIconFunction('progress-clock')
+		}
 	},
 	{
 		name: 'Activities',
-		component: ActivitiesScreen
+		component: ActivitiesScreen,
+		options: {
+			drawerIcon: createDrawerIconFunction('run')
+		}
 	},
 	{
 		name: 'Customers',
-		component: CustomersScreen
+		component: CustomersScreen,
+		options: {
+			drawerIcon: createDrawerIconFunction('face-agent')
+		}
 	},
 	{
 		name: 'Projects',
-		component: ProjectsScreen
+		component: ProjectsScreen,
+		options: {
+			drawerIcon: createDrawerIconFunction('hammer')
+		}
 	},
 	{
 		name: 'Timesheets',
-		component: TimesheetsScreen
+		component: TimesheetsScreen,
+		options: {
+			drawerIcon: createDrawerIconFunction('calendar-clock')
+		}
 	}
 ];
