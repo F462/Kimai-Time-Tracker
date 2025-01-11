@@ -1,10 +1,10 @@
 import {AppStartListening} from 'src/features/data/context/store';
-import {axiosHeadersSet} from 'src/features/account/context/accountActions';
 import {fetchProjects} from './projectsThunks';
+import {userLoggedIn} from 'src/features/account/context/accountActions';
 
-const fetchProjectsOnApiKeyReceived = (startListening: AppStartListening) => {
+const fetchProjectsOnUserLogin = (startListening: AppStartListening) => {
 	startListening({
-		actionCreator: axiosHeadersSet,
+		actionCreator: userLoggedIn,
 		effect: async (_, listenerApi) => {
 			await listenerApi.dispatch(fetchProjects());
 		}
@@ -12,5 +12,5 @@ const fetchProjectsOnApiKeyReceived = (startListening: AppStartListening) => {
 };
 
 export const startProjectListeners = (startListening: AppStartListening) => {
-	fetchProjectsOnApiKeyReceived(startListening);
+	fetchProjectsOnUserLogin(startListening);
 };

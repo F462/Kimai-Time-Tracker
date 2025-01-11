@@ -9,18 +9,18 @@ import {
 } from 'src/features/timesheets/context/timesheetsSelectors';
 import {AppStartListening} from 'src/features/data/context/store';
 import {TimesheetFromApi} from 'src/features/timesheets/types';
-import {axiosHeadersSet} from 'src/features/account/context/accountActions';
 import {internetReachabilityChanged} from 'src/features/network/context/networkSlice';
 import {selectIsInternetReachable} from 'src/features/network/context/networkSelector';
 import {selectServerUrl} from 'src/features/account/context/accountSelectors';
 import {timesheetSynced} from 'src/features/timesheets/context/timesheetsSlice';
+import {userLoggedIn} from 'src/features/account/context/accountActions';
 
 const SYNC_INTERVAL_IN_MILLISECONDS = 3000;
 let syncInterval: ReturnType<typeof setInterval> | undefined;
 
 const syncNewTimesheetsToServer = (startListening: AppStartListening) => {
 	startListening({
-		matcher: isAnyOf(axiosHeadersSet, internetReachabilityChanged),
+		matcher: isAnyOf(userLoggedIn, internetReachabilityChanged),
 		effect: async (_, listenerApi) => {
 			if (selectIsInternetReachable(listenerApi.getState()) !== true) {
 				if (syncInterval !== undefined) {

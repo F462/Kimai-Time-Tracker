@@ -1,10 +1,10 @@
 import {AppStartListening} from 'src/features/data/context/store';
-import {axiosHeadersSet} from 'src/features/account/context/accountActions';
 import {fetchTimesheets} from './timesheetsThunks';
+import {userLoggedIn} from 'src/features/account/context/accountActions';
 
-const fetchTimesheetsOnApiKeyReceived = (startListening: AppStartListening) => {
+const fetchTimesheetsOnUserLogin = (startListening: AppStartListening) => {
 	startListening({
-		actionCreator: axiosHeadersSet,
+		actionCreator: userLoggedIn,
 		effect: async (_, listenerApi) => {
 			await listenerApi.dispatch(fetchTimesheets());
 		}
@@ -12,5 +12,5 @@ const fetchTimesheetsOnApiKeyReceived = (startListening: AppStartListening) => {
 };
 
 export const startTimesheetsListeners = (startListening: AppStartListening) => {
-	fetchTimesheetsOnApiKeyReceived(startListening);
+	fetchTimesheetsOnUserLogin(startListening);
 };

@@ -5,7 +5,7 @@ import {StyleSheet, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 
-import {apiKeyReceived, serverUrlReceived} from '../context/accountActions';
+import {loginUser} from '../middleware/accountThunks';
 import {selectServerUrl} from '../context/accountSelectors';
 import {storeApiKey} from '../utils/accountPersistor';
 
@@ -22,7 +22,7 @@ export const AccountScreen = () => {
 	const {t} = useTranslation();
 	const dispatch = useDispatch();
 	const [apiKey, setApiKey] = useState('');
-	const [serverUrl, setServerUrl] = useState(useSelector(selectServerUrl));
+	const [serverUrl, setServerUrl] = useState(useSelector(selectServerUrl) ?? '');
 
 	return (
 		<View style={styles.mainContainer}>
@@ -32,8 +32,7 @@ export const AccountScreen = () => {
 			<TextInput value={apiKey} onChangeText={setApiKey} secureTextEntry />
 			<Button style={styles.submitButton} mode="contained" onPress={() => {
 				storeApiKey(apiKey).then(() => {
-					dispatch(serverUrlReceived(serverUrl));
-					dispatch(apiKeyReceived());
+					dispatch(loginUser({serverUrl}) as any);
 				}).catch(console.error);
 			}}>{t('save')}</Button>
 		</View>

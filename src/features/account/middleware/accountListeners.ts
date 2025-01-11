@@ -1,23 +1,7 @@
-import axios from 'axios';
-
-import {apiKeyReceived, axiosHeadersSet} from '../context/accountActions';
 import {AppStartListening} from 'src/features/data/context/store';
 import {REHYDRATE} from 'redux-persist';
-import {getApiKey} from '../utils/accountPersistor';
-
-export const setAxiosHeadersOnApiKeyReceived = (
-	startListening: AppStartListening
-) => {
-	startListening({
-		actionCreator: apiKeyReceived,
-		effect: async (_, listenerApi) => {
-			const apiKey = await getApiKey();
-
-			axios.defaults.headers.common.Authorization = `Bearer ${apiKey}`;
-			listenerApi.dispatch(axiosHeadersSet());
-		}
-	});
-};
+import {loginUser} from './accountThunks';
+import {selectServerUrl} from '../context/accountSelectors';
 
 export const setAxiosHeadersOnAppStart = (
 	startListening: AppStartListening
@@ -25,19 +9,17 @@ export const setAxiosHeadersOnAppStart = (
 	startListening({
 		type: REHYDRATE,
 		effect: async (_, listenerApi) => {
-			const apiKey = await getApiKey();
+			const serverUrl = selectServerUrl(listenerApi.getState());
 
-			if (apiKey === null || apiKey === undefined) {
+			if (serverUrl === undefined) {
 				return;
 			}
 
-			axios.defaults.headers.common.Authorization = `Bearer ${apiKey}`;
-			listenerApi.dispatch(axiosHeadersSet());
+			listenerApi.dispatch(loginUser({serverUrl})).catch(console.error);
 		}
 	});
 };
 
 export const startAccountListeners = (startListening: AppStartListening) => {
-	setAxiosHeadersOnApiKeyReceived(startListening);
 	setAxiosHeadersOnAppStart(startListening);
 };

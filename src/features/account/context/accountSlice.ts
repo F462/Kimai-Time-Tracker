@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 
 import {AccountState} from '../types';
-import {serverUrlReceived} from './accountActions';
+import {userLoggedIn} from './accountActions';
 
 const initialState: AccountState = {
 	serverUrl: undefined
@@ -12,7 +12,7 @@ const accountSlice = createSlice({
 	initialState,
 	reducers: {},
 	extraReducers: builder => {
-		builder.addCase(serverUrlReceived, (state, {payload: serverUrl}) => {
+		builder.addCase(userLoggedIn, (state, {payload: serverUrl}) => {
 			state.serverUrl = serverUrl;
 		});
 	}
