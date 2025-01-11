@@ -5,9 +5,10 @@ import {StyleSheet, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 
+import {selectIsUserLoggingIn, selectServerUrl} from '../context/accountSelectors';
 import {loginUser} from '../middleware/accountThunks';
-import {selectServerUrl} from '../context/accountSelectors';
 import {storeApiKey} from '../utils/accountPersistor';
+import {useAppSelector} from 'src/features/data/context/store';
 
 const styles = StyleSheet.create({
 	mainContainer: {
@@ -21,6 +22,9 @@ const styles = StyleSheet.create({
 export const AccountScreen = () => {
 	const {t} = useTranslation();
 	const dispatch = useDispatch();
+
+	const isUserLoggingIn = useAppSelector(selectIsUserLoggingIn);
+
 	const [apiKey, setApiKey] = useState('');
 	const [serverUrl, setServerUrl] = useState(useSelector(selectServerUrl) ?? '');
 
@@ -30,7 +34,7 @@ export const AccountScreen = () => {
 			<TextInput value={serverUrl} onChangeText={setServerUrl} />
 			<Text>{t('enterApiKey')}</Text>
 			<TextInput value={apiKey} onChangeText={setApiKey} secureTextEntry />
-			<Button style={styles.submitButton} mode="contained" onPress={() => {
+			<Button style={styles.submitButton} mode="contained" loading={isUserLoggingIn} onPress={() => {
 				storeApiKey(apiKey).then(() => {
 					dispatch(loginUser({serverUrl}) as any);
 				}).catch(console.error);

@@ -8,3 +8,8 @@ export const selectServerUrl = createSelector(
 	[selectAccountState],
 	accountState => accountState.serverUrl
 );
+
+export const selectIsUserLoggingIn = createSelector(
+	[selectAccountState],
+	accountState => accountState.isUserLoggingIn
+);
