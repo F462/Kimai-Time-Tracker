@@ -1,7 +1,6 @@
-import {createSlice, isAnyOf} from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 
 import {AccountState} from '../types';
-import {loginUser} from '../middleware/accountThunks';
 import {userLoggedIn} from './accountActions';
 
 const initialState: AccountState = {
@@ -13,16 +12,9 @@ const accountSlice = createSlice({
 	initialState,
 	reducers: {},
 	extraReducers: builder => {
-		builder
-			.addCase(userLoggedIn, (state, {payload: serverUrl}) => {
-				state.serverUrl = serverUrl;
-			})
-			.addCase(loginUser.pending, state => {
-				state.isUserLoggingIn = true;
-			})
-			.addMatcher(isAnyOf(loginUser.rejected, loginUser.fulfilled), state => {
-				state.isUserLoggingIn = false;
-			});
+		builder.addCase(userLoggedIn, (state, {payload: serverUrl}) => {
+			state.serverUrl = serverUrl;
+		});
 	}
 });
 

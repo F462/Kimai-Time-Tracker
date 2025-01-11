@@ -3,9 +3,10 @@ import React, {useMemo} from 'react';
 import {Icon} from 'react-native-paper';
 
 import {StyleSheet, View} from 'react-native';
-import {selectIsUserLoggedIn, selectIsUserLoggingIn} from 'src/features/account/context/accountSelectors';
 import {selectAreAllTimesheetsInSync} from 'src/features/timesheets/context/timesheetsSelectors';
 import {selectIsInternetReachable} from 'src/features/network/context/networkSelector';
+import {selectIsUserLoggedIn} from 'src/features/account/context/accountSelectors';
+import {selectIsUserLoggingIn} from 'src/features/appState/context/appStateSelectors';
 import {useAppSelector} from 'src/features/data/context/store';
 
 const styles = StyleSheet.create({

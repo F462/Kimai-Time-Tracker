@@ -13,8 +13,3 @@ export const selectIsUserLoggedIn = createSelector(
 	[selectServerUrl],
 	serverUrl => serverUrl !== undefined
 );
-
-export const selectIsUserLoggingIn = createSelector(
-	[selectAccountState],
-	accountState => accountState.isUserLoggingIn
-);

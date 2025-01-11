@@ -5,8 +5,9 @@ import {StyleSheet, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 
-import {selectIsUserLoggingIn, selectServerUrl} from '../context/accountSelectors';
 import {loginUser} from '../middleware/accountThunks';
+import {selectIsUserLoggingIn} from 'src/features/appState/context/appStateSelectors';
+import {selectServerUrl} from '../context/accountSelectors';
 import {storeApiKey} from '../utils/accountPersistor';
 import {useAppSelector} from 'src/features/data/context/store';
 

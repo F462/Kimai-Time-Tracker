@@ -20,8 +20,9 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {accountReducer} from 'src/features/account/context/accountSlice';
 import {activeTimesheetReducer} from 'src/features/activeTimesheet/context/activeTimesheetSlice';
 import {activitiesReducer} from 'src/features/activities/context/activitiesSlice';
+import {appStateReducer} from 'src/features/appState/context/appStateSlice';
 import {customersReducer} from 'src/features/customers/context/customersSlice';
-import {networkReducer} from '../../network/context/networkSlice';
+import {networkReducer} from 'src/features/network/context/networkSlice';
 import {projectsReducer} from 'src/features/projects/context/projectsSlice';
 import {startRootListener} from '../middleware/rootListener';
 import {timesheetsReducer} from 'src/features/timesheets/context/timesheetsSlice';
@@ -29,13 +30,14 @@ import {timesheetsReducer} from 'src/features/timesheets/context/timesheetsSlice
 const persistConfig = {
 	key: 'root',
 	storage: AsyncStorage,
-	blacklist: ['network']
+	blacklist: ['appState', 'network']
 };
 
 const rootReducer = combineReducers({
 	account: accountReducer,
 	activeTimesheet: activeTimesheetReducer,
 	activities: activitiesReducer,
+	appState: appStateReducer,
 	customers: customersReducer,
 	network: networkReducer,
 	projects: projectsReducer,
