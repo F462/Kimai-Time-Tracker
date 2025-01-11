@@ -4,6 +4,15 @@
 	"enterServerUrl": "Enter Server URL:",
 	"now": "Now",
 	"save": "Save",
+	"screenTitles": {
+		"About": "About",
+		"Account": "Account",
+		"ActiveTimesheet": "Active Timesheet",
+		"Activities": "Activities",
+		"Customers": "Customers",
+		"Projects": "Projects",
+		"Timesheets": "Timesheets"
+	},
 	"selectActivity": "Select Activity",
 	"selectProject": "Select Project",
 	"useCurrentDateTime": "Use current date and time",
