@@ -21,6 +21,7 @@ import {accountReducer} from 'src/features/account/context/accountSlice';
 import {activeTimesheetReducer} from 'src/features/activeTimesheet/context/activeTimesheetSlice';
 import {activitiesReducer} from 'src/features/activities/context/activitiesSlice';
 import {customersReducer} from 'src/features/customers/context/customersSlice';
+import {networkReducer} from '../../network/context/networkSlice';
 import {projectsReducer} from 'src/features/projects/context/projectsSlice';
 import {startRootListener} from '../middleware/rootListener';
 import {timesheetsReducer} from 'src/features/timesheets/context/timesheetsSlice';
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
 	activeTimesheet: activeTimesheetReducer,
 	activities: activitiesReducer,
 	customers: customersReducer,
+	network: networkReducer,
 	projects: projectsReducer,
 	timesheets: timesheetsReducer
 });
