@@ -12,8 +12,6 @@ const {
 const paperLightTheme = {
 	...PaperDefaultLightTheme,
 	colors: {
-		...PaperDefaultLightTheme.colors,
-
 		// created with https://callstack.github.io/react-native-paper/docs/guides/theming/#creating-dynamic-theme-colors
 		'primary': 'rgb(23, 110, 0)',
 		'onPrimary': 'rgb(255, 255, 255)',
@@ -54,8 +52,6 @@ const combinedLightTheme = deepmerge(navigationLightTheme, paperLightTheme);
 const paperDarkTheme = {
 	...PaperDefaultDarkTheme,
 	colors: {
-		...PaperDefaultDarkTheme.colors,
-
 		// created with https://callstack.github.io/react-native-paper/docs/guides/theming/#creating-dynamic-theme-colors
 		'primary': 'rgb(126, 220, 97)',
 		'onPrimary': 'rgb(7, 57, 0)',
