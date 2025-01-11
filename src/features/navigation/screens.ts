@@ -1,3 +1,4 @@
+import {AboutScreen} from 'src/features/about/components/AboutScreen';
 import {AccountScreen} from 'src/features/account/components/AccountScreen';
 import {ActiveTimesheetScreen} from 'src/features/activeTimesheet/components/ActiveTimesheetScreen';
 import {ActivitiesScreen} from 'src/features/activities/components/ActivitiesScreen';
@@ -11,6 +12,10 @@ export const screens: Array<{
 	component: React.FC<any>;
 	options?: any;
 }> = [
+	{
+		name: 'About',
+		component: AboutScreen
+	},
 	{
 		name: 'Account',
 		component: AccountScreen

@@ -1,4 +1,5 @@
 {
+	"appVersion": "App version {{version}}",
 	"enterApiKey": "Enter the API key here:",
 	"enterServerUrl": "Enter Server URL:",
 	"now": "Now",
