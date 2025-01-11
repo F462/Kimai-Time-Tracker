@@ -8268,6 +8268,7 @@ __metadata:
     react-i18next: "npm:^15.2.0"
     react-native: "npm:0.76.5"
     react-native-bootsplash: "npm:^6.3.2"
+    react-native-device-info: "npm:^14.0.2"
     react-native-encrypted-storage: "npm:^4.0.3"
     react-native-gesture-handler: "npm:^2.21.2"
     react-native-get-random-values: "npm:^1.11.0"
@@ -9972,6 +9973,15 @@ __metadata:
   bin:
     react-native-bootsplash: cli.js
   checksum: 10c0/df0bba56d114b403cdefeba193a1526f0fdced2c642a2f450d82e35462c997e3d1a6fd823b98396fdc6a4bfc0ae3607c1e2fd007b2e17d0f539fe69280b905d6
+  languageName: node
+  linkType: hard
+
+"react-native-device-info@npm:^14.0.2":
+  version: 14.0.2
+  resolution: "react-native-device-info@npm:14.0.2"
+  peerDependencies:
+    react-native: "*"
+  checksum: 10c0/ac1704cfccd563714ebe7f3abf076af2d26caca6a5bd4789edb1ea67b1d7ce2036924663a7a185d4f99b1730de96b7e69e36b363828b19159081109a8dc588c8
   languageName: node
   linkType: hard
 
