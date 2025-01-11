@@ -24,6 +24,7 @@ import {selectNextTimesheetStartDate} from '../context/activeTimesheetSelectors'
 import {stopActiveTimesheet} from 'src/features/activeTimesheet/middleware/activeTimesheetThunks';
 
 import AppIcon from 'src/assets/icon.svg';
+import {useStyle} from '../../theming/utils/useStyle';
 
 const styles = StyleSheet.create({
 	mainContainer: {
@@ -44,6 +45,18 @@ const styles = StyleSheet.create({
 	},
 	timePicker: {
 		flex: 1
+	},
+	dayWorkingHoursContainer: {
+		flexDirection: 'row',
+		padding: 10,
+		borderRadius: 5
+	},
+	dayWorkingHourLabelText: {
+		flex: 3
+	},
+	dayWorkingHourValueText: {
+		flex: 1,
+		textAlign: 'right'
 	}
 });
 
@@ -255,12 +268,24 @@ const RefreshView = ({children, style}: RefreshViewProps) => {
 
 const DayWorkingHours = () => {
 	const {t} = useTranslation();
+	const theme = useTheme();
+
 	const workingHoursOfCurrentDayInSeconds = useAppSelector(selectWorkingHoursOfCurrentDayInSeconds);
 	const displayedWorkingHours = dayjs.duration(workingHoursOfCurrentDayInSeconds * 1000).format('HH:mm');
 
+	const dynamicStyles = useStyle(() => ({
+		dayWorkingHoursContainer: {
+			backgroundColor: theme.colors.primaryContainer
+		},
+		textOnContainer: {
+			color: theme.colors.onPrimaryContainer
+		}
+	}), [theme.colors.onPrimaryContainer, theme.colors.primaryContainer]);
+
 	return (
-		<View>
-			<Text>{t('workingTimeToday', {workingTime: displayedWorkingHours})}</Text>
+		<View style={[styles.dayWorkingHoursContainer, dynamicStyles.dayWorkingHoursContainer]}>
+			<Text variant="titleMedium" style={[styles.dayWorkingHourLabelText, dynamicStyles.textOnContainer]}>{t('workingTimeToday')}</Text>
+			<Text variant="titleMedium" style={[styles.dayWorkingHourValueText, dynamicStyles.textOnContainer]}>{displayedWorkingHours}</Text>
 		</View>
 	);
 };
