@@ -1,4 +1,5 @@
 import axios, {AxiosResponse} from 'axios';
+import {isAnyOf} from '@reduxjs/toolkit';
 import path from 'path';
 
 import {
@@ -9,16 +10,27 @@ import {
 import {AppStartListening} from 'src/features/data/context/store';
 import {TimesheetFromApi} from 'src/features/timesheets/types';
 import {axiosHeadersSet} from 'src/features/account/context/accountActions';
+import {internetReachabilityChanged} from 'src/features/network/context/networkSlice';
+import {selectIsInternetReachable} from 'src/features/network/context/networkSelector';
 import {selectServerUrl} from 'src/features/account/context/accountSelectors';
 import {timesheetSynced} from 'src/features/timesheets/context/timesheetsSlice';
 
 const SYNC_INTERVAL_IN_MILLISECONDS = 3000;
-let syncInterval: ReturnType<typeof setInterval>;
+let syncInterval: ReturnType<typeof setInterval> | undefined;
 
 const syncNewTimesheetsToServer = (startListening: AppStartListening) => {
 	startListening({
-		actionCreator: axiosHeadersSet,
+		matcher: isAnyOf(axiosHeadersSet, internetReachabilityChanged),
 		effect: async (_, listenerApi) => {
+			if (selectIsInternetReachable(listenerApi.getState()) !== true) {
+				if (syncInterval !== undefined) {
+					clearInterval(syncInterval);
+					syncInterval = undefined;
+				}
+
+				return;
+			}
+
 			if (syncInterval !== undefined) {
 				return;
 			}
@@ -27,7 +39,7 @@ const syncNewTimesheetsToServer = (startListening: AppStartListening) => {
 				const serverUrl = selectServerUrl(listenerApi.getState());
 
 				if (serverUrl === undefined) {
-					throw Error('Server URL is undefined');
+					return;
 				}
 
 				const timesheetsToSync = selectUnsyncedTimesheets(
