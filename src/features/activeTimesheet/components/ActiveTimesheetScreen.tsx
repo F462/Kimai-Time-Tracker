@@ -11,7 +11,7 @@ import {v4 as uuidv4} from 'uuid';
 
 import {isValidDate, parseSelectedId} from 'src/features/timesheets/utils/functions';
 import {newTimesheetStarted, nextTimesheetStartDatetimeSet} from '../context/activeTimesheetSlice';
-import {selectActiveTimesheet, selectTimesheetListOfCurrentDay, selectWorkingHoursOfCurrentDayInSeconds} from 'src/features/timesheets/context/timesheetsSelectors';
+import {selectActiveTimesheet, selectTimesheetListOfCurrentDay} from 'src/features/timesheets/context/timesheetsSelectors';
 import {selectActivityList, selectSelectedActivity, selectSelectedActivityId} from 'src/features/activities/context/activitiesSelectors';
 import {selectProjectList, selectSelectedProject, selectSelectedProjectId} from 'src/features/projects/context/projectsSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
@@ -22,9 +22,10 @@ import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThun
 import {projectSelected} from 'src/features/projects/context/projectsSlice';
 import {selectNextTimesheetStartDate} from '../context/activeTimesheetSelectors';
 import {stopActiveTimesheet} from 'src/features/activeTimesheet/middleware/activeTimesheetThunks';
+import {useStyle} from 'src/features/theming/utils/useStyle';
+import {useWorkingHoursOfCurrentDayInSeconds} from 'src/features/timesheets/context/timesheetHooks';
 
 import AppIcon from 'src/assets/icon.svg';
-import {useStyle} from '../../theming/utils/useStyle';
 
 const styles = StyleSheet.create({
 	mainContainer: {
@@ -270,7 +271,8 @@ const DayWorkingHours = () => {
 	const {t} = useTranslation();
 	const theme = useTheme();
 
-	const workingHoursOfCurrentDayInSeconds = useAppSelector(selectWorkingHoursOfCurrentDayInSeconds);
+	const workingHoursOfCurrentDayInSeconds = useWorkingHoursOfCurrentDayInSeconds(5000);
+
 	const displayedWorkingHours = dayjs.duration(workingHoursOfCurrentDayInSeconds * 1000).format('HH:mm');
 
 	const dynamicStyles = useStyle(() => ({
