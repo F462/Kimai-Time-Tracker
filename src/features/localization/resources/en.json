@@ -4,6 +4,7 @@
 	"enterApiToken": "Enter the API token here:",
 	"enterServerUrl": "Enter Server URL:",
 	"now": "Now",
+	"logout": "Logout",
 	"save": "Save",
 	"screenTitles": {
 		"About": "About",

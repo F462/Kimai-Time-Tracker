@@ -5,7 +5,8 @@ import {StyleSheet, View} from 'react-native';
 
 const styles = StyleSheet.create({
 	container: {
-		margin: 10
+		margin: 10,
+		flex: 1
 	}
 });
 

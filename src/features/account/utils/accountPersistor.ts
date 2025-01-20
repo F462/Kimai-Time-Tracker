@@ -10,6 +10,14 @@ export async function storeApiToken(apiToken: string) {
 	}
 }
 
+export async function removeApiToken() {
+	try {
+		await EncryptedStorage.removeItem(API_TOKEN_STORE_KEY);
+	} catch (error: any) {
+		console.error(`Error removing API token: ${error.toString()}`);
+	}
+}
+
 export async function getApiToken() {
 	try {
 		return await EncryptedStorage.getItem(API_TOKEN_STORE_KEY);

@@ -8,3 +8,8 @@ export const selectIsUserLoggingIn = createSelector(
 	[selectAppState],
 	appState => appState.isUserLoggingIn
 );
+
+export const selectIsUserLoggingOut = createSelector(
+	[selectAppState],
+	appState => appState.isUserLoggingOut
+);

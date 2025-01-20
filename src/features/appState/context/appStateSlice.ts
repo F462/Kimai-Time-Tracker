@@ -1,7 +1,10 @@
 import {createSlice, isAnyOf} from '@reduxjs/toolkit';
 
+import {
+	loginUser,
+	logoutUser
+} from 'src/features/account/middleware/accountThunks';
 import {AppStateState} from '../types';
-import {loginUser} from 'src/features/account/middleware/accountThunks';
 
 const initialState: AppStateState = {};
 
@@ -14,8 +17,14 @@ const appStateSlice = createSlice({
 			.addCase(loginUser.pending, state => {
 				state.isUserLoggingIn = true;
 			})
+			.addCase(logoutUser.pending, state => {
+				state.isUserLoggingOut = true;
+			})
 			.addMatcher(isAnyOf(loginUser.rejected, loginUser.fulfilled), state => {
 				state.isUserLoggingIn = false;
+			})
+			.addMatcher(isAnyOf(logoutUser.rejected, logoutUser.fulfilled), state => {
+				state.isUserLoggingOut = false;
 			});
 	}
 });

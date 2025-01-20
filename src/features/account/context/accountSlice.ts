@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 
+import {userLoggedIn, userLoggedOut} from './accountActions';
 import {AccountState} from '../types';
-import {userLoggedIn} from './accountActions';
 
 const initialState: AccountState = {
 	serverUrl: undefined
@@ -12,9 +12,13 @@ const accountSlice = createSlice({
 	initialState,
 	reducers: {},
 	extraReducers: builder => {
-		builder.addCase(userLoggedIn, (state, {payload: serverUrl}) => {
-			state.serverUrl = serverUrl;
-		});
+		builder
+			.addCase(userLoggedIn, (state, {payload: serverUrl}) => {
+				state.serverUrl = serverUrl;
+			})
+			.addCase(userLoggedOut, state => {
+				state.serverUrl = undefined;
+			});
 	}
 });
 

@@ -1,8 +1,8 @@
 import axios from 'axios';
 
+import {userLoggedIn, userLoggedOut} from '../context/accountActions';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
 import {getApiToken} from '../utils/accountPersistor';
-import {userLoggedIn} from '../context/accountActions';
 
 export const loginUser = createAppAsyncThunk<void, {serverUrl: string}>(
 	'account/loginUser',
@@ -16,5 +16,14 @@ export const loginUser = createAppAsyncThunk<void, {serverUrl: string}>(
 		axios.defaults.headers.common.Authorization = `Bearer ${apiToken}`;
 
 		dispatch(userLoggedIn(serverUrl));
+	}
+);
+
+export const logoutUser = createAppAsyncThunk<void, void>(
+	'account/logoutUser',
+	async (_payload, {dispatch}) => {
+		delete axios.defaults.headers.common.Authorization;
+
+		dispatch(userLoggedOut());
 	}
 );
