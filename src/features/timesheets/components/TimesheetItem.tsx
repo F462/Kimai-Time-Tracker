@@ -23,7 +23,24 @@ export const TimesheetItem = ({timesheet}: {timesheet: Timesheet}) => {
 
 	const now = useTime(20_000);
 
-	const displayedDuration = useMemo(() => dayjs.duration(timesheet.duration ? timesheet.duration * 1000 : now.diff(dayjs(timesheet.begin))).format('HH:mm'), [now, timesheet.begin, timesheet.duration]);
+	const displayedDuration = useMemo(() => {
+		const duration = (() => {
+			if (timesheet.duration) {
+				return timesheet.duration * 1000;
+			}
+
+			if (timesheet.begin && timesheet.end) {
+				const calculatedTimesheetDuration =
+					dayjs(timesheet.end).diff(dayjs(timesheet.begin));
+				return calculatedTimesheetDuration;
+			}
+
+			return now.diff(dayjs(timesheet.begin));
+		})();
+
+		return dayjs.duration(duration).format('HH:mm');
+	}, [now, timesheet.begin, timesheet.duration, timesheet.end]);
+
 	const displayedTimeStart = useDisplayedDatetime(timesheet.begin);
 	const displayedTimeEnd = useDisplayedDatetime(timesheet.end);
 

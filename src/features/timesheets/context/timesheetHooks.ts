@@ -10,12 +10,19 @@ export const useWorkingHoursOfCurrentDayInSeconds = (
 	const timesheets = useAppSelector(selectTimesheetListOfCurrentDay);
 	const now = useTime(updateInterval);
 
-	return timesheets.reduce(
-		(sum, timesheet) =>
-			sum +
-			(timesheet.duration
-				? timesheet.duration
-				: now.diff(dayjs(timesheet.begin)) / 1000),
-		0
-	);
+	return timesheets.reduce((sum, timesheet) => {
+		const duration = (() => {
+			if (timesheet.duration) {
+				return timesheet.duration;
+			}
+
+			if (timesheet.begin && timesheet.end) {
+				const calculatedTimesheetDuration =
+					dayjs(timesheet.end).diff(dayjs(timesheet.begin)) / 1000;
+				return calculatedTimesheetDuration;
+			}
+		})();
+
+		return sum + (duration ?? now.diff(dayjs(timesheet.begin)) / 1000);
+	}, 0);
 };
