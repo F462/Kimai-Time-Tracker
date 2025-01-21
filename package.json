@@ -36,7 +36,7 @@
 		"react-native-paper": "^5.12.5",
 		"react-native-paper-dates": "^0.22.28",
 		"react-native-paper-select": "^1.2.0",
-		"react-native-reanimated": "^3.16.6",
+		"react-native-reanimated": "^3.16.7",
 		"react-native-safe-area-context": "^5.0.0",
 		"react-native-screens": "^4.4.0",
 		"react-native-svg": "^15.10.1",
