@@ -10,6 +10,7 @@ import {
 } from 'redux-persist';
 import {
 	TypedStartListening,
+	UnknownAction,
 	combineReducers,
 	configureStore,
 	createListenerMiddleware
@@ -26,6 +27,7 @@ import {networkReducer} from 'src/features/network/context/networkSlice';
 import {projectsReducer} from 'src/features/projects/context/projectsSlice';
 import {startRootListener} from '../middleware/rootListener';
 import {timesheetsReducer} from 'src/features/timesheets/context/timesheetsSlice';
+import {userLoggedOut} from 'src/features/account/context/accountActions';
 
 const persistConfig = {
 	key: 'root',
@@ -33,7 +35,7 @@ const persistConfig = {
 	blacklist: ['appState', 'network']
 };
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
 	account: accountReducer,
 	activeTimesheet: activeTimesheetReducer,
 	activities: activitiesReducer,
@@ -43,6 +45,17 @@ const rootReducer = combineReducers({
 	projects: projectsReducer,
 	timesheets: timesheetsReducer
 });
+
+const rootReducer = (
+	state: ReturnType<typeof appReducer> | undefined,
+	action: UnknownAction
+) => {
+	if (action.type === userLoggedOut.type) {
+		return appReducer(undefined, action);
+	}
+
+	return appReducer(state, action);
+};
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
