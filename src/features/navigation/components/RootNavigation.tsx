@@ -10,14 +10,14 @@ import {DefaultDrawerContent} from './DrawerContent';
 import {DefaultHeader} from './DefaultHeader';
 import {ScreenParameters} from '../ScreenParameters';
 import {screens} from '../screens';
-import {selectServerUrl} from 'src/features/account/context/accountSelectors';
+import {selectIsUserLoggedIn} from 'src/features/account/context/accountSelectors';
 
 const RootDrawer = createDrawerNavigator();
 
 const useInitialRouteName = () => {
-	const apiToken = useSelector(selectServerUrl);
+	const isUserLoggedIn = useSelector(selectIsUserLoggedIn);
 
-	return apiToken === undefined ? 'Account' : 'ActiveTimesheet';
+	return !isUserLoggedIn ? 'Account' : 'ActiveTimesheet';
 };
 
 export const RootNavigation = () => {
