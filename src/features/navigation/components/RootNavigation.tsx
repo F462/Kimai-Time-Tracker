@@ -30,7 +30,7 @@ export const RootNavigation = () => {
 		<NavigationContainer theme={theme} onReady={() => {
 			BootSplash.hide().catch(console.error);
 		}}>
-			<RootDrawer.Navigator initialRouteName={initialRouteName} screenOptions={{header}} drawerContent={DefaultDrawerContent}>
+			<RootDrawer.Navigator initialRouteName={initialRouteName} backBehavior="history" screenOptions={{header}} drawerContent={DefaultDrawerContent}>
 				{screens.map((screen) => (
 					<RootDrawer.Screen key={screen.name} name={screen.name} component={screen.component} options={screen.options} />
 				))}
