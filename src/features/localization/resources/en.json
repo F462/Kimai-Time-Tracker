@@ -17,6 +17,7 @@
 	},
 	"selectActivity": "Select Activity",
 	"selectProject": "Select Project",
+	"serverVersion": "Server version {{version}}",
 	"useCurrentDateTime": "Use current date and time",
 	"workingTimeToday": "Working time today:"
 }
