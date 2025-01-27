@@ -8247,6 +8247,7 @@ __metadata:
     react-native-encrypted-storage: "npm:^4.0.3"
     react-native-gesture-handler: "npm:^2.22.0"
     react-native-get-random-values: "npm:^1.11.0"
+    react-native-local-resource: "patch:react-native-local-resource@npm%3A0.1.6#~/.yarn/patches/react-native-local-resource-npm-0.1.6-e7301fc2c6.patch"
     react-native-localize: "npm:^3.4.1"
     react-native-paper: "npm:^5.13.1"
     react-native-paper-dates: "npm:^0.22.29"
@@ -9973,6 +9974,24 @@ __metadata:
     react: ">=18.2.0"
     react-native: ">=0.73.0"
   checksum: 10c0/5690e521e8310d21643634a8d0dacd524e19b76695f347b26f649fcac156a7a901fd6daef7f78482381a41e8445f4552f40ade13790fdf112fab15b0f54dbabd
+  languageName: node
+  linkType: hard
+
+"react-native-local-resource@npm:0.1.6":
+  version: 0.1.6
+  resolution: "react-native-local-resource@npm:0.1.6"
+  peerDependencies:
+    react-native: ^0.41.2
+  checksum: 10c0/0dc7eee6fa0a9f4ed58ef713b6c77e59a2df4dd125ba7e22d6ee4e641ac3b7f79421cabe7f3017d4e2e2ba56a34de78034026610e0f925ce3f9a1a81b31d6896
+  languageName: node
+  linkType: hard
+
+"react-native-local-resource@patch:react-native-local-resource@npm%3A0.1.6#~/.yarn/patches/react-native-local-resource-npm-0.1.6-e7301fc2c6.patch":
+  version: 0.1.6
+  resolution: "react-native-local-resource@patch:react-native-local-resource@npm%3A0.1.6#~/.yarn/patches/react-native-local-resource-npm-0.1.6-e7301fc2c6.patch::version=0.1.6&hash=38ecd5"
+  peerDependencies:
+    react-native: ^0.41.2
+  checksum: 10c0/60f95e548ec9db3bd1ba3dd1bcb19b41f8287a852aa98d1e6c5e8f7efbcec0dc1947300670fcb6fcef4590c86746100bce633fb6548423116c9c24a7c3752641
   languageName: node
   linkType: hard
 
