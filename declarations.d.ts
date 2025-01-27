@@ -6,3 +6,5 @@ declare module '*.svg' {
 }
 
 declare module 'path';
+declare module 'src/assets/license.txt';
+declare module 'react-native-local-resource';
