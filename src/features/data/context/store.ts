@@ -26,6 +26,7 @@ import {customersReducer} from 'src/features/customers/context/customersSlice';
 import {networkReducer} from 'src/features/network/context/networkSlice';
 import {projectsReducer} from 'src/features/projects/context/projectsSlice';
 import {startRootListener} from '../middleware/rootListener';
+import {synchronizationReducer} from '../../synchronization/context/synchronizationSlice';
 import {timesheetsReducer} from 'src/features/timesheets/context/timesheetsSlice';
 import {userLoggedOut} from 'src/features/account/context/accountActions';
 
@@ -43,6 +44,7 @@ const appReducer = combineReducers({
 	customers: customersReducer,
 	network: networkReducer,
 	projects: projectsReducer,
+	synchronization: synchronizationReducer,
 	timesheets: timesheetsReducer
 });
 

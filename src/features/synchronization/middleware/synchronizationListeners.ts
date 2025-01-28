@@ -1,6 +1,4 @@
 import {ListenerEffectAPI, isAnyOf} from '@reduxjs/toolkit';
-import axios, {AxiosResponse} from 'axios';
-import path from 'path';
 
 import {
 	AppDispatch,
@@ -10,17 +8,12 @@ import {
 import {
 	newTimesheetStarted,
 	timesheetStopped
-} from '../../activeTimesheet/context/activeTimesheetSlice';
-import {
-	selectIsTimesheetKnownToServer,
-	selectRemoteTimesheetId,
-	selectUnsyncedTimesheets
-} from 'src/features/timesheets/context/timesheetsSelectors';
-import {TimesheetFromApi} from 'src/features/timesheets/types';
+} from 'src/features/activeTimesheet/context/activeTimesheetSlice';
 import {internetReachabilityChanged} from 'src/features/network/context/networkSlice';
 import {selectIsInternetReachable} from 'src/features/network/context/networkSelector';
 import {selectServerUrl} from 'src/features/account/context/accountSelectors';
-import {timesheetSynced} from 'src/features/timesheets/context/timesheetsSlice';
+import {selectTimesheetsToSynchronize} from 'src/features/timesheets/context/timesheetsSelectors';
+import {synchronizeTimesheet} from './synchronizationThunks';
 import {userLoggedIn} from 'src/features/account/context/accountActions';
 
 const SYNC_INTERVAL_IN_MILLISECONDS = 3000;
@@ -33,43 +26,17 @@ async function sync(listenerApi: ListenerEffectAPI<RootState, AppDispatch>) {
 		return;
 	}
 
-	const timesheetsToSync = selectUnsyncedTimesheets(listenerApi.getState());
+	const timesheetsToSynchronize = selectTimesheetsToSynchronize(
+		listenerApi.getState()
+	);
 
-	if (Object.keys(timesheetsToSync).length === 0) {
+	if (Object.keys(timesheetsToSynchronize).length === 0) {
 		return;
 	}
 
-	for (const [timesheetId, timesheet] of Object.entries(timesheetsToSync)) {
+	for (const timesheet of Object.values(timesheetsToSynchronize)) {
 		try {
-			let response: AxiosResponse<TimesheetFromApi>;
-			if (selectIsTimesheetKnownToServer(timesheetId)(listenerApi.getState())) {
-				const remoteId = selectRemoteTimesheetId(timesheetId)(
-					listenerApi.getState()
-				);
-				response = await axios.patch(
-					path.join(serverUrl, 'api/timesheets', remoteId.toString()),
-					{
-						begin: timesheet.begin,
-						end: timesheet.end,
-						project: timesheet.project,
-						activity: timesheet.activity
-					}
-				);
-			} else {
-				response = await axios.post(path.join(serverUrl, 'api/timesheets'), {
-					begin: timesheet.begin,
-					end: timesheet.end,
-					project: timesheet.project,
-					activity: timesheet.activity
-				});
-			}
-
-			listenerApi.dispatch(
-				timesheetSynced({
-					localId: timesheetId,
-					remoteId: response.data.id
-				})
-			);
+			await listenerApi.dispatch(synchronizeTimesheet({serverUrl, timesheet}));
 		} catch (error: any) {
 			console.warn('Got error on axios request: ', error.toString());
 		}

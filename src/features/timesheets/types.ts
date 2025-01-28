@@ -17,7 +17,6 @@ export type TimesheetFromApi = {
 
 export type Timesheet = Partial<Omit<TimesheetFromApi, 'id'>> & {
 	id: string;
-	isSynced?: boolean;
 };
 
 export type TimesheetsState = {

@@ -4,6 +4,7 @@ import dayjs from 'dayjs';
 
 import {RootState} from 'src/features/data/context/store';
 import {selectActiveTimesheetId} from 'src/features/activeTimesheet/context/activeTimesheetSelectors';
+import {selectTimesheetIdsToSynchronize} from 'src/features/synchronization/context/synchronizationSelectors';
 
 const selectTimesheetsState = (state: RootState) => state.timesheets;
 
@@ -56,16 +57,6 @@ export const selectActiveTimesheet = createSelector(
 		activeTimesheetId !== undefined ? timesheets[activeTimesheetId] : undefined
 );
 
-export const selectUnsyncedTimesheets = createSelector(
-	[selectTimesheets],
-	timesheets => _.pickBy(timesheets, timesheet => !timesheet.isSynced)
-);
-
-export const selectAreAllTimesheetsInSync = createSelector(
-	[selectUnsyncedTimesheets],
-	unsyncedTimesheets => Object.keys(unsyncedTimesheets).length === 0
-);
-
 export const selectIsTimesheetKnownToServer = (timesheetId: string) =>
 	createSelector(
 		[selectTimesheetIdTable],
@@ -77,3 +68,9 @@ export const selectRemoteTimesheetId = (timesheetId: string) =>
 		const remoteId = timesheetIdTable[timesheetId];
 		return remoteId;
 	});
+
+export const selectTimesheetsToSynchronize = createSelector(
+	[selectTimesheets, selectTimesheetIdsToSynchronize],
+	(timesheets, timesheetIdsToSynchronize) =>
+		_.pick(timesheets, timesheetIdsToSynchronize)
+);
