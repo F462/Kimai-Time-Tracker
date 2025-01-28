@@ -26,14 +26,17 @@ import {customersReducer} from 'src/features/customers/context/customersSlice';
 import {networkReducer} from 'src/features/network/context/networkSlice';
 import {projectsReducer} from 'src/features/projects/context/projectsSlice';
 import {startRootListener} from '../middleware/rootListener';
-import {synchronizationReducer} from '../../synchronization/context/synchronizationSlice';
+import {synchronizationReducer} from 'src/features/synchronization/context/synchronizationSlice';
 import {timesheetsReducer} from 'src/features/timesheets/context/timesheetsSlice';
 import {userLoggedOut} from 'src/features/account/context/accountActions';
+
+import {ResetSyncStateTransform} from 'src/features/synchronization/context/ResetSyncStateTransform';
 
 const persistConfig = {
 	key: 'root',
 	storage: AsyncStorage,
-	blacklist: ['appState', 'network']
+	blacklist: ['appState', 'network'],
+	transforms: [ResetSyncStateTransform]
 };
 
 const appReducer = combineReducers({
