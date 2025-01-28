@@ -8,6 +8,7 @@ import {
 	newTimesheetStarted,
 	timesheetStopped
 } from 'src/features/activeTimesheet/context/activeTimesheetSlice';
+import {timesheetSynced} from 'src/features/synchronization/context/synchronizationSlice';
 
 const initialState: TimesheetsState = {
 	timesheets: {},
@@ -29,31 +30,11 @@ const timesheetsSlice = createSlice({
 				state.timesheetIdTable[id] = element.id;
 				return {...container, [id]: {...element, isSynced: true}};
 			}, {});
-		},
-		timesheetSynced: (
-			state,
-			{
-				payload: {localId, remoteId}
-			}: PayloadAction<{
-				localId: string;
-				remoteId: number;
-			}>
-		) => {
-			const timesheet = state.timesheets[localId];
-
-			if (timesheet === undefined) {
-				console.warn(`Timesheet with ID ${localId} not found`);
-				return;
-			}
-
-			timesheet.isSynced = true;
-			state.timesheetIdTable[localId] = remoteId;
 		}
 	},
 	extraReducers: builder => {
 		builder
 			.addCase(newTimesheetStarted, (state, {payload: timesheet}) => {
-				timesheet.isSynced = false;
 				state.timesheets[timesheet.id] = timesheet;
 			})
 			.addCase(timesheetStopped, (state, {payload: timesheetId}) => {
@@ -64,11 +45,20 @@ const timesheetsSlice = createSlice({
 					return;
 				}
 
-				timesheet.isSynced = false;
 				timesheet.end = dayjs().toISOString();
+			})
+			.addCase(timesheetSynced, (state, {payload: {localId, remoteId}}) => {
+				const timesheet = state.timesheets[localId];
+
+				if (timesheet === undefined) {
+					console.warn(`Timesheet with ID ${localId} not found`);
+					return;
+				}
+
+				state.timesheetIdTable[localId] = remoteId;
 			});
 	}
 });
 
-export const {timesheetsReceived, timesheetSynced} = timesheetsSlice.actions;
+export const {timesheetsReceived} = timesheetsSlice.actions;
 export const timesheetsReducer = timesheetsSlice.reducer;
