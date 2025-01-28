@@ -7,6 +7,7 @@ import {
 	selectRemoteTimesheetId
 } from 'src/features/timesheets/context/timesheetsSelectors';
 import {
+	timesheetSyncFailed,
 	timesheetSynced,
 	timesheetSynchronizationStarted
 } from '../context/synchronizationSlice';
@@ -23,31 +24,35 @@ export const synchronizeTimesheet = createAppAsyncThunk<
 	async ({serverUrl, timesheet}, {dispatch, getState}) => {
 		let response: AxiosResponse<TimesheetFromApi>;
 		dispatch(timesheetSynchronizationStarted(timesheet.id));
-		if (selectIsTimesheetKnownToServer(timesheet.id)(getState())) {
-			const remoteId = selectRemoteTimesheetId(timesheet.id)(getState());
-			response = await axios.patch(
-				path.join(serverUrl, 'api/timesheets', remoteId.toString()),
-				{
+		try {
+			if (selectIsTimesheetKnownToServer(timesheet.id)(getState())) {
+				const remoteId = selectRemoteTimesheetId(timesheet.id)(getState());
+				response = await axios.patch(
+					path.join(serverUrl, 'api/timesheets', remoteId.toString()),
+					{
+						begin: timesheet.begin,
+						end: timesheet.end,
+						project: timesheet.project,
+						activity: timesheet.activity
+					}
+				);
+			} else {
+				response = await axios.post(path.join(serverUrl, 'api/timesheets'), {
 					begin: timesheet.begin,
 					end: timesheet.end,
 					project: timesheet.project,
 					activity: timesheet.activity
-				}
-			);
-		} else {
-			response = await axios.post(path.join(serverUrl, 'api/timesheets'), {
-				begin: timesheet.begin,
-				end: timesheet.end,
-				project: timesheet.project,
-				activity: timesheet.activity
-			});
-		}
+				});
+			}
 
-		dispatch(
-			timesheetSynced({
-				localId: timesheet.id,
-				remoteId: response.data.id
-			})
-		);
+			dispatch(
+				timesheetSynced({
+					localId: timesheet.id,
+					remoteId: response.data.id
+				})
+			);
+		} catch (error) {
+			dispatch(timesheetSyncFailed(timesheet.id));
+		}
 	}
 );
