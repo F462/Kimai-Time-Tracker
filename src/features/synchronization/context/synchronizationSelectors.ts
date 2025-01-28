@@ -15,9 +15,8 @@ export const selectTimesheetIdsToSynchronize = createSelector(
 	[selectTimesheetSynchronizationState],
 	timesheetSyncStates =>
 		Object.keys(
-			_.pickBy(
-				timesheetSyncStates,
-				timesheetSyncState => timesheetSyncState === SyncState.NOT_STARTED
+			_.pickBy(timesheetSyncStates, timesheetSyncState =>
+				[SyncState.NOT_STARTED, SyncState.FAILED].includes(timesheetSyncState)
 			)
 		)
 );
