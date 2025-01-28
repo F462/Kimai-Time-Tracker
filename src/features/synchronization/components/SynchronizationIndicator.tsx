@@ -29,7 +29,7 @@ export const SynchronizationIndicator = () => {
 				return 'cloud-alert';
 			} else if (isUserLoggingIn === true) {
 				return 'cloud-refresh';
-		 } else if (areAllTimesheetsInSync) {
+			} else if (areAllTimesheetsInSync) {
 				return 'cloud-check-outline';
 			} else {
 				return 'cloud-sync-outline';
