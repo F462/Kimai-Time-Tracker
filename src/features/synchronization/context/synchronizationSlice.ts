@@ -27,6 +27,9 @@ const synchronizationSlice = createSlice({
 			}>
 		) => {
 			state.timesheets[localId] = SyncState.DONE;
+		},
+		timesheetSyncFailed(state, {payload: id}) {
+			state.timesheets[id] = SyncState.FAILED;
 		}
 	},
 	extraReducers: builder => {
@@ -40,6 +43,9 @@ const synchronizationSlice = createSlice({
 	}
 });
 
-export const {timesheetSynchronizationStarted, timesheetSynced} =
-	synchronizationSlice.actions;
+export const {
+	timesheetSynchronizationStarted,
+	timesheetSynced,
+	timesheetSyncFailed
+} = synchronizationSlice.actions;
 export const synchronizationReducer = synchronizationSlice.reducer;
