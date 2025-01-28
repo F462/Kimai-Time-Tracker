@@ -6,8 +6,11 @@ import {
 	selectIsTimesheetKnownToServer,
 	selectRemoteTimesheetId
 } from 'src/features/timesheets/context/timesheetsSelectors';
+import {
+	timesheetSynced,
+	timesheetSynchronizationStarted
+} from '../context/synchronizationSlice';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
-import {timesheetSynced} from '../context/synchronizationSlice';
 
 export const synchronizeTimesheet = createAppAsyncThunk<
 	void,
@@ -19,6 +22,7 @@ export const synchronizeTimesheet = createAppAsyncThunk<
 	'synchronization/synchronizeTimesheet',
 	async ({serverUrl, timesheet}, {dispatch, getState}) => {
 		let response: AxiosResponse<TimesheetFromApi>;
+		dispatch(timesheetSynchronizationStarted(timesheet.id));
 		if (selectIsTimesheetKnownToServer(timesheet.id)(getState())) {
 			const remoteId = selectRemoteTimesheetId(timesheet.id)(getState());
 			response = await axios.patch(

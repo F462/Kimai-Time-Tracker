@@ -40,5 +40,6 @@ const synchronizationSlice = createSlice({
 	}
 });
 
-export const {timesheetSynced} = synchronizationSlice.actions;
+export const {timesheetSynchronizationStarted, timesheetSynced} =
+	synchronizationSlice.actions;
 export const synchronizationReducer = synchronizationSlice.reducer;
