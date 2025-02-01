@@ -9,15 +9,9 @@ import {
 	newTimesheetStarted,
 	timesheetStopped
 } from 'src/features/activeTimesheet/context/activeTimesheetSlice';
-import {internetReachabilityChanged} from 'src/features/network/context/networkSlice';
-import {selectIsInternetReachable} from 'src/features/network/context/networkSelector';
 import {selectServerUrl} from 'src/features/account/context/accountSelectors';
 import {selectTimesheetsToSynchronize} from 'src/features/timesheets/context/timesheetsSelectors';
 import {synchronizeTimesheet} from './synchronizationThunks';
-import {userLoggedIn} from 'src/features/account/context/accountActions';
-
-const SYNC_INTERVAL_IN_MILLISECONDS = 3000;
-let syncInterval: ReturnType<typeof setInterval> | undefined;
 
 async function sync(listenerApi: ListenerEffectAPI<RootState, AppDispatch>) {
 	const serverUrl = selectServerUrl(listenerApi.getState());
@@ -52,33 +46,8 @@ const runSyncOnActions = (startListening: AppStartListening) => {
 	});
 };
 
-const syncNewTimesheetsToServer = (startListening: AppStartListening) => {
-	startListening({
-		matcher: isAnyOf(userLoggedIn, internetReachabilityChanged),
-		effect: async (_, listenerApi) => {
-			if (selectIsInternetReachable(listenerApi.getState()) !== true) {
-				if (syncInterval !== undefined) {
-					clearInterval(syncInterval);
-					syncInterval = undefined;
-				}
-
-				return;
-			}
-
-			if (syncInterval !== undefined) {
-				return;
-			}
-
-			syncInterval = setInterval(() => {
-				sync(listenerApi).catch(console.warn);
-			}, SYNC_INTERVAL_IN_MILLISECONDS);
-		}
-	});
-};
-
 export const startSynchronizationListeners = (
 	startListening: AppStartListening
 ) => {
 	runSyncOnActions(startListening);
-	syncNewTimesheetsToServer(startListening);
 };
