@@ -30,9 +30,14 @@ export const selectAreAllTimesheetsInSync = createSelector(
 		) === false
 );
 
-export const selectIsTimesheetSyncRunning = (timesheetIdToCheck: string) =>
+export const selectSyncState = (timesheetIdToCheck: string) =>
 	createSelector(
 		[selectTimesheetSynchronizationState],
-		timesheetSyncStates =>
-			timesheetSyncStates[timesheetIdToCheck] === SyncState.RUNNING
+		timesheetSyncStates => timesheetSyncStates[timesheetIdToCheck]
+	);
+
+export const selectIsTimesheetSyncRunning = (timesheetIdToCheck: string) =>
+	createSelector(
+		[selectSyncState(timesheetIdToCheck)],
+		syncState => syncState === SyncState.RUNNING
 	);
