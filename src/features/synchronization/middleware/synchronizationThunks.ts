@@ -12,6 +12,7 @@ import {
 	timesheetSynchronizationStarted
 } from '../context/synchronizationSlice';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
+import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
 import {selectIsTimesheetSyncRunning} from '../context/synchronizationSelectors';
 
 const resyncTimesheetRequests: {[timesheetId: string]: boolean} = {};
@@ -62,6 +63,8 @@ export const synchronizeTimesheet = createAppAsyncThunk<
 					remoteId: response.data.id
 				})
 			);
+
+			await dispatch(fetchTimesheets());
 		} catch (error) {
 			dispatch(timesheetSyncFailed(timesheet.id));
 		} finally {
