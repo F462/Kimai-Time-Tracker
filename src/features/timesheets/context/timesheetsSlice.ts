@@ -28,7 +28,7 @@ const timesheetsSlice = createSlice({
 			state.timesheets = payload.reduce((container, element) => {
 				const id = knownRemoteTimesheetIds[element.id] ?? uuidv4();
 				state.timesheetIdTable[id] = element.id;
-				return {...container, [id]: {...element, isSynced: true}};
+				return {...container, [id]: {...element, id, isSynced: true}};
 			}, {});
 		}
 	},
