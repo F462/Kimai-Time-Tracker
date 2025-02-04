@@ -31,6 +31,7 @@ import {timesheetsReducer} from 'src/features/timesheets/context/timesheetsSlice
 import {userLoggedOut} from 'src/features/account/context/accountActions';
 
 import {ResetSyncStateTransform} from 'src/features/synchronization/context/ResetSyncStateTransform';
+import {createLoggingMiddleware} from 'src/features/logging/middleware/middleware';
 
 const persistConfig = {
 	key: 'root',
@@ -65,7 +66,7 @@ const rootReducer = (
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const listenerMiddleware = createListenerMiddleware();
-const middlewares = [listenerMiddleware.middleware];
+const middlewares = [createLoggingMiddleware(), listenerMiddleware.middleware];
 
 export const store = configureStore({
 	reducer: persistedReducer,
