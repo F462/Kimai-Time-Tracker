@@ -4500,6 +4500,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"base-64@npm:0.1.0":
+  version: 0.1.0
+  resolution: "base-64@npm:0.1.0"
+  checksum: 10c0/fe0dcf076e823f04db7ee9b02495be08a91c445fbc6db03cb9913be9680e2fcc0af8b74459041fe08ad16800b1f65a549501d8f08696a8a6d32880789b7de69d
+  languageName: node
+  linkType: hard
+
 "base64-js@npm:^1.2.3, base64-js@npm:^1.3.1, base64-js@npm:^1.5.1":
   version: 1.5.1
   resolution: "base64-js@npm:1.5.1"
@@ -8385,9 +8392,11 @@ __metadata:
     react: "npm:18.3.1"
     react-i18next: "npm:^15.4.0"
     react-native: "npm:0.77.0"
+    react-native-blob-util: "npm:^0.21.2"
     react-native-bootsplash: "npm:^6.3.3"
     react-native-device-info: "npm:^14.0.2"
     react-native-encrypted-storage: "npm:^4.0.3"
+    react-native-file-logger: "npm:^0.5.6"
     react-native-gesture-handler: "npm:^2.22.1"
     react-native-get-random-values: "npm:^1.11.0"
     react-native-local-resource: "patch:react-native-local-resource@npm%3A0.1.6#~/.yarn/patches/react-native-local-resource-npm-0.1.6-e7301fc2c6.patch"
@@ -10025,6 +10034,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-blob-util@npm:^0.21.2":
+  version: 0.21.2
+  resolution: "react-native-blob-util@npm:0.21.2"
+  dependencies:
+    base-64: "npm:0.1.0"
+    glob: "npm:^10.3.10"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/7d7ca9abd02d2af4b9606813258047ad7748984d1ca5970ee2bc77ca3272690ca102d0cbccbc5e2d8193b3da73b453a03f918ff0f5269e1fe8b759df3dfd6ed0
+  languageName: node
+  linkType: hard
+
 "react-native-bootsplash@npm:^6.3.3":
   version: 6.3.3
   resolution: "react-native-bootsplash@npm:6.3.3"
@@ -10082,6 +10104,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10c0/98de9250a406c5ce21607233a63dcffa727b00d69992825c9b81cb1978c884d0c3fc688811cb515a5628ecf67c5804c1c00047599f34b2591b89447263c4d7cc
+  languageName: node
+  linkType: hard
+
+"react-native-file-logger@npm:^0.5.6":
+  version: 0.5.6
+  resolution: "react-native-file-logger@npm:0.5.6"
+  peerDependencies:
+    react: ">=16.0.0"
+    react-native: ">=0.60.0"
+  checksum: 10c0/288459f1ed59700b127913e1ea1d9682a663da239efe4512e8b425d36ea6f5d1777e23f99364158a55d10084384140d575c5da45f965ce424e7dacff8c78af29
   languageName: node
   linkType: hard
 
