@@ -48,3 +48,44 @@ jest.mock('src/assets/license.txt', () => '');
 jest.mock('react-native-local-resource', () => {
 	return jest.fn().mockReturnValue(Promise.resolve('mockValue'));
 });
+
+// see https://github.com/react-native-share/react-native-share/issues/598
+jest.mock('react-native-share', () => ({
+	default: jest.fn()
+}));
+
+jest.mock('react-native-zip-archive', () => ({
+	zip: jest.fn()
+}));
+
+// see https://gist.github.com/sipamungkas/8922cded82ac909cd62369957eb17c81
+jest.mock('react-native-blob-util', () => {
+	return {
+		__esModule: true,
+		default: {
+			DocumentDir: jest.fn(),
+			config: jest.fn(() => ({
+				fetch: jest.fn(() => ({
+					progress: jest.fn().mockResolvedValue(true)
+				}))
+			})),
+			fs: {
+				cp: jest.fn().mockResolvedValue(true),
+				dirs: {
+					CacheDir: '/mockCacheDir'
+				},
+				unlink: jest.fn()
+			}
+		}
+	};
+});
+
+jest.mock('react-native-file-logger', () => ({
+	FileLogger: {
+		configure: jest.fn(() => Promise.resolve()),
+		debug: jest.fn(),
+		info: jest.fn(),
+		warn: jest.fn(),
+		error: jest.fn()
+	}
+}));
