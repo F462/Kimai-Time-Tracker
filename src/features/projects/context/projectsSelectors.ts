@@ -23,3 +23,11 @@ export const selectSelectedProject = createSelector(
 	(projects, selectedProjectId) =>
 		selectedProjectId !== undefined ? projects[selectedProjectId] : undefined
 );
+
+const selectProject = (projectId: number | undefined) =>
+	createSelector([selectProjects], projects =>
+		projectId ? projects[projectId] : undefined
+	);
+
+export const selectProjectName = (projectId: number | undefined) =>
+	createSelector([selectProject(projectId)], project => project?.name);
