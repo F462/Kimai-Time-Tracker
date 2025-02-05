@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 
+import {ActivityIndicator, Icon} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
-import {Icon} from 'react-native-paper';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
 
@@ -14,6 +14,8 @@ import {selectProjectName} from 'src/features/projects/context/projectsSelectors
 import {selectSyncState} from 'src/features/synchronization/context/synchronizationSelectors';
 import {useAppSelector} from 'src/features/data/context/store';
 import {useTime} from 'src/features/utils/useTime';
+
+const SYNC_STATE_ICON_SIZE = 15;
 
 const styles = StyleSheet.create({
 	datetimeText: {
@@ -51,11 +53,21 @@ const SynchronizationStateIcon = ({synchronizationState}: {synchronizationState?
 		}
 	})();
 
-	return <Icon source={iconSource} size={15} />;
+	return <Icon source={iconSource} size={SYNC_STATE_ICON_SIZE} />;
 };
 
 type TimesheetItemProps = {
 	timesheet: Timesheet;
+};
+
+const TimesheetSyncIndicator = ({timesheet}: TimesheetItemProps) => {
+	const synchronizationState = useAppSelector(selectSyncState(timesheet.id));
+
+	return (
+		<View style={styles.syncStateIconContainer}>
+			{synchronizationState === SyncState.RUNNING ? <ActivityIndicator size={SYNC_STATE_ICON_SIZE} /> : <SynchronizationStateIcon synchronizationState={synchronizationState} />}
+		</View>
+	);
 };
 
 const TimesheetDurationDisplay = ({timesheet}: TimesheetItemProps) => {
@@ -109,13 +121,9 @@ const TimesheetDetails = ({timesheet}: TimesheetItemProps) => {
 };
 
 export const TimesheetItem = ({timesheet}: TimesheetItemProps) => {
-	const synchronizationState = useAppSelector(selectSyncState(timesheet.id));
-
 	return (
 		<View style={styles.row}>
-			<View style={styles.syncStateIconContainer}>
-				<SynchronizationStateIcon synchronizationState={synchronizationState} />
-			</View>
+			<TimesheetSyncIndicator timesheet={timesheet} />
 			<View style={styles.flex}>
 				<TimesheetTimeDisplay timesheet={timesheet} />
 				<TimesheetDetails timesheet={timesheet} />
