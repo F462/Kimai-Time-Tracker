@@ -26,3 +26,11 @@ export const selectSelectedActivity = createSelector(
 			? activities[selectedActivityId]
 			: undefined
 );
+
+const selectActivity = (activityId: number | undefined) =>
+	createSelector([selectActivities], activities =>
+		activityId ? activities[activityId] : undefined
+	);
+
+export const selectActivityName = (activityId: number | undefined) =>
+	createSelector([selectActivity(activityId)], activity => activity?.name);

@@ -7,6 +7,7 @@ import {PressableOpacity} from './PressableOpacity';
 
 const styles = StyleSheet.create({
 	container: {
+		flex: 1,
 		flexDirection: 'row',
 		marginHorizontal: 10,
 		marginVertical: 5

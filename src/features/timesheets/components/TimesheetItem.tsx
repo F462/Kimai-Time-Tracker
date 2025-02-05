@@ -1,14 +1,16 @@
 import React, {useMemo} from 'react';
 
 import {StyleSheet, View} from 'react-native';
+import {Icon} from 'react-native-paper';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
 
-import {Icon} from 'react-native-paper';
 import {ListItem} from 'src/ui/ListItem';
 import {ListItemText} from 'src/ui/ListItemText';
 import {SyncState} from 'src/features/synchronization/types';
 import {Timesheet} from '../types';
+import {selectActivityName} from 'src/features/activities/context/activitiesSelectors';
+import {selectProjectName} from 'src/features/projects/context/projectsSelectors';
 import {selectSyncState} from 'src/features/synchronization/context/synchronizationSelectors';
 import {useAppSelector} from 'src/features/data/context/store';
 import {useTime} from 'src/features/utils/useTime';
@@ -17,6 +19,18 @@ const styles = StyleSheet.create({
 	datetimeText: {
 		flex: 1,
 		textAlign: 'center'
+	},
+	flex: {
+		flex: 1
+	},
+	row: {
+		flexDirection: 'row'
+	},
+	syncStateIconContainer: {
+		alignSelf: 'center'
+	},
+	timesheetDetailsContainer: {
+		justifyContent: 'space-around'
 	}
 });
 
@@ -67,16 +81,27 @@ export const TimesheetItem = ({timesheet}: {timesheet: Timesheet}) => {
 	const displayedTimeStart = useDisplayedDatetime(timesheet.begin);
 	const displayedTimeEnd = useDisplayedDatetime(timesheet.end);
 
+	const displayedActivity = useAppSelector(selectActivityName(timesheet.activity));
+	const displayedProject = useAppSelector(selectProjectName(timesheet.project));
+
 	return (
-		<ListItem>
-			<View>
+		<View style={styles.row}>
+			<View style={styles.syncStateIconContainer}>
 				<SynchronizationStateIcon synchronizationState={synchronizationState} />
 			</View>
-			<ListItemText style={styles.datetimeText}>{displayedTimeStart}</ListItemText>
-			<ListItemText> - </ListItemText>
-			<ListItemText style={styles.datetimeText}>{displayedTimeEnd ?? t('now')}</ListItemText>
-			<View />
-			<ListItemText>({displayedDuration})</ListItemText>
-		</ListItem>
+			<View style={styles.flex}>
+				<ListItem>
+					<ListItemText style={styles.datetimeText}>{displayedTimeStart}</ListItemText>
+					<ListItemText> - </ListItemText>
+					<ListItemText style={styles.datetimeText}>{displayedTimeEnd ?? t('now')}</ListItemText>
+					<View />
+					<ListItemText>({displayedDuration})</ListItemText>
+				</ListItem>
+				<ListItem style={styles.timesheetDetailsContainer}>
+					{displayedActivity && <ListItemText>{displayedActivity}</ListItemText>}
+					{displayedProject && <ListItemText>{displayedProject}</ListItemText>}
+				</ListItem>
+			</View>
+		</View>
 	);
 };
