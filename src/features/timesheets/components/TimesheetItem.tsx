@@ -54,11 +54,12 @@ const SynchronizationStateIcon = ({synchronizationState}: {synchronizationState?
 	return <Icon source={iconSource} size={15} />;
 };
 
-export const TimesheetItem = ({timesheet}: {timesheet: Timesheet}) => {
-	const {t} = useTranslation();
+type TimesheetItemProps = {
+	timesheet: Timesheet;
+};
 
+const TimesheetDurationDisplay = ({timesheet}: TimesheetItemProps) => {
 	const now = useTime(20_000);
-	const synchronizationState = useAppSelector(selectSyncState(timesheet.id));
 
 	const displayedDuration = useMemo(() => {
 		const duration = (() => {
@@ -78,11 +79,37 @@ export const TimesheetItem = ({timesheet}: {timesheet: Timesheet}) => {
 		return dayjs.duration(duration).format('HH:mm');
 	}, [now, timesheet.begin, timesheet.duration, timesheet.end]);
 
+	return <ListItemText>({displayedDuration})</ListItemText>;
+};
+
+const TimesheetTimeDisplay = ({timesheet}: TimesheetItemProps) => {
+	const {t} = useTranslation();
+
 	const displayedTimeStart = useDisplayedDatetime(timesheet.begin);
 	const displayedTimeEnd = useDisplayedDatetime(timesheet.end);
 
+	return (<ListItem>
+		<ListItemText style={styles.datetimeText}>{displayedTimeStart}</ListItemText>
+		<ListItemText> - </ListItemText>
+		<ListItemText style={styles.datetimeText}>{displayedTimeEnd ?? t('now')}</ListItemText>
+		<View />
+		<TimesheetDurationDisplay timesheet={timesheet} />
+	</ListItem>);
+};
+
+const TimesheetDetails = ({timesheet}: TimesheetItemProps) => {
 	const displayedActivity = useAppSelector(selectActivityName(timesheet.activity));
 	const displayedProject = useAppSelector(selectProjectName(timesheet.project));
+
+	return (
+		<ListItem style={styles.timesheetDetailsContainer}>
+			{displayedActivity && <ListItemText>{displayedActivity}</ListItemText>}
+			{displayedProject && <ListItemText>{displayedProject}</ListItemText>}
+		</ListItem>);
+};
+
+export const TimesheetItem = ({timesheet}: TimesheetItemProps) => {
+	const synchronizationState = useAppSelector(selectSyncState(timesheet.id));
 
 	return (
 		<View style={styles.row}>
@@ -90,17 +117,8 @@ export const TimesheetItem = ({timesheet}: {timesheet: Timesheet}) => {
 				<SynchronizationStateIcon synchronizationState={synchronizationState} />
 			</View>
 			<View style={styles.flex}>
-				<ListItem>
-					<ListItemText style={styles.datetimeText}>{displayedTimeStart}</ListItemText>
-					<ListItemText> - </ListItemText>
-					<ListItemText style={styles.datetimeText}>{displayedTimeEnd ?? t('now')}</ListItemText>
-					<View />
-					<ListItemText>({displayedDuration})</ListItemText>
-				</ListItem>
-				<ListItem style={styles.timesheetDetailsContainer}>
-					{displayedActivity && <ListItemText>{displayedActivity}</ListItemText>}
-					{displayedProject && <ListItemText>{displayedProject}</ListItemText>}
-				</ListItem>
+				<TimesheetTimeDisplay timesheet={timesheet} />
+				<TimesheetDetails timesheet={timesheet} />
 			</View>
 		</View>
 	);
