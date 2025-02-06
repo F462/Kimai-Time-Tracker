@@ -9,9 +9,17 @@ import {removeFile} from 'src/features/fileHandling/utils/removeFile';
 
 export const exportLogs = createAppAsyncThunk<void, void>(
 	'logging/exportLogs',
-	async (_payload, {}) => {
-		console.info('exporting logs');
+	async (_payload, {getState}) => {
+		console.info('Exporting logs');
+
 		try {
+			const storeFilePath = path.join(LOGS_DIRECTORY, 'store.txt');
+			await ReactNativeBlobUtil.fs.writeFile(
+				storeFilePath,
+				JSON.stringify(getState()),
+				'utf8'
+			);
+
 			const zipFileToShare = path.join(
 				ReactNativeBlobUtil.fs.dirs.CacheDir,
 				'logs.zip'
@@ -26,6 +34,7 @@ export const exportLogs = createAppAsyncThunk<void, void>(
 			} catch (error) {
 				console.error(error);
 			} finally {
+				await removeFile(storeFilePath);
 				await removeFile(zipFileToShare);
 			}
 		} catch (error) {
