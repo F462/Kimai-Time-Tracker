@@ -29,7 +29,7 @@ const timesheetsSlice = createSlice({
 				const id = knownRemoteTimesheetIds[element.id] ?? uuidv4();
 				state.timesheetIdTable[id] = element.id;
 				return {...container, [id]: {...element, id, isSynced: true}};
-			}, {});
+			}, state.timesheets);
 		}
 	},
 	extraReducers: builder => {
