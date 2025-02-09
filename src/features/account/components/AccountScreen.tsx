@@ -2,16 +2,16 @@ import React, {useCallback, useState} from 'react';
 
 import {Button, Text, TextInput, useTheme} from 'react-native-paper';
 import {Linking, StyleSheet, View} from 'react-native';
-import {useDispatch, useSelector} from 'react-redux';
 import path from 'path';
+import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 
 import {loginUser, logoutUser} from '../middleware/accountThunks';
 import {removeApiToken, storeApiToken} from '../utils/accountPersistor';
 import {selectIsUserLoggedIn, selectServerUrl} from '../context/accountSelectors';
 import {selectIsUserLoggingIn, selectIsUserLoggingOut} from 'src/features/appState/context/appStateSelectors';
+import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {BaseScreen} from 'src/ui/BaseScreen';
-import {useAppSelector} from 'src/features/data/context/store';
 import {useStyle} from 'src/features/theming/utils/useStyle';
 
 const styles = StyleSheet.create({
@@ -31,7 +31,7 @@ export const AccountScreen = () => {
 	const {t} = useTranslation();
 	const theme = useTheme();
 	const languageTag = useTranslation().i18n.language;
-	const dispatch = useDispatch();
+	const dispatch = useAppDispatch();
 
 	const isUserLoggingIn = useAppSelector(selectIsUserLoggingIn);
 	const isUserLoggingOut = useAppSelector(selectIsUserLoggingOut);
@@ -66,7 +66,7 @@ export const AccountScreen = () => {
 			</View>
 			<Button style={styles.actionButton} mode="contained" loading={isUserLoggingIn} icon='content-save-outline' onPress={() => {
 				storeApiToken(apiToken).then(() => {
-					dispatch(loginUser({serverUrl}) as any);
+					dispatch(loginUser({serverUrl})).catch(console.error);
 				}).catch(console.error);
 			}}>{t('save')}</Button>
 			<View style={styles.spacer} />
@@ -76,7 +76,7 @@ export const AccountScreen = () => {
 						setServerUrl('');
 						setApiToken('');
 
-						dispatch(logoutUser() as any);
+						dispatch(logoutUser()).catch(console.error);
 					}).catch(console.error);
 				}}>{t('logout')}</Button>
 			}

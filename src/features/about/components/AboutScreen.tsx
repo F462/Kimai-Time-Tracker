@@ -65,7 +65,7 @@ const ExportLogsButton = () => {
 	const dispatch = useAppDispatch();
 
 	const onPress = useCallback(() => {
-		dispatch(exportLogs() as any);
+		dispatch(exportLogs()).catch(console.error);
 	}, [dispatch]);
 
 	return <Button onPress={onPress}>{t('exportLogs')}</Button>;
