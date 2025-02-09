@@ -70,7 +70,9 @@ export const synchronizeTimesheet = createAppAsyncThunk<
 		} finally {
 			if (resyncTimesheetRequests[timesheet.id] === true) {
 				delete resyncTimesheetRequests[timesheet.id];
-				dispatch(synchronizeTimesheet({serverUrl, timesheet}) as any);
+				dispatch(synchronizeTimesheet({serverUrl, timesheet})).catch(
+					console.error
+				);
 			}
 		}
 	}
