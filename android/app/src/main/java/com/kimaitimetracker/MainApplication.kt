@@ -1,4 +1,4 @@
-package com.kimaitimetracker
+package com.github.f462.kimaitimetracker
 
 import android.app.Application
 import com.facebook.react.PackageList

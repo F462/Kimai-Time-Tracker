@@ -1,4 +1,4 @@
-package com.kimaitimetracker
+package com.github.f462.kimaitimetracker
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
