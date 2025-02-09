@@ -83,9 +83,9 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
 
-    namespace "com.kimaitimetracker"
+    namespace "com.github.f462.kimaitimetracker"
     defaultConfig {
-        applicationId "com.kimaitimetracker"
+        applicationId "com.github.f462.kimaitimetracker"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode project.hasProperty('versionCode') ? project.versionCode.toInteger() : 1
