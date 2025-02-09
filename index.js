@@ -14,5 +14,6 @@ import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
 
 import 'src/features/logging/utils/initialization';
+import 'src/features/debugging/utils/whyDidYouRender';
 
 AppRegistry.registerComponent(appName, () => App);
