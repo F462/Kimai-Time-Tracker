@@ -39,8 +39,7 @@ module.exports = {
 		'no-use-before-define': 'off', // turned off because of @typescript-eslint/no-use-before-define
 		'@typescript-eslint/no-use-before-define': ['error'],
 		'no-console': [ // define console.log as error for debugging purposes
-			'error',
-			{allow: ['assert', 'error', 'warn', 'info', 'debug', 'trace']}
+			'error'
 		],
 		'array-bracket-spacing': ['error', 'never'],
 		'brace-style': ['error', '1tbs', {allowSingleLine: true}],

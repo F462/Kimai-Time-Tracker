@@ -1,5 +1,7 @@
-import {AppStartListening} from 'src/features/data/context/store';
+import {FileLogger} from 'react-native-file-logger';
 import {REHYDRATE} from 'redux-persist';
+
+import {AppStartListening} from 'src/features/data/context/store';
 import {loginUser} from './accountThunks';
 import {selectServerUrl} from '../context/accountSelectors';
 
@@ -15,7 +17,7 @@ export const setAxiosHeadersOnAppStart = (
 				return;
 			}
 
-			listenerApi.dispatch(loginUser({serverUrl})).catch(console.error);
+			listenerApi.dispatch(loginUser({serverUrl})).catch(FileLogger.error);
 		}
 	});
 };

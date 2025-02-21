@@ -4,6 +4,7 @@ import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {Checkbox, IconButton, Text, TextInput, useTheme} from 'react-native-paper';
 import {DatePickerModal, TimePickerModal} from 'react-native-paper-dates';
 import {RefreshControl, ScrollView, StyleProp, StyleSheet, View, ViewStyle} from 'react-native';
+import {FileLogger} from 'react-native-file-logger';
 import {PaperSelect} from 'react-native-paper-select';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
@@ -71,7 +72,7 @@ const StopButton = () => {
 		iconColor={theme.colors.primary}
 		size={200}
 		onPress={() => {
-			dispatch(stopActiveTimesheet()).catch(console.warn);
+			dispatch(stopActiveTimesheet()).catch(FileLogger.warn);
 		}}
 	/>;
 };
@@ -257,7 +258,7 @@ const RefreshView = ({children, style}: RefreshViewProps) => {
 	const [refreshing, setRefreshing] = React.useState(false);
 	const onRefresh = React.useCallback(() => {
 		setRefreshing(true);
-		dispatch(fetchTimesheets()).then(() => setRefreshing(false)).catch(console.warn);
+		dispatch(fetchTimesheets()).then(() => setRefreshing(false)).catch(FileLogger.warn);
 	}, [dispatch]);
 
 	return (

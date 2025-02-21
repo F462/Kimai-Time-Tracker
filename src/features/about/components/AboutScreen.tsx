@@ -3,6 +3,7 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {Button, Text} from 'react-native-paper';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
+import {FileLogger} from 'react-native-file-logger';
 import axios from 'axios';
 import loadLocalResource from 'react-native-local-resource';
 import path from 'path';
@@ -44,7 +45,7 @@ const ServerVersionDisplay = () => {
 		} else {
 			axios.get(path.join(serverUrl, 'api/version')).then((response) => {
 				setServerVersion(response.data.version);
-			}).catch(console.warn);
+			}).catch(FileLogger.warn);
 		}
 	}, [isUserLoggedIn, serverUrl]);
 
@@ -65,7 +66,7 @@ const ExportLogsButton = () => {
 	const dispatch = useAppDispatch();
 
 	const onPress = useCallback(() => {
-		dispatch(exportLogs()).catch(console.error);
+		dispatch(exportLogs()).catch(FileLogger.error);
 	}, [dispatch]);
 
 	return <Button onPress={onPress}>{t('exportLogs')}</Button>;
