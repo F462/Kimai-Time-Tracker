@@ -1,4 +1,5 @@
 import i18n, {InitOptions} from 'i18next';
+import {FileLogger} from 'react-native-file-logger';
 import dayjs from 'dayjs';
 import {findBestLanguageTag} from 'react-native-localize';
 import {initReactI18next} from 'react-i18next';
@@ -31,7 +32,7 @@ const i18nextOptions: InitOptions = {
 	compatibilityJSON: 'v4'
 };
 
-i18n.use(initReactI18next).init(i18nextOptions).catch(console.error);
+i18n.use(initReactI18next).init(i18nextOptions).catch(FileLogger.error);
 
 require('./dayjs');
 dayjs.locale(appLanguage);

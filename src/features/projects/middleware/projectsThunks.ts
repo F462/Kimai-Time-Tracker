@@ -1,3 +1,4 @@
+import {FileLogger} from 'react-native-file-logger';
 import axios from 'axios';
 import path from 'path';
 
@@ -21,7 +22,7 @@ export const fetchProjects = createAppAsyncThunk(
 			);
 			dispatch(projectsReceived(response.data));
 		} catch (error: any) {
-			console.warn('Got error on axios request: ', error.toString());
+			FileLogger.warn(`Got error on axios request: ${error.toString()}`);
 		}
 	}
 );

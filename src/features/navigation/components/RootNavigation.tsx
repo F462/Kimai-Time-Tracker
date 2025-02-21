@@ -2,6 +2,7 @@ import React, {useCallback} from 'react';
 
 import {DrawerHeaderProps, createDrawerNavigator} from '@react-navigation/drawer';
 import BootSplash from 'react-native-bootsplash';
+import {FileLogger} from 'react-native-file-logger';
 import {NavigationContainer} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {useTheme} from 'react-native-paper';
@@ -28,7 +29,7 @@ export const RootNavigation = () => {
 
 	return (
 		<NavigationContainer theme={theme} onReady={() => {
-			BootSplash.hide().catch(console.error);
+			BootSplash.hide().catch(FileLogger.error);
 		}}>
 			<RootDrawer.Navigator initialRouteName={initialRouteName} backBehavior="history" screenOptions={{header}} drawerContent={DefaultDrawerContent}>
 				{screens.map((screen) => (

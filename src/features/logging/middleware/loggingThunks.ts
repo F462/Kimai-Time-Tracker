@@ -1,3 +1,4 @@
+import {FileLogger} from 'react-native-file-logger';
 import Share from 'react-native-share';
 import path from 'path';
 import {zip} from 'react-native-zip-archive';
@@ -10,7 +11,7 @@ import {removeFile} from 'src/features/fileHandling/utils/removeFile';
 export const exportLogs = createAppAsyncThunk<void, void>(
 	'logging/exportLogs',
 	async (_payload, {getState}) => {
-		console.info('Exporting logs');
+		FileLogger.info('Exporting logs');
 
 		try {
 			const storeFilePath = path.join(LOGS_DIRECTORY, 'store.txt');
@@ -31,14 +32,14 @@ export const exportLogs = createAppAsyncThunk<void, void>(
 				await Share.open({
 					url: `file://${zipFileToShare}`
 				});
-			} catch (error) {
-				console.error(error);
+			} catch (error: any) {
+				FileLogger.error(error.toString());
 			} finally {
 				await removeFile(storeFilePath);
 				await removeFile(zipFileToShare);
 			}
-		} catch (error) {
-			console.error(error);
+		} catch (error: any) {
+			FileLogger.error(error.toString());
 		}
 	}
 );

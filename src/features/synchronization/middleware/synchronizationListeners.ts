@@ -1,4 +1,5 @@
 import {ListenerEffectAPI, isAnyOf} from '@reduxjs/toolkit';
+import {FileLogger} from 'react-native-file-logger';
 
 import {
 	AppDispatch,
@@ -32,7 +33,7 @@ async function sync(listenerApi: ListenerEffectAPI<RootState, AppDispatch>) {
 		try {
 			await listenerApi.dispatch(synchronizeTimesheet({serverUrl, timesheet}));
 		} catch (error: any) {
-			console.warn('Got error on axios request: ', error.toString());
+			FileLogger.warn(`Got error on axios request: ${error.toString()}`);
 		}
 	}
 }
@@ -41,7 +42,7 @@ const runSyncOnActions = (startListening: AppStartListening) => {
 	startListening({
 		matcher: isAnyOf(newTimesheetStarted, timesheetStopped),
 		effect: async (_, listenerApi) => {
-			sync(listenerApi).catch(console.error);
+			sync(listenerApi).catch(FileLogger.error);
 		}
 	});
 };

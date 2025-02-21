@@ -13,4 +13,4 @@ FileLogger.configure({
 	.then(() => {
 		FileLogger.info('File logger initialized');
 	})
-	.catch(console.error);
+	.catch(FileLogger.error);
