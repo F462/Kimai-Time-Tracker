@@ -27,7 +27,30 @@ const timesheetsSlice = createSlice({
 			const knownRemoteTimesheetIds = _.invert(state.timesheetIdTable);
 
 			state.timesheets = payload.reduce((container, element) => {
-				const id = knownRemoteTimesheetIds[element.id] ?? uuidv4();
+				const id = (() => {
+					const idInKnownRemoteTimesheetTable =
+						knownRemoteTimesheetIds[element.id];
+					if (idInKnownRemoteTimesheetTable) {
+						return idInKnownRemoteTimesheetTable;
+					}
+
+					// deep compare, if already present
+					const foundTimesheet = _.find(
+						state.timesheets,
+						timesheet =>
+							timesheet.begin === element.begin &&
+							timesheet.end === element.end &&
+							timesheet.activity === element.activity &&
+							timesheet.project === element.project
+					);
+
+					if (foundTimesheet) {
+						return foundTimesheet.id;
+					}
+
+					return uuidv4();
+				})();
+
 				state.timesheetIdTable[id] = element.id;
 				return {...container, [id]: {...element, id, isSynced: true}};
 			}, state.timesheets);
