@@ -1,10 +1,8 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {FileLogger} from 'react-native-file-logger';
-import _ from 'lodash';
 import dayjs from 'dayjs';
-import {v4 as uuidv4} from 'uuid';
 
-import {TimesheetFromApi, TimesheetsState} from '../types';
+import {Timesheet, TimesheetsState} from '../types';
 import {
 	newTimesheetStarted,
 	timesheetStopped
@@ -20,40 +18,11 @@ const timesheetsSlice = createSlice({
 	name: 'timesheets',
 	initialState,
 	reducers: {
-		timesheetsReceived: (
+		timesheetsUpdated: (
 			state,
-			{payload}: PayloadAction<Array<TimesheetFromApi>>
+			{payload: timesheets}: PayloadAction<{[timesheetId: string]: Timesheet}>
 		) => {
-			const knownRemoteTimesheetIds = _.invert(state.timesheetIdTable);
-
-			state.timesheets = payload.reduce((container, element) => {
-				const id = (() => {
-					const idInKnownRemoteTimesheetTable =
-						knownRemoteTimesheetIds[element.id];
-					if (idInKnownRemoteTimesheetTable) {
-						return idInKnownRemoteTimesheetTable;
-					}
-
-					// deep compare, if already present
-					const foundTimesheet = _.find(
-						state.timesheets,
-						timesheet =>
-							timesheet.begin === element.begin &&
-							timesheet.end === element.end &&
-							timesheet.activity === element.activity &&
-							timesheet.project === element.project
-					);
-
-					if (foundTimesheet) {
-						return foundTimesheet.id;
-					}
-
-					return uuidv4();
-				})();
-
-				state.timesheetIdTable[id] = element.id;
-				return {...container, [id]: {...element, id}};
-			}, state.timesheets);
+			state.timesheets = timesheets;
 		}
 	},
 	extraReducers: builder => {
@@ -84,5 +53,5 @@ const timesheetsSlice = createSlice({
 	}
 });
 
-export const {timesheetsReceived} = timesheetsSlice.actions;
+export const {timesheetsUpdated} = timesheetsSlice.actions;
 export const timesheetsReducer = timesheetsSlice.reducer;

@@ -31,6 +31,12 @@ export const selectTimesheetList = createSelector(
 		})
 );
 
+export const selectOnlyLocalTimesheets = createSelector(
+	[selectTimesheets, selectTimesheetIdTable],
+	(timesheets, timesheetIdTable) =>
+		_.omitBy(timesheets, timesheet => timesheet.id in timesheetIdTable)
+);
+
 export const selectTimesheetListOfCurrentDay = createSelector(
 	[selectTimesheetList],
 	timesheets => {
@@ -58,6 +64,11 @@ export const selectActiveTimesheet = createSelector(
 	[selectTimesheets, selectActiveTimesheetId],
 	(timesheets, activeTimesheetId) =>
 		activeTimesheetId !== undefined ? timesheets[activeTimesheetId] : undefined
+);
+
+export const selectKnownRemoteTimesheetIds = createSelector(
+	[selectTimesheetIdTable],
+	timesheetIdTable => _.invert(timesheetIdTable)
 );
 
 export const selectIsTimesheetKnownToServer = (timesheetId: string) =>
