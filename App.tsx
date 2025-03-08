@@ -12,6 +12,10 @@ import {ThemeProvider} from 'src/features/theming/components/ThemeProvider';
 // Run initial configuration for i18n;
 i18n;
 
+import axios from 'axios';
+import axiosRetry from 'axios-retry';
+axiosRetry(axios, {retries: 3});
+
 function App() {
 	return (
 		<Provider store={store}>
