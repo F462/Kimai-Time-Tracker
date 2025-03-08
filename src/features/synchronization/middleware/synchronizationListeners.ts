@@ -1,5 +1,6 @@
-import {ListenerEffectAPI, isAnyOf} from '@reduxjs/toolkit';
 import {FileLogger} from 'react-native-file-logger';
+import {ListenerEffectAPI} from '@reduxjs/toolkit';
+import {REHYDRATE} from 'redux-persist';
 
 import {
 	AppDispatch,
@@ -10,39 +11,68 @@ import {
 	newTimesheetStarted,
 	timesheetStopped
 } from 'src/features/activeTimesheet/context/activeTimesheetSlice';
+import {
+	selectTimesheet,
+	selectTimesheetsToSynchronize
+} from 'src/features/timesheets/context/timesheetsSelectors';
+import {Timesheet} from 'src/features/timesheets/types';
+import {selectIsTimesheetSyncNeeded} from '../context/synchronizationSelectors';
 import {selectServerUrl} from 'src/features/account/context/accountSelectors';
-import {selectTimesheetsToSynchronize} from 'src/features/timesheets/context/timesheetsSelectors';
 import {synchronizeTimesheet} from './synchronizationThunks';
 
-async function sync(listenerApi: ListenerEffectAPI<RootState, AppDispatch>) {
+const syncTimesheet = async (
+	listenerApi: ListenerEffectAPI<RootState, AppDispatch>,
+	timesheet: Timesheet
+) => {
 	const serverUrl = selectServerUrl(listenerApi.getState());
 
 	if (serverUrl === undefined) {
+		FileLogger.error('Server URL not defined, could not sync timesheet.');
 		return;
 	}
 
-	const timesheetsToSynchronize = selectTimesheetsToSynchronize(
-		listenerApi.getState()
-	);
+	await listenerApi.dispatch(synchronizeTimesheet({serverUrl, timesheet}));
+};
 
-	if (Object.keys(timesheetsToSynchronize).length === 0) {
-		return;
-	}
-
-	for (const timesheet of Object.values(timesheetsToSynchronize)) {
-		try {
-			await listenerApi.dispatch(synchronizeTimesheet({serverUrl, timesheet}));
-		} catch (error: any) {
-			FileLogger.warn(`Got error on axios request: ${error.toString()}`);
-		}
-	}
-}
-
-const runSyncOnActions = (startListening: AppStartListening) => {
+const runSyncOnAppStart = (startListening: AppStartListening) => {
 	startListening({
-		matcher: isAnyOf(newTimesheetStarted, timesheetStopped),
-		effect: async (_, listenerApi) => {
-			sync(listenerApi).catch(FileLogger.error);
+		type: REHYDRATE,
+		effect: async (_action, listenerApi) => {
+			const timesheetsToSynchronize = selectTimesheetsToSynchronize(
+				listenerApi.getState()
+			);
+
+			for (const timesheetToSynchronize of Object.values(
+				timesheetsToSynchronize
+			)) {
+				if (
+					selectIsTimesheetSyncNeeded(timesheetToSynchronize.id)(
+						listenerApi.getState()
+					)
+				) {
+					await syncTimesheet(listenerApi, timesheetToSynchronize);
+				}
+			}
+		}
+	});
+};
+
+const runSyncOnTimesheetStarted = (startListening: AppStartListening) => {
+	startListening({
+		actionCreator: newTimesheetStarted,
+		effect: async ({payload: timesheet}, listenerApi) => {
+			await syncTimesheet(listenerApi, timesheet);
+		}
+	});
+};
+
+const runSyncOnTimesheetStopped = (startListening: AppStartListening) => {
+	startListening({
+		actionCreator: timesheetStopped,
+		effect: async ({payload: timesheetId}, listenerApi) => {
+			const timesheet = selectTimesheet(timesheetId)(listenerApi.getState());
+
+			await syncTimesheet(listenerApi, timesheet);
 		}
 	});
 };
@@ -50,5 +80,7 @@ const runSyncOnActions = (startListening: AppStartListening) => {
 export const startSynchronizationListeners = (
 	startListening: AppStartListening
 ) => {
-	runSyncOnActions(startListening);
+	runSyncOnAppStart(startListening);
+	runSyncOnTimesheetStarted(startListening);
+	runSyncOnTimesheetStopped(startListening);
 };
