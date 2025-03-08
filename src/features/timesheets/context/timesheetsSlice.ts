@@ -52,7 +52,7 @@ const timesheetsSlice = createSlice({
 				})();
 
 				state.timesheetIdTable[id] = element.id;
-				return {...container, [id]: {...element, id, isSynced: true}};
+				return {...container, [id]: {...element, id}};
 			}, state.timesheets);
 		}
 	},
