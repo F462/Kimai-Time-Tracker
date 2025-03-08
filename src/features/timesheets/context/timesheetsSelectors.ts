@@ -13,6 +13,9 @@ const selectTimesheets = createSelector(
 	timesheetState => timesheetState.timesheets
 );
 
+export const selectTimesheet = (timesheetId: string) =>
+	createSelector([selectTimesheets], timesheets => timesheets[timesheetId]);
+
 const selectTimesheetIdTable = createSelector(
 	[selectTimesheetsState],
 	timesheetState => timesheetState.timesheetIdTable

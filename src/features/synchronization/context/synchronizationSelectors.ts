@@ -3,6 +3,7 @@ import {createSelector} from '@reduxjs/toolkit';
 
 import {RootState} from 'src/features/data/context/store';
 import {SyncState} from '../types';
+import {isTimesheetSyncNeeded} from '../utils/isTimesheetSyncNeeded';
 
 const selectSynchronizationState = (state: RootState) => state.synchronization;
 
@@ -35,6 +36,9 @@ export const selectSyncState = (timesheetIdToCheck: string) =>
 		[selectTimesheetSynchronizationState],
 		timesheetSyncStates => timesheetSyncStates[timesheetIdToCheck]
 	);
+
+export const selectIsTimesheetSyncNeeded = (timesheetIdToCheck: string) =>
+	createSelector([selectSyncState(timesheetIdToCheck)], isTimesheetSyncNeeded);
 
 export const selectIsTimesheetSyncRunning = (timesheetIdToCheck: string) =>
 	createSelector(
