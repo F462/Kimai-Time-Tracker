@@ -158,7 +158,7 @@ const DatetimeSelector = () => {
 						}
 					}} label={'YYYY-MM-DD'} right={<TextInput.Icon icon="calendar" onPress={() => setDatePickerVisible(true)} />} />
 					<TextInput style={styles.timePicker} value={timeTextInputValue} onChangeText={(text) => setTimeTextInputValue(text)} onEndEditing={(event) => {
-						let newDate = dayjs(event.nativeEvent.text);
+						let newDate = dayjs(event.nativeEvent.text, 'HH:mm');
 						newDate = (dayjsDate === undefined ? newDate : newDate.year(dayjsDate.year()).month(dayjsDate.month()).day(dayjsDate.day()));
 
 						if (isValidDate(newDate.toDate())) {
