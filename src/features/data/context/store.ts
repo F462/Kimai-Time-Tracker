@@ -67,7 +67,7 @@ const rootReducer = (
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-export const listenerMiddleware = createListenerMiddleware();
+const listenerMiddleware = createListenerMiddleware();
 const middlewares = [createLoggingMiddleware(), listenerMiddleware.middleware];
 
 export const store = configureStore({

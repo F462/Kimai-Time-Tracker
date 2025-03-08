@@ -22,5 +22,4 @@ const accountSlice = createSlice({
 	}
 });
 
-export const {} = accountSlice.actions;
 export const accountReducer = accountSlice.reducer;
