@@ -2,7 +2,7 @@ import React from 'react';
 
 import {Icon} from 'react-native-paper';
 
-export const DrawerItemIcon = ({icon}: {icon: string;}) => {
+const DrawerItemIcon = ({icon}: {icon: string;}) => {
 	return <Icon source={icon} size={20} />;
 };
 

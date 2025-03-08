@@ -5,9 +5,7 @@ import {AppStartListening} from 'src/features/data/context/store';
 import {loginUser} from './accountThunks';
 import {selectServerUrl} from '../context/accountSelectors';
 
-export const setAxiosHeadersOnAppStart = (
-	startListening: AppStartListening
-) => {
+const setAxiosHeadersOnAppStart = (startListening: AppStartListening) => {
 	startListening({
 		type: REHYDRATE,
 		effect: async (_, listenerApi) => {
