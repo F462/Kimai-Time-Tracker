@@ -35,10 +35,14 @@ const synchronizationSlice = createSlice({
 	extraReducers: builder => {
 		builder
 			.addCase(newTimesheetStarted, (state, {payload: timesheet}) => {
-				state.timesheets[timesheet.id] = SyncState.NOT_STARTED;
+				if (state.timesheets[timesheet.id] !== SyncState.RUNNING) {
+					state.timesheets[timesheet.id] = SyncState.NOT_STARTED;
+				}
 			})
 			.addCase(timesheetStopped, (state, {payload: timesheetId}) => {
-				state.timesheets[timesheetId] = SyncState.NOT_STARTED;
+				if (state.timesheets[timesheetId] !== SyncState.RUNNING) {
+					state.timesheets[timesheetId] = SyncState.NOT_STARTED;
+				}
 			});
 	}
 });
