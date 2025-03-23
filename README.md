@@ -11,6 +11,7 @@ This project is about creating an Android/iOS app for [Kimai](https://github.com
 - [x] Fetch and show projects
 - [x] Fetch and show timesheets
 - [x] Start and stop new timesheets to track time, also without Internet access
+- [x] Smartwatch compatibility
 
 ## Contributing
 
