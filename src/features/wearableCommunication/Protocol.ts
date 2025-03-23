@@ -1,4 +1,6 @@
 export const wearableProtocol = {
 	activeTimesheetStatusRequest: '/activeTimesheetStatusRequest',
-	activeTimesheetStatusResponse: '/activeTimesheetStatusResponse'
+	activeTimesheetStatusResponse: '/activeTimesheetStatusResponse',
+	startNewTimesheet: '/startNewTimesheet',
+	stopRunningTimesheet: '/stopRunningTimesheet'
 };
