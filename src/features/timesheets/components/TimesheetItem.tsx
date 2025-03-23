@@ -2,17 +2,21 @@ import React, {useMemo} from 'react';
 
 import {ActivityIndicator, Icon} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
+import {FileLogger} from 'react-native-file-logger';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
 
+import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {ListItem} from 'src/ui/ListItem';
 import {ListItemText} from 'src/ui/ListItemText';
+import {PressableOpacity} from 'src/ui/PressableOpacity';
 import {SyncState} from 'src/features/synchronization/types';
 import {Timesheet} from '../types';
 import {selectActivityName} from 'src/features/activities/context/activitiesSelectors';
 import {selectProjectName} from 'src/features/projects/context/projectsSelectors';
+import {selectServerUrl} from 'src/features/account/context/accountSelectors';
 import {selectSyncState} from 'src/features/synchronization/context/synchronizationSelectors';
-import {useAppSelector} from 'src/features/data/context/store';
+import {synchronizeTimesheet} from 'src/features/synchronization/middleware/synchronizationThunks';
 import {useTime} from 'src/features/utils/useTime';
 
 const SYNC_STATE_ICON_SIZE = 15;
@@ -120,14 +124,37 @@ const TimesheetDetails = ({timesheet}: TimesheetItemProps) => {
 		</ListItem>);
 };
 
+const useTimesheetPress = (timesheet: Timesheet) => {
+	const dispatch = useAppDispatch();
+	const serverUrl = useAppSelector(selectServerUrl);
+
+	const synchronizationState = useAppSelector(selectSyncState(timesheet.id));
+
+	switch (synchronizationState) {
+	case SyncState.FAILED:
+		return () => {
+			if (serverUrl === undefined) {
+				FileLogger.warn(`Server URL is not defined, cannot sync timesheet ${timesheet.id}`);
+				return;
+			}
+
+			dispatch(synchronizeTimesheet({serverUrl, timesheet})).catch(FileLogger.error);
+		};
+	default:
+		return undefined;
+	}
+};
+
 export const TimesheetItem = ({timesheet}: TimesheetItemProps) => {
+	const onItemPress = useTimesheetPress(timesheet);
+
 	return (
-		<View style={styles.row}>
+		<PressableOpacity style={styles.row} onPress={onItemPress}>
 			<TimesheetSyncIndicator timesheet={timesheet} />
 			<View style={styles.flex}>
 				<TimesheetTimeDisplay timesheet={timesheet} />
 				<TimesheetDetails timesheet={timesheet} />
 			</View>
-		</View>
+		</PressableOpacity>
 	);
 };
