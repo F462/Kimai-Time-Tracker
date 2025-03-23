@@ -5,5 +5,10 @@ import {Timesheet} from '../types';
 import {TimesheetItem} from './TimesheetItem';
 
 export const TimesheetList = ({data}: {data: Array<Timesheet>}) => {
-	return <DividedList data={data} renderItem={({item}) => <TimesheetItem timesheet={item} />} />;
+	return (
+		<DividedList
+			data={data}
+			renderItem={({item}) => <TimesheetItem timesheet={item} />}
+		/>
+	);
 };

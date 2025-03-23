@@ -10,7 +10,9 @@ export const Onboarding = () => {
 	const dispatch = useAppDispatch();
 	const {t} = useTranslation();
 
-	const hasDevelopmentWarningBeenShown = useAppSelector(selectHasDevelopmentWarningBeenShown);
+	const hasDevelopmentWarningBeenShown = useAppSelector(
+		selectHasDevelopmentWarningBeenShown
+	);
 	const isFirstLaunch = !hasDevelopmentWarningBeenShown;
 
 	if (isFirstLaunch) {

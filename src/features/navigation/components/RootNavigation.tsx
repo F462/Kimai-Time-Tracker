@@ -1,6 +1,9 @@
 import React, {useCallback} from 'react';
 
-import {DrawerHeaderProps, createDrawerNavigator} from '@react-navigation/drawer';
+import {
+	DrawerHeaderProps,
+	createDrawerNavigator
+} from '@react-navigation/drawer';
 import BootSplash from 'react-native-bootsplash';
 import {FileLogger} from 'react-native-file-logger';
 import {NavigationContainer} from '@react-navigation/native';
@@ -25,15 +28,29 @@ export const RootNavigation = () => {
 	const initialRouteName: keyof ScreenParameters = useInitialRouteName();
 	const theme = useTheme<any>();
 
-	const header = useCallback((props: DrawerHeaderProps) => <DefaultHeader {...props} />, []);
+	const header = useCallback(
+		(props: DrawerHeaderProps) => <DefaultHeader {...props} />,
+		[]
+	);
 
 	return (
-		<NavigationContainer theme={theme} onReady={() => {
-			BootSplash.hide().catch(FileLogger.error);
-		}}>
-			<RootDrawer.Navigator initialRouteName={initialRouteName} backBehavior="history" screenOptions={{header}} drawerContent={DefaultDrawerContent}>
-				{screens.map((screen) => (
-					<RootDrawer.Screen key={screen.name} name={screen.name} component={screen.component} options={screen.options} />
+		<NavigationContainer
+			theme={theme}
+			onReady={() => {
+				BootSplash.hide().catch(FileLogger.error);
+			}}>
+			<RootDrawer.Navigator
+				initialRouteName={initialRouteName}
+				backBehavior="history"
+				screenOptions={{header}}
+				drawerContent={DefaultDrawerContent}>
+				{screens.map(screen => (
+					<RootDrawer.Screen
+						key={screen.name}
+						name={screen.name}
+						component={screen.component}
+						options={screen.options}
+					/>
 				))}
 			</RootDrawer.Navigator>
 		</NavigationContainer>

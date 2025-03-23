@@ -34,8 +34,10 @@ export const DefaultHeader = ({navigation, route}: DrawerHeaderProps) => {
 	})();
 	return (
 		<View style={styles.container}>
-			<IconButton icon='menu' onPress={navigation.openDrawer} />
-			<Text variant='titleLarge' style={styles.headerText}>{title}</Text>
+			<IconButton icon="menu" onPress={navigation.openDrawer} />
+			<Text variant="titleLarge" style={styles.headerText}>
+				{title}
+			</Text>
 			<SynchronizationIndicator />
 		</View>
 	);

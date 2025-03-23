@@ -9,7 +9,10 @@ import loadLocalResource from 'react-native-local-resource';
 import path from 'path';
 import {useTranslation} from 'react-i18next';
 
-import {selectIsUserLoggedIn, selectServerUrl} from 'src/features/account/context/accountSelectors';
+import {
+	selectIsUserLoggedIn,
+	selectServerUrl
+} from 'src/features/account/context/accountSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {BaseScreen} from 'src/ui/BaseScreen';
 import {exportLogs} from 'src/features/logging/middleware/loggingThunks';
@@ -43,13 +46,18 @@ const ServerVersionDisplay = () => {
 		if (!isUserLoggedIn || serverUrl === undefined) {
 			setServerVersion(undefined);
 		} else {
-			axios.get(path.join(serverUrl, 'api/version')).then((response) => {
-				setServerVersion(response.data.version);
-			}).catch(FileLogger.warn);
+			axios
+				.get(path.join(serverUrl, 'api/version'))
+				.then(response => {
+					setServerVersion(response.data.version);
+				})
+				.catch(FileLogger.warn);
 		}
 	}, [isUserLoggedIn, serverUrl]);
 
-	return serverVersion && <Text>{t('serverVersion', {version: serverVersion})}</Text>;
+	return (
+		serverVersion && <Text>{t('serverVersion', {version: serverVersion})}</Text>
+	);
 };
 
 const LicenseText = () => {
@@ -58,7 +66,7 @@ const LicenseText = () => {
 		setLicenseText(licenseFileContent);
 	});
 
-	return <Text variant='bodySmall'>{licenseText}</Text>;
+	return <Text variant="bodySmall">{licenseText}</Text>;
 };
 
 const ExportLogsButton = () => {
@@ -82,16 +90,20 @@ export const AboutScreen = () => {
 			<ScrollView>
 				<View style={styles.mainContainer}>
 					<View style={styles.paragraph}>
-						<Text variant='headlineLarge'>{DeviceInfo.getApplicationName()}</Text>
+						<Text variant="headlineLarge">
+							{DeviceInfo.getApplicationName()}
+						</Text>
 					</View>
 					<AppIcon width={iconSize} height={iconSize} />
 					<View style={[styles.paragraph, styles.appInfoTextBox]}>
-						<Text>{t('appVersion', {version: DeviceInfo.getReadableVersion()})}</Text>
+						<Text>
+							{t('appVersion', {version: DeviceInfo.getReadableVersion()})}
+						</Text>
 						<ServerVersionDisplay />
 					</View>
 					<ExportLogsButton />
 					<View style={[styles.paragraph, styles.licenseContainer]}>
-						<Text variant='titleMedium'>{t('license')}</Text>
+						<Text variant="titleMedium">{t('license')}</Text>
 						<LicenseText />
 					</View>
 				</View>

@@ -40,20 +40,28 @@ const styles = StyleSheet.create({
 	}
 });
 
-const useDisplayedDatetime = (timestamp: string | null | undefined) => useMemo(() => timestamp != null ? dayjs(timestamp).format('L LT') : undefined, [timestamp]);
+const useDisplayedDatetime = (timestamp: string | null | undefined) =>
+	useMemo(
+		() => (timestamp != null ? dayjs(timestamp).format('L LT') : undefined),
+		[timestamp]
+	);
 
-const SynchronizationStateIcon = ({synchronizationState}: {synchronizationState?: SyncState}) => {
+const SynchronizationStateIcon = ({
+	synchronizationState
+}: {
+	synchronizationState?: SyncState;
+}) => {
 	const iconSource = (() => {
 		switch (synchronizationState) {
-		case SyncState.NOT_STARTED:
-			return 'timer-sand';
-		case SyncState.RUNNING:
-			return 'sync';
-		case SyncState.FAILED:
-			return 'exclamation';
-		case SyncState.DONE:
-		case undefined:
-			return 'check';
+			case SyncState.NOT_STARTED:
+				return 'timer-sand';
+			case SyncState.RUNNING:
+				return 'sync';
+			case SyncState.FAILED:
+				return 'exclamation';
+			case SyncState.DONE:
+			case undefined:
+				return 'check';
 		}
 	})();
 
@@ -69,7 +77,11 @@ const TimesheetSyncIndicator = ({timesheet}: TimesheetItemProps) => {
 
 	return (
 		<View style={styles.syncStateIconContainer}>
-			{synchronizationState === SyncState.RUNNING ? <ActivityIndicator size={SYNC_STATE_ICON_SIZE} /> : <SynchronizationStateIcon synchronizationState={synchronizationState} />}
+			{synchronizationState === SyncState.RUNNING ? (
+				<ActivityIndicator size={SYNC_STATE_ICON_SIZE} />
+			) : (
+				<SynchronizationStateIcon synchronizationState={synchronizationState} />
+			)}
 		</View>
 	);
 };
@@ -84,8 +96,9 @@ const TimesheetDurationDisplay = ({timesheet}: TimesheetItemProps) => {
 			}
 
 			if (timesheet.begin && timesheet.end) {
-				const calculatedTimesheetDuration =
-					dayjs(timesheet.end).diff(dayjs(timesheet.begin));
+				const calculatedTimesheetDuration = dayjs(timesheet.end).diff(
+					dayjs(timesheet.begin)
+				);
 				return calculatedTimesheetDuration;
 			}
 
@@ -104,24 +117,33 @@ const TimesheetTimeDisplay = ({timesheet}: TimesheetItemProps) => {
 	const displayedTimeStart = useDisplayedDatetime(timesheet.begin);
 	const displayedTimeEnd = useDisplayedDatetime(timesheet.end);
 
-	return (<ListItem>
-		<ListItemText style={styles.datetimeText}>{displayedTimeStart}</ListItemText>
-		<ListItemText> - </ListItemText>
-		<ListItemText style={styles.datetimeText}>{displayedTimeEnd ?? t('now')}</ListItemText>
-		<View />
-		<TimesheetDurationDisplay timesheet={timesheet} />
-	</ListItem>);
+	return (
+		<ListItem>
+			<ListItemText style={styles.datetimeText}>
+				{displayedTimeStart}
+			</ListItemText>
+			<ListItemText> - </ListItemText>
+			<ListItemText style={styles.datetimeText}>
+				{displayedTimeEnd ?? t('now')}
+			</ListItemText>
+			<View />
+			<TimesheetDurationDisplay timesheet={timesheet} />
+		</ListItem>
+	);
 };
 
 const TimesheetDetails = ({timesheet}: TimesheetItemProps) => {
-	const displayedActivity = useAppSelector(selectActivityName(timesheet.activity));
+	const displayedActivity = useAppSelector(
+		selectActivityName(timesheet.activity)
+	);
 	const displayedProject = useAppSelector(selectProjectName(timesheet.project));
 
 	return (
 		<ListItem style={styles.timesheetDetailsContainer}>
 			{displayedActivity && <ListItemText>{displayedActivity}</ListItemText>}
 			{displayedProject && <ListItemText>{displayedProject}</ListItemText>}
-		</ListItem>);
+		</ListItem>
+	);
 };
 
 const useTimesheetPress = (timesheet: Timesheet) => {
@@ -131,17 +153,21 @@ const useTimesheetPress = (timesheet: Timesheet) => {
 	const synchronizationState = useAppSelector(selectSyncState(timesheet.id));
 
 	switch (synchronizationState) {
-	case SyncState.FAILED:
-		return () => {
-			if (serverUrl === undefined) {
-				FileLogger.warn(`Server URL is not defined, cannot sync timesheet ${timesheet.id}`);
-				return;
-			}
+		case SyncState.FAILED:
+			return () => {
+				if (serverUrl === undefined) {
+					FileLogger.warn(
+						`Server URL is not defined, cannot sync timesheet ${timesheet.id}`
+					);
+					return;
+				}
 
-			dispatch(synchronizeTimesheet({serverUrl, timesheet})).catch(FileLogger.error);
-		};
-	default:
-		return undefined;
+				dispatch(synchronizeTimesheet({serverUrl, timesheet})).catch(
+					FileLogger.error
+				);
+			};
+		default:
+			return undefined;
 	}
 };
 
