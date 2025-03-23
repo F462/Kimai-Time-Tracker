@@ -2349,6 +2349,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@d4l/react-native-wear-connectivity@npm:^0.3.1":
+  version: 0.3.1
+  resolution: "@d4l/react-native-wear-connectivity@npm:0.3.1"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/4994550a4bdf90e831fbe23ddbe0845622968b00eaedad10170e2a408d3af7b7c55162eef92b424bee6849ddeb0b36b24f374aeed7878d1ff8119a7398c5be09
+  languageName: node
+  linkType: hard
+
 "@egjs/hammerjs@npm:^2.0.17":
   version: 2.0.17
   resolution: "@egjs/hammerjs@npm:2.0.17"
@@ -8590,6 +8600,7 @@ __metadata:
     "@babel/preset-env": "npm:^7.26.9"
     "@babel/runtime": "npm:^7.26.10"
     "@cspell/eslint-plugin": "npm:^8.17.5"
+    "@d4l/react-native-wear-connectivity": "npm:^0.3.1"
     "@react-native-community/async-storage": "npm:^1.12.1"
     "@react-native-community/cli": "npm:15.1.3"
     "@react-native-community/cli-platform-android": "npm:15.1.3"
