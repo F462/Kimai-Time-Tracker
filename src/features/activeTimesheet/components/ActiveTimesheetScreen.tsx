@@ -40,6 +40,10 @@ import {
 	selectSelectedActivityId
 } from 'src/features/activities/context/activitiesSelectors';
 import {
+	selectCanTimesheetBeStarted,
+	selectNextTimesheetStartDate
+} from '../context/activeTimesheetSelectors';
+import {
 	selectProjectList,
 	selectSelectedProject,
 	selectSelectedProjectId
@@ -50,7 +54,6 @@ import {TimesheetList} from 'src/features/timesheets/components/TimesheetList';
 import {activitySelected} from 'src/features/activities/context/activitiesSlice';
 import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
 import {projectSelected} from 'src/features/projects/context/projectsSlice';
-import {selectNextTimesheetStartDate} from '../context/activeTimesheetSelectors';
 import {stopActiveTimesheet} from 'src/features/activeTimesheet/middleware/activeTimesheetThunks';
 import {useStyle} from 'src/features/theming/utils/useStyle';
 import {useWorkingHoursOfCurrentDayInSeconds} from 'src/features/timesheets/context/timesheetHooks';
@@ -334,6 +337,7 @@ const ProjectSelector = () => {
 
 const StartButton = () => {
 	const dispatch = useAppDispatch();
+	const canTimesheetBeStarted = useAppSelector(selectCanTimesheetBeStarted);
 	const selectedProjectId = useAppSelector(selectSelectedProjectId);
 	const selectedActivityId = useAppSelector(selectSelectedActivityId);
 	const nextTimesheetStartDatetime = useAppSelector(
@@ -342,7 +346,7 @@ const StartButton = () => {
 
 	const iconSize = 200;
 
-	return selectedProjectId !== undefined && selectedActivityId !== undefined ? (
+	return canTimesheetBeStarted ? (
 		<PressableOpacity
 			style={styles.startButton}
 			onPress={() => {
