@@ -12,5 +12,9 @@ const TimesheetListWithAllTimesheets = () => {
 };
 
 export const TimesheetsScreen = () => {
-	return <BaseScreen><TimesheetListWithAllTimesheets /></BaseScreen>;
+	return (
+		<BaseScreen>
+			<TimesheetListWithAllTimesheets />
+		</BaseScreen>
+	);
 };

@@ -9,7 +9,5 @@ module.exports = {
 		'^.+\\.(js|jsx)$': 'babel-jest'
 	},
 	transformIgnorePatterns: [],
-	testPathIgnorePatterns: [
-		'<rootDir>/node_modules/'
-	]
+	testPathIgnorePatterns: ['<rootDir>/node_modules/']
 };

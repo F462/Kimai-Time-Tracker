@@ -9,6 +9,11 @@ const styles = StyleSheet.create({
 	}
 });
 
-export const ListItemText = ({style, children}: React.PropsWithChildren<{style?: React.ComponentProps<typeof Text>['style']}>) => {
+export const ListItemText = ({
+	style,
+	children
+}: React.PropsWithChildren<{
+	style?: React.ComponentProps<typeof Text>['style'];
+}>) => {
 	return <Text style={[styles.itemText, style]}>{children}</Text>;
 };

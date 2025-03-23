@@ -14,13 +14,24 @@ const styles = StyleSheet.create({
 	}
 });
 
-export const ListItem = ({isSelected, style, onPress, children}: React.PropsWithChildren<{isSelected?: boolean; style?: StyleProp<ViewStyle>; onPress?: () => void;}>) => {
+export const ListItem = ({
+	isSelected,
+	style,
+	onPress,
+	children
+}: React.PropsWithChildren<{
+	isSelected?: boolean;
+	style?: StyleProp<ViewStyle>;
+	onPress?: () => void;
+}>) => {
 	return (
-		<PressableOpacity style={[styles.container, style]} onPress={onPress} disabled={onPress === undefined}>
-			{isSelected === undefined ? null
-				: (<Checkbox
-					status={isSelected ? 'checked' : 'unchecked'}
-				/>)}
+		<PressableOpacity
+			style={[styles.container, style]}
+			onPress={onPress}
+			disabled={onPress === undefined}>
+			{isSelected === undefined ? null : (
+				<Checkbox status={isSelected ? 'checked' : 'unchecked'} />
+			)}
 			{children}
 		</PressableOpacity>
 	);

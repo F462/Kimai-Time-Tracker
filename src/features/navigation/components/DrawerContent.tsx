@@ -16,24 +16,45 @@ const styles = StyleSheet.create({
 	}
 });
 
-export const DefaultDrawerContent = ({state, navigation, descriptors}: DrawerContentComponentProps) => {
+export const DefaultDrawerContent = ({
+	state,
+	navigation,
+	descriptors
+}: DrawerContentComponentProps) => {
 	const {t} = useTranslation();
 	const theme = useTheme();
 
-	const shouldFocus = useCallback((routeName: string) => state.routes.findIndex((route) => route.name === routeName) === state.index, [state.index, state.routes]);
-	const DefaultDrawerItem = useCallback(({routeName}: {routeName: string;}) => {
-		const routeKey = state.routes.find(route => route.name === routeName)?.key;
+	const shouldFocus = useCallback(
+		(routeName: string) =>
+			state.routes.findIndex(route => route.name === routeName) === state.index,
+		[state.index, state.routes]
+	);
+	const DefaultDrawerItem = useCallback(
+		({routeName}: {routeName: string}) => {
+			const routeKey = state.routes.find(
+				route => route.name === routeName
+			)?.key;
 
-		if (routeKey === undefined) {
-			return null;
-		}
+			if (routeKey === undefined) {
+				return null;
+			}
 
-		const drawerIcon = descriptors[routeKey]?.options?.drawerIcon;
-		return <DrawerItem focused={shouldFocus(routeName)} label={t(`screenTitles.${routeName}`)} key={routeKey} onPress={() => navigation.navigate(routeName)} icon={drawerIcon} />;
-	}, [descriptors, navigation, shouldFocus, state.routes, t]);
+			const drawerIcon = descriptors[routeKey]?.options?.drawerIcon;
+			return (
+				<DrawerItem
+					focused={shouldFocus(routeName)}
+					label={t(`screenTitles.${routeName}`)}
+					key={routeKey}
+					onPress={() => navigation.navigate(routeName)}
+					icon={drawerIcon}
+				/>
+			);
+		},
+		[descriptors, navigation, shouldFocus, state.routes, t]
+	);
 
 	const header = useMemo(() => {
-		return <DefaultDrawerItem routeName='Account' />;
+		return <DefaultDrawerItem routeName="Account" />;
 	}, [DefaultDrawerItem]);
 	const content = useMemo(() => {
 		return [
@@ -42,24 +63,27 @@ export const DefaultDrawerContent = ({state, navigation, descriptors}: DrawerCon
 			'Customers',
 			'Projects',
 			'Timesheets'
-		].map((routeName) => <DefaultDrawerItem routeName={routeName} key={routeName} />);
+		].map(routeName => (
+			<DefaultDrawerItem routeName={routeName} key={routeName} />
+		));
 	}, [DefaultDrawerItem]);
 	const footer = useMemo(() => {
-		return <DefaultDrawerItem routeName='About' />;
+		return <DefaultDrawerItem routeName="About" />;
 	}, [DefaultDrawerItem]);
 
-	const dynamicStyles = useStyle(() => ({
-		container: {
-			backgroundColor: theme.colors.background
-		}
-	}), [theme.colors.background]);
+	const dynamicStyles = useStyle(
+		() => ({
+			container: {
+				backgroundColor: theme.colors.background
+			}
+		}),
+		[theme.colors.background]
+	);
 
 	return (
 		<View style={[styles.container, dynamicStyles.container]}>
 			{header}
-			<ScrollView>
-				{content}
-			</ScrollView>
+			<ScrollView>{content}</ScrollView>
 			{footer}
 		</View>
 	);

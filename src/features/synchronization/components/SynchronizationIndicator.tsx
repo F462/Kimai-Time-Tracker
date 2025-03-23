@@ -36,8 +36,17 @@ export const SynchronizationIndicator = () => {
 			}
 		})();
 
-		return <View style={styles.icon}><Icon source={iconString} size={30} /></View>;
-	}, [areAllTimesheetsInSync, isInternetReachable, isUserLoggedIn, isUserLoggingIn]);
+		return (
+			<View style={styles.icon}>
+				<Icon source={iconString} size={30} />
+			</View>
+		);
+	}, [
+		areAllTimesheetsInSync,
+		isInternetReachable,
+		isUserLoggedIn,
+		isUserLoggingIn
+	]);
 
 	return iconToDisplay;
 };

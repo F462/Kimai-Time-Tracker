@@ -20,9 +20,11 @@ const config = {
 		)
 	},
 	resolver: {
-		assetExts: [...assetExts.filter((ext) => ext !== 'svg'), 'txt'],
+		assetExts: [...assetExts.filter(ext => ext !== 'svg'), 'txt'],
 		sourceExts: [...sourceExts, 'svg']
 	}
 };
 
-module.exports = wrapWithReanimatedMetroConfig(mergeConfig(defaultConfig, config));
+module.exports = wrapWithReanimatedMetroConfig(
+	mergeConfig(defaultConfig, config)
+);
