@@ -1,5 +1,6 @@
 {
 	"appVersion": "App version {{version}}",
+	"chooseProjectAndActivity": "Choose project and activity on Smartphone to continue",
 	"createApiToken": "Create API token",
 	"enterApiToken": "Enter the API token here:",
 	"enterServerUrl": "Enter Server URL:",

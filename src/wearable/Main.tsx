@@ -1,32 +1,83 @@
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
+import {Text, useTheme} from 'react-native-paper';
+import {sendMessage, watchEvents} from '@d4l/react-native-wear-connectivity';
 import BootSplash from 'react-native-bootsplash';
 import {FileLogger} from 'react-native-file-logger';
-import React from 'react';
+
+import {TimesheetCreationState} from './types';
+import {useStyle} from 'src/features/theming/utils/useStyle';
+import {wearableProtocol} from 'src/features/wearableCommunication/Protocol';
 
 import AppIcon from 'src/assets/icon.svg';
-import {useStyle} from '../features/theming/utils/useStyle';
-import {useTheme} from 'react-native-paper';
+import {useTranslation} from 'react-i18next';
 
 const styles = StyleSheet.create({
 	mainContainer: {
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'center'
+	},
+	chooseProjectActivityText: {
+		textAlign: 'center'
 	}
 });
 
-enum TimesheetCreationState {
-	UNKNOWN = 0,
-	PROJECT_OR_ACTIVITY_NOT_SET,
-	NO_TIMESHEET_RUNNING,
-	TIMESHEET_RUNNING
-}
+const useTimesheetCreationState = () => {
+	const [timesheetCreationState, setTimesheetCreationState] =
+		useState<TimesheetCreationState>();
+
+	useEffect(() => {
+		sendMessage(
+			{text: wearableProtocol.activeTimesheetStatusRequest},
+			() => {},
+			FileLogger.error
+		);
+	}, []);
+
+	useEffect(() => {
+		const unsubscribe = watchEvents.on('message', message => {
+			switch (message.text) {
+				case wearableProtocol.activeTimesheetStatusResponse:
+					setTimesheetCreationState(
+						(() => {
+							try {
+								return parseInt(message.payload, 10);
+							} catch (error: any) {
+								FileLogger.error(
+									`Error while parsing active timesheet status: ${error.toString()}`
+								);
+								return TimesheetCreationState.UNKNOWN;
+							}
+						})()
+					);
+			}
+		});
+
+		() => unsubscribe();
+	}, []);
+
+	return timesheetCreationState;
+};
+
+const ChooseProjectAndActivityText = () => {
+	const {t} = useTranslation();
+
+	return (
+		<Text style={styles.chooseProjectActivityText}>
+			{t('chooseProjectAndActivity')}
+		</Text>
+	);
+};
 
 const ActivityComponent = () => {
-	const timesheetCreationState = TimesheetCreationState.NO_TIMESHEET_RUNNING;
 	const iconSize = 100;
 
+	const timesheetCreationState = useTimesheetCreationState();
+
 	switch (timesheetCreationState) {
+		case TimesheetCreationState.PROJECT_OR_ACTIVITY_NOT_SET:
+			return <ChooseProjectAndActivityText />;
 		case TimesheetCreationState.NO_TIMESHEET_RUNNING:
 			return <AppIcon width={iconSize} height={iconSize} />;
 		default:

@@ -1,0 +1,6 @@
+export enum TimesheetCreationState {
+	UNKNOWN = 0,
+	PROJECT_OR_ACTIVITY_NOT_SET,
+	NO_TIMESHEET_RUNNING,
+	TIMESHEET_RUNNING
+}
