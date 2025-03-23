@@ -1,16 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import {IconButton, Text, useTheme} from 'react-native-paper';
+import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Text, useTheme} from 'react-native-paper';
 import {sendMessage, watchEvents} from '@d4l/react-native-wear-connectivity';
 import BootSplash from 'react-native-bootsplash';
 import {FileLogger} from 'react-native-file-logger';
+import {useTranslation} from 'react-i18next';
 
+import {PressableOpacity} from 'src/ui/PressableOpacity';
 import {TimesheetCreationState} from './types';
 import {useStyle} from 'src/features/theming/utils/useStyle';
 import {wearableProtocol} from 'src/features/wearableCommunication/Protocol';
 
 import AppIcon from 'src/assets/icon.svg';
-import {useTranslation} from 'react-i18next';
 
 const styles = StyleSheet.create({
 	mainContainer: {
@@ -70,16 +71,53 @@ const ChooseProjectAndActivityText = () => {
 	);
 };
 
-const ActivityComponent = () => {
+const StartButton = () => {
 	const iconSize = 100;
 
+	const onPressStartButton = useCallback(() => {
+		sendMessage(
+			{text: wearableProtocol.startNewTimesheet},
+			() => {},
+			FileLogger.error
+		);
+	}, []);
+
+	return (
+		<PressableOpacity onPress={onPressStartButton}>
+			<AppIcon width={iconSize} height={iconSize} />
+		</PressableOpacity>
+	);
+};
+
+const StopButton = () => {
+	const theme = useTheme();
+
+	return (
+		<IconButton
+			icon="stop"
+			iconColor={theme.colors.primary}
+			size={200}
+			onPress={() => {
+				sendMessage(
+					{text: wearableProtocol.stopRunningTimesheet},
+					() => {},
+					FileLogger.error
+				);
+			}}
+		/>
+	);
+};
+
+const ActivityComponent = () => {
 	const timesheetCreationState = useTimesheetCreationState();
 
 	switch (timesheetCreationState) {
 		case TimesheetCreationState.PROJECT_OR_ACTIVITY_NOT_SET:
 			return <ChooseProjectAndActivityText />;
 		case TimesheetCreationState.NO_TIMESHEET_RUNNING:
-			return <AppIcon width={iconSize} height={iconSize} />;
+			return <StartButton />;
+		case TimesheetCreationState.TIMESHEET_RUNNING:
+			return <StopButton />;
 		default:
 			return null;
 	}
