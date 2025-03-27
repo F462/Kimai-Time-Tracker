@@ -20,9 +20,18 @@ const timesheetsSlice = createSlice({
 	reducers: {
 		timesheetsUpdated: (
 			state,
-			{payload: timesheets}: PayloadAction<{[timesheetId: string]: Timesheet}>
+			{
+				payload
+			}: PayloadAction<{
+				timesheets: {[timesheetId: string]: Timesheet};
+				newTimesheetsIdTable: {[localId: string]: number};
+			}>
 		) => {
-			state.timesheets = timesheets;
+			state.timesheets = payload.timesheets;
+			state.timesheetIdTable = {
+				...state.timesheetIdTable,
+				...payload.newTimesheetsIdTable
+			};
 		}
 	},
 	extraReducers: builder => {
