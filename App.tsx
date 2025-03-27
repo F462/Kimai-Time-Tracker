@@ -5,7 +5,6 @@ import {Provider} from 'react-redux';
 import i18n from 'src/features/localization/utils/i18n';
 
 import {persistor, store} from 'src/features/data/context/store';
-import {AppOnWearable} from 'src/wearable/Main';
 import {Onboarding} from 'src/features/onboarding/components/Onboarding';
 import {RootNavigation} from 'src/features/navigation/components/RootNavigation';
 import {ThemeProvider} from 'src/features/theming/components/ThemeProvider';
@@ -37,7 +36,6 @@ function App() {
 	const AppToRender = (() => {
 		switch (isOnWearable) {
 			case true:
-				return AppOnWearable;
 			case false:
 				return AppOnDevice;
 			default:
