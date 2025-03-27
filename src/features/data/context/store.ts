@@ -18,6 +18,10 @@ import {
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 
+import {
+	timesheetsReducer,
+	timesheetsUpdated
+} from 'src/features/timesheets/context/timesheetsSlice';
 import {accountReducer} from 'src/features/account/context/accountSlice';
 import {activeTimesheetReducer} from 'src/features/activeTimesheet/context/activeTimesheetSlice';
 import {activitiesReducer} from 'src/features/activities/context/activitiesSlice';
@@ -28,7 +32,6 @@ import {onboardingReducer} from 'src/features/onboarding/context/onboardingSlice
 import {projectsReducer} from 'src/features/projects/context/projectsSlice';
 import {startRootListener} from '../middleware/rootListener';
 import {synchronizationReducer} from 'src/features/synchronization/context/synchronizationSlice';
-import {timesheetsReducer} from 'src/features/timesheets/context/timesheetsSlice';
 import {userLoggedOut} from 'src/features/account/context/accountActions';
 
 import {ResetSyncStateTransform} from 'src/features/synchronization/context/ResetSyncStateTransform';
@@ -68,7 +71,12 @@ const rootReducer = (
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const listenerMiddleware = createListenerMiddleware();
-const middlewares = [createLoggingMiddleware(), listenerMiddleware.middleware];
+const middlewares = [
+	createLoggingMiddleware({
+		ignoredPayload: [timesheetsUpdated.type]
+	}),
+	listenerMiddleware.middleware
+];
 
 export const store = configureStore({
 	reducer: persistedReducer,
