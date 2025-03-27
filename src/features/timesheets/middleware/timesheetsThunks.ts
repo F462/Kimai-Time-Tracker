@@ -30,6 +30,8 @@ export const fetchTimesheets = createAppAsyncThunk(
 
 			const onlyLocalTimesheets = selectOnlyLocalTimesheets(getState());
 
+			const newTimesheetsIdTable: {[id: string]: number} = {};
+
 			const allTimesheets = response.data.reduce((container, element) => {
 				const id = (() => {
 					const idInKnownRemoteTimesheetTable =
@@ -38,13 +40,19 @@ export const fetchTimesheets = createAppAsyncThunk(
 						return idInKnownRemoteTimesheetTable;
 					}
 
-					return uuidv4();
+					const newId = uuidv4();
+
+					newTimesheetsIdTable[newId] = element.id;
+
+					return newId;
 				})();
 
 				return {...container, [id]: {...element, id}};
 			}, onlyLocalTimesheets);
 
-			dispatch(timesheetsUpdated(allTimesheets));
+			dispatch(
+				timesheetsUpdated({timesheets: allTimesheets, newTimesheetsIdTable})
+			);
 		} catch (error: any) {
 			FileLogger.warn(`Got error on axios request: ${error.toString()}`);
 		}
