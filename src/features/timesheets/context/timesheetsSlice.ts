@@ -1,5 +1,4 @@
 import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {FileLogger} from 'react-native-file-logger';
 import dayjs from 'dayjs';
 
 import {Timesheet, TimesheetsState} from '../types';
@@ -43,7 +42,7 @@ const timesheetsSlice = createSlice({
 				const timesheet = state.timesheets[timesheetId];
 
 				if (timesheet === undefined) {
-					FileLogger.warn(`Could not find timesheet with ID ${timesheetId}`);
+					console.warn(`Could not find timesheet with ID ${timesheetId}`);
 					return;
 				}
 
@@ -53,7 +52,7 @@ const timesheetsSlice = createSlice({
 				const timesheet = state.timesheets[localId];
 
 				if (timesheet === undefined) {
-					FileLogger.warn(`Timesheet with ID ${localId} not found`);
+					console.warn(`Timesheet with ID ${localId} not found`);
 					return;
 				}
 

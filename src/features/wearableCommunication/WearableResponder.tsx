@@ -1,6 +1,5 @@
 import {sendMessage, watchEvents} from '@d4l/react-native-wear-connectivity';
 import {useCallback, useEffect} from 'react';
-import {FileLogger} from 'react-native-file-logger';
 import {v4 as uuidv4} from 'uuid';
 
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
@@ -38,7 +37,7 @@ export const WearableResponder = () => {
 					payload: activeTimesheetStatusPayload
 				},
 				() => {},
-				FileLogger.error
+				console.error
 			),
 		[activeTimesheetStatusPayload]
 	);
@@ -60,7 +59,7 @@ export const WearableResponder = () => {
 					);
 					break;
 				case wearableProtocol.stopRunningTimesheet:
-					dispatch(stopActiveTimesheet()).catch(FileLogger.warn);
+					dispatch(stopActiveTimesheet()).catch(console.warn);
 					break;
 			}
 		});

@@ -1,4 +1,3 @@
-import {FileLogger} from 'react-native-file-logger';
 import {Middleware} from 'redux';
 
 export const createLoggingMiddleware =
@@ -6,7 +5,7 @@ export const createLoggingMiddleware =
 	() => {
 		return (next: (action: unknown) => void): ((action: any) => void) => {
 			return action => {
-				FileLogger.info(
+				console.info(
 					`Event dispatched: ${JSON.stringify(ignoredPayload.includes(action.type) ? action.type : action)}`
 				);
 

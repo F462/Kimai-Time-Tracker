@@ -16,7 +16,6 @@ import {
 	View,
 	ViewStyle
 } from 'react-native';
-import {FileLogger} from 'react-native-file-logger';
 import {PaperSelect} from 'react-native-paper-select';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
@@ -105,7 +104,7 @@ const StopButton = () => {
 			iconColor={theme.colors.primary}
 			size={200}
 			onPress={() => {
-				dispatch(stopActiveTimesheet()).catch(FileLogger.warn);
+				dispatch(stopActiveTimesheet()).catch(console.warn);
 			}}
 		/>
 	);
@@ -389,7 +388,7 @@ const RefreshView = ({children, style}: RefreshViewProps) => {
 		setRefreshing(true);
 		dispatch(fetchTimesheets())
 			.then(() => setRefreshing(false))
-			.catch(FileLogger.warn);
+			.catch(console.warn);
 	}, [dispatch]);
 
 	return (

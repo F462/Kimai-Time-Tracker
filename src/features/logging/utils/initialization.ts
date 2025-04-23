@@ -11,6 +11,6 @@ FileLogger.configure({
 	logsDirectory: LOGS_DIRECTORY
 })
 	.then(() => {
-		FileLogger.info('File logger initialized');
+		console.info('File logger initialized');
 	})
-	.catch(FileLogger.error);
+	.catch(console.error);
