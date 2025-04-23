@@ -1,4 +1,3 @@
-import {FileLogger} from 'react-native-file-logger';
 import {REHYDRATE} from 'redux-persist';
 
 import {AppStartListening} from 'src/features/data/context/store';
@@ -15,7 +14,7 @@ const setAxiosHeadersOnAppStart = (startListening: AppStartListening) => {
 				return;
 			}
 
-			listenerApi.dispatch(loginUser({serverUrl})).catch(FileLogger.error);
+			listenerApi.dispatch(loginUser({serverUrl})).catch(console.error);
 		}
 	});
 };

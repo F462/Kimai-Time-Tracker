@@ -3,7 +3,6 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {sendMessage, watchEvents} from '@d4l/react-native-wear-connectivity';
 import BootSplash from 'react-native-bootsplash';
-import {FileLogger} from 'react-native-file-logger';
 import {useTranslation} from 'react-i18next';
 
 import {PressableOpacity} from 'src/ui/PressableOpacity';
@@ -32,7 +31,7 @@ const useTimesheetCreationState = () => {
 		sendMessage(
 			{text: wearableProtocol.activeTimesheetStatusRequest},
 			() => {},
-			FileLogger.error
+			console.error
 		);
 	}, []);
 
@@ -45,7 +44,7 @@ const useTimesheetCreationState = () => {
 							try {
 								return parseInt(message.payload, 10);
 							} catch (error: any) {
-								FileLogger.error(
+								console.error(
 									`Error while parsing active timesheet status: ${error.toString()}`
 								);
 								return TimesheetCreationState.UNKNOWN;
@@ -78,7 +77,7 @@ const StartButton = () => {
 		sendMessage(
 			{text: wearableProtocol.startNewTimesheet},
 			() => {},
-			FileLogger.error
+			console.error
 		);
 	}, []);
 
@@ -101,7 +100,7 @@ const StopButton = () => {
 				sendMessage(
 					{text: wearableProtocol.stopRunningTimesheet},
 					() => {},
-					FileLogger.error
+					console.error
 				);
 			}}
 		/>
@@ -144,7 +143,7 @@ const MainDisplay = () => {
 
 export const AppOnWearable = () => {
 	React.useEffect(() => {
-		BootSplash.hide().catch(FileLogger.error);
+		BootSplash.hide().catch(console.error);
 	}, []);
 
 	return <MainDisplay />;

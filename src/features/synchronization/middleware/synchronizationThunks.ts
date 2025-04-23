@@ -1,5 +1,4 @@
 import axios, {AxiosResponse} from 'axios';
-import {FileLogger} from 'react-native-file-logger';
 import path from 'path';
 
 import {Timesheet, TimesheetFromApi} from 'src/features/timesheets/types';
@@ -40,7 +39,7 @@ export const synchronizeTimesheet = createAppAsyncThunk<
 		try {
 			if (selectIsTimesheetKnownToServer(timesheet.id)(getState())) {
 				const remoteId = selectRemoteTimesheetId(timesheet.id)(getState());
-				FileLogger.info(
+				console.info(
 					`Timesheet ${timesheet.id} is already known to server with remote ID ${remoteId}`
 				);
 				response = await axios.patch(
@@ -53,7 +52,7 @@ export const synchronizeTimesheet = createAppAsyncThunk<
 					}
 				);
 			} else {
-				FileLogger.info(
+				console.info(
 					`Timesheet ${timesheet.id} is not yet known to server, so POST a new one`
 				);
 				response = await axios.post(path.join(serverUrl, 'api/timesheets'), {
@@ -73,13 +72,13 @@ export const synchronizeTimesheet = createAppAsyncThunk<
 
 			await dispatch(fetchTimesheets());
 		} catch (error: any) {
-			FileLogger.error(`Error while syncing sheet: ${error.toString()}`);
+			console.error(`Error while syncing sheet: ${error.toString()}`);
 			dispatch(timesheetSyncFailed(timesheet.id));
 		} finally {
 			if (resyncTimesheetRequests[timesheet.id] === true) {
 				delete resyncTimesheetRequests[timesheet.id];
 				dispatch(synchronizeTimesheet({serverUrl, timesheet})).catch(
-					FileLogger.error
+					console.error
 				);
 			}
 		}

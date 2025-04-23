@@ -37,7 +37,7 @@ module.exports = {
 		'@typescript-eslint/no-shadow': ['error'],
 		'no-use-before-define': 'off', // turned off because of @typescript-eslint/no-use-before-define
 		'@typescript-eslint/no-use-before-define': ['error'],
-		'no-console': ['error'],
+		'no-console': ['error', { allow: ['trace', 'debug', 'info', 'warn', 'error'] }],
 		'camelcase': ['error'],
 		'curly': ['error', 'all'],
 		'eqeqeq': ['error', 'always', {null: 'ignore'}],

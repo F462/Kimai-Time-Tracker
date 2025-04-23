@@ -2,7 +2,6 @@ import React, {useMemo} from 'react';
 
 import {ActivityIndicator, Icon} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
-import {FileLogger} from 'react-native-file-logger';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
 
@@ -156,14 +155,14 @@ const useTimesheetPress = (timesheet: Timesheet) => {
 		case SyncState.FAILED:
 			return () => {
 				if (serverUrl === undefined) {
-					FileLogger.warn(
+					console.warn(
 						`Server URL is not defined, cannot sync timesheet ${timesheet.id}`
 					);
 					return;
 				}
 
 				dispatch(synchronizeTimesheet({serverUrl, timesheet})).catch(
-					FileLogger.error
+					console.error
 				);
 			};
 		default:

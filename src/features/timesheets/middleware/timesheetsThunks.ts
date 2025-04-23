@@ -1,4 +1,3 @@
-import {FileLogger} from 'react-native-file-logger';
 import axios from 'axios';
 import path from 'path';
 import {v4 as uuidv4} from 'uuid';
@@ -54,7 +53,7 @@ export const fetchTimesheets = createAppAsyncThunk(
 				timesheetsUpdated({timesheets: allTimesheets, newTimesheetsIdTable})
 			);
 		} catch (error: any) {
-			FileLogger.warn(`Got error on axios request: ${error.toString()}`);
+			console.warn(`Got error on axios request: ${error.toString()}`);
 		}
 	}
 );

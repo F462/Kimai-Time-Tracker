@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react';
 import DeviceInfo from 'react-native-device-info';
-import {FileLogger} from 'react-native-file-logger';
 
 export const useIsOnWearable = () => {
 	const [isOnWearable, setIsOnWearable] = useState<boolean>();
@@ -10,7 +9,7 @@ export const useIsOnWearable = () => {
 			.then(hasFeature => {
 				setIsOnWearable(hasFeature);
 			})
-			.catch(FileLogger.error);
+			.catch(console.error);
 	}, []);
 
 	return isOnWearable;

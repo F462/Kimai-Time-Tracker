@@ -5,7 +5,6 @@ import {
 	createDrawerNavigator
 } from '@react-navigation/drawer';
 import BootSplash from 'react-native-bootsplash';
-import {FileLogger} from 'react-native-file-logger';
 import {NavigationContainer} from '@react-navigation/native';
 import {useSelector} from 'react-redux';
 import {useTheme} from 'react-native-paper';
@@ -37,7 +36,7 @@ export const RootNavigation = () => {
 		<NavigationContainer
 			theme={theme}
 			onReady={() => {
-				BootSplash.hide().catch(FileLogger.error);
+				BootSplash.hide().catch(console.error);
 			}}>
 			<RootDrawer.Navigator
 				initialRouteName={initialRouteName}

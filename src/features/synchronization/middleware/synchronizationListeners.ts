@@ -1,4 +1,3 @@
-import {FileLogger} from 'react-native-file-logger';
 import {ListenerEffectAPI} from '@reduxjs/toolkit';
 import {REHYDRATE} from 'redux-persist';
 
@@ -27,7 +26,7 @@ const syncTimesheet = async (
 	const serverUrl = selectServerUrl(listenerApi.getState());
 
 	if (serverUrl === undefined) {
-		FileLogger.error('Server URL not defined, could not sync timesheet.');
+		console.error('Server URL not defined, could not sync timesheet.');
 		return;
 	}
 

@@ -2,7 +2,6 @@ import React, {useCallback, useState} from 'react';
 
 import {Button, Text, TextInput, useTheme} from 'react-native-paper';
 import {Linking, StyleSheet, View} from 'react-native';
-import {FileLogger} from 'react-native-file-logger';
 import path from 'path';
 import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
@@ -55,7 +54,7 @@ export const AccountScreen = () => {
 	const onCreateApiToken = useCallback(() => {
 		Linking.openURL(
 			path.join(serverUrl, languageTag, 'profile/admin/api-token')
-		).catch(FileLogger.error);
+		).catch(console.error);
 	}, [languageTag, serverUrl]);
 
 	const dynamicStyles = useStyle(
@@ -92,9 +91,9 @@ export const AccountScreen = () => {
 				onPress={() => {
 					storeApiToken(apiToken)
 						.then(() => {
-							dispatch(loginUser({serverUrl})).catch(FileLogger.error);
+							dispatch(loginUser({serverUrl})).catch(console.error);
 						})
-						.catch(FileLogger.error);
+						.catch(console.error);
 				}}>
 				{t('save')}
 			</Button>
@@ -111,9 +110,9 @@ export const AccountScreen = () => {
 								setServerUrl('');
 								setApiToken('');
 
-								dispatch(logoutUser()).catch(FileLogger.error);
+								dispatch(logoutUser()).catch(console.error);
 							})
-							.catch(FileLogger.error);
+							.catch(console.error);
 					}}>
 					{t('logout')}
 				</Button>
