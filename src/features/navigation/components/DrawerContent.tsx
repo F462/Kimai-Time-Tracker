@@ -26,13 +26,14 @@ export const DefaultDrawerContent = ({
 
 	const shouldFocus = useCallback(
 		(routeName: string) =>
-			state.routes.findIndex(route => route.name === routeName) === state.index,
+			state.routes.findIndex((route) => route.name === routeName) ===
+			state.index,
 		[state.index, state.routes]
 	);
 	const DefaultDrawerItem = useCallback(
 		({routeName}: {routeName: string}) => {
 			const routeKey = state.routes.find(
-				route => route.name === routeName
+				(route) => route.name === routeName
 			)?.key;
 
 			if (routeKey === undefined) {
@@ -63,7 +64,7 @@ export const DefaultDrawerContent = ({
 			'Customers',
 			'Projects',
 			'Timesheets'
-		].map(routeName => (
+		].map((routeName) => (
 			<DefaultDrawerItem routeName={routeName} key={routeName} />
 		));
 	}, [DefaultDrawerItem]);

@@ -33,7 +33,7 @@ const timesheetsSlice = createSlice({
 			};
 		}
 	},
-	extraReducers: builder => {
+	extraReducers: (builder) => {
 		builder
 			.addCase(newTimesheetStarted, (state, {payload: timesheet}) => {
 				state.timesheets[timesheet.id] = timesheet;

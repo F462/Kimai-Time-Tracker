@@ -43,7 +43,7 @@ export const WearableResponder = () => {
 	);
 
 	useEffect(() => {
-		const unsubscribe = watchEvents.on('message', message => {
+		const unsubscribe = watchEvents.on('message', (message) => {
 			switch (message.text) {
 				case wearableProtocol.activeTimesheetStatusRequest:
 					sendActiveTimesheetStatus();

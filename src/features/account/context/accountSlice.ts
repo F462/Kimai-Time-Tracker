@@ -11,12 +11,12 @@ const accountSlice = createSlice({
 	name: 'account',
 	initialState,
 	reducers: {},
-	extraReducers: builder => {
+	extraReducers: (builder) => {
 		builder
 			.addCase(userLoggedIn, (state, {payload: serverUrl}) => {
 				state.serverUrl = serverUrl;
 			})
-			.addCase(userLoggedOut, state => {
+			.addCase(userLoggedOut, (state) => {
 				state.serverUrl = undefined;
 			});
 	}

@@ -6,5 +6,5 @@ const selectNetworkState = (state: RootState) => state.network;
 
 export const selectIsInternetReachable = createSelector(
 	[selectNetworkState],
-	networkState => networkState.isInternetReachable
+	(networkState) => networkState.isInternetReachable
 );

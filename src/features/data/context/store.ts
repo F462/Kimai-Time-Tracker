@@ -82,7 +82,7 @@ const middlewares = [
 
 export const store = configureStore({
 	reducer: persistedReducer,
-	middleware: getDefaultMiddleware =>
+	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({
 			serializableCheck: {
 				// ignore redux persist actions in serializable check

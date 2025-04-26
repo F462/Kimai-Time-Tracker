@@ -43,7 +43,7 @@ export const RootNavigation = () => {
 				backBehavior="history"
 				screenOptions={{header}}
 				drawerContent={DefaultDrawerContent}>
-				{screens.map(screen => (
+				{screens.map((screen) => (
 					<RootDrawer.Screen
 						key={screen.name}
 						name={screen.name}

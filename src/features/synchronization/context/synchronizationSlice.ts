@@ -32,7 +32,7 @@ const synchronizationSlice = createSlice({
 			state.timesheets[id] = SyncState.FAILED;
 		}
 	},
-	extraReducers: builder => {
+	extraReducers: (builder) => {
 		builder
 			.addCase(newTimesheetStarted, (state, {payload: timesheet}) => {
 				if (state.timesheets[timesheet.id] !== SyncState.RUNNING) {

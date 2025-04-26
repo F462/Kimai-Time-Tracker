@@ -6,5 +6,5 @@ const selectOnboardingState = (state: RootState) => state.onboarding;
 
 export const selectHasDevelopmentWarningBeenShown = createSelector(
 	[selectOnboardingState],
-	onboardingState => onboardingState.hasDevelopmentWarningBeenShown
+	(onboardingState) => onboardingState.hasDevelopmentWarningBeenShown
 );

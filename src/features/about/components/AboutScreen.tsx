@@ -47,7 +47,7 @@ const ServerVersionDisplay = () => {
 		} else {
 			axios
 				.get(path.join(serverUrl, 'api/version'))
-				.then(response => {
+				.then((response) => {
 					setServerVersion(response.data.version);
 				})
 				.catch(console.warn);

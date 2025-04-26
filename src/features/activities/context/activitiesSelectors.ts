@@ -6,17 +6,17 @@ const selectActivitiesState = (state: RootState) => state.activities;
 
 const selectActivities = createSelector(
 	[selectActivitiesState],
-	activities => activities.activities
+	(activities) => activities.activities
 );
 
 export const selectActivityList = createSelector(
 	[selectActivities],
-	activities => Object.values(activities)
+	(activities) => Object.values(activities)
 );
 
 export const selectSelectedActivityId = createSelector(
 	[selectActivitiesState],
-	activitiesState => activitiesState.selectedActivityId
+	(activitiesState) => activitiesState.selectedActivityId
 );
 
 export const selectSelectedActivity = createSelector(
@@ -28,9 +28,9 @@ export const selectSelectedActivity = createSelector(
 );
 
 const selectActivity = (activityId: number | undefined) =>
-	createSelector([selectActivities], activities =>
+	createSelector([selectActivities], (activities) =>
 		activityId ? activities[activityId] : undefined
 	);
 
 export const selectActivityName = (activityId: number | undefined) =>
-	createSelector([selectActivity(activityId)], activity => activity?.name);
+	createSelector([selectActivity(activityId)], (activity) => activity?.name);
