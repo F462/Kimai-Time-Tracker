@@ -73,7 +73,7 @@
 		"@types/react": "^19.1.2",
 		"@types/react-test-renderer": "^19.1.0",
 		"babel-jest": "^29.7.0",
-		"eslint": "^8.57.1",
+		"eslint": "^9.25.1",
 		"eslint-config-prettier": "^10.1.2",
 		"eslint-plugin-ft-flow": "^3.0.11",
 		"eslint-plugin-prettier": "^5.2.6",
@@ -87,5 +87,9 @@
 	"engines": {
 		"node": ">=18"
 	},
-	"packageManager": "yarn@4.1.0"
+	"packageManager": "yarn@4.1.0",
+	"resolutions": {
+		"eslint-plugin-react-hooks": "5.2.0",
+		"eslint-plugin-react-native": "5.0.0"
+	}
 }
