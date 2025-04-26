@@ -10,11 +10,11 @@ import {loginUser, logoutUser} from '../middleware/accountThunks';
 import {removeApiToken, storeApiToken} from '../utils/accountPersistor';
 import {
 	selectIsUserLoggedIn,
-	selectServerUrl
+	selectServerUrl,
 } from '../context/accountSelectors';
 import {
 	selectIsUserLoggingIn,
-	selectIsUserLoggingOut
+	selectIsUserLoggingOut,
 } from 'src/features/appState/context/appStateSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {BaseScreen} from 'src/ui/BaseScreen';
@@ -22,15 +22,15 @@ import {useStyle} from 'src/features/theming/utils/useStyle';
 
 const styles = StyleSheet.create({
 	inputContainer: {
-		marginVertical: 10
+		marginVertical: 10,
 	},
 	actionButton: {
 		marginHorizontal: 10,
-		marginVertical: 20
+		marginVertical: 20,
 	},
 	spacer: {
-		flex: 1
-	}
+		flex: 1,
+	},
 });
 
 export const AccountScreen = () => {
@@ -46,24 +46,24 @@ export const AccountScreen = () => {
 
 	const [apiToken, setApiToken] = useState('');
 	const [serverUrl, setServerUrl] = useState(
-		useSelector(selectServerUrl) ?? ''
+		useSelector(selectServerUrl) ?? '',
 	);
 
 	const canApiTokenBeCreated = !!serverUrl;
 
 	const onCreateApiToken = useCallback(() => {
 		Linking.openURL(
-			path.join(serverUrl, languageTag, 'profile/admin/api-token')
+			path.join(serverUrl, languageTag, 'profile/admin/api-token'),
 		).catch(console.error);
 	}, [languageTag, serverUrl]);
 
 	const dynamicStyles = useStyle(
 		() => ({
 			logoutButton: {
-				backgroundColor: theme.colors.error
-			}
+				backgroundColor: theme.colors.error,
+			},
 		}),
-		[theme.colors.error]
+		[theme.colors.error],
 	);
 
 	return (

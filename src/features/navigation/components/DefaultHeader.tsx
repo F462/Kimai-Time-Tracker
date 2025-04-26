@@ -11,13 +11,13 @@ import {SynchronizationIndicator} from 'src/features/synchronization/components/
 const styles = StyleSheet.create({
 	container: {
 		flexDirection: 'row',
-		margin: 10
+		margin: 10,
 	},
 	headerText: {
 		flex: 1,
 		marginLeft: 20,
-		textAlignVertical: 'center'
-	}
+		textAlignVertical: 'center',
+	},
 });
 
 export const DefaultHeader = ({navigation, route}: DrawerHeaderProps) => {

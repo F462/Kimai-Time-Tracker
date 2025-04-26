@@ -4,11 +4,11 @@ import path from 'path';
 
 export const LOGS_DIRECTORY = path.join(
 	ReactNativeBlobUtil.fs.dirs.CacheDir,
-	'logs'
+	'logs',
 );
 
 FileLogger.configure({
-	logsDirectory: LOGS_DIRECTORY
+	logsDirectory: LOGS_DIRECTORY,
 })
 	.then(() => {
 		console.info('File logger initialized');

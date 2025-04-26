@@ -5,8 +5,8 @@ import {StyleSheet, View} from 'react-native';
 const styles = StyleSheet.create({
 	container: {
 		margin: 10,
-		flex: 1
-	}
+		flex: 1,
+	},
 });
 
 export const BaseScreen = ({children}: React.PropsWithChildren<{}>) => {

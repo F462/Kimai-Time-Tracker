@@ -5,7 +5,7 @@ import {
 	IconButton,
 	Text,
 	TextInput,
-	useTheme
+	useTheme,
 } from 'react-native-paper';
 import {DatePickerModal, TimePickerModal} from 'react-native-paper-dates';
 import {
@@ -14,7 +14,7 @@ import {
 	StyleProp,
 	StyleSheet,
 	View,
-	ViewStyle
+	ViewStyle,
 } from 'react-native';
 import {PaperSelect} from 'react-native-paper-select';
 import dayjs from 'dayjs';
@@ -23,29 +23,29 @@ import {v4 as uuidv4} from 'uuid';
 
 import {
 	isValidDate,
-	parseSelectedId
+	parseSelectedId,
 } from 'src/features/timesheets/utils/functions';
 import {
 	newTimesheetStarted,
-	nextTimesheetStartDatetimeSet
+	nextTimesheetStartDatetimeSet,
 } from '../context/activeTimesheetSlice';
 import {
 	selectActiveTimesheet,
-	selectTimesheetListOfCurrentDay
+	selectTimesheetListOfCurrentDay,
 } from 'src/features/timesheets/context/timesheetsSelectors';
 import {
 	selectActivityList,
 	selectSelectedActivity,
-	selectSelectedActivityId
+	selectSelectedActivityId,
 } from 'src/features/activities/context/activitiesSelectors';
 import {
 	selectCanTimesheetBeStarted,
-	selectNextTimesheetStartDate
+	selectNextTimesheetStartDate,
 } from '../context/activeTimesheetSelectors';
 import {
 	selectProjectList,
 	selectSelectedProject,
-	selectSelectedProjectId
+	selectSelectedProjectId,
 } from 'src/features/projects/context/projectsSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {PressableOpacity} from 'src/ui/PressableOpacity';
@@ -62,35 +62,35 @@ import AppIcon from 'src/assets/icon.svg';
 const styles = StyleSheet.create({
 	mainContainer: {
 		margin: 20,
-		gap: 20
+		gap: 20,
 	},
 	startButton: {
 		alignSelf: 'center',
-		padding: 20
+		padding: 20,
 	},
 	datetimePickerContainer: {
 		flexDirection: 'row',
 		marginVertical: 10,
-		gap: 10
+		gap: 10,
 	},
 	datePicker: {
-		flex: 2
+		flex: 2,
 	},
 	timePicker: {
-		flex: 1
+		flex: 1,
 	},
 	dayWorkingHoursContainer: {
 		flexDirection: 'row',
 		padding: 10,
-		borderRadius: 5
+		borderRadius: 5,
 	},
 	dayWorkingHourLabelText: {
-		flex: 3
+		flex: 3,
 	},
 	dayWorkingHourValueText: {
 		flex: 1,
-		textAlign: 'right'
-	}
+		textAlign: 'right',
+	},
 });
 
 const StopButton = () => {
@@ -128,12 +128,12 @@ function Selector<T extends {id: number; name: string}>({
 	elements,
 	selectedElement,
 	label,
-	onSelection
+	onSelection,
 }: SelectorProps<T>) {
 	const elementList = useMemo(() => {
 		return Object.values(elements ?? {}).map((item) => ({
 			_id: item.id.toString(),
-			value: item.name
+			value: item.name,
 		}));
 	}, [elements]);
 
@@ -146,8 +146,8 @@ function Selector<T extends {id: number; name: string}>({
 			selectedArrayList={[
 				{
 					_id: selectedElement?.id.toString() ?? '',
-					value: selectedElement?.name ?? ''
-				}
+					value: selectedElement?.name ?? '',
+				},
 			]}
 			multiEnable={false}
 			hideSearchBox={true}
@@ -167,11 +167,11 @@ const DatetimeSelector = () => {
 			dateUnixTimestamp !== undefined
 				? dayjs.unix(dateUnixTimestamp).toDate()
 				: undefined,
-		[dateUnixTimestamp]
+		[dateUnixTimestamp],
 	);
 	const dayjsDate = useMemo(
 		() => (date !== undefined ? dayjs(date) : undefined),
-		[date]
+		[date],
 	);
 
 	const [datePickerVisible, setDatePickerVisible] = useState(false);
@@ -180,7 +180,7 @@ const DatetimeSelector = () => {
 	const [dateTextInputValue, setDateTextInputValue] = useState<string>();
 	const updateDateTextInput = useCallback(
 		() => setDateTextInputValue(dayjsDate?.format('YYYY-MM-DD')),
-		[dayjsDate]
+		[dayjsDate],
 	);
 	useEffect(() => {
 		updateDateTextInput();
@@ -188,7 +188,7 @@ const DatetimeSelector = () => {
 	const [timeTextInputValue, setTimeTextInputValue] = useState<string>();
 	const updateTimeTextInput = useCallback(
 		() => setTimeTextInputValue(dayjsDate?.format('HH:mm')),
-		[dayjsDate]
+		[dayjsDate],
 	);
 	useEffect(() => {
 		updateTimeTextInput();
@@ -196,7 +196,9 @@ const DatetimeSelector = () => {
 
 	useEffect(() => {
 		dispatch(
-			nextTimesheetStartDatetimeSet(useCurrentTime ? undefined : dayjs().unix())
+			nextTimesheetStartDatetimeSet(
+				useCurrentTime ? undefined : dayjs().unix(),
+			),
 		);
 	}, [dispatch, useCurrentTime]);
 
@@ -273,8 +275,8 @@ const DatetimeSelector = () => {
 							dayjsDate
 								?.set('hour', value.hours)
 								.set('minute', value.minutes)
-								.unix()
-						)
+								.unix(),
+						),
 					);
 					setTimePickerVisible(false);
 				}}
@@ -340,7 +342,7 @@ const StartButton = () => {
 	const selectedProjectId = useAppSelector(selectSelectedProjectId);
 	const selectedActivityId = useAppSelector(selectSelectedActivityId);
 	const nextTimesheetStartDatetime = useAppSelector(
-		selectNextTimesheetStartDate
+		selectNextTimesheetStartDate,
 	);
 
 	const iconSize = 200;
@@ -357,8 +359,8 @@ const StartButton = () => {
 							: new Date()
 						).toISOString(),
 						project: selectedProjectId,
-						activity: selectedActivityId
-					})
+						activity: selectedActivityId,
+					}),
 				);
 			}}>
 			<AppIcon width={iconSize} height={iconSize} />
@@ -416,20 +418,20 @@ const DayWorkingHours = () => {
 	const dynamicStyles = useStyle(
 		() => ({
 			dayWorkingHoursContainer: {
-				backgroundColor: theme.colors.primaryContainer
+				backgroundColor: theme.colors.primaryContainer,
 			},
 			textOnContainer: {
-				color: theme.colors.onPrimaryContainer
-			}
+				color: theme.colors.onPrimaryContainer,
+			},
 		}),
-		[theme.colors.onPrimaryContainer, theme.colors.primaryContainer]
+		[theme.colors.onPrimaryContainer, theme.colors.primaryContainer],
 	);
 
 	return (
 		<View
 			style={[
 				styles.dayWorkingHoursContainer,
-				dynamicStyles.dayWorkingHoursContainer
+				dynamicStyles.dayWorkingHoursContainer,
 			]}>
 			<Text
 				variant="titleMedium"

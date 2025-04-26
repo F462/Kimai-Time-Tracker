@@ -10,7 +10,7 @@ import {useTranslation} from 'react-i18next';
 
 import {
 	selectIsUserLoggedIn,
-	selectServerUrl
+	selectServerUrl,
 } from 'src/features/account/context/accountSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {BaseScreen} from 'src/ui/BaseScreen';
@@ -21,17 +21,17 @@ import licenseFile from 'src/assets/license.txt';
 
 const styles = StyleSheet.create({
 	mainContainer: {
-		alignItems: 'center'
+		alignItems: 'center',
 	},
 	paragraph: {
-		margin: 20
+		margin: 20,
 	},
 	appInfoTextBox: {
-		alignItems: 'flex-end'
+		alignItems: 'flex-end',
 	},
 	licenseContainer: {
-		alignItems: 'center'
-	}
+		alignItems: 'center',
+	},
 });
 
 const ServerVersionDisplay = () => {

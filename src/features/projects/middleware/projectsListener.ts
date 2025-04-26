@@ -7,7 +7,7 @@ const fetchProjectsOnUserLogin = (startListening: AppStartListening) => {
 		actionCreator: userLoggedIn,
 		effect: async (_, listenerApi) => {
 			await listenerApi.dispatch(fetchProjects());
-		}
+		},
 	});
 };
 

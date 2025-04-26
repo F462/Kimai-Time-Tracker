@@ -34,12 +34,12 @@ export const WearableResponder = () => {
 			sendMessage(
 				{
 					text: wearableProtocol.activeTimesheetStatusResponse,
-					payload: activeTimesheetStatusPayload
+					payload: activeTimesheetStatusPayload,
 				},
 				() => {},
-				console.error
+				console.error,
 			),
-		[activeTimesheetStatusPayload]
+		[activeTimesheetStatusPayload],
 	);
 
 	useEffect(() => {
@@ -54,8 +54,8 @@ export const WearableResponder = () => {
 							id: uuidv4(),
 							begin: new Date().toISOString(),
 							project: selectedProjectId,
-							activity: selectedActivityId
-						})
+							activity: selectedActivityId,
+						}),
 					);
 					break;
 				case wearableProtocol.stopRunningTimesheet:
@@ -69,7 +69,7 @@ export const WearableResponder = () => {
 		dispatch,
 		selectedActivityId,
 		selectedProjectId,
-		sendActiveTimesheetStatus
+		sendActiveTimesheetStatus,
 	]);
 
 	useEffect(() => {

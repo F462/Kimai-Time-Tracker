@@ -9,15 +9,15 @@ const selectActiveTimesheetState = (state: RootState) => state.activeTimesheet;
 export const selectCanTimesheetBeStarted = createSelector(
 	[selectSelectedProjectId, selectSelectedActivityId],
 	(selectedProjectId, selectedActivityId) =>
-		selectedProjectId !== undefined && selectedActivityId !== undefined
+		selectedProjectId !== undefined && selectedActivityId !== undefined,
 );
 
 export const selectActiveTimesheetId = createSelector(
 	[selectActiveTimesheetState],
-	(activeTimesheetState) => activeTimesheetState.activeTimesheetId
+	(activeTimesheetState) => activeTimesheetState.activeTimesheetId,
 );
 
 export const selectNextTimesheetStartDate = createSelector(
 	[selectActiveTimesheetState],
-	(activeTimesheetState) => activeTimesheetState.nextTimesheetStartDatetime
+	(activeTimesheetState) => activeTimesheetState.nextTimesheetStartDatetime,
 );

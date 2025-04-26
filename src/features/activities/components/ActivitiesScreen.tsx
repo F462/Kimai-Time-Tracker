@@ -2,7 +2,7 @@ import React, {useCallback} from 'react';
 
 import {
 	selectActivityList,
-	selectSelectedActivityId
+	selectSelectedActivityId,
 } from '../context/activitiesSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {Activity} from '../types';
@@ -14,7 +14,7 @@ import {activitySelected} from '../context/activitiesSlice';
 
 const ActivityItem = ({
 	activity,
-	isSelected
+	isSelected,
 }: {
 	activity: Activity;
 	isSelected: boolean;

@@ -2,7 +2,7 @@ import {createSlice, isAnyOf} from '@reduxjs/toolkit';
 
 import {
 	loginUser,
-	logoutUser
+	logoutUser,
 } from 'src/features/account/middleware/accountThunks';
 import {AppStateState} from '../types';
 
@@ -27,9 +27,9 @@ const appStateSlice = createSlice({
 				isAnyOf(logoutUser.rejected, logoutUser.fulfilled),
 				(state) => {
 					state.isUserLoggingOut = false;
-				}
+				},
 			);
-	}
+	},
 });
 
 export const appStateReducer = appStateSlice.reducer;

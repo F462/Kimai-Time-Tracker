@@ -2,7 +2,7 @@ import {
 	MD3DarkTheme as PaperDefaultDarkTheme,
 	MD3LightTheme as PaperDefaultLightTheme,
 	PaperProvider,
-	adaptNavigationTheme
+	adaptNavigationTheme,
 } from 'react-native-paper';
 import {Appearance} from 'react-native';
 import {DefaultTheme as NavigationDefaultTheme} from '@react-navigation/native';
@@ -13,7 +13,7 @@ import {useIsOnWearable} from '../../utils/useIsOnWearable';
 const {LightTheme: navigationLightTheme, DarkTheme: navigationDarkTheme} =
 	adaptNavigationTheme({
 		reactNavigationLight: NavigationDefaultTheme,
-		reactNavigationDark: NavigationDefaultTheme
+		reactNavigationDark: NavigationDefaultTheme,
 	});
 
 const paperLightTheme = {
@@ -47,12 +47,12 @@ const paperLightTheme = {
 			level2: 'rgb(235, 242, 226)',
 			level3: 'rgb(228, 237, 219)',
 			level4: 'rgb(225, 236, 217)',
-			level5: 'rgb(221, 233, 212)'
+			level5: 'rgb(221, 233, 212)',
 		},
 		surfaceDisabled: 'rgba(26, 28, 24, 0.12)',
 		onSurfaceDisabled: 'rgba(26, 28, 24, 0.38)',
-		backdrop: 'rgba(45, 50, 41, 0.4)'
-	}
+		backdrop: 'rgba(45, 50, 41, 0.4)',
+	},
 };
 const combinedLightTheme = deepmerge(navigationLightTheme, paperLightTheme);
 
@@ -95,12 +95,12 @@ const paperDarkTheme = {
 			level2: 'rgb(34, 43, 30)',
 			level3: 'rgb(37, 49, 32)',
 			level4: 'rgb(38, 51, 33)',
-			level5: 'rgb(40, 55, 34)'
+			level5: 'rgb(40, 55, 34)',
 		},
 		surfaceDisabled: 'rgba(227, 227, 220, 0.12)',
 		onSurfaceDisabled: 'rgba(227, 227, 220, 0.38)',
-		backdrop: 'rgba(45, 50, 41, 0.4)'
-	}
+		backdrop: 'rgba(45, 50, 41, 0.4)',
+	},
 };
 const combinedDarkTheme = deepmerge(navigationDarkTheme, paperDarkTheme);
 

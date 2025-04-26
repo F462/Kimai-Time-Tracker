@@ -4,7 +4,7 @@ import {userLoggedIn, userLoggedOut} from './accountActions';
 import {AccountState} from '../types';
 
 const initialState: AccountState = {
-	serverUrl: undefined
+	serverUrl: undefined,
 };
 
 const accountSlice = createSlice({
@@ -19,7 +19,7 @@ const accountSlice = createSlice({
 			.addCase(userLoggedOut, (state) => {
 				state.serverUrl = undefined;
 			});
-	}
+	},
 });
 
 export const accountReducer = accountSlice.reducer;

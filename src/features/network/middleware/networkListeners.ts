@@ -12,13 +12,13 @@ const startNetworkEventListener = (startListening: AppStartListening) => {
 			addEventListener((state) => {
 				const newInternetState = state.isInternetReachable;
 				const oldInternetState = selectIsInternetReachable(
-					listenerApi.getState()
+					listenerApi.getState(),
 				);
 				if (oldInternetState !== newInternetState) {
 					listenerApi.dispatch(internetReachabilityChanged(newInternetState));
 				}
 			});
-		}
+		},
 	});
 };
 

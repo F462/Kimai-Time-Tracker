@@ -6,10 +6,10 @@ const selectCustomersState = (state: RootState) => state.customers;
 
 const selectCustomers = createSelector(
 	[selectCustomersState],
-	(customers) => customers.customers
+	(customers) => customers.customers,
 );
 
 export const selectCustomerList = createSelector(
 	[selectCustomers],
-	(customers) => Object.values(customers)
+	(customers) => Object.values(customers),
 );

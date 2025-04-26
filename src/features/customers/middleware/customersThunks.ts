@@ -17,11 +17,11 @@ export const fetchCustomers = createAppAsyncThunk(
 
 		try {
 			const response = await axios.get<Array<Customer>>(
-				path.join(serverUrl, 'api/customers')
+				path.join(serverUrl, 'api/customers'),
 			);
 			dispatch(customersReceived(response.data));
 		} catch (error: any) {
 			console.warn(`Got error on axios request: ${error.toString()}`);
 		}
-	}
+	},
 );

@@ -3,11 +3,11 @@ import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 import {SyncState, SynchronizationState} from '../types';
 import {
 	newTimesheetStarted,
-	timesheetStopped
+	timesheetStopped,
 } from 'src/features/activeTimesheet/context/activeTimesheetSlice';
 
 const initialState: SynchronizationState = {
-	timesheets: {}
+	timesheets: {},
 };
 
 const synchronizationSlice = createSlice({
@@ -20,17 +20,17 @@ const synchronizationSlice = createSlice({
 		timesheetSynced: (
 			state,
 			{
-				payload: {localId}
+				payload: {localId},
 			}: PayloadAction<{
 				localId: string;
 				remoteId: number;
-			}>
+			}>,
 		) => {
 			state.timesheets[localId] = SyncState.DONE;
 		},
 		timesheetSyncFailed(state, {payload: id}) {
 			state.timesheets[id] = SyncState.FAILED;
-		}
+		},
 	},
 	extraReducers: (builder) => {
 		builder
@@ -44,12 +44,12 @@ const synchronizationSlice = createSlice({
 					state.timesheets[timesheetId] = SyncState.NOT_STARTED;
 				}
 			});
-	}
+	},
 });
 
 export const {
 	timesheetSynchronizationStarted,
 	timesheetSynced,
-	timesheetSyncFailed
+	timesheetSyncFailed,
 } = synchronizationSlice.actions;
 export const synchronizationReducer = synchronizationSlice.reducer;

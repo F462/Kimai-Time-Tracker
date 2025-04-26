@@ -6,6 +6,6 @@ if (process.env.NODE_ENV === 'development') {
 
 	whyDidYouRender(React, {
 		trackAllPureComponents: true,
-		trackExtraHooks: [[ReactRedux, 'useSelector']]
+		trackExtraHooks: [[ReactRedux, 'useSelector']],
 	});
 }

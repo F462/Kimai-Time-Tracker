@@ -5,7 +5,7 @@ import {FlatList} from 'react-native';
 
 export function DividedList<T>({
 	data,
-	renderItem
+	renderItem,
 }: {
 	data: Array<T>;
 	renderItem: React.ComponentProps<typeof FlatList<T>>['renderItem'];

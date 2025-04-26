@@ -2,7 +2,7 @@ import React, {useCallback} from 'react';
 
 import {
 	selectProjectList,
-	selectSelectedProjectId
+	selectSelectedProjectId,
 } from '../context/projectsSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {BaseScreen} from 'src/ui/BaseScreen';
@@ -14,7 +14,7 @@ import {projectSelected} from '../context/projectsSlice';
 
 const ProjectItem = ({
 	project,
-	isSelected
+	isSelected,
 }: {
 	project: Project;
 	isSelected: boolean;

@@ -6,14 +6,14 @@ import {
 	REGISTER,
 	REHYDRATE,
 	persistReducer,
-	persistStore
+	persistStore,
 } from 'redux-persist';
 import {
 	TypedStartListening,
 	UnknownAction,
 	combineReducers,
 	configureStore,
-	createListenerMiddleware
+	createListenerMiddleware,
 } from '@reduxjs/toolkit';
 // it is needed to be imported here for the actual definition
 // eslint-disable-next-line no-restricted-imports
@@ -22,7 +22,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import {
 	timesheetsReducer,
-	timesheetsUpdated
+	timesheetsUpdated,
 } from 'src/features/timesheets/context/timesheetsSlice';
 import {accountReducer} from 'src/features/account/context/accountSlice';
 import {activeTimesheetReducer} from 'src/features/activeTimesheet/context/activeTimesheetSlice';
@@ -43,7 +43,7 @@ const persistConfig = {
 	key: 'root',
 	storage: AsyncStorage,
 	blacklist: ['appState', 'network'],
-	transforms: [ResetSyncStateTransform]
+	transforms: [ResetSyncStateTransform],
 };
 
 const appReducer = combineReducers({
@@ -56,12 +56,12 @@ const appReducer = combineReducers({
 	onboarding: onboardingReducer,
 	projects: projectsReducer,
 	synchronization: synchronizationReducer,
-	timesheets: timesheetsReducer
+	timesheets: timesheetsReducer,
 });
 
 const rootReducer = (
 	state: ReturnType<typeof appReducer> | undefined,
-	action: UnknownAction
+	action: UnknownAction,
 ) => {
 	if (action.type === userLoggedOut.type) {
 		return appReducer(undefined, action);
@@ -75,9 +75,9 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 const listenerMiddleware = createListenerMiddleware();
 const middlewares = [
 	createLoggingMiddleware({
-		ignoredPayload: [timesheetsUpdated.type]
+		ignoredPayload: [timesheetsUpdated.type],
 	}),
-	listenerMiddleware.middleware
+	listenerMiddleware.middleware,
 ];
 
 export const store = configureStore({
@@ -86,9 +86,9 @@ export const store = configureStore({
 		getDefaultMiddleware({
 			serializableCheck: {
 				// ignore redux persist actions in serializable check
-				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
-			}
-		}).concat(middlewares)
+				ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+			},
+		}).concat(middlewares),
 });
 
 export const persistor = persistStore(store, null, () => {});

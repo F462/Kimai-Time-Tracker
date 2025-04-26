@@ -10,15 +10,15 @@ const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: 'row',
 		marginHorizontal: 10,
-		marginVertical: 5
-	}
+		marginVertical: 5,
+	},
 });
 
 export const ListItem = ({
 	isSelected,
 	style,
 	onPress,
-	children
+	children,
 }: React.PropsWithChildren<{
 	isSelected?: boolean;
 	style?: StyleProp<ViewStyle>;
