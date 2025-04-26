@@ -8,8 +8,8 @@ export const ResetSyncStateTransform = createTransform(
 	// transform state being rehydrated
 	(outboundState: SynchronizationState) => {
 		// convert mySet back to a Set.
-		return _.mapValues(outboundState, state =>
-			_.mapValues(state, syncState => {
+		return _.mapValues(outboundState, (state) =>
+			_.mapValues(state, (syncState) => {
 				if (syncState === SyncState.RUNNING) {
 					return SyncState.NOT_STARTED;
 				} else {

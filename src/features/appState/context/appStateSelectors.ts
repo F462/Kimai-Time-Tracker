@@ -6,10 +6,10 @@ const selectAppState = (state: RootState) => state.appState;
 
 export const selectIsUserLoggingIn = createSelector(
 	[selectAppState],
-	appState => appState.isUserLoggingIn
+	(appState) => appState.isUserLoggingIn
 );
 
 export const selectIsUserLoggingOut = createSelector(
 	[selectAppState],
-	appState => appState.isUserLoggingOut
+	(appState) => appState.isUserLoggingOut
 );

@@ -9,7 +9,7 @@ const startNetworkEventListener = (startListening: AppStartListening) => {
 	startListening({
 		type: REHYDRATE,
 		effect: async (_, listenerApi) => {
-			addEventListener(state => {
+			addEventListener((state) => {
 				const newInternetState = state.isInternetReachable;
 				const oldInternetState = selectIsInternetReachable(
 					listenerApi.getState()

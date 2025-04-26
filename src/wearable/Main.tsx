@@ -36,7 +36,7 @@ const useTimesheetCreationState = () => {
 	}, []);
 
 	useEffect(() => {
-		const unsubscribe = watchEvents.on('message', message => {
+		const unsubscribe = watchEvents.on('message', (message) => {
 			switch (message.text) {
 				case wearableProtocol.activeTimesheetStatusResponse:
 					setTimesheetCreationState(

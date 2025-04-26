@@ -14,10 +14,10 @@ export const selectCanTimesheetBeStarted = createSelector(
 
 export const selectActiveTimesheetId = createSelector(
 	[selectActiveTimesheetState],
-	activeTimesheetState => activeTimesheetState.activeTimesheetId
+	(activeTimesheetState) => activeTimesheetState.activeTimesheetId
 );
 
 export const selectNextTimesheetStartDate = createSelector(
 	[selectActiveTimesheetState],
-	activeTimesheetState => activeTimesheetState.nextTimesheetStartDatetime
+	(activeTimesheetState) => activeTimesheetState.nextTimesheetStartDatetime
 );

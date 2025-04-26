@@ -131,7 +131,7 @@ function Selector<T extends {id: number; name: string}>({
 	onSelection
 }: SelectorProps<T>) {
 	const elementList = useMemo(() => {
-		return Object.values(elements ?? {}).map(item => ({
+		return Object.values(elements ?? {}).map((item) => ({
 			_id: item.id.toString(),
 			value: item.name
 		}));
@@ -212,8 +212,8 @@ const DatetimeSelector = () => {
 					<TextInput
 						style={styles.datePicker}
 						value={dateTextInputValue}
-						onChangeText={text => setDateTextInputValue(text)}
-						onEndEditing={event => {
+						onChangeText={(text) => setDateTextInputValue(text)}
+						onEndEditing={(event) => {
 							let newDate = dayjs(event.nativeEvent.text);
 							newDate =
 								dayjsDate === undefined
@@ -237,8 +237,8 @@ const DatetimeSelector = () => {
 					<TextInput
 						style={styles.timePicker}
 						value={timeTextInputValue}
-						onChangeText={text => setTimeTextInputValue(text)}
-						onEndEditing={event => {
+						onChangeText={(text) => setTimeTextInputValue(text)}
+						onEndEditing={(event) => {
 							let newDate = dayjs(event.nativeEvent.text, 'HH:mm');
 							newDate =
 								dayjsDate === undefined
@@ -267,7 +267,7 @@ const DatetimeSelector = () => {
 			<TimePickerModal
 				visible={timePickerVisible}
 				onDismiss={() => setTimePickerVisible(false)}
-				onConfirm={value => {
+				onConfirm={(value) => {
 					dispatch(
 						nextTimesheetStartDatetimeSet(
 							dayjsDate
@@ -287,7 +287,7 @@ const DatetimeSelector = () => {
 				visible={datePickerVisible}
 				onDismiss={() => setDatePickerVisible(false)}
 				date={date}
-				onConfirm={value => {
+				onConfirm={(value) => {
 					dispatch(nextTimesheetStartDatetimeSet(dayjs(value.date).unix()));
 					setDatePickerVisible(false);
 				}}
@@ -308,7 +308,7 @@ const ActivitySelector = () => {
 			elements={activities}
 			selectedElement={selectedActivity}
 			label={t('selectActivity')}
-			onSelection={value => {
+			onSelection={(value) => {
 				dispatch(activitySelected(parseSelectedId(value.selectedList[0])));
 			}}
 		/>
@@ -327,7 +327,7 @@ const ProjectSelector = () => {
 			elements={projects}
 			selectedElement={selectedProject}
 			label={t('selectProject')}
-			onSelection={value => {
+			onSelection={(value) => {
 				dispatch(projectSelected(parseSelectedId(value.selectedList[0])));
 			}}
 		/>

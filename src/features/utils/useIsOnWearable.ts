@@ -6,7 +6,7 @@ export const useIsOnWearable = () => {
 
 	useEffect(() => {
 		DeviceInfo.hasSystemFeature('android.hardware.type.watch')
-			.then(hasFeature => {
+			.then((hasFeature) => {
 				setIsOnWearable(hasFeature);
 			})
 			.catch(console.error);

@@ -12,20 +12,23 @@ const appStateSlice = createSlice({
 	name: 'appState',
 	initialState,
 	reducers: {},
-	extraReducers: builder => {
+	extraReducers: (builder) => {
 		builder
-			.addCase(loginUser.pending, state => {
+			.addCase(loginUser.pending, (state) => {
 				state.isUserLoggingIn = true;
 			})
-			.addCase(logoutUser.pending, state => {
+			.addCase(logoutUser.pending, (state) => {
 				state.isUserLoggingOut = true;
 			})
-			.addMatcher(isAnyOf(loginUser.rejected, loginUser.fulfilled), state => {
+			.addMatcher(isAnyOf(loginUser.rejected, loginUser.fulfilled), (state) => {
 				state.isUserLoggingIn = false;
 			})
-			.addMatcher(isAnyOf(logoutUser.rejected, logoutUser.fulfilled), state => {
-				state.isUserLoggingOut = false;
-			});
+			.addMatcher(
+				isAnyOf(logoutUser.rejected, logoutUser.fulfilled),
+				(state) => {
+					state.isUserLoggingOut = false;
+				}
+			);
 	}
 });
 

@@ -10,20 +10,20 @@ const selectTimesheetsState = (state: RootState) => state.timesheets;
 
 const selectTimesheets = createSelector(
 	[selectTimesheetsState],
-	timesheetState => timesheetState.timesheets
+	(timesheetState) => timesheetState.timesheets
 );
 
 export const selectTimesheet = (timesheetId: string) =>
-	createSelector([selectTimesheets], timesheets => timesheets[timesheetId]);
+	createSelector([selectTimesheets], (timesheets) => timesheets[timesheetId]);
 
 const selectTimesheetIdTable = createSelector(
 	[selectTimesheetsState],
-	timesheetState => timesheetState.timesheetIdTable
+	(timesheetState) => timesheetState.timesheetIdTable
 );
 
 export const selectTimesheetList = createSelector(
 	[selectTimesheets],
-	timesheets =>
+	(timesheets) =>
 		Object.values(timesheets).sort((a, b) => {
 			const aTimestamp = dayjs(a.begin);
 			const bTimestamp = dayjs(b.begin);
@@ -34,14 +34,14 @@ export const selectTimesheetList = createSelector(
 export const selectOnlyLocalTimesheets = createSelector(
 	[selectTimesheets, selectTimesheetIdTable],
 	(timesheets, timesheetIdTable) =>
-		_.omitBy(timesheets, timesheet => timesheet.id in timesheetIdTable)
+		_.omitBy(timesheets, (timesheet) => timesheet.id in timesheetIdTable)
 );
 
 export const selectTimesheetListOfCurrentDay = createSelector(
 	[selectTimesheetList],
-	timesheets => {
+	(timesheets) => {
 		return timesheets.filter(
-			timesheet =>
+			(timesheet) =>
 				dayjs(timesheet.begin).unix() - dayjs().startOf('day').unix() > 0
 		);
 	}
@@ -55,17 +55,17 @@ export const selectActiveTimesheet = createSelector(
 
 export const selectKnownRemoteTimesheetIds = createSelector(
 	[selectTimesheetIdTable],
-	timesheetIdTable => _.invert(timesheetIdTable)
+	(timesheetIdTable) => _.invert(timesheetIdTable)
 );
 
 export const selectIsTimesheetKnownToServer = (timesheetId: string) =>
 	createSelector(
 		[selectTimesheetIdTable],
-		timesheetIdTable => timesheetId in timesheetIdTable
+		(timesheetIdTable) => timesheetId in timesheetIdTable
 	);
 
 export const selectRemoteTimesheetId = (timesheetId: string) =>
-	createSelector([selectTimesheetIdTable], timesheetIdTable => {
+	createSelector([selectTimesheetIdTable], (timesheetIdTable) => {
 		const remoteId = timesheetIdTable[timesheetId];
 		return remoteId;
 	});
