@@ -17,49 +17,49 @@ export const screens: Array<{
 		name: 'About',
 		component: AboutScreen,
 		options: {
-			drawerIcon: createDrawerIconFunction('information-variant')
-		}
+			drawerIcon: createDrawerIconFunction('information-variant'),
+		},
 	},
 	{
 		name: 'Account',
 		component: AccountScreen,
 		options: {
-			drawerIcon: createDrawerIconFunction('account-outline')
-		}
+			drawerIcon: createDrawerIconFunction('account-outline'),
+		},
 	},
 	{
 		name: 'ActiveTimesheet',
 		component: ActiveTimesheetScreen,
 		options: {
-			drawerIcon: createDrawerIconFunction('progress-clock')
-		}
+			drawerIcon: createDrawerIconFunction('progress-clock'),
+		},
 	},
 	{
 		name: 'Activities',
 		component: ActivitiesScreen,
 		options: {
-			drawerIcon: createDrawerIconFunction('run')
-		}
+			drawerIcon: createDrawerIconFunction('run'),
+		},
 	},
 	{
 		name: 'Customers',
 		component: CustomersScreen,
 		options: {
-			drawerIcon: createDrawerIconFunction('face-agent')
-		}
+			drawerIcon: createDrawerIconFunction('face-agent'),
+		},
 	},
 	{
 		name: 'Projects',
 		component: ProjectsScreen,
 		options: {
-			drawerIcon: createDrawerIconFunction('hammer')
-		}
+			drawerIcon: createDrawerIconFunction('hammer'),
+		},
 	},
 	{
 		name: 'Timesheets',
 		component: TimesheetsScreen,
 		options: {
-			drawerIcon: createDrawerIconFunction('calendar-clock')
-		}
-	}
+			drawerIcon: createDrawerIconFunction('calendar-clock'),
+		},
+	},
 ];

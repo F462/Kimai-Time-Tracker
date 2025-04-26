@@ -19,7 +19,7 @@ const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
 	baseDirectory: __dirname,
 	recommendedConfig: js.configs.recommended,
-	allConfig: js.configs.all
+	allConfig: js.configs.all,
 });
 
 export default defineConfig([
@@ -27,7 +27,7 @@ export default defineConfig([
 		'**/.eslintrc.js',
 		'**/jest.config.js',
 		'**/jest.setup.js',
-		'.yarn/'
+		'.yarn/',
 	]),
 	{
 		extends: compat.extends('@react-native', 'plugin:prettier/recommended'),
@@ -36,7 +36,7 @@ export default defineConfig([
 			'@typescript-eslint': typescriptEslint,
 			react,
 			'react-native': reactNative,
-			'@cspell': cspell
+			'@cspell': cspell,
 		},
 
 		languageOptions: {
@@ -44,7 +44,7 @@ export default defineConfig([
 				...jest.environments.globals.globals,
 				AsyncIterableIterator: true,
 				Detox: true,
-				JSX: true
+				JSX: true,
 			},
 
 			parser: tsParser,
@@ -55,9 +55,9 @@ export default defineConfig([
 				project: './tsconfig.json',
 
 				ecmaFeatures: {
-					jsx: true
-				}
-			}
+					jsx: true,
+				},
+			},
 		},
 
 		rules: {
@@ -88,15 +88,15 @@ export default defineConfig([
 					caughtErrorsIgnorePattern: '^_',
 					destructuredArrayIgnorePattern: '^_',
 					varsIgnorePattern: '^_',
-					ignoreRestSiblings: true
-				}
+					ignoreRestSiblings: true,
+				},
 			],
 
 			'no-console': [
 				'error',
 				{
-					allow: ['trace', 'debug', 'info', 'warn', 'error']
-				}
+					allow: ['trace', 'debug', 'info', 'warn', 'error'],
+				},
 			],
 
 			camelcase: ['error'],
@@ -106,8 +106,8 @@ export default defineConfig([
 				'error',
 				'always',
 				{
-					null: 'ignore'
-				}
+					null: 'ignore',
+				},
 			],
 
 			'func-name-matching': ['error', 'always'],
@@ -124,8 +124,8 @@ export default defineConfig([
 			'react-hooks/exhaustive-deps': [
 				'error',
 				{
-					additionalHooks: '(useStyle)'
-				}
+					additionalHooks: '(useStyle)',
+				},
 			],
 
 			'no-restricted-imports': [
@@ -135,23 +135,23 @@ export default defineConfig([
 						{
 							group: ['*.e2e'],
 							message:
-								'Do not import test files to mock functionality in production code.'
-						}
+								'Do not import test files to mock functionality in production code.',
+						},
 					],
 
 					paths: [
 						{
 							name: 'react-redux',
 							importNames: ['useDispatch'],
-							message: "Use 'useAppDispatch' instead."
+							message: "Use 'useAppDispatch' instead.",
 						},
 						{
 							name: '@reduxjs/toolkit',
 							importNames: ['createAsyncThunk'],
-							message: "Use 'createAppAsyncThunk' instead."
-						}
-					]
-				}
+							message: "Use 'createAppAsyncThunk' instead.",
+						},
+					],
+				},
 			],
 
 			'sort-imports': [
@@ -161,9 +161,9 @@ export default defineConfig([
 					ignoreDeclarationSort: false,
 					ignoreMemberSort: false,
 					memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
-					allowSeparatedGroups: true
-				}
-			]
-		}
-	}
+					allowSeparatedGroups: true,
+				},
+			],
+		},
+	},
 ]);

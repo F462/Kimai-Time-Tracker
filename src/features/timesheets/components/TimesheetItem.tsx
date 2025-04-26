@@ -23,30 +23,30 @@ const SYNC_STATE_ICON_SIZE = 15;
 const styles = StyleSheet.create({
 	datetimeText: {
 		flex: 1,
-		textAlign: 'center'
+		textAlign: 'center',
 	},
 	flex: {
-		flex: 1
+		flex: 1,
 	},
 	row: {
-		flexDirection: 'row'
+		flexDirection: 'row',
 	},
 	syncStateIconContainer: {
-		alignSelf: 'center'
+		alignSelf: 'center',
 	},
 	timesheetDetailsContainer: {
-		justifyContent: 'space-around'
-	}
+		justifyContent: 'space-around',
+	},
 });
 
 const useDisplayedDatetime = (timestamp: string | null | undefined) =>
 	useMemo(
 		() => (timestamp != null ? dayjs(timestamp).format('L LT') : undefined),
-		[timestamp]
+		[timestamp],
 	);
 
 const SynchronizationStateIcon = ({
-	synchronizationState
+	synchronizationState,
 }: {
 	synchronizationState?: SyncState;
 }) => {
@@ -96,7 +96,7 @@ const TimesheetDurationDisplay = ({timesheet}: TimesheetItemProps) => {
 
 			if (timesheet.begin && timesheet.end) {
 				const calculatedTimesheetDuration = dayjs(timesheet.end).diff(
-					dayjs(timesheet.begin)
+					dayjs(timesheet.begin),
 				);
 				return calculatedTimesheetDuration;
 			}
@@ -133,7 +133,7 @@ const TimesheetTimeDisplay = ({timesheet}: TimesheetItemProps) => {
 
 const TimesheetDetails = ({timesheet}: TimesheetItemProps) => {
 	const displayedActivity = useAppSelector(
-		selectActivityName(timesheet.activity)
+		selectActivityName(timesheet.activity),
 	);
 	const displayedProject = useAppSelector(selectProjectName(timesheet.project));
 
@@ -156,13 +156,13 @@ const useTimesheetPress = (timesheet: Timesheet) => {
 			return () => {
 				if (serverUrl === undefined) {
 					console.warn(
-						`Server URL is not defined, cannot sync timesheet ${timesheet.id}`
+						`Server URL is not defined, cannot sync timesheet ${timesheet.id}`,
 					);
 					return;
 				}
 
 				dispatch(synchronizeTimesheet({serverUrl, timesheet})).catch(
-					console.error
+					console.error,
 				);
 			};
 		default:

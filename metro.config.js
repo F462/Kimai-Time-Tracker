@@ -4,7 +4,7 @@ const defaultConfig = getDefaultConfig(__dirname);
 const {assetExts, sourceExts} = defaultConfig.resolver;
 
 const {
-	wrapWithReanimatedMetroConfig
+	wrapWithReanimatedMetroConfig,
 } = require('react-native-reanimated/metro-config');
 
 /**
@@ -16,15 +16,15 @@ const {
 const config = {
 	transformer: {
 		babelTransformerPath: require.resolve(
-			'react-native-svg-transformer/react-native'
-		)
+			'react-native-svg-transformer/react-native',
+		),
 	},
 	resolver: {
 		assetExts: [...assetExts.filter((ext) => ext !== 'svg'), 'txt'],
-		sourceExts: [...sourceExts, 'svg']
-	}
+		sourceExts: [...sourceExts, 'svg'],
+	},
 };
 
 module.exports = wrapWithReanimatedMetroConfig(
-	mergeConfig(defaultConfig, config)
+	mergeConfig(defaultConfig, config),
 );

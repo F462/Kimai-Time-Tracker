@@ -3,7 +3,7 @@ import {Project, ProjectsState} from '../types';
 
 const initialState: ProjectsState = {
 	projects: {},
-	selectedProjectId: undefined
+	selectedProjectId: undefined,
 };
 
 const projectsSlice = createSlice({
@@ -13,16 +13,16 @@ const projectsSlice = createSlice({
 		projectsReceived: (state, {payload}: PayloadAction<Array<Project>>) => {
 			state.projects = payload.reduce(
 				(container, element) => ({...container, [element.id]: element}),
-				{}
+				{},
 			);
 		},
 		projectSelected: (
 			state,
-			{payload: projectId}: PayloadAction<number | undefined>
+			{payload: projectId}: PayloadAction<number | undefined>,
 		) => {
 			state.selectedProjectId = projectId;
-		}
-	}
+		},
+	},
 });
 
 export const {projectsReceived, projectSelected} = projectsSlice.actions;

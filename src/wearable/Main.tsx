@@ -16,11 +16,11 @@ const styles = StyleSheet.create({
 	mainContainer: {
 		flex: 1,
 		alignItems: 'center',
-		justifyContent: 'center'
+		justifyContent: 'center',
 	},
 	chooseProjectActivityText: {
-		textAlign: 'center'
-	}
+		textAlign: 'center',
+	},
 });
 
 const useTimesheetCreationState = () => {
@@ -31,7 +31,7 @@ const useTimesheetCreationState = () => {
 		sendMessage(
 			{text: wearableProtocol.activeTimesheetStatusRequest},
 			() => {},
-			console.error
+			console.error,
 		);
 	}, []);
 
@@ -45,11 +45,11 @@ const useTimesheetCreationState = () => {
 								return parseInt(message.payload, 10);
 							} catch (error: any) {
 								console.error(
-									`Error while parsing active timesheet status: ${error.toString()}`
+									`Error while parsing active timesheet status: ${error.toString()}`,
 								);
 								return TimesheetCreationState.UNKNOWN;
 							}
-						})()
+						})(),
 					);
 			}
 		});
@@ -77,7 +77,7 @@ const StartButton = () => {
 		sendMessage(
 			{text: wearableProtocol.startNewTimesheet},
 			() => {},
-			console.error
+			console.error,
 		);
 	}, []);
 
@@ -100,7 +100,7 @@ const StopButton = () => {
 				sendMessage(
 					{text: wearableProtocol.stopRunningTimesheet},
 					() => {},
-					console.error
+					console.error,
 				);
 			}}
 		/>
@@ -128,10 +128,10 @@ const MainDisplay = () => {
 	const dynamicStyles = useStyle(
 		() => ({
 			mainContainer: {
-				backgroundColor: theme.colors.background
-			}
+				backgroundColor: theme.colors.background,
+			},
 		}),
-		[theme.colors.background]
+		[theme.colors.background],
 	);
 
 	return (

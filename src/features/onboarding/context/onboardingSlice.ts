@@ -10,8 +10,8 @@ const onboardingSlice = createSlice({
 	reducers: {
 		developmentWarningShown: (state) => {
 			state.hasDevelopmentWarningBeenShown = true;
-		}
-	}
+		},
+	},
 });
 
 export const {developmentWarningShown} = onboardingSlice.actions;

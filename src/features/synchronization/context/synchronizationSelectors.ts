@@ -9,7 +9,7 @@ const selectSynchronizationState = (state: RootState) => state.synchronization;
 
 const selectTimesheetSynchronizationState = createSelector(
 	[selectSynchronizationState],
-	(synchronizationState) => synchronizationState.timesheets
+	(synchronizationState) => synchronizationState.timesheets,
 );
 
 export const selectTimesheetIdsToSynchronize = createSelector(
@@ -17,9 +17,9 @@ export const selectTimesheetIdsToSynchronize = createSelector(
 	(timesheetSyncStates) =>
 		Object.keys(
 			_.pickBy(timesheetSyncStates, (timesheetSyncState) =>
-				[SyncState.NOT_STARTED, SyncState.FAILED].includes(timesheetSyncState)
-			)
-		)
+				[SyncState.NOT_STARTED, SyncState.FAILED].includes(timesheetSyncState),
+			),
+		),
 );
 
 export const selectAreAllTimesheetsInSync = createSelector(
@@ -27,14 +27,14 @@ export const selectAreAllTimesheetsInSync = createSelector(
 	(timesheetSyncStates) =>
 		_.some(
 			timesheetSyncStates,
-			(timesheetSyncState) => timesheetSyncState !== SyncState.DONE
-		) === false
+			(timesheetSyncState) => timesheetSyncState !== SyncState.DONE,
+		) === false,
 );
 
 export const selectSyncState = (timesheetIdToCheck: string) =>
 	createSelector(
 		[selectTimesheetSynchronizationState],
-		(timesheetSyncStates) => timesheetSyncStates[timesheetIdToCheck]
+		(timesheetSyncStates) => timesheetSyncStates[timesheetIdToCheck],
 	);
 
 export const selectIsTimesheetSyncNeeded = (timesheetIdToCheck: string) =>
@@ -43,5 +43,5 @@ export const selectIsTimesheetSyncNeeded = (timesheetIdToCheck: string) =>
 export const selectIsTimesheetSyncRunning = (timesheetIdToCheck: string) =>
 	createSelector(
 		[selectSyncState(timesheetIdToCheck)],
-		(syncState) => syncState === SyncState.RUNNING
+		(syncState) => syncState === SyncState.RUNNING,
 	);

@@ -12,7 +12,7 @@ export const PressableOpacity = ({
 		<Pressable
 			style={({pressed}) => [
 				style,
-				props.onPress && pressed ? {opacity: 0.25} : {}
+				props.onPress && pressed ? {opacity: 0.25} : {},
 			]}
 			{...props}
 		/>

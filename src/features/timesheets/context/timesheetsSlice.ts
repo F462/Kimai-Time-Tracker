@@ -4,13 +4,13 @@ import dayjs from 'dayjs';
 import {Timesheet, TimesheetsState} from '../types';
 import {
 	newTimesheetStarted,
-	timesheetStopped
+	timesheetStopped,
 } from 'src/features/activeTimesheet/context/activeTimesheetSlice';
 import {timesheetSynced} from 'src/features/synchronization/context/synchronizationSlice';
 
 const initialState: TimesheetsState = {
 	timesheets: {},
-	timesheetIdTable: {}
+	timesheetIdTable: {},
 };
 
 const timesheetsSlice = createSlice({
@@ -20,18 +20,18 @@ const timesheetsSlice = createSlice({
 		timesheetsUpdated: (
 			state,
 			{
-				payload
+				payload,
 			}: PayloadAction<{
 				timesheets: {[timesheetId: string]: Timesheet};
 				newTimesheetsIdTable: {[localId: string]: number};
-			}>
+			}>,
 		) => {
 			state.timesheets = payload.timesheets;
 			state.timesheetIdTable = {
 				...state.timesheetIdTable,
-				...payload.newTimesheetsIdTable
+				...payload.newTimesheetsIdTable,
 			};
-		}
+		},
 	},
 	extraReducers: (builder) => {
 		builder
@@ -58,7 +58,7 @@ const timesheetsSlice = createSlice({
 
 				state.timesheetIdTable[localId] = remoteId;
 			});
-	}
+	},
 });
 
 export const {timesheetsUpdated} = timesheetsSlice.actions;

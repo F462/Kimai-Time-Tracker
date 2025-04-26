@@ -11,8 +11,8 @@ import {useAppSelector} from 'src/features/data/context/store';
 
 const styles = StyleSheet.create({
 	icon: {
-		margin: 10
-	}
+		margin: 10,
+	},
 });
 
 export const SynchronizationIndicator = () => {
@@ -45,7 +45,7 @@ export const SynchronizationIndicator = () => {
 		areAllTimesheetsInSync,
 		isInternetReachable,
 		isUserLoggedIn,
-		isUserLoggingIn
+		isUserLoggingIn,
 	]);
 
 	return iconToDisplay;

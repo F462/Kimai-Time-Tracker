@@ -15,9 +15,9 @@ export const ResetSyncStateTransform = createTransform(
 				} else {
 					return syncState;
 				}
-			})
+			}),
 		);
 	},
 	// define which reducers this transform gets called for.
-	{whitelist: ['synchronization']}
+	{whitelist: ['synchronization']},
 );

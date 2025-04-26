@@ -17,19 +17,19 @@ export const exportLogs = createAppAsyncThunk<void, void>(
 			await ReactNativeBlobUtil.fs.writeFile(
 				storeFilePath,
 				JSON.stringify(getState()),
-				'utf8'
+				'utf8',
 			);
 
 			const zipFileToShare = path.join(
 				ReactNativeBlobUtil.fs.dirs.CacheDir,
-				'logs.zip'
+				'logs.zip',
 			);
 
 			try {
 				await zip(LOGS_DIRECTORY, zipFileToShare);
 
 				await Share.open({
-					url: `file://${zipFileToShare}`
+					url: `file://${zipFileToShare}`,
 				});
 			} catch (error: any) {
 				console.error(error.toString());
@@ -40,5 +40,5 @@ export const exportLogs = createAppAsyncThunk<void, void>(
 		} catch (error: any) {
 			console.error(error.toString());
 		}
-	}
+	},
 );

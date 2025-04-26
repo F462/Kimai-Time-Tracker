@@ -10,6 +10,6 @@ require('dayjs/locale/de');
 
 dayjs.updateLocale('en', {
 	formats: {
-		LT: 'hh:mm A'
-	}
+		LT: 'hh:mm A',
+	},
 });

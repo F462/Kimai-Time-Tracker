@@ -4,7 +4,7 @@ import {v4 as uuidv4} from 'uuid';
 
 import {
 	selectKnownRemoteTimesheetIds,
-	selectOnlyLocalTimesheets
+	selectOnlyLocalTimesheets,
 } from '../context/timesheetsSelectors';
 import {TimesheetFromApi} from '../types';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
@@ -22,7 +22,7 @@ export const fetchTimesheets = createAppAsyncThunk(
 
 		try {
 			const response = await axios.get<Array<TimesheetFromApi>>(
-				path.join(serverUrl, 'api/timesheets')
+				path.join(serverUrl, 'api/timesheets'),
 			);
 
 			const knownRemoteTimesheetIds = selectKnownRemoteTimesheetIds(getState());
@@ -50,10 +50,10 @@ export const fetchTimesheets = createAppAsyncThunk(
 			}, onlyLocalTimesheets);
 
 			dispatch(
-				timesheetsUpdated({timesheets: allTimesheets, newTimesheetsIdTable})
+				timesheetsUpdated({timesheets: allTimesheets, newTimesheetsIdTable}),
 			);
 		} catch (error: any) {
 			console.warn(`Got error on axios request: ${error.toString()}`);
 		}
-	}
+	},
 );

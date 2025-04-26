@@ -4,12 +4,12 @@ import path from 'path';
 import {Timesheet, TimesheetFromApi} from 'src/features/timesheets/types';
 import {
 	selectIsTimesheetKnownToServer,
-	selectRemoteTimesheetId
+	selectRemoteTimesheetId,
 } from 'src/features/timesheets/context/timesheetsSelectors';
 import {
 	timesheetSyncFailed,
 	timesheetSynced,
-	timesheetSynchronizationStarted
+	timesheetSynchronizationStarted,
 } from '../context/synchronizationSlice';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
 import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
@@ -40,7 +40,7 @@ export const synchronizeTimesheet = createAppAsyncThunk<
 			if (selectIsTimesheetKnownToServer(timesheet.id)(getState())) {
 				const remoteId = selectRemoteTimesheetId(timesheet.id)(getState());
 				console.info(
-					`Timesheet ${timesheet.id} is already known to server with remote ID ${remoteId}`
+					`Timesheet ${timesheet.id} is already known to server with remote ID ${remoteId}`,
 				);
 				response = await axios.patch(
 					path.join(serverUrl, 'api/timesheets', remoteId.toString()),
@@ -48,26 +48,26 @@ export const synchronizeTimesheet = createAppAsyncThunk<
 						begin: timesheet.begin,
 						end: timesheet.end,
 						project: timesheet.project,
-						activity: timesheet.activity
-					}
+						activity: timesheet.activity,
+					},
 				);
 			} else {
 				console.info(
-					`Timesheet ${timesheet.id} is not yet known to server, so POST a new one`
+					`Timesheet ${timesheet.id} is not yet known to server, so POST a new one`,
 				);
 				response = await axios.post(path.join(serverUrl, 'api/timesheets'), {
 					begin: timesheet.begin,
 					end: timesheet.end,
 					project: timesheet.project,
-					activity: timesheet.activity
+					activity: timesheet.activity,
 				});
 			}
 
 			dispatch(
 				timesheetSynced({
 					localId: timesheet.id,
-					remoteId: response.data.id
-				})
+					remoteId: response.data.id,
+				}),
 			);
 
 			await dispatch(fetchTimesheets());
@@ -78,9 +78,9 @@ export const synchronizeTimesheet = createAppAsyncThunk<
 			if (resyncTimesheetRequests[timesheet.id] === true) {
 				delete resyncTimesheetRequests[timesheet.id];
 				dispatch(synchronizeTimesheet({serverUrl, timesheet})).catch(
-					console.error
+					console.error,
 				);
 			}
 		}
-	}
+	},
 );

@@ -3,7 +3,7 @@ import {ActiveTimesheetState} from '../types';
 import {Timesheet} from 'src/features/timesheets/types';
 
 const initialState: ActiveTimesheetState = {
-	activeTimesheetId: undefined
+	activeTimesheetId: undefined,
 };
 
 const activeTimesheetSlice = createSlice({
@@ -12,30 +12,30 @@ const activeTimesheetSlice = createSlice({
 	reducers: {
 		newTimesheetStarted: (
 			state,
-			{payload: timesheet}: PayloadAction<Timesheet>
+			{payload: timesheet}: PayloadAction<Timesheet>,
 		) => {
 			state.activeTimesheetId = timesheet.id;
 		},
 		nextTimesheetStartDatetimeSet: (
 			state,
-			{payload}: PayloadAction<number | undefined>
+			{payload}: PayloadAction<number | undefined>,
 		) => {
 			state.nextTimesheetStartDatetime = payload;
 		},
 		timesheetStopped: (
 			state,
-			{payload: timesheetId}: PayloadAction<string>
+			{payload: timesheetId}: PayloadAction<string>,
 		) => {
 			if (timesheetId === state.activeTimesheetId) {
 				state.activeTimesheetId = undefined;
 			}
-		}
-	}
+		},
+	},
 });
 
 export const {
 	newTimesheetStarted,
 	nextTimesheetStartDatetimeSet,
-	timesheetStopped
+	timesheetStopped,
 } = activeTimesheetSlice.actions;
 export const activeTimesheetReducer = activeTimesheetSlice.reducer;

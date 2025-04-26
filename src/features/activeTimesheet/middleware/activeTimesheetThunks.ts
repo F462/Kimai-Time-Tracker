@@ -12,5 +12,5 @@ export const stopActiveTimesheet = createAppAsyncThunk<void, void>(
 		}
 
 		dispatch(timesheetStopped(activeTimesheetId));
-	}
+	},
 );

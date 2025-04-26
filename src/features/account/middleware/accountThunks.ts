@@ -16,7 +16,7 @@ export const loginUser = createAppAsyncThunk<void, {serverUrl: string}>(
 		axios.defaults.headers.common.Authorization = `Bearer ${apiToken}`;
 
 		dispatch(userLoggedIn(serverUrl));
-	}
+	},
 );
 
 export const logoutUser = createAppAsyncThunk<void, void>(
@@ -25,5 +25,5 @@ export const logoutUser = createAppAsyncThunk<void, void>(
 		delete axios.defaults.headers.common.Authorization;
 
 		dispatch(userLoggedOut());
-	}
+	},
 );

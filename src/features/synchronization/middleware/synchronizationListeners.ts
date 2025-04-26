@@ -4,15 +4,15 @@ import {REHYDRATE} from 'redux-persist';
 import {
 	AppDispatch,
 	AppStartListening,
-	RootState
+	RootState,
 } from 'src/features/data/context/store';
 import {
 	newTimesheetStarted,
-	timesheetStopped
+	timesheetStopped,
 } from 'src/features/activeTimesheet/context/activeTimesheetSlice';
 import {
 	selectTimesheet,
-	selectTimesheetsToSynchronize
+	selectTimesheetsToSynchronize,
 } from 'src/features/timesheets/context/timesheetsSelectors';
 import {Timesheet} from 'src/features/timesheets/types';
 import {selectIsTimesheetSyncNeeded} from '../context/synchronizationSelectors';
@@ -21,7 +21,7 @@ import {synchronizeTimesheet} from './synchronizationThunks';
 
 const syncTimesheet = async (
 	listenerApi: ListenerEffectAPI<RootState, AppDispatch>,
-	timesheet: Timesheet
+	timesheet: Timesheet,
 ) => {
 	const serverUrl = selectServerUrl(listenerApi.getState());
 
@@ -38,21 +38,21 @@ const runSyncOnAppStart = (startListening: AppStartListening) => {
 		type: REHYDRATE,
 		effect: async (_action, listenerApi) => {
 			const timesheetsToSynchronize = selectTimesheetsToSynchronize(
-				listenerApi.getState()
+				listenerApi.getState(),
 			);
 
 			for (const timesheetToSynchronize of Object.values(
-				timesheetsToSynchronize
+				timesheetsToSynchronize,
 			)) {
 				if (
 					selectIsTimesheetSyncNeeded(timesheetToSynchronize.id)(
-						listenerApi.getState()
+						listenerApi.getState(),
 					)
 				) {
 					await syncTimesheet(listenerApi, timesheetToSynchronize);
 				}
 			}
-		}
+		},
 	});
 };
 
@@ -61,7 +61,7 @@ const runSyncOnTimesheetStarted = (startListening: AppStartListening) => {
 		actionCreator: newTimesheetStarted,
 		effect: async ({payload: timesheet}, listenerApi) => {
 			await syncTimesheet(listenerApi, timesheet);
-		}
+		},
 	});
 };
 
@@ -72,12 +72,12 @@ const runSyncOnTimesheetStopped = (startListening: AppStartListening) => {
 			const timesheet = selectTimesheet(timesheetId)(listenerApi.getState());
 
 			await syncTimesheet(listenerApi, timesheet);
-		}
+		},
 	});
 };
 
 export const startSynchronizationListeners = (
-	startListening: AppStartListening
+	startListening: AppStartListening,
 ) => {
 	runSyncOnAppStart(startListening);
 	runSyncOnTimesheetStarted(startListening);

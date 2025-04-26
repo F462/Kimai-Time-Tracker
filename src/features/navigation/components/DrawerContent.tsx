@@ -2,7 +2,7 @@ import React, {useCallback, useMemo} from 'react';
 
 import {
 	DrawerContentComponentProps,
-	DrawerItem
+	DrawerItem,
 } from '@react-navigation/drawer';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import {useStyle} from 'src/features/theming/utils/useStyle';
@@ -12,14 +12,14 @@ import {useTranslation} from 'react-i18next';
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		padding: 10
-	}
+		padding: 10,
+	},
 });
 
 export const DefaultDrawerContent = ({
 	state,
 	navigation,
-	descriptors
+	descriptors,
 }: DrawerContentComponentProps) => {
 	const {t} = useTranslation();
 	const theme = useTheme();
@@ -28,12 +28,12 @@ export const DefaultDrawerContent = ({
 		(routeName: string) =>
 			state.routes.findIndex((route) => route.name === routeName) ===
 			state.index,
-		[state.index, state.routes]
+		[state.index, state.routes],
 	);
 	const DefaultDrawerItem = useCallback(
 		({routeName}: {routeName: string}) => {
 			const routeKey = state.routes.find(
-				(route) => route.name === routeName
+				(route) => route.name === routeName,
 			)?.key;
 
 			if (routeKey === undefined) {
@@ -51,7 +51,7 @@ export const DefaultDrawerContent = ({
 				/>
 			);
 		},
-		[descriptors, navigation, shouldFocus, state.routes, t]
+		[descriptors, navigation, shouldFocus, state.routes, t],
 	);
 
 	const header = useMemo(() => {
@@ -63,7 +63,7 @@ export const DefaultDrawerContent = ({
 			'Activities',
 			'Customers',
 			'Projects',
-			'Timesheets'
+			'Timesheets',
 		].map((routeName) => (
 			<DefaultDrawerItem routeName={routeName} key={routeName} />
 		));
@@ -75,10 +75,10 @@ export const DefaultDrawerContent = ({
 	const dynamicStyles = useStyle(
 		() => ({
 			container: {
-				backgroundColor: theme.colors.background
-			}
+				backgroundColor: theme.colors.background,
+			},
 		}),
-		[theme.colors.background]
+		[theme.colors.background],
 	);
 
 	return (

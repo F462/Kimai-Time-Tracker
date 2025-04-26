@@ -10,7 +10,7 @@ const selectTimesheetsState = (state: RootState) => state.timesheets;
 
 const selectTimesheets = createSelector(
 	[selectTimesheetsState],
-	(timesheetState) => timesheetState.timesheets
+	(timesheetState) => timesheetState.timesheets,
 );
 
 export const selectTimesheet = (timesheetId: string) =>
@@ -18,7 +18,7 @@ export const selectTimesheet = (timesheetId: string) =>
 
 const selectTimesheetIdTable = createSelector(
 	[selectTimesheetsState],
-	(timesheetState) => timesheetState.timesheetIdTable
+	(timesheetState) => timesheetState.timesheetIdTable,
 );
 
 export const selectTimesheetList = createSelector(
@@ -28,13 +28,13 @@ export const selectTimesheetList = createSelector(
 			const aTimestamp = dayjs(a.begin);
 			const bTimestamp = dayjs(b.begin);
 			return bTimestamp.unix() - aTimestamp.unix();
-		})
+		}),
 );
 
 export const selectOnlyLocalTimesheets = createSelector(
 	[selectTimesheets, selectTimesheetIdTable],
 	(timesheets, timesheetIdTable) =>
-		_.omitBy(timesheets, (timesheet) => timesheet.id in timesheetIdTable)
+		_.omitBy(timesheets, (timesheet) => timesheet.id in timesheetIdTable),
 );
 
 export const selectTimesheetListOfCurrentDay = createSelector(
@@ -42,26 +42,26 @@ export const selectTimesheetListOfCurrentDay = createSelector(
 	(timesheets) => {
 		return timesheets.filter(
 			(timesheet) =>
-				dayjs(timesheet.begin).unix() - dayjs().startOf('day').unix() > 0
+				dayjs(timesheet.begin).unix() - dayjs().startOf('day').unix() > 0,
 		);
-	}
+	},
 );
 
 export const selectActiveTimesheet = createSelector(
 	[selectTimesheets, selectActiveTimesheetId],
 	(timesheets, activeTimesheetId) =>
-		activeTimesheetId !== undefined ? timesheets[activeTimesheetId] : undefined
+		activeTimesheetId !== undefined ? timesheets[activeTimesheetId] : undefined,
 );
 
 export const selectKnownRemoteTimesheetIds = createSelector(
 	[selectTimesheetIdTable],
-	(timesheetIdTable) => _.invert(timesheetIdTable)
+	(timesheetIdTable) => _.invert(timesheetIdTable),
 );
 
 export const selectIsTimesheetKnownToServer = (timesheetId: string) =>
 	createSelector(
 		[selectTimesheetIdTable],
-		(timesheetIdTable) => timesheetId in timesheetIdTable
+		(timesheetIdTable) => timesheetId in timesheetIdTable,
 	);
 
 export const selectRemoteTimesheetId = (timesheetId: string) =>
@@ -73,5 +73,5 @@ export const selectRemoteTimesheetId = (timesheetId: string) =>
 export const selectTimesheetsToSynchronize = createSelector(
 	[selectTimesheets, selectTimesheetIdsToSynchronize],
 	(timesheets, timesheetIdsToSynchronize) =>
-		_.pick(timesheets, timesheetIdsToSynchronize)
+		_.pick(timesheets, timesheetIdsToSynchronize),
 );

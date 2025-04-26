@@ -2,7 +2,7 @@ import React, {useCallback} from 'react';
 
 import {
 	DrawerHeaderProps,
-	createDrawerNavigator
+	createDrawerNavigator,
 } from '@react-navigation/drawer';
 import BootSplash from 'react-native-bootsplash';
 import {NavigationContainer} from '@react-navigation/native';
@@ -29,7 +29,7 @@ export const RootNavigation = () => {
 
 	const header = useCallback(
 		(props: DrawerHeaderProps) => <DefaultHeader {...props} />,
-		[]
+		[],
 	);
 
 	return (

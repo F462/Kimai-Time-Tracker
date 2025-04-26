@@ -5,13 +5,13 @@ import {Text} from 'react-native-paper';
 
 const styles = StyleSheet.create({
 	itemText: {
-		textAlignVertical: 'center'
-	}
+		textAlignVertical: 'center',
+	},
 });
 
 export const ListItemText = ({
 	style,
-	children
+	children,
 }: React.PropsWithChildren<{
 	style?: React.ComponentProps<typeof Text>['style'];
 }>) => {

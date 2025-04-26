@@ -15,7 +15,7 @@ const setAxiosHeadersOnAppStart = (startListening: AppStartListening) => {
 			}
 
 			listenerApi.dispatch(loginUser({serverUrl})).catch(console.error);
-		}
+		},
 	});
 };
 

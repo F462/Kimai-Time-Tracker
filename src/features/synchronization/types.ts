@@ -2,7 +2,7 @@ export enum SyncState {
 	NOT_STARTED,
 	RUNNING,
 	DONE,
-	FAILED
+	FAILED,
 }
 
 export type SynchronizationState = {
