@@ -15,6 +15,8 @@ import {
 	configureStore,
 	createListenerMiddleware
 } from '@reduxjs/toolkit';
+// it is needed to be imported here for the actual definition
+// eslint-disable-next-line no-restricted-imports
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 
