@@ -2,6 +2,7 @@
 	"appVersion": "App version {{version}}",
 	"chooseProjectAndActivity": "Choose project and activity on Smartphone to continue",
 	"createApiToken": "Create API token",
+	"delete": "Delete",
 	"enterApiToken": "Enter the API token here:",
 	"enterServerUrl": "Enter Server URL:",
 	"exportLogs": "Export logs",
