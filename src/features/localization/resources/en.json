@@ -24,6 +24,7 @@
 	"selectActivity": "Select Activity",
 	"selectProject": "Select Project",
 	"serverVersion": "Server version {{version}}",
+	"synchronize": "Synchronize",
 	"useCurrentDateTime": "Use current date and time",
 	"warning": "Warning",
 	"workingTimeToday": "Working time today:"
