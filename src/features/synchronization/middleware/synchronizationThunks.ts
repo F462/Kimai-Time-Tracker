@@ -14,8 +14,37 @@ import {
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
 import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
 import {selectIsTimesheetSyncRunning} from '../context/synchronizationSelectors';
+import {timesheetDeleted} from 'src/features/timesheets/context/timesheetsSlice';
 
 const resyncTimesheetRequests: {[timesheetId: string]: boolean} = {};
+
+export const deleteTimesheet = createAppAsyncThunk<
+	void,
+	{
+		serverUrl: string;
+		timesheet: Timesheet;
+	}
+>(
+	'synchronization/deleteTimesheet',
+	async ({serverUrl, timesheet}, {dispatch, getState}) => {
+		try {
+			if (selectIsTimesheetKnownToServer(timesheet.id)(getState())) {
+				const remoteId = selectRemoteTimesheetId(timesheet.id)(getState());
+				console.info(
+					`Delete timesheet with ID ${timesheet.id} from server with remote ID ${remoteId}`,
+				);
+
+				await axios.delete(
+					path.join(serverUrl, 'api/timesheets', remoteId.toString()),
+				);
+			}
+
+			dispatch(timesheetDeleted(timesheet.id));
+		} catch (error: any) {
+			console.error(`Error while deleting sheet: ${error.toString()}`);
+		}
+	},
+);
 
 export const synchronizeTimesheet = createAppAsyncThunk<
 	void,

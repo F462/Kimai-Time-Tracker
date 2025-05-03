@@ -1,6 +1,6 @@
 import React, {useCallback, useMemo, useState} from 'react';
 
-import {ActivityIndicator, Icon} from 'react-native-paper';
+import {ActivityIndicator, Icon, useTheme} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
@@ -15,6 +15,7 @@ import {selectActivityName} from 'src/features/activities/context/activitiesSele
 import {selectProjectName} from 'src/features/projects/context/projectsSelectors';
 import {selectSyncState} from 'src/features/synchronization/context/synchronizationSelectors';
 import {useAppSelector} from 'src/features/data/context/store';
+import {useStyle} from 'src/features/theming/utils/useStyle';
 import {useTime} from 'src/features/utils/useTime';
 
 const SYNC_STATE_ICON_SIZE = 15;
@@ -145,11 +146,24 @@ const TimesheetDetails = ({timesheet}: TimesheetItemProps) => {
 };
 
 export const TimesheetItem = ({timesheet}: TimesheetItemProps) => {
+	const theme = useTheme();
+
 	const [modalVisible, setModalVisible] = useState(false);
 	const onItemPress = useCallback(() => {
 		setModalVisible(true);
 	}, []);
 	const hideModal = useCallback(() => setModalVisible(false), []);
+
+	const dynamicStyles = useStyle(
+		() => ({
+			pressable: {
+				backgroundColor: modalVisible
+					? theme.colors.primary
+					: theme.colors.background,
+			},
+		}),
+		[modalVisible, theme.colors.background, theme.colors.primary],
+	);
 
 	return (
 		<>
@@ -158,7 +172,9 @@ export const TimesheetItem = ({timesheet}: TimesheetItemProps) => {
 				visible={modalVisible}
 				onHideModal={hideModal}
 			/>
-			<PressableOpacity style={styles.row} onPress={onItemPress}>
+			<PressableOpacity
+				style={[styles.row, dynamicStyles.pressable]}
+				onPress={onItemPress}>
 				<TimesheetSyncIndicator timesheet={timesheet} />
 				<View style={styles.flex}>
 					<TimesheetTimeDisplay timesheet={timesheet} />

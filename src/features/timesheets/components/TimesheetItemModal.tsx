@@ -3,10 +3,13 @@ import React, {useCallback} from 'react';
 import {Style} from 'react-native-paper/lib/typescript/components/List/utils';
 import {StyleSheet} from 'react-native';
 
+import {
+	deleteTimesheet,
+	synchronizeTimesheet,
+} from 'src/features/synchronization/middleware/synchronizationThunks';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {Timesheet} from '../types';
 import {selectServerUrl} from 'src/features/account/context/accountSelectors';
-import {synchronizeTimesheet} from 'src/features/synchronization/middleware/synchronizationThunks';
 import {useStyle} from 'src/features/theming/utils/useStyle';
 import {useTranslation} from 'react-i18next';
 
@@ -33,6 +36,22 @@ const useSynchronizeTimesheet = (timesheet: Timesheet) => {
 	}, [dispatch, serverUrl, timesheet]);
 };
 
+const useDeleteTimesheet = (timesheet: Timesheet) => {
+	const dispatch = useAppDispatch();
+	const serverUrl = useAppSelector(selectServerUrl);
+
+	return useCallback(() => {
+		if (serverUrl === undefined) {
+			console.warn(
+				`Server URL is not defined, cannot delete timesheet ${timesheet.id}`,
+			);
+			return;
+		}
+
+		dispatch(deleteTimesheet({serverUrl, timesheet})).catch(console.error);
+	}, [dispatch, serverUrl, timesheet]);
+};
+
 type TimesheetItemModalProps = {
 	timesheet: Timesheet;
 	visible: boolean;
@@ -47,6 +66,7 @@ export const TimesheetItemModal = ({
 	const theme = useTheme();
 	const {t} = useTranslation();
 	const onSyncItemPressed = useSynchronizeTimesheet(timesheet);
+	const onDeleteItemPressed = useDeleteTimesheet(timesheet);
 
 	const dynamicStyles = useStyle(
 		() => ({
@@ -63,6 +83,11 @@ export const TimesheetItemModal = ({
 			icon: 'cloud-sync-outline',
 			onPress: onSyncItemPressed,
 		},
+		{
+			text: t('delete'),
+			icon: 'delete-outline',
+			onPress: onDeleteItemPressed,
+		},
 	];
 
 	const createListIcon = useCallback(
@@ -78,18 +103,21 @@ export const TimesheetItemModal = ({
 				visible={visible}
 				onDismiss={onHideModal}
 				contentContainerStyle={[styles.modal, dynamicStyles.modal]}>
-				{modalEntries.map((modalEntry) => {
-					return (
-						<List.Item
-							title={modalEntry.text}
-							onPress={() => {
-								modalEntry.onPress();
-								onHideModal();
-							}}
-							left={(props) => createListIcon(props, modalEntry.icon)}
-						/>
-					);
-				})}
+				<>
+					{modalEntries.map((modalEntry) => {
+						return (
+							<List.Item
+								key={modalEntry.text}
+								title={modalEntry.text}
+								onPress={() => {
+									modalEntry.onPress();
+									onHideModal();
+								}}
+								left={(props) => createListIcon(props, modalEntry.icon)}
+							/>
+						);
+					})}
+				</>
 			</Modal>
 		</Portal>
 	);
