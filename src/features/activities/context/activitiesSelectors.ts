@@ -4,7 +4,7 @@ import {RootState} from 'src/features/data/context/store';
 
 const selectActivitiesState = (state: RootState) => state.activities;
 
-const selectActivities = createSelector(
+export const selectActivities = createSelector(
 	[selectActivitiesState],
 	(activities) => activities.activities,
 );
@@ -27,7 +27,7 @@ export const selectSelectedActivity = createSelector(
 			: undefined,
 );
 
-const selectActivity = (activityId: number | undefined) =>
+export const selectActivity = (activityId: number | undefined) =>
 	createSelector([selectActivities], (activities) =>
 		activityId ? activities[activityId] : undefined,
 	);
