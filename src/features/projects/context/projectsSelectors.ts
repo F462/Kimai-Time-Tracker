@@ -4,7 +4,7 @@ import {RootState} from 'src/features/data/context/store';
 
 const selectProjectsState = (state: RootState) => state.projects;
 
-const selectProjects = createSelector(
+export const selectProjects = createSelector(
 	[selectProjectsState],
 	(projects) => projects.projects,
 );
@@ -24,7 +24,7 @@ export const selectSelectedProject = createSelector(
 		selectedProjectId !== undefined ? projects[selectedProjectId] : undefined,
 );
 
-const selectProject = (projectId: number | undefined) =>
+export const selectProject = (projectId: number | undefined) =>
 	createSelector([selectProjects], (projects) =>
 		projectId ? projects[projectId] : undefined,
 	);

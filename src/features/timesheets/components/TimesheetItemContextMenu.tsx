@@ -1,5 +1,5 @@
 import {List, Modal, Portal, useTheme} from 'react-native-paper';
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {Style} from 'react-native-paper/lib/typescript/components/List/utils';
 import {StyleSheet} from 'react-native';
 
@@ -8,6 +8,7 @@ import {
 	synchronizeTimesheet,
 } from 'src/features/synchronization/middleware/synchronizationThunks';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
+import {EditTimesheetModal} from './EditTimesheetModal';
 import {Timesheet} from '../types';
 import {selectServerUrl} from 'src/features/account/context/accountSelectors';
 import {useStyle} from 'src/features/theming/utils/useStyle';
@@ -65,8 +66,14 @@ export const TimesheetItemContextMenu = ({
 }: TimesheetItemContextMenuProps) => {
 	const theme = useTheme();
 	const {t} = useTranslation();
+
+	const [editTimesheetModalVisible, setEditTimesheetModalVisible] =
+		useState(false);
+
 	const onSyncItemPressed = useSynchronizeTimesheet(timesheet);
-	const onEditItemPressed = () => {};
+	const onEditItemPressed = () => {
+		setEditTimesheetModalVisible(true);
+	};
 	const onDeleteItemPressed = useDeleteTimesheet(timesheet);
 
 	const dynamicStyles = useStyle(
@@ -104,27 +111,34 @@ export const TimesheetItemContextMenu = ({
 	);
 
 	return (
-		<Portal>
-			<Modal
-				visible={visible}
-				onDismiss={onHideMenu}
-				contentContainerStyle={[styles.modal, dynamicStyles.modal]}>
-				<>
-					{modalEntries.map((modalEntry) => {
-						return (
-							<List.Item
-								key={modalEntry.text}
-								title={modalEntry.text}
-								onPress={() => {
-									modalEntry.onPress();
-									onHideMenu();
-								}}
-								left={(props) => createListIcon(props, modalEntry.icon)}
-							/>
-						);
-					})}
-				</>
-			</Modal>
-		</Portal>
+		<>
+			<Portal>
+				<EditTimesheetModal
+					timesheet={timesheet}
+					visible={editTimesheetModalVisible}
+					onHideModal={() => setEditTimesheetModalVisible(false)}
+				/>
+				<Modal
+					visible={visible}
+					onDismiss={onHideMenu}
+					contentContainerStyle={[styles.modal, dynamicStyles.modal]}>
+					<>
+						{modalEntries.map((modalEntry) => {
+							return (
+								<List.Item
+									key={modalEntry.text}
+									title={modalEntry.text}
+									onPress={() => {
+										modalEntry.onPress();
+										onHideMenu();
+									}}
+									left={(props) => createListIcon(props, modalEntry.icon)}
+								/>
+							);
+						})}
+					</>
+				</Modal>
+			</Portal>
+		</>
 	);
 };

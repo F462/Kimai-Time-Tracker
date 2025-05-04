@@ -41,7 +41,6 @@ import {ProjectSelector as ProjectSelectorComponent} from 'src/ui/Selectors/Proj
 import {TimesheetList} from 'src/features/timesheets/components/TimesheetList';
 import {activitySelected} from 'src/features/activities/context/activitiesSlice';
 import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
-import {parseSelectedId} from 'src/features/timesheets/utils/functions';
 import {projectSelected} from 'src/features/projects/context/projectsSlice';
 import {stopActiveTimesheet} from 'src/features/activeTimesheet/middleware/activeTimesheetThunks';
 import {useStyle} from 'src/features/theming/utils/useStyle';
@@ -145,8 +144,8 @@ const ActivitySelector = () => {
 	return (
 		<ActivitySelectorComponent
 			selectedActivity={selectedActivity}
-			onSelectActivity={(value) => {
-				dispatch(activitySelected(parseSelectedId(value.selectedList[0])));
+			onSelectActivity={(activity) => {
+				dispatch(activitySelected(activity?.id));
 			}}
 		/>
 	);
@@ -160,9 +159,7 @@ const ProjectSelector = () => {
 	return (
 		<ProjectSelectorComponent
 			selectedProject={selectedProject}
-			onSelectProject={(value) =>
-				dispatch(projectSelected(parseSelectedId(value.selectedList[0])))
-			}
+			onSelectProject={(project) => dispatch(projectSelected(project?.id))}
 		/>
 	);
 };
