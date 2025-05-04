@@ -3,6 +3,7 @@
 	"chooseProjectAndActivity": "Choose project and activity on Smartphone to continue",
 	"createApiToken": "Create API token",
 	"delete": "Delete",
+	"edit": "Edit",
 	"enterApiToken": "Enter the API token here:",
 	"enterServerUrl": "Enter Server URL:",
 	"exportLogs": "Export logs",

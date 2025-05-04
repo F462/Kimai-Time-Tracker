@@ -66,6 +66,7 @@ export const TimesheetItemModal = ({
 	const theme = useTheme();
 	const {t} = useTranslation();
 	const onSyncItemPressed = useSynchronizeTimesheet(timesheet);
+	const onEditItemPressed = () => {};
 	const onDeleteItemPressed = useDeleteTimesheet(timesheet);
 
 	const dynamicStyles = useStyle(
@@ -82,6 +83,11 @@ export const TimesheetItemModal = ({
 			text: t('synchronize'),
 			icon: 'cloud-sync-outline',
 			onPress: onSyncItemPressed,
+		},
+		{
+			text: t('edit'),
+			icon: 'pencil-outline',
+			onPress: onEditItemPressed,
 		},
 		{
 			text: t('delete'),
