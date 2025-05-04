@@ -52,17 +52,17 @@ const useDeleteTimesheet = (timesheet: Timesheet) => {
 	}, [dispatch, serverUrl, timesheet]);
 };
 
-type TimesheetItemModalProps = {
+type TimesheetItemContextMenuProps = {
 	timesheet: Timesheet;
 	visible: boolean;
-	onHideModal: () => void;
+	onHideMenu: () => void;
 };
 
-export const TimesheetItemModal = ({
+export const TimesheetItemContextMenu = ({
 	timesheet,
 	visible,
-	onHideModal,
-}: TimesheetItemModalProps) => {
+	onHideMenu,
+}: TimesheetItemContextMenuProps) => {
 	const theme = useTheme();
 	const {t} = useTranslation();
 	const onSyncItemPressed = useSynchronizeTimesheet(timesheet);
@@ -107,7 +107,7 @@ export const TimesheetItemModal = ({
 		<Portal>
 			<Modal
 				visible={visible}
-				onDismiss={onHideModal}
+				onDismiss={onHideMenu}
 				contentContainerStyle={[styles.modal, dynamicStyles.modal]}>
 				<>
 					{modalEntries.map((modalEntry) => {
@@ -117,7 +117,7 @@ export const TimesheetItemModal = ({
 								title={modalEntry.text}
 								onPress={() => {
 									modalEntry.onPress();
-									onHideModal();
+									onHideMenu();
 								}}
 								left={(props) => createListIcon(props, modalEntry.icon)}
 							/>

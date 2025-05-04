@@ -10,7 +10,7 @@ import {ListItemText} from 'src/ui/ListItemText';
 import {PressableOpacity} from 'src/ui/PressableOpacity';
 import {SyncState} from 'src/features/synchronization/types';
 import {Timesheet} from '../types';
-import {TimesheetItemModal} from './TimesheetItemModal';
+import {TimesheetItemContextMenu} from './TimesheetItemContextMenu';
 import {selectActivityName} from 'src/features/activities/context/activitiesSelectors';
 import {selectProjectName} from 'src/features/projects/context/projectsSelectors';
 import {selectSyncState} from 'src/features/synchronization/context/synchronizationSelectors';
@@ -148,29 +148,29 @@ const TimesheetDetails = ({timesheet}: TimesheetItemProps) => {
 export const TimesheetItem = ({timesheet}: TimesheetItemProps) => {
 	const theme = useTheme();
 
-	const [modalVisible, setModalVisible] = useState(false);
+	const [contextMenuVisible, setContextMenuVisible] = useState(false);
 	const onItemPress = useCallback(() => {
-		setModalVisible(true);
+		setContextMenuVisible(true);
 	}, []);
-	const hideModal = useCallback(() => setModalVisible(false), []);
+	const hideContextMenu = useCallback(() => setContextMenuVisible(false), []);
 
 	const dynamicStyles = useStyle(
 		() => ({
 			pressable: {
-				backgroundColor: modalVisible
+				backgroundColor: contextMenuVisible
 					? theme.colors.primary
 					: theme.colors.background,
 			},
 		}),
-		[modalVisible, theme.colors.background, theme.colors.primary],
+		[contextMenuVisible, theme.colors.background, theme.colors.primary],
 	);
 
 	return (
 		<>
-			<TimesheetItemModal
+			<TimesheetItemContextMenu
 				timesheet={timesheet}
-				visible={modalVisible}
-				onHideModal={hideModal}
+				visible={contextMenuVisible}
+				onHideMenu={hideContextMenu}
 			/>
 			<PressableOpacity
 				style={[styles.row, dynamicStyles.pressable]}
