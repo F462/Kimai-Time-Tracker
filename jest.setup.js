@@ -89,3 +89,9 @@ jest.mock('react-native-file-logger', () => ({
 		error: jest.fn()
 	}
 }));
+
+// to fix RN 0.80 bug, see https://github.com/facebook/react-native/issues/51993
+jest.mock('react-native/Libraries/Components/RefreshControl/RefreshControl', () => ({
+  __esModule: true,
+  default: require('./__mocks__/RefreshControlMock'),
+}));
