@@ -10,7 +10,7 @@
 		"start": "react-native start",
 		"test": "jest",
 		"typecheck": "tsc -p .",
-		"verify": "yarn typecheck && yarn lint && yarn test"
+		"verify": "yarn typecheck && yarn lint && yarn dedupe --check && yarn test"
 	},
 	"dependencies": {
 		"@d4l/react-native-wear-connectivity": "^0.3.1",
