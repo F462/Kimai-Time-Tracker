@@ -92,7 +92,7 @@
 	"engines": {
 		"node": ">=18"
 	},
-	"packageManager": "yarn@4.1.0",
+	"packageManager": "yarn@4.9.2",
 	"resolutions": {
 		"eslint-plugin-react-hooks": "5.2.0",
 		"eslint-plugin-react-native": "5.0.0"
