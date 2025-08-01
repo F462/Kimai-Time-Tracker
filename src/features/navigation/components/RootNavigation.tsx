@@ -6,6 +6,8 @@ import {
 } from '@react-navigation/drawer';
 import BootSplash from 'react-native-bootsplash';
 import {NavigationContainer} from '@react-navigation/native';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {useTheme} from 'react-native-paper';
 
@@ -14,6 +16,12 @@ import {DefaultHeader} from './DefaultHeader';
 import {ScreenParameters} from '../ScreenParameters';
 import {screens} from '../screens';
 import {selectIsUserLoggedIn} from 'src/features/account/context/accountSelectors';
+
+const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+	},
+});
 
 const RootDrawer = createDrawerNavigator();
 
@@ -33,25 +41,27 @@ export const RootNavigation = () => {
 	);
 
 	return (
-		<NavigationContainer
-			theme={theme}
-			onReady={() => {
-				BootSplash.hide().catch(console.error);
-			}}>
-			<RootDrawer.Navigator
-				initialRouteName={initialRouteName}
-				backBehavior="history"
-				screenOptions={{header}}
-				drawerContent={DefaultDrawerContent}>
-				{screens.map((screen) => (
-					<RootDrawer.Screen
-						key={screen.name}
-						name={screen.name}
-						component={screen.component}
-						options={screen.options}
-					/>
-				))}
-			</RootDrawer.Navigator>
-		</NavigationContainer>
+		<SafeAreaView style={styles.container}>
+			<NavigationContainer
+				theme={theme}
+				onReady={() => {
+					BootSplash.hide().catch(console.error);
+				}}>
+				<RootDrawer.Navigator
+					initialRouteName={initialRouteName}
+					backBehavior="history"
+					screenOptions={{header}}
+					drawerContent={DefaultDrawerContent}>
+					{screens.map((screen) => (
+						<RootDrawer.Screen
+							key={screen.name}
+							name={screen.name}
+							component={screen.component}
+							options={screen.options}
+						/>
+					))}
+				</RootDrawer.Navigator>
+			</NavigationContainer>
+		</SafeAreaView>
 	);
 };
