@@ -14,17 +14,21 @@ import {useIsOnWearable} from 'src/features/utils/useIsOnWearable';
 // Run initial configuration for i18n;
 i18n;
 
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import axios from 'axios';
 import axiosRetry from 'axios-retry';
+
 axiosRetry(axios, {retries: 3});
 
 const AppOnDevice = () => {
 	return (
 		<Provider store={store}>
 			<PersistGate loading={null} persistor={persistor}>
-				<WearableResponder />
-				<Onboarding />
-				<RootNavigation />
+				<SafeAreaProvider>
+					<WearableResponder />
+					<Onboarding />
+					<RootNavigation />
+				</SafeAreaProvider>
 			</PersistGate>
 		</Provider>
 	);
