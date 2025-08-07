@@ -1,4 +1,7 @@
-import {DatePickerModal, TimePickerModal} from 'react-native-paper-dates';
+import RNDateTimePicker, {
+	AndroidNativeProps,
+	DateTimePickerEvent,
+} from '@react-native-community/datetimepicker';
 import {StyleSheet, View} from 'react-native';
 import {useCallback, useEffect, useMemo, useState} from 'react';
 import {TextInput} from 'react-native-paper';
@@ -27,12 +30,9 @@ type DateTimePickerProps = {
 };
 export const DateTimePicker = ({initialValue}: DateTimePickerProps) => {
 	const dispatch = useAppDispatch();
-	const date = useMemo(
-		() =>
-			initialValue !== undefined
-				? dayjs.unix(initialValue).toDate()
-				: undefined,
-		[initialValue],
+
+	const [date, setDate] = useState<Date | undefined>(
+		dayjs.unix(initialValue ?? Date.now() / 1000).toDate(),
 	);
 
 	const dayjsDate = useMemo(
@@ -40,8 +40,30 @@ export const DateTimePicker = ({initialValue}: DateTimePickerProps) => {
 		[date],
 	);
 
-	const [datePickerVisible, setDatePickerVisible] = useState(false);
-	const [timePickerVisible, setTimePickerVisible] = useState(false);
+	const [mode, setMode] = useState<AndroidNativeProps['mode']>('date');
+	const [show, setShow] = useState(false);
+
+	const onChange = (
+		_event: DateTimePickerEvent,
+		selectedDate: Date | undefined,
+	) => {
+		const currentDate = selectedDate;
+		setShow(false);
+		setDate(currentDate);
+	};
+
+	const showMode = (currentMode: AndroidNativeProps['mode']) => {
+		setShow(true);
+		setMode(currentMode);
+	};
+
+	const showDatepicker = () => {
+		showMode('date');
+	};
+
+	const showTimepicker = () => {
+		showMode('time');
+	};
 
 	const [dateTextInputValue, setDateTextInputValue] = useState<string>();
 	const updateDateTextInput = useCallback(
@@ -82,12 +104,7 @@ export const DateTimePicker = ({initialValue}: DateTimePickerProps) => {
 						}
 					}}
 					label={'YYYY-MM-DD'}
-					right={
-						<TextInput.Icon
-							icon="calendar"
-							onPress={() => setDatePickerVisible(true)}
-						/>
-					}
+					right={<TextInput.Icon icon="calendar" onPress={showDatepicker} />}
 				/>
 				<TextInput
 					style={styles.timePicker}
@@ -110,42 +127,17 @@ export const DateTimePicker = ({initialValue}: DateTimePickerProps) => {
 						}
 					}}
 					label={'HH:MM'}
-					right={
-						<TextInput.Icon
-							icon="clock"
-							onPress={() => setTimePickerVisible(true)}
-						/>
-					}
+					right={<TextInput.Icon icon="clock" onPress={showTimepicker} />}
 				/>
 			</View>
-			<DatePickerModal
-				locale="en"
-				mode="single"
-				visible={datePickerVisible}
-				onDismiss={() => setDatePickerVisible(false)}
-				date={date}
-				onConfirm={(value) => {
-					dispatch(nextTimesheetStartDatetimeSet(dayjs(value.date).unix()));
-					setDatePickerVisible(false);
-				}}
-			/>
-			<TimePickerModal
-				visible={timePickerVisible}
-				onDismiss={() => setTimePickerVisible(false)}
-				onConfirm={(value) => {
-					dispatch(
-						nextTimesheetStartDatetimeSet(
-							dayjsDate
-								?.set('hour', value.hours)
-								.set('minute', value.minutes)
-								.unix(),
-						),
-					);
-					setTimePickerVisible(false);
-				}}
-				hours={parseInt(dayjsDate?.format('HH') ?? '0', 10)}
-				minutes={parseInt(dayjsDate?.format('mm') ?? '0', 10)}
-			/>
+			{show && (
+				<RNDateTimePicker
+					value={date ?? new Date()}
+					mode={mode}
+					is24Hour={true}
+					onChange={onChange}
+				/>
+			)}
 		</>
 	);
 };

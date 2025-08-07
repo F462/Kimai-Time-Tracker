@@ -3083,6 +3083,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/datetimepicker@npm:^8.4.3":
+  version: 8.4.3
+  resolution: "@react-native-community/datetimepicker@npm:8.4.3"
+  dependencies:
+    invariant: "npm:^2.2.4"
+  peerDependencies:
+    expo: ">=52.0.0"
+    react: "*"
+    react-native: "*"
+    react-native-windows: "*"
+  peerDependenciesMeta:
+    expo:
+      optional: true
+    react-native-windows:
+      optional: true
+  checksum: 10c0/bb93fc534e501643e39245d00759a03ef5e66b25033937c908caea09ada20b16f97d3b79495a8697ba4069bb6b393613f17b7ee7ee64a3a95affad9fbb61b1f4
+  languageName: node
+  linkType: hard
+
 "@react-native-community/netinfo@npm:^11.4.1":
   version: 11.4.1
   resolution: "@react-native-community/netinfo@npm:11.4.1"
@@ -8791,6 +8810,7 @@ __metadata:
     "@react-native-community/cli": "npm:19.1.1"
     "@react-native-community/cli-platform-android": "npm:19.1.1"
     "@react-native-community/cli-platform-ios": "npm:19.1.1"
+    "@react-native-community/datetimepicker": "npm:^8.4.3"
     "@react-native-community/netinfo": "npm:^11.4.1"
     "@react-native-vector-icons/material-design-icons": "npm:^12.3.0"
     "@react-native/babel-preset": "npm:0.80.2"
@@ -8837,7 +8857,6 @@ __metadata:
     react-native-local-resource: "patch:react-native-local-resource@npm%3A0.1.6#~/.yarn/patches/react-native-local-resource-npm-0.1.6-e7301fc2c6.patch"
     react-native-localize: "npm:^3.5.1"
     react-native-paper: "npm:^5.14.5"
-    react-native-paper-dates: "npm:^0.22.49"
     react-native-paper-select: "npm:^1.3.0"
     react-native-reanimated: "npm:^4.0.1"
     react-native-safe-area-context: "npm:^5.6.0"
@@ -10654,20 +10673,6 @@ __metadata:
     react-native-macos:
       optional: true
   checksum: 10c0/640265066df511ff63c4d5c7543c9372c04397927632dbecdd983e4ba2e93c15367c11c0915bd34cc32769daee56f687565845f128bce63485fb4f8ee4ad75f5
-  languageName: node
-  linkType: hard
-
-"react-native-paper-dates@npm:^0.22.49":
-  version: 0.22.49
-  resolution: "react-native-paper-dates@npm:0.22.49"
-  dependencies:
-    color: "npm:^4.2.3"
-  peerDependencies:
-    react: "*"
-    react-native: "*"
-    react-native-paper: "*"
-    react-native-safe-area-context: "*"
-  checksum: 10c0/76b64ae0b26a22f40368000cdbb7cff8ee93e736579169cef8eff67cfe30982438fdce2d0c3175f184c78526c37e63df50e09d2c7efeb2cff2e217e4bed993a9
   languageName: node
   linkType: hard
 

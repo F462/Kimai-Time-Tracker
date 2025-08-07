@@ -3,8 +3,6 @@ import dayjs from 'dayjs';
 import {findBestLanguageTag} from 'react-native-localize';
 import {initReactI18next} from 'react-i18next';
 
-import './react-native-paper-dates';
-
 import de from '../resources/de.json';
 import en from '../resources/en.json';
 
