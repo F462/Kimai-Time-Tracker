@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {Checkbox, IconButton, Text, useTheme} from 'react-native-paper';
 import {
@@ -9,7 +9,6 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import {PaperSelect} from 'react-native-paper-select';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
 import {v4 as uuidv4} from 'uuid';
@@ -23,22 +22,22 @@ import {
 	selectTimesheetListOfCurrentDay,
 } from 'src/features/timesheets/context/timesheetsSelectors';
 import {
-	selectActivityList,
-	selectSelectedActivity,
-	selectSelectedActivityId,
-} from 'src/features/activities/context/activitiesSelectors';
-import {
 	selectCanTimesheetBeStarted,
 	selectNextTimesheetStartDate,
 } from '../context/activeTimesheetSelectors';
 import {
-	selectProjectList,
+	selectSelectedActivity,
+	selectSelectedActivityId,
+} from 'src/features/activities/context/activitiesSelectors';
+import {
 	selectSelectedProject,
 	selectSelectedProjectId,
 } from 'src/features/projects/context/projectsSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
+import {ActivitySelector as ActivitySelectorComponent} from 'src/ui/Selectors/ActivitySelector';
 import {DateTimePicker} from 'src/ui/DateTimePicker';
 import {PressableOpacity} from 'src/ui/PressableOpacity';
+import {ProjectSelector as ProjectSelectorComponent} from 'src/ui/Selectors/ProjectSelector';
 import {TimesheetList} from 'src/features/timesheets/components/TimesheetList';
 import {activitySelected} from 'src/features/activities/context/activitiesSlice';
 import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
@@ -98,44 +97,6 @@ const ActiveTimesheetContent = () => {
 	);
 };
 
-type SelectorProps<T extends {id: number; name: string}> = {
-	elements: Array<T>;
-	selectedElement: T | undefined;
-	label: string;
-	onSelection: React.ComponentProps<typeof PaperSelect>['onSelection'];
-};
-function Selector<T extends {id: number; name: string}>({
-	elements,
-	selectedElement,
-	label,
-	onSelection,
-}: SelectorProps<T>) {
-	const elementList = useMemo(() => {
-		return Object.values(elements ?? {}).map((item) => ({
-			_id: item.id.toString(),
-			value: item.name,
-		}));
-	}, [elements]);
-
-	return (
-		<PaperSelect
-			label={label}
-			value={selectedElement?.name ?? ''}
-			onSelection={onSelection}
-			arrayList={elementList}
-			selectedArrayList={[
-				{
-					_id: selectedElement?.id.toString() ?? '',
-					value: selectedElement?.name ?? '',
-				},
-			]}
-			multiEnable={false}
-			hideSearchBox={true}
-			textInputMode="outlined"
-		/>
-	);
-}
-
 const DatetimeSelector = () => {
 	const dispatch = useAppDispatch();
 	const {t} = useTranslation();
@@ -166,18 +127,14 @@ const DatetimeSelector = () => {
 };
 
 const ActivitySelector = () => {
-	const {t} = useTranslation();
 	const dispatch = useAppDispatch();
 
-	const activities = useAppSelector(selectActivityList);
 	const selectedActivity = useAppSelector(selectSelectedActivity);
 
 	return (
-		<Selector
-			elements={activities}
-			selectedElement={selectedActivity}
-			label={t('selectActivity')}
-			onSelection={(value) => {
+		<ActivitySelectorComponent
+			selectedActivity={selectedActivity}
+			onSelectActivity={(value) => {
 				dispatch(activitySelected(parseSelectedId(value.selectedList[0])));
 			}}
 		/>
@@ -185,20 +142,16 @@ const ActivitySelector = () => {
 };
 
 const ProjectSelector = () => {
-	const {t} = useTranslation();
 	const dispatch = useAppDispatch();
 
-	const projects = useAppSelector(selectProjectList);
 	const selectedProject = useAppSelector(selectSelectedProject);
 
 	return (
-		<Selector
-			elements={projects}
-			selectedElement={selectedProject}
-			label={t('selectProject')}
-			onSelection={(value) => {
-				dispatch(projectSelected(parseSelectedId(value.selectedList[0])));
-			}}
+		<ProjectSelectorComponent
+			selectedProject={selectedProject}
+			onSelectProject={(value) =>
+				dispatch(projectSelected(parseSelectedId(value.selectedList[0])))
+			}
 		/>
 	);
 };
