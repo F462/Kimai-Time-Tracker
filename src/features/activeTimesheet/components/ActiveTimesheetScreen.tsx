@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import {Checkbox, IconButton, Text, useTheme} from 'react-native-paper';
 import {
@@ -111,6 +111,14 @@ const DatetimeSelector = () => {
 	}, [dispatch, useCurrentTime]);
 
 	const dateUnixTimestamp = useAppSelector(selectNextTimesheetStartDate);
+	const handleDateTimePick = useCallback(
+		(
+			pickedDateTime: Parameters<
+				React.ComponentProps<typeof DateTimePicker>['onDateTimePick']
+			>[0],
+		) => dispatch(nextTimesheetStartDatetimeSet(pickedDateTime.unix())),
+		[dispatch],
+	);
 
 	return (
 		<View>
@@ -120,7 +128,10 @@ const DatetimeSelector = () => {
 				onPress={() => setUseCurrentTime(!useCurrentTime)}
 			/>
 			{useCurrentTime === false ? (
-				<DateTimePicker initialValue={dateUnixTimestamp} />
+				<DateTimePicker
+					initialValue={dateUnixTimestamp}
+					onDateTimePick={handleDateTimePick}
+				/>
 			) : null}
 		</View>
 	);
