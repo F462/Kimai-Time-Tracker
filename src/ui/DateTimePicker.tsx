@@ -8,8 +8,6 @@ import {TextInput} from 'react-native-paper';
 import dayjs from 'dayjs';
 
 import {isValidDate} from 'src/features/timesheets/utils/functions';
-import {nextTimesheetStartDatetimeSet} from 'src/features/activeTimesheet/context/activeTimesheetSlice';
-import {useAppDispatch} from 'src/features/data/context/store';
 
 const styles = StyleSheet.create({
 	datetimePickerContainer: {
@@ -27,10 +25,12 @@ const styles = StyleSheet.create({
 
 type DateTimePickerProps = {
 	initialValue?: number;
+	onDateTimePick: (pickedDate: dayjs.Dayjs) => void;
 };
-export const DateTimePicker = ({initialValue}: DateTimePickerProps) => {
-	const dispatch = useAppDispatch();
-
+export const DateTimePicker = ({
+	initialValue,
+	onDateTimePick,
+}: DateTimePickerProps) => {
 	const [date, setDate] = useState<Date | undefined>(
 		dayjs.unix(initialValue ?? Date.now() / 1000).toDate(),
 	);
@@ -98,7 +98,7 @@ export const DateTimePicker = ({initialValue}: DateTimePickerProps) => {
 								: newDate.hour(dayjsDate.hour()).minute(dayjsDate.minute());
 
 						if (isValidDate(newDate.toDate())) {
-							dispatch(nextTimesheetStartDatetimeSet(newDate.unix()));
+							onDateTimePick(newDate);
 						} else {
 							updateDateTextInput();
 						}
@@ -121,7 +121,7 @@ export const DateTimePicker = ({initialValue}: DateTimePickerProps) => {
 										.day(dayjsDate.day());
 
 						if (isValidDate(newDate.toDate())) {
-							dispatch(nextTimesheetStartDatetimeSet(newDate.unix()));
+							onDateTimePick(newDate);
 						} else {
 							updateDateTextInput();
 						}
