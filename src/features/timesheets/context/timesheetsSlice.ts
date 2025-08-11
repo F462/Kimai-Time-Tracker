@@ -38,6 +38,12 @@ const timesheetsSlice = createSlice({
 		) => {
 			delete state.timesheets[timesheetId];
 		},
+		timesheetEdited: (
+			state,
+			{payload: timesheet}: PayloadAction<Timesheet>,
+		) => {
+			state.timesheets[timesheet.id] = timesheet;
+		},
 	},
 	extraReducers: (builder) => {
 		builder
@@ -67,5 +73,6 @@ const timesheetsSlice = createSlice({
 	},
 });
 
-export const {timesheetsUpdated, timesheetDeleted} = timesheetsSlice.actions;
+export const {timesheetsUpdated, timesheetDeleted, timesheetEdited} =
+	timesheetsSlice.actions;
 export const timesheetsReducer = timesheetsSlice.reducer;

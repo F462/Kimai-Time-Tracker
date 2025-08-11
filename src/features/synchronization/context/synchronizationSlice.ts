@@ -1,10 +1,11 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {PayloadAction, createSlice, isAnyOf} from '@reduxjs/toolkit';
 
 import {SyncState, SynchronizationState} from '../types';
 import {
 	newTimesheetStarted,
 	timesheetStopped,
 } from 'src/features/activeTimesheet/context/activeTimesheetSlice';
+import {timesheetEdited} from 'src/features/timesheets/context/timesheetsSlice';
 
 const initialState: SynchronizationState = {
 	timesheets: {},
@@ -34,16 +35,19 @@ const synchronizationSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder
-			.addCase(newTimesheetStarted, (state, {payload: timesheet}) => {
-				if (state.timesheets[timesheet.id] !== SyncState.RUNNING) {
-					state.timesheets[timesheet.id] = SyncState.NOT_STARTED;
-				}
-			})
 			.addCase(timesheetStopped, (state, {payload: timesheetId}) => {
 				if (state.timesheets[timesheetId] !== SyncState.RUNNING) {
 					state.timesheets[timesheetId] = SyncState.NOT_STARTED;
 				}
-			});
+			})
+			.addMatcher(
+				isAnyOf(newTimesheetStarted, timesheetEdited),
+				(state, {payload: timesheet}) => {
+					if (state.timesheets[timesheet.id] !== SyncState.RUNNING) {
+						state.timesheets[timesheet.id] = SyncState.NOT_STARTED;
+					}
+				},
+			);
 	},
 });
 

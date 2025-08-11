@@ -50,6 +50,7 @@ export const DateTimePicker = ({
 		const currentDate = selectedDate;
 		setShow(false);
 		setDate(currentDate);
+		onDateTimePick(dayjs(currentDate));
 	};
 
 	const showMode = (currentMode: AndroidNativeProps['mode']) => {
