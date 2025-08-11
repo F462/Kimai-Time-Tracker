@@ -1,16 +1,17 @@
 import {Button, Modal, Portal, Text, useTheme} from 'react-native-paper';
 import {StyleSheet, View} from 'react-native';
+import {useCallback, useState} from 'react';
 import dayjs from 'dayjs';
 import {useTranslation} from 'react-i18next';
 
+import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {ActivitySelector} from 'src/ui/Selectors/ActivitySelector';
 import {DateTimePicker} from 'src/ui/DateTimePicker';
 import {ProjectSelector} from 'src/ui/Selectors/ProjectSelector';
 import {Timesheet} from '../types';
 import {selectActivity} from 'src/features/activities/context/activitiesSelectors';
 import {selectProject} from 'src/features/projects/context/projectsSelectors';
-import {useAppSelector} from 'src/features/data/context/store';
-import {useState} from 'react';
+import {timesheetEdited} from '../context/timesheetsSlice';
 import {useStyle} from 'src/features/theming/utils/useStyle';
 
 const styles = StyleSheet.create({
@@ -53,6 +54,7 @@ export const EditTimesheetModal = ({
 	visible,
 	onHideModal,
 }: EditTimesheetModalProps) => {
+	const dispatch = useAppDispatch();
 	const theme = useTheme();
 	const {t} = useTranslation();
 
@@ -78,6 +80,27 @@ export const EditTimesheetModal = ({
 	const timesheetActivity = useAppSelector(selectActivity(timesheet.activity));
 	const [selectedActivity, setSelectedActivity] = useState(timesheetActivity);
 
+	const onSave = useCallback(() => {
+		dispatch(
+			timesheetEdited({
+				...timesheet,
+				begin: timesheetBegin ? dayjs.unix(timesheetBegin).format() : undefined,
+				end: timesheetEnd ? dayjs.unix(timesheetEnd).format() : undefined,
+				project: selectedProject?.id,
+				activity: selectedActivity?.id,
+			}),
+		);
+		onHideModal();
+	}, [
+		dispatch,
+		onHideModal,
+		selectedActivity?.id,
+		selectedProject?.id,
+		timesheet,
+		timesheetBegin,
+		timesheetEnd,
+	]);
+
 	return (
 		<Portal>
 			<Modal
@@ -89,9 +112,9 @@ export const EditTimesheetModal = ({
 					<DatePickerWithLabel
 						label="Begin:"
 						initialValue={timesheetBegin}
-						onDateTimePick={(pickedDateTime) =>
-							setTimesheetBegin(pickedDateTime.unix())
-						}
+						onDateTimePick={(pickedDateTime) => {
+							setTimesheetBegin(pickedDateTime.unix());
+						}}
 					/>
 					<DatePickerWithLabel
 						label="End:"
@@ -111,7 +134,9 @@ export const EditTimesheetModal = ({
 				</View>
 				<View style={styles.buttonContainer}>
 					<Button onPress={onHideModal}>{t('dismiss')}</Button>
-					<Button mode="contained">{t('save')}</Button>
+					<Button mode="contained" onPress={onSave}>
+						{t('save')}
+					</Button>
 				</View>
 			</Modal>
 		</Portal>
