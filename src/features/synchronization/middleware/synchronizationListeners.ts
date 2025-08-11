@@ -18,6 +18,7 @@ import {Timesheet} from 'src/features/timesheets/types';
 import {selectIsTimesheetSyncNeeded} from '../context/synchronizationSelectors';
 import {selectServerUrl} from 'src/features/account/context/accountSelectors';
 import {synchronizeTimesheet} from './synchronizationThunks';
+import {timesheetEdited} from 'src/features/timesheets/context/timesheetsSlice';
 
 const syncTimesheet = async (
 	listenerApi: ListenerEffectAPI<RootState, AppDispatch>,
@@ -65,6 +66,15 @@ const runSyncOnTimesheetStarted = (startListening: AppStartListening) => {
 	});
 };
 
+const runSyncOnTimesheetEdited = (startListening: AppStartListening) => {
+	startListening({
+		actionCreator: timesheetEdited,
+		effect: async ({payload: timesheet}, listenerApi) => {
+			await syncTimesheet(listenerApi, timesheet);
+		},
+	});
+};
+
 const runSyncOnTimesheetStopped = (startListening: AppStartListening) => {
 	startListening({
 		actionCreator: timesheetStopped,
@@ -81,5 +91,6 @@ export const startSynchronizationListeners = (
 ) => {
 	runSyncOnAppStart(startListening);
 	runSyncOnTimesheetStarted(startListening);
+	runSyncOnTimesheetEdited(startListening);
 	runSyncOnTimesheetStopped(startListening);
 };
