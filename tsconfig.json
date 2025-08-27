@@ -9,4 +9,8 @@
     "eslint.config.mjs",
     ".prettierrc.js"
   ],
+  "exclude": [
+    "**/node_modules",
+    "**/Pods"
+  ]
 }
