@@ -1,0 +1,13 @@
+diff --git a/scripts/cocoapods/helpers.rb b/scripts/cocoapods/helpers.rb
+index cdb1e14269d4fb6802a0ff6831bced4a11399fc6..3778a73a95e696c163c8e14a90f6c2e1a4b3c14c 100644
+--- a/scripts/cocoapods/helpers.rb
++++ b/scripts/cocoapods/helpers.rb
+@@ -81,7 +81,7 @@ module Helpers
+         }
+ 
+         def self.min_ios_version_supported
+-            return '15.1'
++            return '15.5'
+         end
+ 
+         def self.min_xcode_version_supported
