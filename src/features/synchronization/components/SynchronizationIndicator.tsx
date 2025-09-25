@@ -1,12 +1,13 @@
 import React, {useMemo} from 'react';
 
-import {Icon} from 'react-native-paper';
+import {IconButton} from 'react-native-paper';
 
 import {StyleSheet, View} from 'react-native';
 import {selectAreAllTimesheetsInSync} from '../context/synchronizationSelectors';
 import {selectIsInternetReachable} from 'src/features/network/context/networkSelector';
 import {selectIsUserLoggedIn} from 'src/features/account/context/accountSelectors';
 import {selectIsUserLoggingIn} from 'src/features/appState/context/appStateSelectors';
+import {useAppNavigation} from 'src/features/navigation/context/hooks';
 import {useAppSelector} from 'src/features/data/context/store';
 
 const styles = StyleSheet.create({
@@ -16,29 +17,35 @@ const styles = StyleSheet.create({
 });
 
 export const SynchronizationIndicator = () => {
+	const navigation = useAppNavigation();
+
 	const areAllTimesheetsInSync = useAppSelector(selectAreAllTimesheetsInSync);
 	const isInternetReachable = useAppSelector(selectIsInternetReachable);
 	const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
 	const isUserLoggingIn = useAppSelector(selectIsUserLoggingIn);
 
 	const iconToDisplay = useMemo(() => {
-		const iconString = (() => {
+		const {iconString, iconCallback} = (() => {
 			if (isInternetReachable === false) {
-				return 'cloud-off-outline';
+				return {iconString: 'cloud-off-outline'};
 			} else if (isUserLoggedIn === false) {
-				return 'cloud-alert';
+				return {iconString: 'cloud-alert'};
 			} else if (isUserLoggingIn === true) {
-				return 'cloud-refresh';
+				return {iconString: 'cloud-refresh'};
 			} else if (areAllTimesheetsInSync) {
-				return 'cloud-check-outline';
+				return {iconString: 'cloud-check-outline'};
 			} else {
-				return 'cloud-sync-outline';
+				return {
+					iconString: 'cloud-sync-outline',
+					iconCallback: () =>
+						navigation.navigate('Timesheets', {onlyShowNonDoneEntries: true}),
+				};
 			}
 		})();
 
 		return (
 			<View style={styles.icon}>
-				<Icon source={iconString} size={30} />
+				<IconButton icon={iconString} onPress={iconCallback} size={30} />
 			</View>
 		);
 	}, [
@@ -46,6 +53,7 @@ export const SynchronizationIndicator = () => {
 		isInternetReachable,
 		isUserLoggedIn,
 		isUserLoggingIn,
+		navigation,
 	]);
 
 	return iconToDisplay;
