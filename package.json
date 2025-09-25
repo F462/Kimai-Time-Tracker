@@ -10,7 +10,8 @@
 		"start": "react-native start",
 		"test": "jest",
 		"typecheck": "tsc -p .",
-		"verify": "yarn typecheck && yarn lint && yarn test"
+		"verify": "yarn typecheck && yarn lint && yarn depcyclecheck && yarn test",
+		"depcyclecheck": "dpdm index.js --transform --circular --exit-code circular:1 --warning=false --no-tree"
 	},
 	"dependencies": {
 		"@d4l/react-native-wear-connectivity": "^0.3.1",
@@ -75,6 +76,7 @@
 		"@types/react": "^19.1.13",
 		"@types/react-test-renderer": "^19.1.0",
 		"babel-jest": "30.1.2",
+		"dpdm": "^3.14.0",
 		"eslint": "^9.36.0",
 		"eslint-config-prettier": "^10.1.8",
 		"eslint-plugin-ft-flow": "^3.0.11",
