@@ -11,7 +11,7 @@ import {ProjectSelector} from 'src/ui/Selectors/ProjectSelector';
 import {Timesheet} from '../types';
 import {selectActivity} from 'src/features/activities/context/activitiesSelectors';
 import {selectProject} from 'src/features/projects/context/projectsSelectors';
-import {timesheetEdited} from '../context/timesheetsSlice';
+import {timesheetEdited} from '../context/timesheetActions';
 import {useStyle} from 'src/features/theming/utils/useStyle';
 
 const styles = StyleSheet.create({

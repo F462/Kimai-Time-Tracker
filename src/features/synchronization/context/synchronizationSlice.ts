@@ -5,7 +5,7 @@ import {
 	newTimesheetStarted,
 	timesheetStopped,
 } from 'src/features/activeTimesheet/context/activeTimesheetSlice';
-import {timesheetEdited} from 'src/features/timesheets/context/timesheetsSlice';
+import {timesheetEdited} from 'src/features/timesheets/context/timesheetActions';
 
 const initialState: SynchronizationState = {
 	timesheets: {},

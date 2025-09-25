@@ -6,6 +6,7 @@ import {
 	newTimesheetStarted,
 	timesheetStopped,
 } from 'src/features/activeTimesheet/context/activeTimesheetSlice';
+import {timesheetEdited} from './timesheetActions';
 import {timesheetSynced} from 'src/features/synchronization/context/synchronizationSlice';
 
 const initialState: TimesheetsState = {
@@ -38,15 +39,12 @@ const timesheetsSlice = createSlice({
 		) => {
 			delete state.timesheets[timesheetId];
 		},
-		timesheetEdited: (
-			state,
-			{payload: timesheet}: PayloadAction<Timesheet>,
-		) => {
-			state.timesheets[timesheet.id] = timesheet;
-		},
 	},
 	extraReducers: (builder) => {
 		builder
+			.addCase(timesheetEdited, (state, {payload: timesheet}) => {
+				state.timesheets[timesheet.id] = timesheet;
+			})
 			.addCase(newTimesheetStarted, (state, {payload: timesheet}) => {
 				state.timesheets[timesheet.id] = timesheet;
 			})
@@ -73,6 +71,5 @@ const timesheetsSlice = createSlice({
 	},
 });
 
-export const {timesheetsUpdated, timesheetDeleted, timesheetEdited} =
-	timesheetsSlice.actions;
+export const {timesheetsUpdated, timesheetDeleted} = timesheetsSlice.actions;
 export const timesheetsReducer = timesheetsSlice.reducer;
