@@ -18,7 +18,7 @@ import {Timesheet} from 'src/features/timesheets/types';
 import {selectIsTimesheetSyncNeeded} from '../context/synchronizationSelectors';
 import {selectServerUrl} from 'src/features/account/context/accountSelectors';
 import {synchronizeTimesheet} from './synchronizationThunks';
-import {timesheetEdited} from 'src/features/timesheets/context/timesheetsSlice';
+import {timesheetEdited} from 'src/features/timesheets/context/timesheetActions';
 
 const syncTimesheet = async (
 	listenerApi: ListenerEffectAPI<RootState, AppDispatch>,
