@@ -11,7 +11,9 @@ import {SynchronizationIndicator} from 'src/features/synchronization/components/
 const styles = StyleSheet.create({
 	container: {
 		flexDirection: 'row',
-		margin: 10,
+		alignItems: 'center',
+		marginHorizontal: 10,
+		marginTop: 5,
 	},
 	headerText: {
 		flex: 1,

@@ -2,19 +2,12 @@ import React, {useMemo} from 'react';
 
 import {IconButton} from 'react-native-paper';
 
-import {StyleSheet, View} from 'react-native';
 import {selectAreAllTimesheetsInSync} from '../context/synchronizationSelectors';
 import {selectIsInternetReachable} from 'src/features/network/context/networkSelector';
 import {selectIsUserLoggedIn} from 'src/features/account/context/accountSelectors';
 import {selectIsUserLoggingIn} from 'src/features/appState/context/appStateSelectors';
 import {useAppNavigation} from 'src/features/navigation/context/hooks';
 import {useAppSelector} from 'src/features/data/context/store';
-
-const styles = StyleSheet.create({
-	icon: {
-		margin: 10,
-	},
-});
 
 export const SynchronizationIndicator = () => {
 	const navigation = useAppNavigation();
@@ -43,11 +36,7 @@ export const SynchronizationIndicator = () => {
 			}
 		})();
 
-		return (
-			<View style={styles.icon}>
-				<IconButton icon={iconString} onPress={iconCallback} size={30} />
-			</View>
-		);
+		return <IconButton icon={iconString} onPress={iconCallback} size={30} />;
 	}, [
 		areAllTimesheetsInSync,
 		isInternetReachable,
