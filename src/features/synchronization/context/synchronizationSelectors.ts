@@ -7,7 +7,7 @@ import {isTimesheetSyncNeeded} from '../utils/isTimesheetSyncNeeded';
 
 const selectSynchronizationState = (state: RootState) => state.synchronization;
 
-const selectTimesheetSynchronizationState = createSelector(
+export const selectTimesheetSynchronizationState = createSelector(
 	[selectSynchronizationState],
 	(synchronizationState) => synchronizationState.timesheets,
 );

@@ -2,9 +2,13 @@ import _ from 'lodash';
 import {createSelector} from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 
+import {
+	selectTimesheetIdsToSynchronize,
+	selectTimesheetSynchronizationState,
+} from 'src/features/synchronization/context/synchronizationSelectors';
 import {RootState} from 'src/features/data/context/store';
+import {SyncState} from 'src/features/synchronization/types';
 import {selectActiveTimesheetId} from 'src/features/activeTimesheet/context/activeTimesheetSelectors';
-import {selectTimesheetIdsToSynchronize} from 'src/features/synchronization/context/synchronizationSelectors';
 
 const selectTimesheetsState = (state: RootState) => state.timesheets;
 
@@ -29,6 +33,16 @@ export const selectTimesheetList = createSelector(
 			const bTimestamp = dayjs(b.begin);
 			return bTimestamp.unix() - aTimestamp.unix();
 		}),
+);
+
+export const selectErroneousTimesheetList = createSelector(
+	[selectTimesheetList, selectTimesheetSynchronizationState],
+	(timesheets, timesheetSynchronizationState) =>
+		timesheets.filter((timesheet) =>
+			[SyncState.NOT_STARTED, SyncState.RUNNING, SyncState.FAILED].includes(
+				timesheetSynchronizationState[timesheet.id],
+			),
+		),
 );
 
 export const selectOnlyLocalTimesheets = createSelector(
