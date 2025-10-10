@@ -8,9 +8,7 @@ import {persistor, store} from 'src/features/data/context/store';
 import {Onboarding} from 'src/features/onboarding/components/Onboarding';
 import {RootNavigation} from 'src/features/navigation/components/RootNavigation';
 import {ThemeProvider} from 'src/features/theming/components/ThemeProvider';
-import {WearableResponder} from 'src/features/wearableCommunication/WearableResponder';
 import i18n from 'src/features/localization/utils/i18n';
-import {useIsOnWearable} from 'src/features/utils/useIsOnWearable';
 
 // Run initial configuration for i18n;
 i18n;
@@ -27,7 +25,6 @@ const AppOnDevice = () => {
 			<PersistGate loading={null} persistor={persistor}>
 				<Portal.Host>
 					<SafeAreaProvider>
-						<WearableResponder />
 						<Onboarding />
 						<RootNavigation />
 					</SafeAreaProvider>
@@ -38,25 +35,9 @@ const AppOnDevice = () => {
 };
 
 function App() {
-	const isOnWearable = useIsOnWearable();
-
-	const AppToRender = (() => {
-		switch (isOnWearable) {
-			case true:
-			case false:
-				return AppOnDevice;
-			default:
-				return null;
-		}
-	})();
-
-	if (AppToRender === null) {
-		return null;
-	}
-
 	return (
 		<ThemeProvider>
-			<AppToRender />
+			<AppOnDevice />
 		</ThemeProvider>
 	);
 }

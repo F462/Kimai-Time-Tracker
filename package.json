@@ -14,7 +14,6 @@
 		"depcyclecheck": "dpdm index.js --transform --circular --exit-code circular:1 --warning=false --no-tree"
 	},
 	"dependencies": {
-		"@d4l/react-native-wear-connectivity": "^0.3.1",
 		"@react-native-async-storage/async-storage": "^2.2.0",
 		"@react-native-community/datetimepicker": "^8.4.5",
 		"@react-native-community/netinfo": "^11.4.1",

@@ -8,7 +8,6 @@ import {Appearance} from 'react-native';
 import {DefaultTheme as NavigationDefaultTheme} from '@react-navigation/native';
 import React from 'react';
 import deepmerge from 'deepmerge';
-import {useIsOnWearable} from '../../utils/useIsOnWearable';
 
 const {LightTheme: navigationLightTheme, DarkTheme: navigationDarkTheme} =
 	adaptNavigationTheme({
@@ -105,9 +104,7 @@ const paperDarkTheme = {
 const combinedDarkTheme = deepmerge(navigationDarkTheme, paperDarkTheme);
 
 export const ThemeProvider = ({children}: React.PropsWithChildren<{}>) => {
-	const isOnWearable = useIsOnWearable();
-	const isDarkThemeUsed =
-		isOnWearable !== false || Appearance.getColorScheme() === 'dark';
+	const isDarkThemeUsed = Appearance.getColorScheme() === 'dark';
 	const theme = isDarkThemeUsed ? combinedDarkTheme : combinedLightTheme;
 
 	return <PaperProvider theme={theme}>{children}</PaperProvider>;
