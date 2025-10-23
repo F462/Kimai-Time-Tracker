@@ -100,6 +100,8 @@ android {
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            // Suffix or override for Debug build
+            applicationIdSuffix ".debug"
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
