@@ -8772,7 +8772,7 @@ __metadata:
     path: "npm:^0.12.7"
     prettier: "npm:3.6.2"
     react: "npm:19.1.1"
-    react-i18next: "npm:^16.1.6"
+    react-i18next: "npm:^16.2.0"
     react-native: "npm:^0.82.1"
     react-native-blob-util: "npm:^0.22.2"
     react-native-bootsplash: "npm:^6.3.11"
@@ -10386,12 +10386,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^16.1.6":
-  version: 16.1.6
-  resolution: "react-i18next@npm:16.1.6"
+"react-i18next@npm:^16.2.0":
+  version: 16.2.0
+  resolution: "react-i18next@npm:16.2.0"
   dependencies:
     "@babel/runtime": "npm:^7.27.6"
     html-parse-stringify: "npm:^3.0.1"
+    use-sync-external-store: "npm:^1.6.0"
   peerDependencies:
     i18next: ">= 25.5.2"
     react: ">= 16.8.0"
@@ -10403,7 +10404,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/110869d4cb0f809ead896a04555838a7b3e75d95f112052fd1250651996e82c1f38dc68680d366ea8e19189f2724c7b8cff101c3b2b6ae4f2353714fb538ddc8
+  checksum: 10c0/d10d733a64e691cf1924aee4e6c6a7b938eede33e3f34867491d97512a8e35efa8f427b7161e3e3c46191eead378832c023008cf75785ae7f8840cb27f7b3bc1
   languageName: node
   linkType: hard
 
@@ -12422,12 +12423,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"use-sync-external-store@npm:^1.4.0, use-sync-external-store@npm:^1.5.0":
-  version: 1.5.0
-  resolution: "use-sync-external-store@npm:1.5.0"
+"use-sync-external-store@npm:^1.4.0, use-sync-external-store@npm:^1.5.0, use-sync-external-store@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "use-sync-external-store@npm:1.6.0"
   peerDependencies:
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0
-  checksum: 10c0/1b8663515c0be34fa653feb724fdcce3984037c78dd4a18f68b2c8be55cc1a1084c578d5b75f158d41b5ddffc2bf5600766d1af3c19c8e329bb20af2ec6f52f4
+  checksum: 10c0/35e1179f872a53227bdf8a827f7911da4c37c0f4091c29b76b1e32473d1670ebe7bcd880b808b7549ba9a5605c233350f800ffab963ee4a4ee346ee983b6019b
   languageName: node
   linkType: hard
 
