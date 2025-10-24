@@ -3,6 +3,7 @@ export type ScreenParameters = {
 	Account: undefined;
 	ActiveTimesheet: undefined;
 	Activities: undefined;
+	ContractSummary: undefined;
 	Customers: undefined;
 	Projects: undefined;
 	Timesheets: {onlyShowNonDoneEntries?: boolean};

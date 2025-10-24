@@ -60,6 +60,7 @@ export const DefaultDrawerContent = ({
 	const content = useMemo(() => {
 		return [
 			'ActiveTimesheet',
+			'ContractSummary',
 			'Activities',
 			'Customers',
 			'Projects',

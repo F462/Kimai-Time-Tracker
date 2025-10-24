@@ -2,6 +2,7 @@ import {AboutScreen} from 'src/features/about/components/AboutScreen';
 import {AccountScreen} from 'src/features/account/components/AccountScreen';
 import {ActiveTimesheetScreen} from 'src/features/activeTimesheet/components/ActiveTimesheetScreen';
 import {ActivitiesScreen} from 'src/features/activities/components/ActivitiesScreen';
+import {ContractSummaryScreen} from 'src/features/contract/components/ContractSummaryScreen';
 import {CustomersScreen} from 'src/features/customers/components/CustomersScreen';
 import {ProjectsScreen} from 'src/features/projects/components/ProjectsScreen';
 import {ScreenParameters} from './ScreenParameters';
@@ -39,6 +40,13 @@ export const screens: Array<{
 		component: ActivitiesScreen,
 		options: {
 			drawerIcon: createDrawerIconFunction('run'),
+		},
+	},
+	{
+		name: 'ContractSummary',
+		component: ContractSummaryScreen,
+		options: {
+			drawerIcon: createDrawerIconFunction('file-sign'),
 		},
 	},
 	{
