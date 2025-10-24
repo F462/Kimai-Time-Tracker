@@ -36,6 +36,7 @@
 		"react-native": "^0.82.1",
 		"react-native-blob-util": "^0.22.2",
 		"react-native-bootsplash": "^6.3.11",
+		"react-native-calendars": "^1.1313.0",
 		"react-native-device-info": "^14.1.1",
 		"react-native-encrypted-storage": "^4.0.3",
 		"react-native-file-logger": "patch:react-native-file-logger@npm%3A0.7.1#~/.yarn/patches/react-native-file-logger-npm-0.7.1-f931fca641.patch",
