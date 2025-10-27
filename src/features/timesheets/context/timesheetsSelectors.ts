@@ -56,7 +56,8 @@ export const selectTimesheetListOfCurrentDay = createSelector(
 	(timesheets) => {
 		return timesheets.filter(
 			(timesheet) =>
-				dayjs(timesheet.begin).unix() - dayjs().startOf('day').unix() > 0,
+				dayjs(timesheet.begin).unix() - dayjs().startOf('day').unix() > 0 &&
+				dayjs(timesheet.begin).unix() - dayjs().endOf('day').unix() < 0,
 		);
 	},
 );
