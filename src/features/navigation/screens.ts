@@ -5,6 +5,7 @@ import {ActivitiesScreen} from 'src/features/activities/components/ActivitiesScr
 import {CustomersScreen} from 'src/features/customers/components/CustomersScreen';
 import {ProjectsScreen} from 'src/features/projects/components/ProjectsScreen';
 import {ScreenParameters} from './ScreenParameters';
+import {SettingsScreen} from 'src/features/settings/components/SettingsScreen';
 import {TimesheetsScreen} from 'src/features/timesheets/components/TimesheetsScreen';
 import {createDrawerIconFunction} from './components/DrawerItemIcon';
 
@@ -53,6 +54,13 @@ export const screens: Array<{
 		component: ProjectsScreen,
 		options: {
 			drawerIcon: createDrawerIconFunction('hammer'),
+		},
+	},
+	{
+		name: 'Settings',
+		component: SettingsScreen,
+		options: {
+			drawerIcon: createDrawerIconFunction('cog'),
 		},
 	},
 	{

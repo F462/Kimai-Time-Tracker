@@ -1,9 +1,17 @@
 {
+	"appTheme": "App theme",
+	"appThemeValues": {
+		"dark": "Dark",
+		"dark_oled": "Dark OLED",
+		"light": "Light",
+		"system": "System"
+	},
 	"appVersion": "App version {{version}}",
 	"chooseProjectAndActivity": "Choose project and activity on Smartphone to continue",
 	"createApiToken": "Create API token",
 	"delete": "Delete",
 	"dismiss": "Dismiss",
+	"displayTitle": "Display",
 	"edit": "Edit",
 	"editTimesheet": "Edit Timesheet",
 	"enterApiToken": "Enter the API token here:",
@@ -23,6 +31,7 @@
 		"Activities": "Activities",
 		"Customers": "Customers",
 		"Projects": "Projects",
+		"Settings": "Settings",
 		"Timesheets": "Timesheets"
 	},
 	"selectActivity": "Select Activity",

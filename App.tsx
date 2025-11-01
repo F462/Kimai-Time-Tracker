@@ -19,26 +19,20 @@ import axiosRetry from 'axios-retry';
 
 axiosRetry(axios, {retries: 3});
 
-const AppOnDevice = () => {
-	return (
-		<Provider store={store}>
-			<PersistGate loading={null} persistor={persistor}>
-				<Portal.Host>
-					<SafeAreaProvider>
-						<Onboarding />
-						<RootNavigation />
-					</SafeAreaProvider>
-				</Portal.Host>
-			</PersistGate>
-		</Provider>
-	);
-};
-
 function App() {
 	return (
-		<ThemeProvider>
-			<AppOnDevice />
-		</ThemeProvider>
+		<Provider store={store}>
+			<ThemeProvider>
+				<PersistGate loading={null} persistor={persistor}>
+					<Portal.Host>
+						<SafeAreaProvider>
+							<Onboarding />
+							<RootNavigation />
+						</SafeAreaProvider>
+					</Portal.Host>
+				</PersistGate>
+			</ThemeProvider>
+		</Provider>
 	);
 }
 

@@ -5,5 +5,6 @@ export type ScreenParameters = {
 	Activities: undefined;
 	Customers: undefined;
 	Projects: undefined;
+	Settings: undefined;
 	Timesheets: {onlyShowNonDoneEntries?: boolean};
 };

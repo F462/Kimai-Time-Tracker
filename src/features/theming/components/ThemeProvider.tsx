@@ -4,10 +4,14 @@ import {
 	PaperProvider,
 	adaptNavigationTheme,
 } from 'react-native-paper';
+import React, {useMemo} from 'react';
 import {Appearance} from 'react-native';
 import {DefaultTheme as NavigationDefaultTheme} from '@react-navigation/native';
-import React from 'react';
 import deepmerge from 'deepmerge';
+
+import {AppTheme} from 'src/features/settings/types';
+import {selectAppTheme} from 'src/features/settings/context/settingsSelectors';
+import {useAppSelector} from 'src/features/data/context/store';
 
 const {LightTheme: navigationLightTheme, DarkTheme: navigationDarkTheme} =
 	adaptNavigationTheme({
@@ -103,9 +107,31 @@ const paperDarkTheme = {
 };
 const combinedDarkTheme = deepmerge(navigationDarkTheme, paperDarkTheme);
 
+const combinedDarkOledTheme = deepmerge(combinedDarkTheme, {
+	colors: {
+		background: 'rgb(0, 0, 0)',
+	},
+});
+
 export const ThemeProvider = ({children}: React.PropsWithChildren<{}>) => {
-	const isDarkThemeUsed = Appearance.getColorScheme() === 'dark';
-	const theme = isDarkThemeUsed ? combinedDarkTheme : combinedLightTheme;
+	const appThemeSetting = useAppSelector(selectAppTheme);
+
+	const theme = useMemo(() => {
+		switch (appThemeSetting) {
+			case AppTheme.SYSTEM:
+				if (Appearance.getColorScheme() === 'dark') {
+					return combinedDarkTheme;
+				} else {
+					return combinedLightTheme;
+				}
+			case AppTheme.LIGHT:
+				return combinedLightTheme;
+			case AppTheme.DARK:
+				return combinedDarkTheme;
+			case AppTheme.DARK_OLED:
+				return combinedDarkOledTheme;
+		}
+	}, [appThemeSetting]);
 
 	return <PaperProvider theme={theme}>{children}</PaperProvider>;
 };

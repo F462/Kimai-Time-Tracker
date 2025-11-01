@@ -69,7 +69,9 @@ export const DefaultDrawerContent = ({
 		));
 	}, [DefaultDrawerItem]);
 	const footer = useMemo(() => {
-		return <DefaultDrawerItem routeName="About" />;
+		return ['Settings', 'About'].map((routeName) => (
+			<DefaultDrawerItem routeName={routeName} key={routeName} />
+		));
 	}, [DefaultDrawerItem]);
 
 	const dynamicStyles = useStyle(

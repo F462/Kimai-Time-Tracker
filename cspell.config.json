@@ -2,6 +2,7 @@
 	"words": [
 		"bootsplash",
 		"netinfo",
+		"oled",
 		"persistor",
 		"pressable",
 		"timesheet",
