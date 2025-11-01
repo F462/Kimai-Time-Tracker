@@ -3090,6 +3090,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-picker/picker@npm:^2.11.4":
+  version: 2.11.4
+  resolution: "@react-native-picker/picker@npm:2.11.4"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/3c9947c1a3022ffa35008cc479b718585b106ff70a5fb0f24c4117bf2eaaf5f60795cba20271af50a01d3a878d5dc06661ea1c1315664898524e291e7412a18f
+  languageName: node
+  linkType: hard
+
 "@react-native-vector-icons/common@npm:^12.4.0":
   version: 12.4.0
   resolution: "@react-native-vector-icons/common@npm:12.4.0"
@@ -8741,6 +8751,7 @@ __metadata:
     "@react-native-community/cli-platform-ios": "npm:20.0.2"
     "@react-native-community/datetimepicker": "npm:^8.5.0"
     "@react-native-community/netinfo": "npm:^11.4.1"
+    "@react-native-picker/picker": "npm:^2.11.4"
     "@react-native-vector-icons/material-design-icons": "npm:^12.4.0"
     "@react-native/babel-preset": "npm:0.82.1"
     "@react-native/eslint-config": "npm:0.82.1"
