@@ -8,6 +8,7 @@ import BootSplash from 'react-native-bootsplash';
 import {NavigationContainer} from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {StyleSheet} from 'react-native';
+import {exitApp} from '@logicwind/react-native-exit-app';
 import {useSelector} from 'react-redux';
 import {useTheme} from 'react-native-paper';
 
@@ -38,10 +39,13 @@ const SessionUnlockComponent = () => {
 				if (result.success) {
 					dispatch(userUnlockedSession());
 				} else {
-					authenticate();
+					exitApp();
 				}
 			})
-			.catch((error) => console.error('Authentication error:', error));
+			.catch((error) => {
+				console.error('Authentication error:', error);
+				exitApp();
+			});
 	}, [dispatch, t]);
 
 	useEffect(() => {

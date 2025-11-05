@@ -2748,6 +2748,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@logicwind/react-native-exit-app@npm:^0.2.0":
+  version: 0.2.0
+  resolution: "@logicwind/react-native-exit-app@npm:0.2.0"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+  checksum: 10c0/e8a08c9a60e12d3cd28f8dd669e832361a63eb17519cd3105cf8d3dd4070f6992100f90fcc6633eaf42a954a9b57b99d423893d4d10fe78ee0103734bbba8254
+  languageName: node
+  linkType: hard
+
 "@napi-rs/wasm-runtime@npm:^0.2.11":
   version: 0.2.11
   resolution: "@napi-rs/wasm-runtime@npm:0.2.11"
@@ -8755,6 +8765,7 @@ __metadata:
     "@babel/preset-env": "npm:^7.28.5"
     "@babel/runtime": "npm:^7.28.4"
     "@cspell/eslint-plugin": "npm:^9.2.2"
+    "@logicwind/react-native-exit-app": "npm:^0.2.0"
     "@react-native-async-storage/async-storage": "npm:^2.2.0"
     "@react-native-community/cli": "npm:20.0.2"
     "@react-native-community/cli-platform-android": "npm:20.0.2"

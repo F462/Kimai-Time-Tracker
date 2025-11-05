@@ -14,6 +14,7 @@
 		"depcyclecheck": "dpdm index.js --transform --circular --exit-code circular:1 --warning=false --no-tree"
 	},
 	"dependencies": {
+		"@logicwind/react-native-exit-app": "^0.2.0",
 		"@react-native-async-storage/async-storage": "^2.2.0",
 		"@react-native-community/datetimepicker": "^8.5.0",
 		"@react-native-community/netinfo": "^11.4.1",
