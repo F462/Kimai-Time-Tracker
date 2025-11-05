@@ -87,7 +87,7 @@ const BiometricsSwitch = () => {
 			if (newValue) {
 				simplePrompt(t('pleaseAuthenticateToContinue'))
 					.then((result) => {
-						if (result) {
+						if (result.success) {
 							dispatch(biometricsToUnlockEnabledStateSet(true));
 						}
 					})

@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 
 import {
 	DrawerHeaderProps,
@@ -11,17 +11,45 @@ import {StyleSheet} from 'react-native';
 import {useSelector} from 'react-redux';
 import {useTheme} from 'react-native-paper';
 
+import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {DefaultDrawerContent} from './DrawerContent';
 import {DefaultHeader} from './DefaultHeader';
 import {ScreenParameters} from '../ScreenParameters';
 import {screens} from '../screens';
+import {selectIsSessionUnlocked} from 'src/features/appState/context/appStateSelectors';
 import {selectIsUserLoggedIn} from 'src/features/account/context/accountSelectors';
+import {simplePrompt} from '@sbaiahmed1/react-native-biometrics';
+import {useTranslation} from 'react-i18next';
+import {userUnlockedSession} from 'src/features/appState/context/appStateSlice';
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 	},
 });
+
+const SessionUnlockComponent = () => {
+	const {t} = useTranslation();
+	const dispatch = useAppDispatch();
+
+	const authenticate = useCallback(() => {
+		simplePrompt(t('pleaseAuthenticateToContinue'))
+			.then((result) => {
+				if (result.success) {
+					dispatch(userUnlockedSession());
+				} else {
+					authenticate();
+				}
+			})
+			.catch((error) => console.error('Authentication error:', error));
+	}, [dispatch, t]);
+
+	useEffect(() => {
+		authenticate();
+	});
+
+	return null;
+};
 
 const RootDrawer = createDrawerNavigator();
 
@@ -40,28 +68,34 @@ export const RootNavigation = () => {
 		[],
 	);
 
+	const isSessionUnlocked = useAppSelector(selectIsSessionUnlocked);
+
 	return (
 		<SafeAreaView style={styles.container}>
-			<NavigationContainer
-				theme={theme}
-				onReady={() => {
-					BootSplash.hide().catch(console.error);
-				}}>
-				<RootDrawer.Navigator
-					initialRouteName={initialRouteName}
-					backBehavior="history"
-					screenOptions={{header}}
-					drawerContent={DefaultDrawerContent}>
-					{screens.map((screen) => (
-						<RootDrawer.Screen
-							key={screen.name}
-							name={screen.name}
-							component={screen.component}
-							options={screen.options}
-						/>
-					))}
-				</RootDrawer.Navigator>
-			</NavigationContainer>
+			{!isSessionUnlocked ? (
+				<SessionUnlockComponent />
+			) : (
+				<NavigationContainer
+					theme={theme}
+					onReady={() => {
+						BootSplash.hide().catch(console.error);
+					}}>
+					<RootDrawer.Navigator
+						initialRouteName={initialRouteName}
+						backBehavior="history"
+						screenOptions={{header}}
+						drawerContent={DefaultDrawerContent}>
+						{screens.map((screen) => (
+							<RootDrawer.Screen
+								key={screen.name}
+								name={screen.name}
+								component={screen.component}
+								options={screen.options}
+							/>
+						))}
+					</RootDrawer.Navigator>
+				</NavigationContainer>
+			)}
 		</SafeAreaView>
 	);
 };

@@ -7,6 +7,7 @@ import {Provider} from 'react-redux';
 import {persistor, store} from 'src/features/data/context/store';
 import {Onboarding} from 'src/features/onboarding/components/Onboarding';
 import {RootNavigation} from 'src/features/navigation/components/RootNavigation';
+import {SessionLocker} from 'src/features/utils/components/SessionLocker';
 import {ThemeProvider} from 'src/features/theming/components/ThemeProvider';
 import i18n from 'src/features/localization/utils/i18n';
 
@@ -26,6 +27,7 @@ function App() {
 				<PersistGate loading={null} persistor={persistor}>
 					<Portal.Host>
 						<SafeAreaProvider>
+							<SessionLocker />
 							<Onboarding />
 							<RootNavigation />
 						</SafeAreaProvider>

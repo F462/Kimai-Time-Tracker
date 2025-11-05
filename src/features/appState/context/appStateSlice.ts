@@ -11,7 +11,14 @@ const initialState: AppStateState = {};
 const appStateSlice = createSlice({
 	name: 'appState',
 	initialState,
-	reducers: {},
+	reducers: {
+		userUnlockedSession: (state) => {
+			state.isSessionUnlocked = true;
+		},
+		sessionLocked: (state) => {
+			state.isSessionUnlocked = false;
+		},
+	},
 	extraReducers: (builder) => {
 		builder
 			.addCase(loginUser.pending, (state) => {
@@ -32,4 +39,5 @@ const appStateSlice = createSlice({
 	},
 });
 
+export const {userUnlockedSession, sessionLocked} = appStateSlice.actions;
 export const appStateReducer = appStateSlice.reducer;
