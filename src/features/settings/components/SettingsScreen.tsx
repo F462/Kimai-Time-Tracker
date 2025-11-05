@@ -1,15 +1,22 @@
-import {List, useTheme} from 'react-native-paper';
+import {List, Switch, useTheme} from 'react-native-paper';
+import React, {useCallback} from 'react';
 import {Picker} from '@react-native-picker/picker';
-import React from 'react';
 import {StyleSheet} from 'react-native';
+import {simplePrompt} from '@sbaiahmed1/react-native-biometrics';
 import {useTranslation} from 'react-i18next';
 
+import {
+	appThemeSet,
+	biometricsToUnlockEnabledStateSet,
+} from '../context/settingsSlice';
+import {
+	selectAppTheme,
+	selectIsBiometricsToUnlockEnabled,
+} from '../context/settingsSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {AppTheme} from '../types';
 import {BaseScreen} from 'src/ui/BaseScreen';
-import {appThemeSet} from '../context/settingsSlice';
-import {selectAppTheme} from '../context/settingsSelectors';
-import {useStyle} from '../../theming/utils/useStyle';
+import {useStyle} from 'src/features/theming/utils/useStyle';
 
 const styles = StyleSheet.create({
 	themePicker: {
@@ -67,10 +74,63 @@ const DisplaySection = () => {
 	);
 };
 
+const FingerprintIcon = () => <List.Icon icon="fingerprint" />;
+const BiometricsSwitch = () => {
+	const {t} = useTranslation();
+	const dispatch = useAppDispatch();
+
+	const isBiometricsToUnlockEnabled = useAppSelector(
+		selectIsBiometricsToUnlockEnabled,
+	);
+	const setBiometricsEnabledState = useCallback(
+		(newValue: boolean) => {
+			if (newValue) {
+				simplePrompt(t('pleaseAuthenticateToContinue'))
+					.then((result) => {
+						if (result) {
+							dispatch(biometricsToUnlockEnabledStateSet(true));
+						}
+					})
+					.catch((error) => console.error('Authentication error:', error));
+			} else {
+				dispatch(biometricsToUnlockEnabledStateSet(false));
+			}
+		},
+		[dispatch, t],
+	);
+
+	return (
+		<Switch
+			value={isBiometricsToUnlockEnabled}
+			onValueChange={setBiometricsEnabledState}
+		/>
+	);
+};
+const BiometricsItem = () => {
+	const {t} = useTranslation();
+	return (
+		<List.Item
+			title={t('useBiometrics')}
+			left={FingerprintIcon}
+			right={BiometricsSwitch}
+		/>
+	);
+};
+const SecuritySection = () => {
+	const {t} = useTranslation();
+	return (
+		<List.Section>
+			<List.Subheader>{t('securityTitle')}</List.Subheader>
+			<BiometricsItem />
+		</List.Section>
+	);
+};
+
 export const SettingsScreen = () => {
 	return (
 		<BaseScreen>
 			<DisplaySection />
+			<SecuritySection />
 		</BaseScreen>
 	);
 };

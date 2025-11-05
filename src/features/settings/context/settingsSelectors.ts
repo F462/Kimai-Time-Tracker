@@ -8,3 +8,8 @@ export const selectAppTheme = createSelector(
 	[selectSettingsState],
 	(settings) => settings.appTheme,
 );
+
+export const selectIsBiometricsToUnlockEnabled = createSelector(
+	[selectSettingsState],
+	(settings) => settings.isBiometricsToUnlockEnabled,
+);

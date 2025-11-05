@@ -7,4 +7,5 @@ export enum AppTheme {
 
 export type SettingsState = {
 	appTheme: AppTheme;
+	isBiometricsToUnlockEnabled: boolean;
 };

@@ -23,6 +23,7 @@
 	"now": "Now",
 	"license": "License",
 	"logout": "Logout",
+	"pleaseAuthenticateToContinue": "Please authenticate to continue",
 	"save": "Save",
 	"screenTitles": {
 		"About": "About",
@@ -34,10 +35,12 @@
 		"Settings": "Settings",
 		"Timesheets": "Timesheets"
 	},
+	"securityTitle": "Security",
 	"selectActivity": "Select Activity",
 	"selectProject": "Select Project",
 	"serverVersion": "Server version {{version}}",
 	"synchronize": "Synchronize",
+	"useBiometrics": "Use biometrics to unlock",
 	"useCurrentDateTime": "Use current date and time",
 	"warning": "Warning",
 	"workingTimeToday": "Working time today:"
