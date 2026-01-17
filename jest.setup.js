@@ -4,6 +4,10 @@ jest.mock('@react-native-async-storage/async-storage', () =>
 	require('@react-native-async-storage/async-storage/jest/async-storage-mock')
 );
 
+jest.mock('react-native-worklets', () =>
+	require('react-native-worklets/lib/module/mock')
+);
+
 // see https://react.i18next.com/misc/testing
 jest.mock('react-i18next', () => ({
 	useTranslation: () => ({t: key => key, i18n: {language: 'en'}}),
