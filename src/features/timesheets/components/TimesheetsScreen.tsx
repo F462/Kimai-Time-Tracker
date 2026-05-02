@@ -1,12 +1,12 @@
 import React from 'react';
 
+import {useRoute} from '@react-navigation/native';
+
 import {
 	selectErroneousTimesheetList,
 	selectTimesheetList,
 } from '../context/timesheetsSelectors';
 import {BaseScreen} from 'src/ui/BaseScreen';
-import {RouteProp} from '@react-navigation/native';
-import {ScreenParameters} from 'src/features/navigation/ScreenParameters';
 import {TimesheetList} from './TimesheetList';
 import {useAppSelector} from 'src/features/data/context/store';
 
@@ -22,11 +22,8 @@ const TimesheetListWithErroneousTimesheets = () => {
 	return <TimesheetList data={timesheetList} />;
 };
 
-type TimesheetsScreenProps = {
-	route: RouteProp<ScreenParameters, 'Timesheets'>;
-};
-
-export const TimesheetsScreen = ({route}: TimesheetsScreenProps) => {
+export const TimesheetsScreen = () => {
+	const route = useRoute();
 	const onlyShowNonDoneEntries = route.params?.onlyShowNonDoneEntries;
 
 	return (

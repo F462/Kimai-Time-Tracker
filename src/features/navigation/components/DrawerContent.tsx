@@ -9,6 +9,8 @@ import {useStyle} from 'src/features/theming/utils/useStyle';
 import {useTheme} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 
+import {ScreenParameters} from '../ScreenParameters';
+
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -20,20 +22,21 @@ export const DefaultDrawerContent = ({
 	state,
 	navigation,
 	descriptors,
-}: DrawerContentComponentProps) => {
+}: DrawerContentComponentProps<ScreenParameters>) => {
 	const {t} = useTranslation();
 	const theme = useTheme();
 
 	const shouldFocus = useCallback(
 		(routeName: string) =>
-			state.routes.findIndex((route) => route.name === routeName) ===
-			state.index,
+			state.routes.findIndex(
+				(route: {name: string}) => route.name === routeName,
+			) === state.index,
 		[state.index, state.routes],
 	);
 	const DefaultDrawerItem = useCallback(
 		({routeName}: {routeName: string}) => {
 			const routeKey = state.routes.find(
-				(route) => route.name === routeName,
+				(route: {name: string}) => route.name === routeName,
 			)?.key;
 
 			if (routeKey === undefined) {
