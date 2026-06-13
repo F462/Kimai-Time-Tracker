@@ -9,8 +9,6 @@ import {useStyle} from 'src/features/theming/utils/useStyle';
 import {useTheme} from 'react-native-paper';
 import {useTranslation} from 'react-i18next';
 
-import {ScreenParameters} from '../ScreenParameters';
-
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -22,7 +20,7 @@ export const DefaultDrawerContent = ({
 	state,
 	navigation,
 	descriptors,
-}: DrawerContentComponentProps<ScreenParameters>) => {
+}: DrawerContentComponentProps) => {
 	const {t} = useTranslation();
 	const theme = useTheme();
 
