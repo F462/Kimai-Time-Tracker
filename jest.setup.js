@@ -17,6 +17,21 @@ jest.mock('react-i18next', () => ({
 	}
 }));
 
+jest.mock('@react-navigation/drawer', () => {
+	const React = require('react');
+	const { View } = require('react-native');
+
+	return {
+		createDrawerNavigator: () => ({
+			Navigator: ({ children }) => <View>{children}</View>,
+			Screen: ({ children }) => <View>{children}</View>,
+		}),
+		DrawerContentScrollView: ({ children }) => <View>{children}</View>,
+		DrawerItemList: () => null,
+		DrawerItem: () => null,
+	};
+});
+
 jest.mock('react-native-localize', () => ({
 	findBestLanguageTag: jest.fn()
 }));
@@ -96,6 +111,6 @@ jest.mock('react-native-file-logger', () => ({
 
 // to fix RN 0.80 bug, see https://github.com/facebook/react-native/issues/51993
 jest.mock('react-native/Libraries/Components/RefreshControl/RefreshControl', () => ({
-  __esModule: true,
-  default: require('./__mocks__/RefreshControlMock'),
+	__esModule: true,
+	default: require('./__mocks__/RefreshControlMock'),
 }));

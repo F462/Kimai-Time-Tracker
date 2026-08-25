@@ -1,7 +1,11 @@
 import {DependencyList, useMemo} from 'react';
-import {StyleSheet} from 'react-native';
+import {ImageStyle, StyleSheet, TextStyle, ViewStyle} from 'react-native';
 
-export function useStyle<T extends StyleSheet.NamedStyles<T>>(
+type NamedStyles<T> = {
+	[P in keyof T]: ViewStyle | TextStyle | ImageStyle;
+};
+
+export function useStyle<T extends NamedStyles<T>>(
 	styleObjectCreator: () => T,
 	dependencies: DependencyList,
 ): T {
