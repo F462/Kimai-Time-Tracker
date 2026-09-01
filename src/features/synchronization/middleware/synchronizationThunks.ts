@@ -1,6 +1,3 @@
-import axios, {AxiosResponse} from 'axios';
-import path from 'path';
-
 import {Timesheet, TimesheetFromApi} from 'src/features/timesheets/types';
 import {
 	selectIsTimesheetKnownToServer,
@@ -11,6 +8,7 @@ import {
 	timesheetSynced,
 	timesheetSynchronizationStarted,
 } from '../context/synchronizationSlice';
+import {api} from 'src/features/account/utils/ApiClient';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
 import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
 import {selectIsTimesheetSyncRunning} from '../context/synchronizationSelectors';
@@ -21,12 +19,11 @@ const resyncTimesheetRequests: {[timesheetId: string]: boolean} = {};
 export const deleteTimesheet = createAppAsyncThunk<
 	void,
 	{
-		serverUrl: string;
 		timesheet: Timesheet;
 	}
 >(
 	'synchronization/deleteTimesheet',
-	async ({serverUrl, timesheet}, {dispatch, getState}) => {
+	async ({timesheet}, {dispatch, getState}) => {
 		try {
 			if (selectIsTimesheetKnownToServer(timesheet.id)(getState())) {
 				const remoteId = selectRemoteTimesheetId(timesheet.id)(getState());
@@ -34,9 +31,7 @@ export const deleteTimesheet = createAppAsyncThunk<
 					`Delete timesheet with ID ${timesheet.id} from server with remote ID ${remoteId}`,
 				);
 
-				await axios.delete(
-					path.join(serverUrl, 'api/timesheets', remoteId.toString()),
-				);
+				await api.delete(`api/timesheets/${remoteId.toString()}`);
 			}
 
 			dispatch(timesheetDeleted(timesheet.id));
@@ -49,12 +44,11 @@ export const deleteTimesheet = createAppAsyncThunk<
 export const synchronizeTimesheet = createAppAsyncThunk<
 	void,
 	{
-		serverUrl: string;
 		timesheet: Timesheet;
 	}
 >(
 	'synchronization/synchronizeTimesheet',
-	async ({serverUrl, timesheet}, {dispatch, getState}) => {
+	async ({timesheet}, {dispatch, getState}) => {
 		if (
 			resyncTimesheetRequests[timesheet.id] !== true &&
 			selectIsTimesheetSyncRunning(timesheet.id)(getState())
@@ -63,7 +57,7 @@ export const synchronizeTimesheet = createAppAsyncThunk<
 			return;
 		}
 
-		let response: AxiosResponse<TimesheetFromApi>;
+		let response: TimesheetFromApi;
 		dispatch(timesheetSynchronizationStarted(timesheet.id));
 		try {
 			if (selectIsTimesheetKnownToServer(timesheet.id)(getState())) {
@@ -71,8 +65,8 @@ export const synchronizeTimesheet = createAppAsyncThunk<
 				console.info(
 					`Timesheet ${timesheet.id} is already known to server with remote ID ${remoteId}`,
 				);
-				response = await axios.patch(
-					path.join(serverUrl, 'api/timesheets', remoteId.toString()),
+				response = await api.patch<TimesheetFromApi>(
+					`api/timesheets/${remoteId.toString()}`,
 					{
 						begin: timesheet.begin,
 						end: timesheet.end,
@@ -84,7 +78,7 @@ export const synchronizeTimesheet = createAppAsyncThunk<
 				console.info(
 					`Timesheet ${timesheet.id} is not yet known to server, so POST a new one`,
 				);
-				response = await axios.post(path.join(serverUrl, 'api/timesheets'), {
+				response = await api.post<TimesheetFromApi>('api/timesheets', {
 					begin: timesheet.begin,
 					end: timesheet.end,
 					project: timesheet.project,
@@ -95,7 +89,7 @@ export const synchronizeTimesheet = createAppAsyncThunk<
 			dispatch(
 				timesheetSynced({
 					localId: timesheet.id,
-					remoteId: response.data.id,
+					remoteId: response.id,
 				}),
 			);
 
@@ -106,9 +100,7 @@ export const synchronizeTimesheet = createAppAsyncThunk<
 		} finally {
 			if (resyncTimesheetRequests[timesheet.id] === true) {
 				delete resyncTimesheetRequests[timesheet.id];
-				dispatch(synchronizeTimesheet({serverUrl, timesheet})).catch(
-					console.error,
-				);
+				dispatch(synchronizeTimesheet({timesheet})).catch(console.error);
 			}
 		}
 	},

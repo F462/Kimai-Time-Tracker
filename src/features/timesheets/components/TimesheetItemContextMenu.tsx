@@ -7,10 +7,9 @@ import {
 	deleteTimesheet,
 	synchronizeTimesheet,
 } from 'src/features/synchronization/middleware/synchronizationThunks';
-import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {EditTimesheetModal} from './EditTimesheetModal';
 import {Timesheet} from '../types';
-import {selectServerUrl} from 'src/features/account/context/accountSelectors';
+import {useAppDispatch} from 'src/features/data/context/store';
 import {useStyle} from 'src/features/theming/utils/useStyle';
 import {useTranslation} from 'react-i18next';
 
@@ -23,34 +22,18 @@ const styles = StyleSheet.create({
 
 const useSynchronizeTimesheet = (timesheet: Timesheet) => {
 	const dispatch = useAppDispatch();
-	const serverUrl = useAppSelector(selectServerUrl);
 
 	return useCallback(() => {
-		if (serverUrl === undefined) {
-			console.warn(
-				`Server URL is not defined, cannot sync timesheet ${timesheet.id}`,
-			);
-			return;
-		}
-
-		dispatch(synchronizeTimesheet({serverUrl, timesheet})).catch(console.error);
-	}, [dispatch, serverUrl, timesheet]);
+		dispatch(synchronizeTimesheet({timesheet})).catch(console.error);
+	}, [dispatch, timesheet]);
 };
 
 const useDeleteTimesheet = (timesheet: Timesheet) => {
 	const dispatch = useAppDispatch();
-	const serverUrl = useAppSelector(selectServerUrl);
 
 	return useCallback(() => {
-		if (serverUrl === undefined) {
-			console.warn(
-				`Server URL is not defined, cannot delete timesheet ${timesheet.id}`,
-			);
-			return;
-		}
-
-		dispatch(deleteTimesheet({serverUrl, timesheet})).catch(console.error);
-	}, [dispatch, serverUrl, timesheet]);
+		dispatch(deleteTimesheet({timesheet})).catch(console.error);
+	}, [dispatch, timesheet]);
 };
 
 type TimesheetItemContextMenuProps = {

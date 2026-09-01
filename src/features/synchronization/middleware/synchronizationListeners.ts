@@ -16,7 +16,6 @@ import {
 } from 'src/features/timesheets/context/timesheetsSelectors';
 import {Timesheet} from 'src/features/timesheets/types';
 import {selectIsTimesheetSyncNeeded} from '../context/synchronizationSelectors';
-import {selectServerUrl} from 'src/features/account/context/accountSelectors';
 import {synchronizeTimesheet} from './synchronizationThunks';
 import {timesheetEdited} from 'src/features/timesheets/context/timesheetActions';
 
@@ -24,14 +23,7 @@ const syncTimesheet = async (
 	listenerApi: ListenerEffectAPI<RootState, AppDispatch>,
 	timesheet: Timesheet,
 ) => {
-	const serverUrl = selectServerUrl(listenerApi.getState());
-
-	if (serverUrl === undefined) {
-		console.error('Server URL not defined, could not sync timesheet.');
-		return;
-	}
-
-	await listenerApi.dispatch(synchronizeTimesheet({serverUrl, timesheet}));
+	await listenerApi.dispatch(synchronizeTimesheet({timesheet}));
 };
 
 const runSyncOnAppStart = (startListening: AppStartListening) => {

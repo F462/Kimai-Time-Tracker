@@ -3,21 +3,18 @@ import React, {useCallback, useState} from 'react';
 import {Button, Text, TextInput, useTheme} from 'react-native-paper';
 import {Linking, StyleSheet, View} from 'react-native';
 import path from 'path';
-import {useSelector} from 'react-redux';
 import {useTranslation} from 'react-i18next';
 
 import {loginUser, logoutUser} from '../middleware/accountThunks';
 import {removeApiToken, storeApiToken} from '../utils/accountPersistor';
-import {
-	selectIsUserLoggedIn,
-	selectServerUrl,
-} from '../context/accountSelectors';
 import {
 	selectIsUserLoggingIn,
 	selectIsUserLoggingOut,
 } from 'src/features/appState/context/appStateSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {BaseScreen} from 'src/ui/BaseScreen';
+import {api} from '../utils/ApiClient';
+import {selectIsUserLoggedIn} from '../context/accountSelectors';
 import {useStyle} from 'src/features/theming/utils/useStyle';
 
 const styles = StyleSheet.create({
@@ -45,9 +42,7 @@ export const AccountScreen = () => {
 	const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
 
 	const [apiToken, setApiToken] = useState('');
-	const [serverUrl, setServerUrl] = useState(
-		useSelector(selectServerUrl) ?? '',
-	);
+	const [serverUrl, setServerUrl] = useState(api.getBaseUrl() ?? '');
 
 	const canApiTokenBeCreated = !!serverUrl;
 

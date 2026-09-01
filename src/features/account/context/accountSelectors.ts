@@ -6,7 +6,9 @@ const selectAccountState = (state: RootState) => state.account;
 
 export const selectServerUrl = createSelector(
 	[selectAccountState],
-	(accountState) => accountState.serverUrl,
+	(accountState) => {
+		return accountState.serverUrl;
+	},
 );
 
 export const selectIsUserLoggedIn = createSelector(

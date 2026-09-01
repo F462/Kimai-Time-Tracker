@@ -1,6 +1,5 @@
-import axios from 'axios';
-
 import {userLoggedIn, userLoggedOut} from '../context/accountActions';
+import {api} from '../utils/ApiClient';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
 import {getApiToken} from '../utils/accountPersistor';
 
@@ -13,7 +12,7 @@ export const loginUser = createAppAsyncThunk<void, {serverUrl: string}>(
 			return;
 		}
 
-		axios.defaults.headers.common.Authorization = `Bearer ${apiToken}`;
+		api.configure(serverUrl, apiToken);
 
 		dispatch(userLoggedIn(serverUrl));
 	},
@@ -22,7 +21,7 @@ export const loginUser = createAppAsyncThunk<void, {serverUrl: string}>(
 export const logoutUser = createAppAsyncThunk<void, void>(
 	'account/logoutUser',
 	async (_payload, {dispatch}) => {
-		delete axios.defaults.headers.common.Authorization;
+		api.reset();
 
 		dispatch(userLoggedOut());
 	},

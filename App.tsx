@@ -15,10 +15,6 @@ import i18n from 'src/features/localization/utils/i18n';
 i18n;
 
 import {SafeAreaProvider} from 'react-native-safe-area-context';
-import axios from 'axios';
-import axiosRetry from 'axios-retry';
-
-axiosRetry(axios, {retries: 3});
 
 function App() {
 	return (

@@ -3,18 +3,14 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {Button, Text} from 'react-native-paper';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import axios from 'axios';
 import loadLocalResource from 'react-native-local-resource';
-import path from 'path';
 import {useTranslation} from 'react-i18next';
 
-import {
-	selectIsUserLoggedIn,
-	selectServerUrl,
-} from 'src/features/account/context/accountSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {BaseScreen} from 'src/ui/BaseScreen';
+import {api} from 'src/features/account/utils/ApiClient';
 import {exportLogs} from 'src/features/logging/middleware/loggingThunks';
+import {selectIsUserLoggedIn} from 'src/features/account/context/accountSelectors';
 
 import AppIcon from 'src/assets/icon.svg';
 import licenseFile from 'src/assets/license.txt';
@@ -38,21 +34,20 @@ const ServerVersionDisplay = () => {
 	const {t} = useTranslation();
 
 	const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
-	const serverUrl = useAppSelector(selectServerUrl);
 	const [serverVersion, setServerVersion] = useState<string>();
 
 	useEffect(() => {
-		if (!isUserLoggedIn || serverUrl === undefined) {
+		if (!isUserLoggedIn || api.isConfigured()) {
 			setServerVersion(undefined);
 		} else {
-			axios
-				.get(path.join(serverUrl, 'api/version'))
+			api
+				.get<{version: string}>('api/version')
 				.then((response) => {
-					setServerVersion(response.data.version);
+					setServerVersion(response.version);
 				})
 				.catch(console.warn);
 		}
-	}, [isUserLoggedIn, serverUrl]);
+	}, [isUserLoggedIn]);
 
 	return (
 		serverVersion && <Text>{t('serverVersion', {version: serverVersion})}</Text>
