@@ -3429,9 +3429,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/datetimepicker@npm:^9.1.0":
-  version: 9.1.0
-  resolution: "@react-native-community/datetimepicker@npm:9.1.0"
+"@react-native-community/datetimepicker@npm:^9.2.0":
+  version: 9.2.0
+  resolution: "@react-native-community/datetimepicker@npm:9.2.0"
   dependencies:
     invariant: "npm:^2.2.4"
   peerDependencies:
@@ -3444,7 +3444,7 @@ __metadata:
       optional: true
     react-native-windows:
       optional: true
-  checksum: 10c0/3f31baec58c1245204a9b4057809027019aa1abb4b8caea4cb4d44ab70f5a97dfe5114a8aa315299aa47ad31971059181c355aa056d9c3a14b7892582da9f4cb
+  checksum: 10c0/2dec5efab72b55c8cd0986b945d4cdb723b98bec88957e6471c821e24126db93fee80d95c85f86d28a577d095517653bd0dc97a86afea46ed9e52385fe39b3d6
   languageName: node
   linkType: hard
 
@@ -7747,15 +7747,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^26.4.0":
-  version: 26.4.0
-  resolution: "i18next@npm:26.4.0"
+"i18next@npm:^26.4.1":
+  version: 26.4.1
+  resolution: "i18next@npm:26.4.1"
   peerDependencies:
     typescript: ^5 || ^6 || ^7
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/3edc8b329e61f627278b83668fae9c68d9d5d187fac9d96403b3e69f7afa42cfb7bce8d5bec345dde082483cb57528a837bb2ea3f2a9d377ff23c2b86d6afdcd
+  checksum: 10c0/d378fdef07d07b3bbaa803ca18bf663bfcb203ab4be5eb8da2f1eb49e5559efcaf731f0cf34deccfe804c465f1cab8948d58f9303afe6921bc18949cb170df5e
   languageName: node
   linkType: hard
 
@@ -9108,7 +9108,7 @@ __metadata:
     "@react-native-community/cli": "npm:20.2.0"
     "@react-native-community/cli-platform-android": "npm:20.2.0"
     "@react-native-community/cli-platform-ios": "npm:20.2.0"
-    "@react-native-community/datetimepicker": "npm:^9.1.0"
+    "@react-native-community/datetimepicker": "npm:^9.2.0"
     "@react-native-community/netinfo": "npm:^12.0.1"
     "@react-native-picker/picker": "npm:^2.11.4"
     "@react-native-vector-icons/material-design-icons": "npm:^13.1.3"
@@ -9140,14 +9140,14 @@ __metadata:
     eslint-config-prettier: "npm:^10.1.8"
     eslint-plugin-ft-flow: "npm:^3.0.11"
     eslint-plugin-prettier: "npm:^5.5.6"
-    i18next: "npm:^26.4.0"
+    i18next: "npm:^26.4.1"
     jest: "npm:^30.5.0"
     lodash: "npm:^4.18.1"
     node-addon-api: "npm:^8.9.2"
     path: "npm:^0.12.7"
     prettier: "npm:3.9.6"
     react: "npm:19.2.3"
-    react-i18next: "npm:^17.0.12"
+    react-i18next: "npm:^17.0.13"
     react-native: "npm:0.87.1"
     react-native-blob-util: "npm:^0.24.10"
     react-native-bootsplash: "npm:^7.3.2"
@@ -9167,7 +9167,7 @@ __metadata:
     react-native-svg: "npm:^15.15.5"
     react-native-svg-transformer: "npm:^1.5.3"
     react-native-worklets: "npm:^0.12.1"
-    react-native-zip-archive: "npm:^9.4.0"
+    react-native-zip-archive: "npm:^9.4.1"
     react-redux: "npm:^9.3.0"
     react-test-renderer: "npm:19.2.3"
     redux-persist: "npm:^6.0.0"
@@ -10749,9 +10749,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^17.0.12":
-  version: 17.0.12
-  resolution: "react-i18next@npm:17.0.12"
+"react-i18next@npm:^17.0.13":
+  version: 17.0.13
+  resolution: "react-i18next@npm:17.0.13"
   dependencies:
     "@babel/runtime": "npm:^7.29.7"
     html-parse-stringify: "npm:^4.0.1"
@@ -10767,7 +10767,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/5ad870d228a47382abc8f074fde88c18a5f9fe393ae902fb89c0ddbbc359f53001c16c6742a4032885d7396b49c72f26a6e93b690913e887ba630ba4145105e8
+  checksum: 10c0/58369886b4b49dd1c3c950de8d89811a15f1728f0805356f5003ec77ea96f2ef007ef25fb039fb241676d9f48664448d8be9dbc569bebfa06ad1cad5a76517ec
   languageName: node
   linkType: hard
 
@@ -11069,13 +11069,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-zip-archive@npm:^9.4.0":
-  version: 9.4.0
-  resolution: "react-native-zip-archive@npm:9.4.0"
+"react-native-zip-archive@npm:^9.4.1":
+  version: 9.4.1
+  resolution: "react-native-zip-archive@npm:9.4.1"
   peerDependencies:
     react: ">=18.0.0"
     react-native: ">=0.70.0"
-  checksum: 10c0/2cf244baecebf8fe0b03c4e2fc211e998fb0b9b9b6fbb99d9e41a0600c5afcb02ca6b91df0b579f438875aff290a94d2f55a78492c864d26a69af9323c5ba59b
+  checksum: 10c0/60472258f0f71f58cbdbf3441e7542ab7e58936b3ac70485c221b843a990d34e75b7cd0ffc043293d645b4a8a7b14d057786c7dce04a5894cee65d2766f1d7b4
   languageName: node
   linkType: hard
 
