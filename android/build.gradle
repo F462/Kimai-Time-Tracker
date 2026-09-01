@@ -22,6 +22,7 @@ subprojects{
     afterEvaluate {
         if(it.hasProperty('android')) {
             android {
+                buildToolsVersion = "37.0.0"
                 compileSdkVersion rootProject.ext.compileSdkVersion
             }
         }
