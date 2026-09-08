@@ -10,7 +10,7 @@ export const fetchCustomers = createAppAsyncThunk(
 			const response = await api.get<Array<Customer>>('api/customers');
 			dispatch(customersReceived(response));
 		} catch (error: any) {
-			console.warn(`Got error on axios request: ${error.toString()}`);
+			console.warn(`Got error on fetch request: ${error.toString()}`);
 		}
 	},
 );

@@ -10,7 +10,7 @@ export const fetchActivities = createAppAsyncThunk(
 			const response = await api.get<Array<Activity>>('api/activities');
 			dispatch(activitiesReceived(response));
 		} catch (error: any) {
-			console.warn(`Got error on axios request: ${error.toString()}`);
+			console.warn(`Got error on fetch request: ${error.toString()}`);
 		}
 	},
 );

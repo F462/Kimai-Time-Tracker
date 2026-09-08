@@ -43,7 +43,7 @@ export const fetchTimesheets = createAppAsyncThunk(
 				timesheetsUpdated({timesheets: allTimesheets, newTimesheetsIdTable}),
 			);
 		} catch (error: any) {
-			console.warn(`Got error on axios request: ${error.toString()}`);
+			console.warn(`Got error on fetch request: ${error.toString()}`);
 		}
 	},
 );
