@@ -3429,9 +3429,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/datetimepicker@npm:^9.2.0":
-  version: 9.2.0
-  resolution: "@react-native-community/datetimepicker@npm:9.2.0"
+"@react-native-community/datetimepicker@npm:^9.2.1":
+  version: 9.2.1
+  resolution: "@react-native-community/datetimepicker@npm:9.2.1"
   dependencies:
     invariant: "npm:^2.2.4"
   peerDependencies:
@@ -3444,7 +3444,7 @@ __metadata:
       optional: true
     react-native-windows:
       optional: true
-  checksum: 10c0/2dec5efab72b55c8cd0986b945d4cdb723b98bec88957e6471c821e24126db93fee80d95c85f86d28a577d095517653bd0dc97a86afea46ed9e52385fe39b3d6
+  checksum: 10c0/6d6c4703506d6c3e8f933461094fcb23227a88481af2de13179004aa54537fd7d74ae4566860f90a784b5636516bbd463b8af844543fb85db5dc9cdfc4c0381e
   languageName: node
   linkType: hard
 
@@ -3468,15 +3468,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/common@npm:^13.0.2":
-  version: 13.0.2
-  resolution: "@react-native-vector-icons/common@npm:13.0.2"
+"@react-native-vector-icons/common@npm:^13.0.3":
+  version: 13.0.3
+  resolution: "@react-native-vector-icons/common@npm:13.0.3"
   dependencies:
     find-up: "npm:^8.0.0"
     picocolors: "npm:^1.1.1"
     plist: "npm:^3.1.0"
   peerDependencies:
-    "@react-native-vector-icons/get-image": ^13.0.0
+    "@react-native-vector-icons/get-image": ^13.0.1
     "@react-native/assets-registry": "*"
     expo-font: "*"
     react: "*"
@@ -3490,15 +3490,15 @@ __metadata:
       optional: true
   bin:
     rnvi-update-plist: lib/commonjs/scripts/updatePlist.js
-  checksum: 10c0/8bdc571a758446e8509c10196da8dde936dbe6357b2d1328df658a311e805c49ce9b90d51e215efed51d452e4a994b99a3156c78d331830f5bbbf7561c8eb03d
+  checksum: 10c0/fd25f59a64c6b6e294e94b3e5b739a388b014853a29b39bb027570d3cfe944f8eda60304b102697909355351163bb6b8a84a6b3c10c45951c1bd1fdcb90932c4
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/material-design-icons@npm:^13.1.3":
-  version: 13.1.3
-  resolution: "@react-native-vector-icons/material-design-icons@npm:13.1.3"
+"@react-native-vector-icons/material-design-icons@npm:^13.1.4":
+  version: 13.1.4
+  resolution: "@react-native-vector-icons/material-design-icons@npm:13.1.4"
   dependencies:
-    "@react-native-vector-icons/common": "npm:^13.0.2"
+    "@react-native-vector-icons/common": "npm:^13.0.3"
   peerDependencies:
     "@expo/config-plugins": ">=10.0.0"
     react: "*"
@@ -3506,7 +3506,7 @@ __metadata:
   peerDependenciesMeta:
     "@expo/config-plugins":
       optional: true
-  checksum: 10c0/235ff7c67a17804d0bcb2a60ec65091ad98a0b76beffc9b544514955ec42c58460a537aef873f69eb22b3cff612c841b929a7d5f827c95350cd73722405c3043
+  checksum: 10c0/4a6bd1ea9381e53e91314c08dbcfeb05f0ba8c0682bb4d02f29b8714955249b658dedbc548a58d7cdf11f1a45ee332b55b65b57f49bb3d4e4eb59863b9093cf0
   languageName: node
   linkType: hard
 
@@ -7666,15 +7666,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^26.4.1":
-  version: 26.4.1
-  resolution: "i18next@npm:26.4.1"
+"i18next@npm:^26.4.2":
+  version: 26.4.2
+  resolution: "i18next@npm:26.4.2"
   peerDependencies:
     typescript: ^5 || ^6 || ^7
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/d378fdef07d07b3bbaa803ca18bf663bfcb203ab4be5eb8da2f1eb49e5559efcaf731f0cf34deccfe804c465f1cab8948d58f9303afe6921bc18949cb170df5e
+  checksum: 10c0/f2c9613e03e09e56a84aee939d8fbe3442a58622915e11f97e47f9ab358dfa65be783230b37a21483152711f786fccfe697d7f5ea9269c54f16179dc59960e4b
   languageName: node
   linkType: hard
 
@@ -9020,10 +9020,10 @@ __metadata:
     "@react-native-community/cli": "npm:20.2.0"
     "@react-native-community/cli-platform-android": "npm:20.2.0"
     "@react-native-community/cli-platform-ios": "npm:20.2.0"
-    "@react-native-community/datetimepicker": "npm:^9.2.0"
+    "@react-native-community/datetimepicker": "npm:^9.2.1"
     "@react-native-community/netinfo": "npm:^12.0.1"
     "@react-native-picker/picker": "npm:^2.11.4"
-    "@react-native-vector-icons/material-design-icons": "npm:^13.1.3"
+    "@react-native-vector-icons/material-design-icons": "npm:^13.1.4"
     "@react-native/babel-preset": "npm:0.87.1"
     "@react-native/eslint-config": "npm:0.87.1"
     "@react-native/jest-preset": "npm:0.87.1"
@@ -9051,7 +9051,7 @@ __metadata:
     eslint-plugin-ft-flow: "npm:^3.0.11"
     eslint-plugin-prettier: "npm:^5.5.6"
     http-status-codes: "npm:^2.3.0"
-    i18next: "npm:^26.4.1"
+    i18next: "npm:^26.4.2"
     jest: "npm:^30.5.0"
     lodash: "npm:^4.18.1"
     node-addon-api: "npm:^8.9.2"
@@ -9077,8 +9077,8 @@ __metadata:
     react-native-share: "npm:^12.3.1"
     react-native-svg: "npm:^15.15.5"
     react-native-svg-transformer: "npm:^1.5.3"
-    react-native-worklets: "npm:^0.12.1"
-    react-native-zip-archive: "npm:^9.4.1"
+    react-native-worklets: "npm:^0.12.2"
+    react-native-zip-archive: "npm:^9.5.1"
     react-redux: "npm:^9.3.0"
     react-test-renderer: "npm:19.2.3"
     redux-persist: "npm:^6.0.0"
@@ -10946,9 +10946,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-worklets@npm:^0.12.1":
-  version: 0.12.1
-  resolution: "react-native-worklets@npm:0.12.1"
+"react-native-worklets@npm:^0.12.2":
+  version: 0.12.2
+  resolution: "react-native-worklets@npm:0.12.2"
   dependencies:
     "@babel/generator": "npm:^7.27.1"
     "@babel/plugin-transform-arrow-functions": "npm:^7.27.1"
@@ -10969,17 +10969,17 @@ __metadata:
     "@react-native/metro-config": "*"
     react: "*"
     react-native: 0.83 - 0.87
-  checksum: 10c0/86b9043ed2ceacd3dada3f94d62393a5bb54c7a26877e5bb54171cd4455b34f4148009a6b41bf53be70f265444bd7fff287f4d0fd8599e27d476c10e6cd7923f
+  checksum: 10c0/d7e318b87e7c31018d198b54b4ff1325ce46ccbf8626cc09c3b66050ab99f59cf9932f82a03ac659ba2b0ed349495421103d1a7206e777e3a811d8c40ad3caaf
   languageName: node
   linkType: hard
 
-"react-native-zip-archive@npm:^9.4.1":
-  version: 9.4.1
-  resolution: "react-native-zip-archive@npm:9.4.1"
+"react-native-zip-archive@npm:^9.5.1":
+  version: 9.5.1
+  resolution: "react-native-zip-archive@npm:9.5.1"
   peerDependencies:
     react: ">=18.0.0"
     react-native: ">=0.70.0"
-  checksum: 10c0/60472258f0f71f58cbdbf3441e7542ab7e58936b3ac70485c221b843a990d34e75b7cd0ffc043293d645b4a8a7b14d057786c7dce04a5894cee65d2766f1d7b4
+  checksum: 10c0/fb8c6bbb45641915ff4298d6f64426d1a26c853e7f992a15b35f9fe28c57bcef0e32c9ab59d1f836e46aad0b06f83e3ed3ec087cc8a4ab8438372c039db65b10
   languageName: node
   linkType: hard
 
