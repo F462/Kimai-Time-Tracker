@@ -63,11 +63,6 @@ jest.mock('react-native-device-info', () => mockRNDeviceInfo);
 import mockRNCNetInfo from '@react-native-community/netinfo/jest/netinfo-mock.js';
 jest.mock('@react-native-community/netinfo', () => mockRNCNetInfo);
 
-jest.mock('src/assets/license.txt', () => '');
-jest.mock('react-native-local-resource', () => {
-	return jest.fn().mockReturnValue(Promise.resolve('mockValue'));
-});
-
 // see https://github.com/react-native-share/react-native-share/issues/598
 jest.mock('react-native-share', () => ({
 	default: jest.fn()

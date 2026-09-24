@@ -3,7 +3,6 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {Button, Text} from 'react-native-paper';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import loadLocalResource from 'react-native-local-resource';
 import {useTranslation} from 'react-i18next';
 
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
@@ -13,7 +12,7 @@ import {exportLogs} from 'src/features/logging/middleware/loggingThunks';
 import {selectIsUserLoggedIn} from 'src/features/account/context/accountSelectors';
 
 import AppIcon from 'src/assets/icon.svg';
-import licenseFile from 'src/assets/license.txt';
+import licenseText from 'src/assets/license.txt';
 
 const styles = StyleSheet.create({
 	mainContainer: {
@@ -55,11 +54,6 @@ const ServerVersionDisplay = () => {
 };
 
 const LicenseText = () => {
-	const [licenseText, setLicenseText] = useState<string>();
-	loadLocalResource(licenseFile).then((licenseFileContent: string) => {
-		setLicenseText(licenseFileContent);
-	});
-
 	return <Text variant="bodySmall">{licenseText}</Text>;
 };
 
