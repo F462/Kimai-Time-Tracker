@@ -17,12 +17,17 @@
 	"enterApiToken": "Enter the API token here:",
 	"enterServerUrl": "Enter Server URL:",
 	"exportLogs": "Export logs",
+	"expectedHours": "Expected hours",
+	"monthlyBreakdown": "Monthly breakdown",
+	"total": "Total",
 	"onboarding": {
 		"appStillInDevelopment": "The app is still in development. Do not use for production! The app will need a re-installation with full data loss on update."
 	},
 	"now": "Now",
 	"license": "License",
 	"logout": "Logout",
+	"overtime": "Overtime",
+	"overtimeBasedOnWorkingHours": "Overtime is calculated based on {{hours}} h of standard working hours per working day.",
 	"pleaseAuthenticateToContinue": "Please authenticate to continue",
 	"qr": {
 		"cameraPermissionRequired": "Camera permission is required to scan QR codes.",
@@ -47,6 +52,7 @@
 		"ActiveTimesheet": "Active Timesheet",
 		"Activities": "Activities",
 		"Customers": "Customers",
+		"Overview": "Overview",
 		"Projects": "Projects",
 		"Settings": "Settings",
 		"Timesheets": "Timesheets"
@@ -55,9 +61,14 @@
 	"selectActivity": "Select Activity",
 	"selectProject": "Select Project",
 	"serverVersion": "Server version {{version}}",
+	"standardWorkingHoursPerDay": "Standard working hours per day",
 	"synchronize": "Synchronize",
+	"underTime": "Time remaining",
 	"useBiometrics": "Use biometrics to unlock",
 	"useCurrentDateTime": "Use current date and time",
 	"warning": "Warning",
-	"workingTimeToday": "Working time today:"
+	"workingHoursOption": "{{hours}} h",
+	"workingTimeTitle": "Working time",
+	"workingTimeToday": "Working time today:",
+	"workedTime": "Worked time"
 }

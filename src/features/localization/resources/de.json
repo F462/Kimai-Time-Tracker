@@ -16,5 +16,18 @@
 		"unknownError": "Unbekannter Fehler."
 	},
 	"save": "Speichern",
-	"scanQrCode": "QR-Code scannen"
+	"scanQrCode": "QR-Code scannen",
+	"expectedHours": "Erwartete Stunden",
+	"monthlyBreakdown": "Monatsübersicht",
+	"total": "Gesamt",
+	"screenTitles": {
+		"Overview": "Übersicht"
+	},
+	"overtime": "Überstunden",
+	"overtimeBasedOnWorkingHours": "Überstunden werden basierend auf {{hours}} Std. regulärer Arbeitszeit pro Arbeitstag berechnet.",
+	"standardWorkingHoursPerDay": "Reguläre Arbeitsstunden pro Tag",
+	"underTime": "Restzeit",
+	"workingHoursOption": "{{hours}} Std.",
+	"workingTimeTitle": "Arbeitszeit",
+	"workedTime": "Gearbeitete Zeit"
 }

@@ -5,6 +5,7 @@ import {AppTheme, SettingsState} from '../types';
 const initialState: SettingsState = {
 	appTheme: AppTheme.SYSTEM,
 	isBiometricsToUnlockEnabled: false,
+	standardWorkingHoursPerDay: 8,
 };
 
 const settingsSlice = createSlice({
@@ -20,9 +21,18 @@ const settingsSlice = createSlice({
 		) => {
 			state.isBiometricsToUnlockEnabled = biometricsEnabled;
 		},
+		standardWorkingHoursPerDaySet: (
+			state,
+			{payload: standardWorkingHoursPerDay}: PayloadAction<number>,
+		) => {
+			state.standardWorkingHoursPerDay = standardWorkingHoursPerDay;
+		},
 	},
 });
 
-export const {appThemeSet, biometricsToUnlockEnabledStateSet} =
-	settingsSlice.actions;
+export const {
+	appThemeSet,
+	biometricsToUnlockEnabledStateSet,
+	standardWorkingHoursPerDaySet,
+} = settingsSlice.actions;
 export const settingsReducer = settingsSlice.reducer;

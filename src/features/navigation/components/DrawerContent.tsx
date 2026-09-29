@@ -63,6 +63,7 @@ export const DefaultDrawerContent = ({
 			'ActiveTimesheet',
 			'Activities',
 			'Customers',
+			'Overview',
 			'Projects',
 			'Timesheets',
 		].map((routeName) => (
