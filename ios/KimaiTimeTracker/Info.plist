@@ -37,6 +37,8 @@
 	<string/>
 	<key>NSFaceIDUsageDescription</key>
 	<string>This app uses Face ID for secure authentication</string>
+	<key>NSCameraUsageDescription</key>
+	<string>This app uses the camera to scan QR codes for authentication</string>
 	<key>RCTNewArchEnabled</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
