@@ -24,7 +24,23 @@
 	"license": "License",
 	"logout": "Logout",
 	"pleaseAuthenticateToContinue": "Please authenticate to continue",
+	"qr": {
+		"cameraPermissionRequired": "Camera permission is required to scan QR codes.",
+		"invalidFormat": "The QR code is not a valid Kimai credential.",
+		"invalidJson": "The QR code does not contain valid JSON.",
+		"invalidUrl": "The server URL in the QR code is invalid.",
+		"missingToken": "The QR code is missing the API token.",
+		"missingUrl": "The QR code is missing the server URL.",
+		"noCameraAvailable": "No camera device is available on this device.",
+		"openSettings": "Open Settings",
+		"pointAtQrCode": "Point your camera at the QR code",
+		"requestPermission": "Request Permission",
+		"unsupportedType": "The QR code is not of the supported type.",
+		"unsupportedVersion": "The QR code uses an unsupported version.",
+		"unknownError": "Unknown error."
+	},
 	"save": "Save",
+	"scanQrCode": "Scan QR Code",
 	"screenTitles": {
 		"About": "About",
 		"Account": "Account",

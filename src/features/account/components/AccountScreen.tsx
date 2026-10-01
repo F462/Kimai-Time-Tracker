@@ -1,6 +1,6 @@
 import React, {useCallback, useState} from 'react';
 
-import {Button, Text, TextInput, useTheme} from 'react-native-paper';
+import {Button, Portal, Text, TextInput, useTheme} from 'react-native-paper';
 import {Linking, StyleSheet, View} from 'react-native';
 import path from 'path';
 import {useTranslation} from 'react-i18next';
@@ -13,6 +13,8 @@ import {
 } from 'src/features/appState/context/appStateSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {BaseScreen} from 'src/ui/BaseScreen';
+import type {QrCredentials} from '../utils/parseQrCredentials';
+import {QrScanner} from './QrScanner';
 import {api} from '../utils/ApiClient';
 import {selectIsUserLoggedIn} from '../context/accountSelectors';
 import {useStyle} from 'src/features/theming/utils/useStyle';
@@ -43,6 +45,8 @@ export const AccountScreen = () => {
 
 	const [apiToken, setApiToken] = useState('');
 	const [serverUrl, setServerUrl] = useState(api.getBaseUrl() ?? '');
+	const [isScannerVisible, setIsScannerVisible] = useState(false);
+	const [isDirty, setIsDirty] = useState(true);
 
 	const canApiTokenBeCreated = !!serverUrl;
 
@@ -51,6 +55,23 @@ export const AccountScreen = () => {
 			path.join(serverUrl, languageTag, 'profile/admin/api-token'),
 		).catch(console.error);
 	}, [languageTag, serverUrl]);
+
+	const handleCredentialsScanned = useCallback(
+		(credentials: QrCredentials) => {
+			setIsScannerVisible(false);
+			setServerUrl(credentials.serverUrl);
+			setApiToken(credentials.apiToken);
+			storeApiToken(credentials.apiToken)
+				.then(() => {
+					setIsDirty(false);
+					dispatch(loginUser({serverUrl: credentials.serverUrl})).catch(
+						console.error,
+					);
+				})
+				.catch(console.error);
+		},
+		[dispatch],
+	);
 
 	const dynamicStyles = useStyle(
 		() => ({
@@ -63,9 +84,23 @@ export const AccountScreen = () => {
 
 	return (
 		<BaseScreen>
+			<Button
+				style={styles.actionButton}
+				mode="outlined"
+				// eslint-disable-next-line @cspell/spellchecker
+				icon="qrcode-scan"
+				onPress={() => setIsScannerVisible(true)}>
+				{t('scanQrCode')}
+			</Button>
 			<View style={styles.inputContainer}>
 				<Text>{t('enterServerUrl')}</Text>
-				<TextInput value={serverUrl} onChangeText={setServerUrl} />
+				<TextInput
+					value={serverUrl}
+					onChangeText={(text) => {
+						setServerUrl(text);
+						setIsDirty(true);
+					}}
+				/>
 			</View>
 			{canApiTokenBeCreated && (
 				<Button onPress={onCreateApiToken}>{t('createApiToken')}</Button>
@@ -74,7 +109,10 @@ export const AccountScreen = () => {
 				<Text>{t('enterApiToken')}</Text>
 				<TextInput
 					value={apiToken}
-					onChangeText={setApiToken}
+					onChangeText={(text) => {
+						setApiToken(text);
+						setIsDirty(true);
+					}}
 					secureTextEntry
 				/>
 			</View>
@@ -82,10 +120,12 @@ export const AccountScreen = () => {
 				style={styles.actionButton}
 				mode="contained"
 				loading={isUserLoggingIn}
+				disabled={!isDirty}
 				icon="content-save-outline"
 				onPress={() => {
 					storeApiToken(apiToken)
 						.then(() => {
+							setIsDirty(false);
 							dispatch(loginUser({serverUrl})).catch(console.error);
 						})
 						.catch(console.error);
@@ -104,6 +144,7 @@ export const AccountScreen = () => {
 							.then(() => {
 								setServerUrl('');
 								setApiToken('');
+								setIsDirty(true);
 
 								dispatch(logoutUser()).catch(console.error);
 							})
@@ -111,6 +152,14 @@ export const AccountScreen = () => {
 					}}>
 					{t('logout')}
 				</Button>
+			)}
+			{isScannerVisible && (
+				<Portal>
+					<QrScanner
+						onCredentialsScanned={handleCredentialsScanned}
+						onClose={() => setIsScannerVisible(false)}
+					/>
+				</Portal>
 			)}
 		</BaseScreen>
 	);

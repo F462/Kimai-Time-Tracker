@@ -1,4 +1,20 @@
 {
 	"enterApiToken": "Geben Sie hier den API Schlüssel ein:",
-	"save": "Speichern"
+	"qr": {
+		"cameraPermissionRequired": "Zur Scannung von QR-Codes ist die Kameraberechtigung erforderlich.",
+		"invalidFormat": "Der QR-Code ist keine gültige Kimai-Anmeldeinformation.",
+		"invalidJson": "Der QR-Code enthält kein gültiges JSON.",
+		"invalidUrl": "Die Server-URL im QR-Code ist ungültig.",
+		"missingToken": "Der QR-Code enthält keinen API-Schlüssel.",
+		"missingUrl": "Der QR-Code enthält keine Server-URL.",
+		"noCameraAvailable": "Auf diesem Gerät ist keine Kamera verfügbar.",
+		"openSettings": "Einstellungen öffnen",
+		"pointAtQrCode": "Richten Sie Ihre Kamera auf den QR-Code",
+		"requestPermission": "Berechtigung anfordern",
+		"unsupportedType": "Der QR-Code hat nicht den unterstützten Typ.",
+		"unsupportedVersion": "Der QR-Code verwendet eine nicht unterstützte Version.",
+		"unknownError": "Unbekannter Fehler."
+	},
+	"save": "Speichern",
+	"scanQrCode": "QR-Code scannen"
 }
