@@ -1,13 +1,13 @@
-import React, {useCallback, useMemo} from 'react';
-
 import {
 	DrawerContentComponentProps,
 	DrawerItem,
 } from '@react-navigation/drawer';
-import {ScrollView, StyleSheet, View} from 'react-native';
-import {useStyle} from 'src/features/theming/utils/useStyle';
-import {useTheme} from 'react-native-paper';
+import React, {useCallback, useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
+import {ScrollView, StyleSheet, View} from 'react-native';
+import {useTheme} from 'react-native-paper';
+
+import {useStyle} from 'src/features/theming/utils/useStyle';
 
 const styles = StyleSheet.create({
 	container: {

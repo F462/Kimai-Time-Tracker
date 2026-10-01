@@ -1,5 +1,6 @@
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+
 import {AppTheme, SettingsState} from '../types';
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
 
 const initialState: SettingsState = {
 	appTheme: AppTheme.SYSTEM,

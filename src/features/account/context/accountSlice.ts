@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 
-import {userLoggedIn, userLoggedOut} from './accountActions';
 import {AccountState} from '../types';
+import {userLoggedIn, userLoggedOut} from './accountActions';
 
 const initialState: AccountState = {
 	serverUrl: undefined,

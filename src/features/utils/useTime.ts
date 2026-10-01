@@ -1,6 +1,5 @@
-import {useEffect, useState} from 'react';
-
 import dayjs from 'dayjs';
+import {useEffect, useState} from 'react';
 
 export const useTime = (updateInterval: number = 1000) => {
 	const [time, setTime] = useState(dayjs());

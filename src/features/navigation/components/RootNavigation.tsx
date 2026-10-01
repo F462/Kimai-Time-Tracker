@@ -1,27 +1,26 @@
-import React, {useCallback, useEffect} from 'react';
-
-import {
-	DrawerHeaderProps,
-	createDrawerNavigator,
-} from '@react-navigation/drawer';
-import BootSplash from 'react-native-bootsplash';
-import {NavigationContainer} from '@react-navigation/native';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {StyleSheet} from 'react-native';
 import {exitApp} from '@logicwind/react-native-exit-app';
-import {useSelector} from 'react-redux';
+import {
+	createDrawerNavigator,
+	DrawerHeaderProps,
+} from '@react-navigation/drawer';
+import {NavigationContainer} from '@react-navigation/native';
+import {simplePrompt} from '@sbaiahmed1/react-native-biometrics';
+import React, {useCallback, useEffect} from 'react';
+import {useTranslation} from 'react-i18next';
+import {StyleSheet} from 'react-native';
+import BootSplash from 'react-native-bootsplash';
 import {useTheme} from 'react-native-paper';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {useSelector} from 'react-redux';
 
+import {selectIsUserLoggedIn} from 'src/features/account/context/accountSelectors';
+import {selectIsSessionUnlocked} from 'src/features/appState/context/appStateSelectors';
+import {userUnlockedSession} from 'src/features/appState/context/appStateSlice';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
-import {DefaultDrawerContent} from './DrawerContent';
-import {DefaultHeader} from './DefaultHeader';
 import {ScreenParameters} from '../ScreenParameters';
 import {screens} from '../screens';
-import {selectIsSessionUnlocked} from 'src/features/appState/context/appStateSelectors';
-import {selectIsUserLoggedIn} from 'src/features/account/context/accountSelectors';
-import {simplePrompt} from '@sbaiahmed1/react-native-biometrics';
-import {useTranslation} from 'react-i18next';
-import {userUnlockedSession} from 'src/features/appState/context/appStateSlice';
+import {DefaultHeader} from './DefaultHeader';
+import {DefaultDrawerContent} from './DrawerContent';
 
 const styles = StyleSheet.create({
 	container: {

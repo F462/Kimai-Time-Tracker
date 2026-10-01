@@ -1,5 +1,5 @@
-import {AppState} from 'react-native';
 import {useEffect} from 'react';
+import {AppState} from 'react-native';
 
 import {sessionLocked} from 'src/features/appState/context/appStateSlice';
 import {useAppDispatch} from 'src/features/data/context/store';

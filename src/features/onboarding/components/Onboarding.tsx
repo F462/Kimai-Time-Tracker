@@ -1,10 +1,9 @@
+import {useTranslation} from 'react-i18next';
 import {Alert} from 'react-native';
 
-import {useTranslation} from 'react-i18next';
-
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
-import {developmentWarningShown} from '../context/onboardingSlice';
 import {selectHasDevelopmentWarningBeenShown} from '../context/onboardingSelectors';
+import {developmentWarningShown} from '../context/onboardingSlice';
 
 export const Onboarding = () => {
 	const dispatch = useAppDispatch();

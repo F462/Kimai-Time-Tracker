@@ -1,5 +1,5 @@
-import _ from 'lodash';
 import {createSelector} from '@reduxjs/toolkit';
+import _ from 'lodash';
 
 import {RootState} from 'src/features/data/context/store';
 import {SyncState} from '../types';

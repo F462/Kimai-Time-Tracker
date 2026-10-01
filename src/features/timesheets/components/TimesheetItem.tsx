@@ -1,22 +1,21 @@
-import React, {useCallback, useMemo, useState} from 'react';
-
-import {ActivityIndicator, Icon, useTheme} from 'react-native-paper';
-import {StyleSheet, View} from 'react-native';
 import dayjs from 'dayjs';
+import React, {useCallback, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
+import {StyleSheet, View} from 'react-native';
+import {ActivityIndicator, Icon, useTheme} from 'react-native-paper';
 
+import {selectActivityName} from 'src/features/activities/context/activitiesSelectors';
+import {useAppSelector} from 'src/features/data/context/store';
+import {selectProjectName} from 'src/features/projects/context/projectsSelectors';
+import {selectSyncState} from 'src/features/synchronization/context/synchronizationSelectors';
+import {SyncState} from 'src/features/synchronization/types';
+import {useStyle} from 'src/features/theming/utils/useStyle';
+import {useTime} from 'src/features/utils/useTime';
 import {ListItem} from 'src/ui/ListItem';
 import {ListItemText} from 'src/ui/ListItemText';
 import {PressableOpacity} from 'src/ui/PressableOpacity';
-import {SyncState} from 'src/features/synchronization/types';
 import {Timesheet} from '../types';
 import {TimesheetItemContextMenu} from './TimesheetItemContextMenu';
-import {selectActivityName} from 'src/features/activities/context/activitiesSelectors';
-import {selectProjectName} from 'src/features/projects/context/projectsSelectors';
-import {selectSyncState} from 'src/features/synchronization/context/synchronizationSelectors';
-import {useAppSelector} from 'src/features/data/context/store';
-import {useStyle} from 'src/features/theming/utils/useStyle';
-import {useTime} from 'src/features/utils/useTime';
 
 const SYNC_STATE_ICON_SIZE = 15;
 

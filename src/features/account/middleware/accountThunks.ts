@@ -1,7 +1,7 @@
-import {userLoggedIn, userLoggedOut} from '../context/accountActions';
-import {api} from '../utils/ApiClient';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
+import {userLoggedIn, userLoggedOut} from '../context/accountActions';
 import {getApiToken} from '../utils/accountPersistor';
+import {api} from '../utils/ApiClient';
 
 export const loginUser = createAppAsyncThunk<void, {serverUrl: string}>(
 	'account/loginUser',

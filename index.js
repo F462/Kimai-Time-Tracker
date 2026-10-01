@@ -2,16 +2,15 @@
  * @format
  */
 
-import 'react-native-get-random-values';
-
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import duration from 'dayjs/plugin/duration';
 import {AppRegistry} from 'react-native';
 
 import App from './App';
 import {name as appName} from './app.json';
 
-import customParseFormat from 'dayjs/plugin/customParseFormat';
-import dayjs from 'dayjs';
-import duration from 'dayjs/plugin/duration';
+import 'react-native-get-random-values';
 dayjs.extend(duration);
 dayjs.extend(customParseFormat);
 

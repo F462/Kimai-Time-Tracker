@@ -2,17 +2,18 @@
  * @file EsLint configuration for this project based on the underlying TS project.
  */
 
-import {defineConfig, globalIgnores} from 'eslint/config';
-import {FlatCompat} from '@eslint/eslintrc';
 import cspell from '@cspell/eslint-plugin';
-import {fileURLToPath} from 'node:url';
-import jest from 'eslint-plugin-jest';
+import {FlatCompat} from '@eslint/eslintrc';
 import js from '@eslint/js';
-import path from 'node:path';
+import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+import {defineConfig, globalIgnores} from 'eslint/config';
+import jest from 'eslint-plugin-jest';
 import react from 'eslint-plugin-react';
 import reactNative from 'eslint-plugin-react-native';
-import tsParser from '@typescript-eslint/parser';
-import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -37,6 +38,7 @@ export default defineConfig([
 			react,
 			'react-native': reactNative,
 			'@cspell': cspell,
+			'simple-import-sort': simpleImportSort,
 		},
 
 		languageOptions: {
@@ -154,16 +156,18 @@ export default defineConfig([
 				},
 			],
 
-			'sort-imports': [
+			'simple-import-sort/imports': [
 				'error',
 				{
-					ignoreCase: false,
-					ignoreDeclarationSort: false,
-					ignoreMemberSort: false,
-					memberSyntaxSortOrder: ['none', 'all', 'multiple', 'single'],
-					allowSeparatedGroups: true,
+					groups: [
+						// Group 1: official (external) dependencies
+						['^@?\\w'],
+						// Group 2: local imports (absolute and relative)
+						['^src/', '^\\.{1,2}/'],
+					],
 				},
 			],
+			'simple-import-sort/exports': 'error',
 		},
 	},
 ]);

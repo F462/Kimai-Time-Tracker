@@ -2,10 +2,10 @@ import RNDateTimePicker, {
 	AndroidNativeProps,
 	DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
-import {StyleSheet, View} from 'react-native';
-import {useCallback, useEffect, useMemo, useState} from 'react';
-import {TextInput} from 'react-native-paper';
 import dayjs from 'dayjs';
+import {useCallback, useEffect, useMemo, useState} from 'react';
+import {StyleSheet, View} from 'react-native';
+import {TextInput} from 'react-native-paper';
 
 import {isValidDate} from 'src/features/timesheets/utils/functions';
 

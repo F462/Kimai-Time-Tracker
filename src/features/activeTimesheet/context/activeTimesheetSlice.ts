@@ -1,6 +1,7 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
-import {ActiveTimesheetState} from '../types';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+
 import {Timesheet} from 'src/features/timesheets/types';
+import {ActiveTimesheetState} from '../types';
 
 const initialState: ActiveTimesheetState = {
 	activeTimesheetId: undefined,

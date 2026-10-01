@@ -1,6 +1,6 @@
-import {FileLogger} from 'react-native-file-logger';
-import ReactNativeBlobUtil from 'react-native-blob-util';
 import path from 'path';
+import ReactNativeBlobUtil from 'react-native-blob-util';
+import {FileLogger} from 'react-native-file-logger';
 
 export const LOGS_DIRECTORY = path.join(
 	ReactNativeBlobUtil.fs.dirs.CacheDir,

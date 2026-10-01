@@ -1,13 +1,13 @@
-import {PayloadAction, createSlice} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 
-import {Timesheet, TimesheetsState} from '../types';
 import {
 	newTimesheetStarted,
 	timesheetStopped,
 } from 'src/features/activeTimesheet/context/activeTimesheetSlice';
-import {timesheetEdited} from './timesheetActions';
 import {timesheetSynced} from 'src/features/synchronization/context/synchronizationSlice';
+import {Timesheet, TimesheetsState} from '../types';
+import {timesheetEdited} from './timesheetActions';
 
 const initialState: TimesheetsState = {
 	timesheets: {},

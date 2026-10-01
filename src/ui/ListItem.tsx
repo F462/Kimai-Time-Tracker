@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {StyleProp, StyleSheet, ViewStyle} from 'react-native';
 import {Checkbox} from 'react-native-paper';
 

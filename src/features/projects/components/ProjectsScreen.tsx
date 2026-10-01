@@ -1,16 +1,16 @@
 import React, {useCallback} from 'react';
 
-import {
-	selectProjectList,
-	selectSelectedProjectId,
-} from '../context/projectsSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {BaseScreen} from 'src/ui/BaseScreen';
 import {DividedList} from 'src/ui/DividedList';
 import {ListItem} from 'src/ui/ListItem';
 import {ListItemText} from 'src/ui/ListItemText';
-import {Project} from '../types';
+import {
+	selectProjectList,
+	selectSelectedProjectId,
+} from '../context/projectsSelectors';
 import {projectSelected} from '../context/projectsSlice';
+import {Project} from '../types';
 
 const ProjectItem = ({
 	project,

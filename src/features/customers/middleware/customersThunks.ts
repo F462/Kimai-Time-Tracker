@@ -1,7 +1,7 @@
-import {Customer} from '../types';
 import {api} from 'src/features/account/utils/ApiClient';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
 import {customersReceived} from '../context/customersSlice';
+import {Customer} from '../types';
 
 export const fetchCustomers = createAppAsyncThunk(
 	'customers/fetchCustomers',

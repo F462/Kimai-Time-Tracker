@@ -6,9 +6,9 @@ import {
 	selectActivityList,
 } from 'src/features/activities/context/activitiesSelectors';
 import {Activity} from 'src/features/activities/types';
-import {BaseSelector} from './BaseSelector';
-import {parseSelectedId} from '../../features/timesheets/utils/functions';
 import {useAppSelector} from 'src/features/data/context/store';
+import {parseSelectedId} from '../../features/timesheets/utils/functions';
+import {BaseSelector} from './BaseSelector';
 
 type ActivitySelectorProps = {
 	selectedActivity: Activity | undefined;

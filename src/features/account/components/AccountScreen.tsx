@@ -1,23 +1,22 @@
-import React, {useCallback, useState} from 'react';
-
-import {Button, Portal, Text, TextInput, useTheme} from 'react-native-paper';
-import {Linking, StyleSheet, View} from 'react-native';
 import path from 'path';
+import React, {useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
+import {Linking, StyleSheet, View} from 'react-native';
+import {Button, Portal, Text, TextInput, useTheme} from 'react-native-paper';
 
-import {loginUser, logoutUser} from '../middleware/accountThunks';
-import {removeApiToken, storeApiToken} from '../utils/accountPersistor';
 import {
 	selectIsUserLoggingIn,
 	selectIsUserLoggingOut,
 } from 'src/features/appState/context/appStateSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
+import {useStyle} from 'src/features/theming/utils/useStyle';
 import {BaseScreen} from 'src/ui/BaseScreen';
+import {selectIsUserLoggedIn} from '../context/accountSelectors';
+import {loginUser, logoutUser} from '../middleware/accountThunks';
+import {removeApiToken, storeApiToken} from '../utils/accountPersistor';
+import {api} from '../utils/ApiClient';
 import type {QrCredentials} from '../utils/parseQrCredentials';
 import {QrScanner} from './QrScanner';
-import {api} from '../utils/ApiClient';
-import {selectIsUserLoggedIn} from '../context/accountSelectors';
-import {useStyle} from 'src/features/theming/utils/useStyle';
 
 const styles = StyleSheet.create({
 	inputContainer: {

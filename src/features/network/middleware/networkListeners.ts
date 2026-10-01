@@ -1,9 +1,9 @@
-import {REHYDRATE} from 'redux-persist';
 import {addEventListener} from '@react-native-community/netinfo';
+import {REHYDRATE} from 'redux-persist';
 
 import {AppStartListening} from 'src/features/data/context/store';
-import {internetReachabilityChanged} from '../context/networkSlice';
 import {selectIsInternetReachable} from '../context/networkSelector';
+import {internetReachabilityChanged} from '../context/networkSlice';
 
 const startNetworkEventListener = (startListening: AppStartListening) => {
 	startListening({

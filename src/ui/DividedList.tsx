@@ -1,7 +1,6 @@
 import React, {useCallback} from 'react';
-
-import {Divider} from 'react-native-paper';
 import {FlatList} from 'react-native';
+import {Divider} from 'react-native-paper';
 
 export function DividedList<T>({
 	data,

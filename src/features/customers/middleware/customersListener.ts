@@ -1,6 +1,6 @@
+import {userLoggedIn} from 'src/features/account/context/accountActions';
 import {AppStartListening} from 'src/features/data/context/store';
 import {fetchCustomers} from './customersThunks';
-import {userLoggedIn} from 'src/features/account/context/accountActions';
 
 const fetchCustomersOnUserLogin = (startListening: AppStartListening) => {
 	startListening({

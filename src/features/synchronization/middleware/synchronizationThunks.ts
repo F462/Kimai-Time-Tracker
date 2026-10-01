@@ -1,18 +1,18 @@
-import {Timesheet, TimesheetFromApi} from 'src/features/timesheets/types';
+import {api} from 'src/features/account/utils/ApiClient';
+import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
 import {
 	selectIsTimesheetKnownToServer,
 	selectRemoteTimesheetId,
 } from 'src/features/timesheets/context/timesheetsSelectors';
+import {timesheetDeleted} from 'src/features/timesheets/context/timesheetsSlice';
+import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
+import {Timesheet, TimesheetFromApi} from 'src/features/timesheets/types';
+import {selectIsTimesheetSyncRunning} from '../context/synchronizationSelectors';
 import {
-	timesheetSyncFailed,
 	timesheetSynced,
+	timesheetSyncFailed,
 	timesheetSynchronizationStarted,
 } from '../context/synchronizationSlice';
-import {api} from 'src/features/account/utils/ApiClient';
-import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
-import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
-import {selectIsTimesheetSyncRunning} from '../context/synchronizationSelectors';
-import {timesheetDeleted} from 'src/features/timesheets/context/timesheetsSlice';
 
 const resyncTimesheetRequests: {[timesheetId: string]: boolean} = {};
 

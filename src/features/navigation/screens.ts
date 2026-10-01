@@ -4,10 +4,10 @@ import {ActiveTimesheetScreen} from 'src/features/activeTimesheet/components/Act
 import {ActivitiesScreen} from 'src/features/activities/components/ActivitiesScreen';
 import {CustomersScreen} from 'src/features/customers/components/CustomersScreen';
 import {ProjectsScreen} from 'src/features/projects/components/ProjectsScreen';
-import {ScreenParameters} from './ScreenParameters';
 import {SettingsScreen} from 'src/features/settings/components/SettingsScreen';
 import {TimesheetsScreen} from 'src/features/timesheets/components/TimesheetsScreen';
 import {createDrawerIconFunction} from './components/DrawerItemIcon';
+import {ScreenParameters} from './ScreenParameters';
 
 export const screens: Array<{
 	name: keyof ScreenParameters;

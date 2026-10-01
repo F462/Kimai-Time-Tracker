@@ -1,11 +1,11 @@
-import Share from 'react-native-share';
 import path from 'path';
+import ReactNativeBlobUtil from 'react-native-blob-util';
+import Share from 'react-native-share';
 import {zip} from 'react-native-zip-archive';
 
-import {LOGS_DIRECTORY} from '../utils/initialization';
-import ReactNativeBlobUtil from 'react-native-blob-util';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
 import {removeFile} from 'src/features/fileHandling/utils/removeFile';
+import {LOGS_DIRECTORY} from '../utils/initialization';
 
 export const exportLogs = createAppAsyncThunk<void, void>(
 	'logging/exportLogs',

@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 
-import {selectTimesheetListOfCurrentDay} from './timesheetsSelectors';
 import {useAppSelector} from 'src/features/data/context/store';
 import {useTime} from 'src/features/utils/useTime';
+import {selectTimesheetListOfCurrentDay} from './timesheetsSelectors';
 
 export const useWorkingHoursOfCurrentDayInSeconds = (
 	updateInterval: number | undefined,

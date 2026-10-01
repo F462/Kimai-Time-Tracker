@@ -1,11 +1,10 @@
-import React from 'react';
-
-import {IconButton, Text} from 'react-native-paper';
-import {StyleSheet, View} from 'react-native';
 import {DrawerHeaderProps} from '@react-navigation/drawer';
-import i18n from 'src/features/localization/utils/i18n';
+import React from 'react';
 import {useTranslation} from 'react-i18next';
+import {StyleSheet, View} from 'react-native';
+import {IconButton, Text} from 'react-native-paper';
 
+import i18n from 'src/features/localization/utils/i18n';
 import {SynchronizationIndicator} from 'src/features/synchronization/components/SynchronizationIndicator';
 
 const styles = StyleSheet.create({

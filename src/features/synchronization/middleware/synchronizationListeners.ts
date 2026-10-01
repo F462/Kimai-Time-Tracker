@@ -2,14 +2,15 @@ import {ListenerEffectAPI} from '@reduxjs/toolkit';
 import {REHYDRATE} from 'redux-persist';
 
 import {
+	newTimesheetStarted,
+	timesheetStopped,
+} from 'src/features/activeTimesheet/context/activeTimesheetSlice';
+import {
 	AppDispatch,
 	AppStartListening,
 	RootState,
 } from 'src/features/data/context/store';
-import {
-	newTimesheetStarted,
-	timesheetStopped,
-} from 'src/features/activeTimesheet/context/activeTimesheetSlice';
+import {timesheetEdited} from 'src/features/timesheets/context/timesheetActions';
 import {
 	selectTimesheet,
 	selectTimesheetsToSynchronize,
@@ -17,7 +18,6 @@ import {
 import {Timesheet} from 'src/features/timesheets/types';
 import {selectIsTimesheetSyncNeeded} from '../context/synchronizationSelectors';
 import {synchronizeTimesheet} from './synchronizationThunks';
-import {timesheetEdited} from 'src/features/timesheets/context/timesheetActions';
 
 const syncTimesheet = async (
 	listenerApi: ListenerEffectAPI<RootState, AppDispatch>,

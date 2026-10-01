@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import {createTransform} from 'redux-persist';
 
-import {SyncState, SynchronizationState} from '../types';
+import {SynchronizationState, SyncState} from '../types';
 
 export const ResetSyncStateTransform = createTransform(
 	undefined,

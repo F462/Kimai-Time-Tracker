@@ -1,14 +1,14 @@
-import _ from 'lodash';
 import {createSelector} from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
+import _ from 'lodash';
 
+import {selectActiveTimesheetId} from 'src/features/activeTimesheet/context/activeTimesheetSelectors';
+import {RootState} from 'src/features/data/context/store';
 import {
 	selectTimesheetIdsToSynchronize,
 	selectTimesheetSynchronizationState,
 } from 'src/features/synchronization/context/synchronizationSelectors';
-import {RootState} from 'src/features/data/context/store';
 import {SyncState} from 'src/features/synchronization/types';
-import {selectActiveTimesheetId} from 'src/features/activeTimesheet/context/activeTimesheetSelectors';
 
 const selectTimesheetsState = (state: RootState) => state.timesheets;
 

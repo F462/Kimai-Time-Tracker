@@ -1,11 +1,11 @@
-import {PayloadAction, createSlice, isAnyOf} from '@reduxjs/toolkit';
+import {createSlice, isAnyOf, PayloadAction} from '@reduxjs/toolkit';
 
-import {SyncState, SynchronizationState} from '../types';
 import {
 	newTimesheetStarted,
 	timesheetStopped,
 } from 'src/features/activeTimesheet/context/activeTimesheetSlice';
 import {timesheetEdited} from 'src/features/timesheets/context/timesheetActions';
+import {SynchronizationState, SyncState} from '../types';
 
 const initialState: SynchronizationState = {
 	timesheets: {},

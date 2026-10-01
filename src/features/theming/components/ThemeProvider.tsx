@@ -1,17 +1,17 @@
+import {DefaultTheme as NavigationDefaultTheme} from '@react-navigation/native';
+import deepmerge from 'deepmerge';
+import React, {useMemo} from 'react';
+import {Appearance} from 'react-native';
 import {
+	adaptNavigationTheme,
 	MD3DarkTheme as PaperDefaultDarkTheme,
 	MD3LightTheme as PaperDefaultLightTheme,
 	PaperProvider,
-	adaptNavigationTheme,
 } from 'react-native-paper';
-import React, {useMemo} from 'react';
-import {Appearance} from 'react-native';
-import {DefaultTheme as NavigationDefaultTheme} from '@react-navigation/native';
-import deepmerge from 'deepmerge';
 
-import {AppTheme} from 'src/features/settings/types';
-import {selectAppTheme} from 'src/features/settings/context/settingsSelectors';
 import {useAppSelector} from 'src/features/data/context/store';
+import {selectAppTheme} from 'src/features/settings/context/settingsSelectors';
+import {AppTheme} from 'src/features/settings/types';
 
 const {LightTheme: navigationLightTheme, DarkTheme: navigationDarkTheme} =
 	adaptNavigationTheme({

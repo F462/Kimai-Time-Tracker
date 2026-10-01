@@ -1,18 +1,16 @@
 import React, {useCallback, useEffect, useState} from 'react';
-
-import {Button, Text} from 'react-native-paper';
+import {useTranslation} from 'react-i18next';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
-import {useTranslation} from 'react-i18next';
-
-import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
-import {BaseScreen} from 'src/ui/BaseScreen';
-import {api} from 'src/features/account/utils/ApiClient';
-import {exportLogs} from 'src/features/logging/middleware/loggingThunks';
-import {selectIsUserLoggedIn} from 'src/features/account/context/accountSelectors';
+import {Button, Text} from 'react-native-paper';
 
 import AppIcon from 'src/assets/icon.svg';
 import licenseText from 'src/assets/license.txt';
+import {selectIsUserLoggedIn} from 'src/features/account/context/accountSelectors';
+import {api} from 'src/features/account/utils/ApiClient';
+import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
+import {exportLogs} from 'src/features/logging/middleware/loggingThunks';
+import {BaseScreen} from 'src/ui/BaseScreen';
 
 const styles = StyleSheet.create({
 	mainContainer: {

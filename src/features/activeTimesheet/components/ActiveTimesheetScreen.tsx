@@ -1,6 +1,6 @@
+import dayjs from 'dayjs';
 import React, {useCallback, useEffect, useState} from 'react';
-
-import {Checkbox, IconButton, Text, useTheme} from 'react-native-paper';
+import {useTranslation} from 'react-i18next';
 import {
 	RefreshControl,
 	ScrollView,
@@ -9,44 +9,42 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import dayjs from 'dayjs';
-import {useTranslation} from 'react-i18next';
+import {Checkbox, IconButton, Text, useTheme} from 'react-native-paper';
 import {v4 as uuidv4} from 'uuid';
 
+import AppIcon from 'src/assets/icon.svg';
+import {stopActiveTimesheet} from 'src/features/activeTimesheet/middleware/activeTimesheetThunks';
 import {
-	newTimesheetStarted,
-	nextTimesheetStartDatetimeSet,
-} from '../context/activeTimesheetSlice';
+	selectSelectedActivity,
+	selectSelectedActivityId,
+} from 'src/features/activities/context/activitiesSelectors';
+import {activitySelected} from 'src/features/activities/context/activitiesSlice';
+import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
+import {
+	selectSelectedProject,
+	selectSelectedProjectId,
+} from 'src/features/projects/context/projectsSelectors';
+import {projectSelected} from 'src/features/projects/context/projectsSlice';
+import {useStyle} from 'src/features/theming/utils/useStyle';
+import {TimesheetList} from 'src/features/timesheets/components/TimesheetList';
+import {useWorkingHoursOfCurrentDayInSeconds} from 'src/features/timesheets/context/timesheetHooks';
 import {
 	selectActiveTimesheet,
 	selectTimesheetListOfCurrentDay,
 } from 'src/features/timesheets/context/timesheetsSelectors';
+import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
+import {DateTimePicker} from 'src/ui/DateTimePicker';
+import {PressableOpacity} from 'src/ui/PressableOpacity';
+import {ActivitySelector as ActivitySelectorComponent} from 'src/ui/Selectors/ActivitySelector';
+import {ProjectSelector as ProjectSelectorComponent} from 'src/ui/Selectors/ProjectSelector';
 import {
 	selectCanTimesheetBeStarted,
 	selectNextTimesheetStartDate,
 } from '../context/activeTimesheetSelectors';
 import {
-	selectSelectedActivity,
-	selectSelectedActivityId,
-} from 'src/features/activities/context/activitiesSelectors';
-import {
-	selectSelectedProject,
-	selectSelectedProjectId,
-} from 'src/features/projects/context/projectsSelectors';
-import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
-import {ActivitySelector as ActivitySelectorComponent} from 'src/ui/Selectors/ActivitySelector';
-import {DateTimePicker} from 'src/ui/DateTimePicker';
-import {PressableOpacity} from 'src/ui/PressableOpacity';
-import {ProjectSelector as ProjectSelectorComponent} from 'src/ui/Selectors/ProjectSelector';
-import {TimesheetList} from 'src/features/timesheets/components/TimesheetList';
-import {activitySelected} from 'src/features/activities/context/activitiesSlice';
-import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
-import {projectSelected} from 'src/features/projects/context/projectsSlice';
-import {stopActiveTimesheet} from 'src/features/activeTimesheet/middleware/activeTimesheetThunks';
-import {useStyle} from 'src/features/theming/utils/useStyle';
-import {useWorkingHoursOfCurrentDayInSeconds} from 'src/features/timesheets/context/timesheetHooks';
-
-import AppIcon from 'src/assets/icon.svg';
+	newTimesheetStarted,
+	nextTimesheetStartDatetimeSet,
+} from '../context/activeTimesheetSlice';
 
 const styles = StyleSheet.create({
 	mainContainer: {

@@ -1,44 +1,43 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-	FLUSH,
-	PAUSE,
-	PERSIST,
-	PURGE,
-	REGISTER,
-	REHYDRATE,
-	persistReducer,
-	persistStore,
-} from 'redux-persist';
-import {
-	TypedStartListening,
-	UnknownAction,
 	combineReducers,
 	configureStore,
 	createListenerMiddleware,
+	TypedStartListening,
+	UnknownAction,
 } from '@reduxjs/toolkit';
 // it is needed to be imported here for the actual definition
 // eslint-disable-next-line no-restricted-imports
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import {
-	timesheetsReducer,
-	timesheetsUpdated,
-} from 'src/features/timesheets/context/timesheetsSlice';
+	FLUSH,
+	PAUSE,
+	PERSIST,
+	persistReducer,
+	persistStore,
+	PURGE,
+	REGISTER,
+	REHYDRATE,
+} from 'redux-persist';
+
+import {userLoggedOut} from 'src/features/account/context/accountActions';
 import {accountReducer} from 'src/features/account/context/accountSlice';
 import {activeTimesheetReducer} from 'src/features/activeTimesheet/context/activeTimesheetSlice';
 import {activitiesReducer} from 'src/features/activities/context/activitiesSlice';
 import {appStateReducer} from 'src/features/appState/context/appStateSlice';
 import {customersReducer} from 'src/features/customers/context/customersSlice';
+import {createLoggingMiddleware} from 'src/features/logging/middleware/middleware';
 import {networkReducer} from 'src/features/network/context/networkSlice';
 import {onboardingReducer} from 'src/features/onboarding/context/onboardingSlice';
 import {projectsReducer} from 'src/features/projects/context/projectsSlice';
 import {settingsReducer} from 'src/features/settings/context/settingsSlice';
-import {startRootListener} from '../middleware/rootListener';
-import {synchronizationReducer} from 'src/features/synchronization/context/synchronizationSlice';
-import {userLoggedOut} from 'src/features/account/context/accountActions';
-
 import {ResetSyncStateTransform} from 'src/features/synchronization/context/ResetSyncStateTransform';
-import {createLoggingMiddleware} from 'src/features/logging/middleware/middleware';
+import {synchronizationReducer} from 'src/features/synchronization/context/synchronizationSlice';
+import {
+	timesheetsReducer,
+	timesheetsUpdated,
+} from 'src/features/timesheets/context/timesheetsSlice';
+import {startRootListener} from '../middleware/rootListener';
 
 const persistConfig = {
 	key: 'root',

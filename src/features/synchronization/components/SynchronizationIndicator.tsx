@@ -1,13 +1,12 @@
 import React, {useMemo} from 'react';
-
 import {IconButton} from 'react-native-paper';
 
-import {selectAreAllTimesheetsInSync} from '../context/synchronizationSelectors';
-import {selectIsInternetReachable} from 'src/features/network/context/networkSelector';
 import {selectIsUserLoggedIn} from 'src/features/account/context/accountSelectors';
 import {selectIsUserLoggingIn} from 'src/features/appState/context/appStateSelectors';
-import {useAppNavigation} from 'src/features/navigation/context/hooks';
 import {useAppSelector} from 'src/features/data/context/store';
+import {useAppNavigation} from 'src/features/navigation/context/hooks';
+import {selectIsInternetReachable} from 'src/features/network/context/networkSelector';
+import {selectAreAllTimesheetsInSync} from '../context/synchronizationSelectors';
 
 export const SynchronizationIndicator = () => {
 	const navigation = useAppNavigation();

@@ -1,7 +1,7 @@
-import {Activity} from '../types';
-import {activitiesReceived} from '../context/activitiesSlice';
 import {api} from 'src/features/account/utils/ApiClient';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
+import {activitiesReceived} from '../context/activitiesSlice';
+import {Activity} from '../types';
 
 export const fetchActivities = createAppAsyncThunk(
 	'activities/fetchActivities',

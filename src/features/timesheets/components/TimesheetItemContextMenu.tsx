@@ -1,17 +1,17 @@
-import {List, Modal, Portal, useTheme} from 'react-native-paper';
 import React, {useCallback, useState} from 'react';
-import {Style} from 'react-native-paper/lib/typescript/components/List/utils';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet} from 'react-native';
+import {List, Modal, Portal, useTheme} from 'react-native-paper';
+import {Style} from 'react-native-paper/lib/typescript/components/List/utils';
 
+import {useAppDispatch} from 'src/features/data/context/store';
 import {
 	deleteTimesheet,
 	synchronizeTimesheet,
 } from 'src/features/synchronization/middleware/synchronizationThunks';
-import {EditTimesheetModal} from './EditTimesheetModal';
-import {Timesheet} from '../types';
-import {useAppDispatch} from 'src/features/data/context/store';
 import {useStyle} from 'src/features/theming/utils/useStyle';
-import {useTranslation} from 'react-i18next';
+import {Timesheet} from '../types';
+import {EditTimesheetModal} from './EditTimesheetModal';
 
 const styles = StyleSheet.create({
 	modal: {

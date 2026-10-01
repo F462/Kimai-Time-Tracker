@@ -1,14 +1,14 @@
 import React, {useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 
+import {useAppSelector} from 'src/features/data/context/store';
 import {
 	selectProjectList,
 	selectProjects,
 } from 'src/features/projects/context/projectsSelectors';
-import {BaseSelector} from './BaseSelector';
 import {Project} from 'src/features/projects/types';
 import {parseSelectedId} from 'src/features/timesheets/utils/functions';
-import {useAppSelector} from 'src/features/data/context/store';
+import {BaseSelector} from './BaseSelector';
 
 type ProjectSelectorProps = {
 	selectedProject: Project | undefined;

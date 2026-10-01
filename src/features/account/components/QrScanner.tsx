@@ -1,24 +1,22 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-
+import {useTranslation} from 'react-i18next';
 import {BackHandler, Linking, Platform, StyleSheet, View} from 'react-native';
 import {Button, Text, useTheme} from 'react-native-paper';
-import {useTranslation} from 'react-i18next';
-
-import {
-	Barcode,
-	useBarcodeScannerOutput,
-} from 'react-native-vision-camera-barcode-scanner';
 import {
 	Camera,
 	useCameraDevice,
 	useCameraPermission,
 } from 'react-native-vision-camera';
-
 import {
-	type QrCredentials,
-	parseQrCredentials,
-} from '../utils/parseQrCredentials';
+	Barcode,
+	useBarcodeScannerOutput,
+} from 'react-native-vision-camera-barcode-scanner';
+
 import {useStyle} from 'src/features/theming/utils/useStyle';
+import {
+	parseQrCredentials,
+	type QrCredentials,
+} from '../utils/parseQrCredentials';
 
 interface QrScannerProps {
 	onCredentialsScanned: (credentials: QrCredentials) => void;

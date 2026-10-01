@@ -1,18 +1,18 @@
-import {Button, Modal, Portal, Text, useTheme} from 'react-native-paper';
-import {StyleSheet, View} from 'react-native';
-import {useCallback, useState} from 'react';
 import dayjs from 'dayjs';
+import {useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
+import {StyleSheet, View} from 'react-native';
+import {Button, Modal, Portal, Text, useTheme} from 'react-native-paper';
 
-import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
-import {ActivitySelector} from 'src/ui/Selectors/ActivitySelector';
-import {DateTimePicker} from 'src/ui/DateTimePicker';
-import {ProjectSelector} from 'src/ui/Selectors/ProjectSelector';
-import {Timesheet} from '../types';
 import {selectActivity} from 'src/features/activities/context/activitiesSelectors';
+import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {selectProject} from 'src/features/projects/context/projectsSelectors';
-import {timesheetEdited} from '../context/timesheetActions';
 import {useStyle} from 'src/features/theming/utils/useStyle';
+import {DateTimePicker} from 'src/ui/DateTimePicker';
+import {ActivitySelector} from 'src/ui/Selectors/ActivitySelector';
+import {ProjectSelector} from 'src/ui/Selectors/ProjectSelector';
+import {timesheetEdited} from '../context/timesheetActions';
+import {Timesheet} from '../types';
 
 const styles = StyleSheet.create({
 	modal: {

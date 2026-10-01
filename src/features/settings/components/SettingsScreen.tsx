@@ -1,22 +1,22 @@
-import {List, Switch, useTheme} from 'react-native-paper';
-import React, {useCallback} from 'react';
 import {Picker} from '@react-native-picker/picker';
-import {StyleSheet} from 'react-native';
 import {simplePrompt} from '@sbaiahmed1/react-native-biometrics';
+import React, {useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
+import {StyleSheet} from 'react-native';
+import {List, Switch, useTheme} from 'react-native-paper';
 
-import {
-	appThemeSet,
-	biometricsToUnlockEnabledStateSet,
-} from '../context/settingsSlice';
+import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
+import {useStyle} from 'src/features/theming/utils/useStyle';
+import {BaseScreen} from 'src/ui/BaseScreen';
 import {
 	selectAppTheme,
 	selectIsBiometricsToUnlockEnabled,
 } from '../context/settingsSelectors';
-import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
+import {
+	appThemeSet,
+	biometricsToUnlockEnabledStateSet,
+} from '../context/settingsSlice';
 import {AppTheme} from '../types';
-import {BaseScreen} from 'src/ui/BaseScreen';
-import {useStyle} from 'src/features/theming/utils/useStyle';
 
 const styles = StyleSheet.create({
 	themePicker: {

@@ -1,7 +1,7 @@
 import {createSelector} from '@reduxjs/toolkit';
 
-import {RootState} from 'src/features/data/context/store';
 import {selectSelectedActivityId} from 'src/features/activities/context/activitiesSelectors';
+import {RootState} from 'src/features/data/context/store';
 import {selectSelectedProjectId} from 'src/features/projects/context/projectsSelectors';
 
 const selectActiveTimesheetState = (state: RootState) => state.activeTimesheet;

@@ -1,7 +1,7 @@
-import i18n, {InitOptions} from 'i18next';
 import dayjs from 'dayjs';
-import {findBestLanguageTag} from 'react-native-localize';
+import i18n, {InitOptions} from 'i18next';
 import {initReactI18next} from 'react-i18next';
+import {findBestLanguageTag} from 'react-native-localize';
 
 import de from '../resources/de.json';
 import en from '../resources/en.json';

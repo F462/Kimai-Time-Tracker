@@ -1,8 +1,8 @@
 import {REHYDRATE} from 'redux-persist';
 
 import {AppStartListening} from 'src/features/data/context/store';
-import {loginUser} from './accountThunks';
 import {selectServerUrl} from '../context/accountSelectors';
+import {loginUser} from './accountThunks';
 
 const setAxiosHeadersOnAppStart = (startListening: AppStartListening) => {
 	startListening({

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {Icon} from 'react-native-paper';
 
 const DrawerItemIcon = ({icon}: {icon: string}) => {

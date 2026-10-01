@@ -1,16 +1,16 @@
 import React, {useCallback} from 'react';
 
-import {
-	selectActivityList,
-	selectSelectedActivityId,
-} from '../context/activitiesSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
-import {Activity} from '../types';
 import {BaseScreen} from 'src/ui/BaseScreen';
 import {DividedList} from 'src/ui/DividedList';
 import {ListItem} from 'src/ui/ListItem';
 import {ListItemText} from 'src/ui/ListItemText';
+import {
+	selectActivityList,
+	selectSelectedActivityId,
+} from '../context/activitiesSelectors';
 import {activitySelected} from '../context/activitiesSlice';
+import {Activity} from '../types';
 
 const ActivityItem = ({
 	activity,
