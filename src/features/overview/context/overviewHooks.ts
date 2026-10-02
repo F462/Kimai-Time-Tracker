@@ -105,18 +105,24 @@ export const useMonthlyOverview = (
 			standardWorkingHoursPerDay,
 		);
 
+		// Only count days up to today — future days would otherwise
+		// subtract their expected hours (e.g. −8 h each) from the total.
+		const pastDays = months.flatMap((month) =>
+			month.days.filter((day) => !day.isFuture),
+		);
+
 		return {
 			months,
-			yearDeltaInSeconds: months.reduce(
-				(sum, month) => sum + month.deltaSeconds,
+			yearDeltaInSeconds: pastDays.reduce(
+				(sum, day) => sum + day.deltaSeconds,
 				0,
 			),
-			yearExpectedInSeconds: months.reduce(
-				(sum, month) => sum + month.expectedSeconds,
+			yearExpectedInSeconds: pastDays.reduce(
+				(sum, day) => sum + day.expectedSeconds,
 				0,
 			),
-			yearWorkedInSeconds: months.reduce(
-				(sum, month) => sum + month.workedSeconds,
+			yearWorkedInSeconds: pastDays.reduce(
+				(sum, day) => sum + day.workedSeconds,
 				0,
 			),
 		};
