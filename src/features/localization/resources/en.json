@@ -10,6 +10,8 @@
 	"chooseProjectAndActivity": "Choose project and activity on Smartphone to continue",
 	"createApiToken": "Create API token",
 	"delete": "Delete",
+	"deleteActivity": "Delete activity",
+	"deleteActivityWarning": "Deleting this activity will also permanently delete all of its linked timesheets. This action cannot be undone.",
 	"dismiss": "Dismiss",
 	"displayTitle": "Display",
 	"edit": "Edit",

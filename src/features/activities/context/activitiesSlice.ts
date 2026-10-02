@@ -23,8 +23,16 @@ const activitiesSlice = createSlice({
 		) => {
 			state.selectedActivityId = activityId;
 		},
+		activityRemoved: (state, {payload: activityId}: PayloadAction<number>) => {
+			delete state.activities[activityId];
+
+			if (state.selectedActivityId === activityId) {
+				state.selectedActivityId = undefined;
+			}
+		},
 	},
 });
 
-export const {activitiesReceived, activitySelected} = activitiesSlice.actions;
+export const {activitiesReceived, activitySelected, activityRemoved} =
+	activitiesSlice.actions;
 export const activitiesReducer = activitiesSlice.reducer;

@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {BaseScreen} from 'src/ui/BaseScreen';
@@ -11,6 +11,7 @@ import {
 } from '../context/activitiesSelectors';
 import {activitySelected} from '../context/activitiesSlice';
 import {Activity} from '../types';
+import {ActivityItemContextMenu} from './ActivityItemContextMenu';
 
 const ActivityItem = ({
 	activity,
@@ -20,14 +21,28 @@ const ActivityItem = ({
 	isSelected: boolean;
 }) => {
 	const dispatch = useAppDispatch();
-	const onProjectItemPress = useCallback(() => {
+	const [contextMenuVisible, setContextMenuVisible] = useState(false);
+
+	const onSelectActivity = useCallback(() => {
 		dispatch(activitySelected(activity.id));
 	}, [dispatch, activity.id]);
+	const onOpenContextMenu = useCallback(() => setContextMenuVisible(true), []);
+	const onHideContextMenu = useCallback(() => setContextMenuVisible(false), []);
 
 	return (
-		<ListItem isSelected={isSelected} onPress={onProjectItemPress}>
-			<ListItemText>{activity.name}</ListItemText>
-		</ListItem>
+		<>
+			<ActivityItemContextMenu
+				activity={activity}
+				visible={contextMenuVisible}
+				onHideMenu={onHideContextMenu}
+			/>
+			<ListItem
+				isSelected={isSelected}
+				onPress={onSelectActivity}
+				onLongPress={onOpenContextMenu}>
+				<ListItemText>{activity.name}</ListItemText>
+			</ListItem>
+		</>
 	);
 };
 

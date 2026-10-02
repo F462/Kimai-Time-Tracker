@@ -1,4 +1,6 @@
 {
+	"deleteActivity": "Aktivität löschen",
+	"deleteActivityWarning": "Wenn diese Aktivität gelöscht wird, werden auch alle damit verknüpften Arbeitszeiteinträge dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
 	"enterApiToken": "Geben Sie hier den API Schlüssel ein:",
 	"qr": {
 		"cameraPermissionRequired": "Zur Scannung von QR-Codes ist die Kameraberechtigung erforderlich.",
