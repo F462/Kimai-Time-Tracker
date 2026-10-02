@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
 	RefreshControl,
@@ -72,6 +72,14 @@ const RefreshView = ({children, style}: RefreshViewProps) => {
 export const OverviewScreen = () => {
 	const {t} = useTranslation();
 	const theme = useTheme();
+	const dispatch = useAppDispatch();
+
+	// Ensure the complete current year is loaded from the server when the
+	// overview is shown, so the aggregated numbers are based on every
+	// timesheet of the year rather than just the default page the API returns.
+	useEffect(() => {
+		dispatch(fetchTimesheets()).catch(console.warn);
+	}, [dispatch]);
 
 	const monthlyOverview = useMonthlyOverview(REFRESH_INTERVAL_MS);
 	const standardWorkingHoursPerDay = useAppSelector(

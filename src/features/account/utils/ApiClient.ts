@@ -98,7 +98,9 @@ export class ApiClient {
 			} catch {
 				// Fallback to HTTP status if body isn't JSON
 			}
-			throw new Error(errorMessage);
+			const error = new Error(errorMessage) as Error & {status?: number};
+			error.status = response.status;
+			throw error;
 		}
 
 		if (response.status === StatusCodes.NO_CONTENT) {
