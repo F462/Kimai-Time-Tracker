@@ -43,28 +43,28 @@ export const DateTimePicker = ({
 	const [mode, setMode] = useState<AndroidNativeProps['mode']>('date');
 	const [show, setShow] = useState(false);
 
-	const onChange = (
-		_event: DateTimePickerEvent,
-		selectedDate: Date | undefined,
-	) => {
-		const currentDate = selectedDate;
-		setShow(false);
-		setDate(currentDate);
-		onDateTimePick(dayjs(currentDate));
-	};
+	const onChange = useCallback(
+		(_event: DateTimePickerEvent, selectedDate: Date | undefined) => {
+			const currentDate = selectedDate;
+			setShow(false);
+			setDate(currentDate);
+			onDateTimePick(dayjs(currentDate));
+		},
+		[onDateTimePick],
+	);
 
-	const showMode = (currentMode: AndroidNativeProps['mode']) => {
+	const showMode = useCallback((currentMode: AndroidNativeProps['mode']) => {
 		setShow(true);
 		setMode(currentMode);
-	};
+	}, []);
 
-	const showDatepicker = () => {
+	const showDatepicker = useCallback(() => {
 		showMode('date');
-	};
+	}, [showMode]);
 
-	const showTimepicker = () => {
+	const showTimepicker = useCallback(() => {
 		showMode('time');
-	};
+	}, [showMode]);
 
 	const [dateTextInputValue, setDateTextInputValue] = useState<string>();
 	const updateDateTextInput = useCallback(
@@ -84,51 +84,81 @@ export const DateTimePicker = ({
 		updateTimeTextInput();
 	}, [dayjsDate, updateTimeTextInput]);
 
+	const handleDateChangeText = useCallback(
+		(text: string) => setDateTextInputValue(text),
+		[],
+	);
+
+	const handleDateEndEditing = useCallback(
+		(event: {nativeEvent: {text: string}}) => {
+			let newDate = dayjs(event.nativeEvent.text);
+			newDate =
+				dayjsDate === undefined
+					? newDate
+					: newDate.hour(dayjsDate.hour()).minute(dayjsDate.minute());
+
+			if (isValidDate(newDate.toDate())) {
+				onDateTimePick(newDate);
+			} else {
+				updateDateTextInput();
+			}
+		},
+		[dayjsDate, onDateTimePick, updateDateTextInput],
+	);
+
+	const handleTimeChangeText = useCallback(
+		(text: string) => setTimeTextInputValue(text),
+		[],
+	);
+
+	const handleTimeEndEditing = useCallback(
+		(event: {nativeEvent: {text: string}}) => {
+			let newDate = dayjs(event.nativeEvent.text, 'HH:mm');
+			newDate =
+				dayjsDate === undefined
+					? newDate
+					: newDate
+							.year(dayjsDate.year())
+							.month(dayjsDate.month())
+							.day(dayjsDate.day());
+
+			if (isValidDate(newDate.toDate())) {
+				onDateTimePick(newDate);
+			} else {
+				updateDateTextInput();
+			}
+		},
+		[dayjsDate, onDateTimePick, updateDateTextInput],
+	);
+
+	const dateIcon = useMemo(
+		() => <TextInput.Icon icon="calendar" onPress={showDatepicker} />,
+		[showDatepicker],
+	);
+
+	const timeIcon = useMemo(
+		() => <TextInput.Icon icon="clock" onPress={showTimepicker} />,
+		[showTimepicker],
+	);
+
 	return (
 		<>
 			<View style={styles.datetimePickerContainer}>
 				<TextInput
 					style={styles.datePicker}
 					value={dateTextInputValue}
-					onChangeText={(text) => setDateTextInputValue(text)}
-					onEndEditing={(event) => {
-						let newDate = dayjs(event.nativeEvent.text);
-						newDate =
-							dayjsDate === undefined
-								? newDate
-								: newDate.hour(dayjsDate.hour()).minute(dayjsDate.minute());
-
-						if (isValidDate(newDate.toDate())) {
-							onDateTimePick(newDate);
-						} else {
-							updateDateTextInput();
-						}
-					}}
+					onChangeText={handleDateChangeText}
+					onEndEditing={handleDateEndEditing}
 					label={'YYYY-MM-DD'}
-					right={<TextInput.Icon icon="calendar" onPress={showDatepicker} />}
+					right={dateIcon}
 				/>
 				<TextInput
 					style={styles.timePicker}
 					value={timeTextInputValue}
-					onChangeText={(text) => setTimeTextInputValue(text)}
-					onEndEditing={(event) => {
-						let newDate = dayjs(event.nativeEvent.text, 'HH:mm');
-						newDate =
-							dayjsDate === undefined
-								? newDate
-								: newDate
-										.year(dayjsDate.year())
-										.month(dayjsDate.month())
-										.day(dayjsDate.day());
-
-						if (isValidDate(newDate.toDate())) {
-							onDateTimePick(newDate);
-						} else {
-							updateDateTextInput();
-						}
-					}}
+					onChangeText={handleTimeChangeText}
+					onEndEditing={handleTimeEndEditing}
 					label={'HH:MM'}
-					right={<TextInput.Icon icon="clock" onPress={showTimepicker} />}
+					right={timeIcon}
 				/>
 			</View>
 			{show && (

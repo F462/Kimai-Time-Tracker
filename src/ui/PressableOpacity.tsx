@@ -1,5 +1,8 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {Pressable, StyleProp, ViewStyle} from 'react-native';
+
+const pressedStyle = {opacity: 0.25};
+const defaultStyle = {};
 
 export const PressableOpacity = ({
 	style,
@@ -7,13 +10,14 @@ export const PressableOpacity = ({
 }: Omit<React.ComponentProps<typeof Pressable>, 'style'> & {
 	style?: StyleProp<ViewStyle>;
 }) => {
-	return (
-		<Pressable
-			style={({pressed}) => [
-				style,
-				props.onPress && pressed ? {opacity: 0.25} : {},
-			]}
-			{...props}
-		/>
+	const hasPressHandler = props.onPress !== undefined;
+	const styleResolver = useCallback(
+		({pressed}: {pressed: boolean}) => [
+			style,
+			hasPressHandler && pressed ? pressedStyle : defaultStyle,
+		],
+		[style, hasPressHandler],
 	);
+
+	return <Pressable style={styleResolver} {...props} />;
 };

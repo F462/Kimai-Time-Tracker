@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useMemo} from 'react';
 import {StyleProp, StyleSheet, ViewStyle} from 'react-native';
 import {Checkbox} from 'react-native-paper';
 
@@ -25,9 +25,10 @@ export const ListItem = ({
 	onPress?: () => void;
 	onLongPress?: () => void;
 }>) => {
+	const combinedStyle = useMemo(() => [styles.container, style], [style]);
 	return (
 		<PressableOpacity
-			style={[styles.container, style]}
+			style={combinedStyle}
 			onPress={onPress}
 			onLongPress={onLongPress}
 			disabled={onPress === undefined}>

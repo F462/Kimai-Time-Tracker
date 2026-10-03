@@ -20,18 +20,22 @@ export function BaseSelector<T extends {id: number; name: string}>({
 		}));
 	}, [elements]);
 
+	const selectedArrayList = useMemo(() => {
+		return [
+			{
+				_id: selectedElement?.id.toString() ?? '',
+				value: selectedElement?.name ?? '',
+			},
+		];
+	}, [selectedElement?.id, selectedElement?.name]);
+
 	return (
 		<PaperSelect
 			label={label}
 			value={selectedElement?.name ?? ''}
 			onSelection={onSelection}
 			arrayList={elementList}
-			selectedArrayList={[
-				{
-					_id: selectedElement?.id.toString() ?? '',
-					value: selectedElement?.name ?? '',
-				},
-			]}
+			selectedArrayList={selectedArrayList}
 			multiEnable={false}
 			hideSearchBox={true}
 			textInputMode="outlined"

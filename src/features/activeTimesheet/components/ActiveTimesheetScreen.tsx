@@ -73,15 +73,17 @@ const StopButton = () => {
 	const dispatch = useAppDispatch();
 	const theme = useTheme();
 
+	const handleStop = useCallback(() => {
+		dispatch(stopActiveTimesheet()).catch(console.warn);
+	}, [dispatch]);
+
 	return (
 		<IconButton
 			icon="stop"
 			style={styles.startButton}
 			iconColor={theme.colors.primary}
 			size={200}
-			onPress={() => {
-				dispatch(stopActiveTimesheet()).catch(console.warn);
-			}}
+			onPress={handleStop}
 		/>
 	);
 };
@@ -107,6 +109,11 @@ const DatetimeSelector = () => {
 		);
 	}, [dispatch, useCurrentTime]);
 
+	const toggleUseCurrentTime = useCallback(
+		() => setUseCurrentTime((prev) => !prev),
+		[],
+	);
+
 	const dateUnixTimestamp = useAppSelector(selectNextTimesheetStartDate);
 	const handleDateTimePick = useCallback(
 		(
@@ -122,7 +129,7 @@ const DatetimeSelector = () => {
 			<Checkbox.Item
 				label={t('useCurrentDateTime')}
 				status={useCurrentTime ? 'checked' : 'unchecked'}
-				onPress={() => setUseCurrentTime(!useCurrentTime)}
+				onPress={toggleUseCurrentTime}
 			/>
 			{useCurrentTime === false ? (
 				<DateTimePicker
@@ -139,12 +146,23 @@ const ActivitySelector = () => {
 
 	const selectedActivity = useAppSelector(selectSelectedActivity);
 
+	const handleSelectActivity = useCallback(
+		(
+			activity: Parameters<
+				React.ComponentProps<
+					typeof ActivitySelectorComponent
+				>['onSelectActivity']
+			>[0],
+		) => {
+			dispatch(activitySelected(activity?.id));
+		},
+		[dispatch],
+	);
+
 	return (
 		<ActivitySelectorComponent
 			selectedActivity={selectedActivity}
-			onSelectActivity={(activity) => {
-				dispatch(activitySelected(activity?.id));
-			}}
+			onSelectActivity={handleSelectActivity}
 		/>
 	);
 };
@@ -154,10 +172,19 @@ const ProjectSelector = () => {
 
 	const selectedProject = useAppSelector(selectSelectedProject);
 
+	const handleSelectProject = useCallback(
+		(
+			project: Parameters<
+				React.ComponentProps<typeof ProjectSelectorComponent>['onSelectProject']
+			>[0],
+		) => dispatch(projectSelected(project?.id)),
+		[dispatch],
+	);
+
 	return (
 		<ProjectSelectorComponent
 			selectedProject={selectedProject}
-			onSelectProject={(project) => dispatch(projectSelected(project?.id))}
+			onSelectProject={handleSelectProject}
 		/>
 	);
 };
@@ -173,22 +200,27 @@ const StartButton = () => {
 
 	const iconSize = 200;
 
+	const handleStart = useCallback(() => {
+		dispatch(
+			newTimesheetStarted({
+				id: uuidv4(),
+				begin: (nextTimesheetStartDatetime
+					? dayjs.unix(nextTimesheetStartDatetime)
+					: new Date()
+				).toISOString(),
+				project: selectedProjectId,
+				activity: selectedActivityId,
+			}),
+		);
+	}, [
+		dispatch,
+		nextTimesheetStartDatetime,
+		selectedProjectId,
+		selectedActivityId,
+	]);
+
 	return canTimesheetBeStarted ? (
-		<PressableOpacity
-			style={styles.startButton}
-			onPress={() => {
-				dispatch(
-					newTimesheetStarted({
-						id: uuidv4(),
-						begin: (nextTimesheetStartDatetime
-							? dayjs.unix(nextTimesheetStartDatetime)
-							: new Date()
-						).toISOString(),
-						project: selectedProjectId,
-						activity: selectedActivityId,
-					}),
-				);
-			}}>
+		<PressableOpacity style={styles.startButton} onPress={handleStart}>
 			<AppIcon width={iconSize} height={iconSize} />
 		</PressableOpacity>
 	) : null;
