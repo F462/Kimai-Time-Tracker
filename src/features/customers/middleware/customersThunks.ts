@@ -1,6 +1,10 @@
 import {api} from 'src/features/account/utils/ApiClient';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
-import {customerRemoved, customersReceived} from '../context/customersSlice';
+import {
+	customerRemoved,
+	customersReceived,
+	customerUpdated,
+} from '../context/customersSlice';
 import {Customer} from '../types';
 
 export const fetchCustomers = createAppAsyncThunk(
@@ -23,6 +27,27 @@ export const removeCustomer = createAppAsyncThunk<void, number>(
 			dispatch(customerRemoved(customerId));
 		} catch (error: any) {
 			console.warn(`Got error on delete request: ${error.toString()}`);
+		}
+	},
+);
+
+export const updateCustomer = createAppAsyncThunk(
+	'customers/updateCustomer',
+	async (customer: Customer, {dispatch}) => {
+		try {
+			const response = await api.patch<Customer>(
+				`api/customers/${customer.id.toString()}`,
+				{
+					name: customer.name,
+					number: customer.number,
+					comment: customer.comment,
+					visible: customer.visible,
+					billable: customer.billable,
+				},
+			);
+			dispatch(customerUpdated(response));
+		} catch (error: any) {
+			console.warn(`Got error on update request: ${error.toString()}`);
 		}
 	},
 );

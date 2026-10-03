@@ -22,6 +22,7 @@
 	"displayTitle": "Display",
 	"edit": "Edit",
 	"editActivity": "Edit Activity",
+	"editCustomer": "Edit Customer",
 	"editTimesheet": "Edit Timesheet",
 	"enterApiToken": "Enter the API token here:",
 	"enterServerUrl": "Enter Server URL:",

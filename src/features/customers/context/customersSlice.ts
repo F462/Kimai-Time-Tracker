@@ -27,9 +27,16 @@ const customersSlice = createSlice({
 				state.selectedCustomerId = undefined;
 			}
 		},
+		customerUpdated: (state, {payload: customer}: PayloadAction<Customer>) => {
+			state.customers[customer.id] = customer;
+		},
 	},
 });
 
-export const {customersReceived, customerSelected, customerRemoved} =
-	customersSlice.actions;
+export const {
+	customersReceived,
+	customerSelected,
+	customerRemoved,
+	customerUpdated,
+} = customersSlice.actions;
 export const customersReducer = customersSlice.reducer;

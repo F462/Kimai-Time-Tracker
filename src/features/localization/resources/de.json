@@ -11,6 +11,7 @@
 	"dismiss": "Verwerfen",
 	"edit": "Bearbeiten",
 	"editActivity": "Aktivität bearbeiten",
+	"editCustomer": "Kunde bearbeiten",
 	"enterApiToken": "Geben Sie hier den API Schlüssel ein:",
 	"qr": {
 		"cameraPermissionRequired": "Zur Scannung von QR-Codes ist die Kameraberechtigung erforderlich.",
