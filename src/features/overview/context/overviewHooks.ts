@@ -3,7 +3,7 @@ import {useEffect} from 'react';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {computeOverview} from '../middleware/overviewThunks';
 import type {MonthlyOverviewData} from '../utils/overviewUtils';
-import {selectMonthlyOverview} from './overviewSelectors';
+import {selectOverviewState} from './overviewSelectors';
 
 /**
  * Returns the monthly overview as pre-computed by `computeOverview` (which is
@@ -17,7 +17,7 @@ import {selectMonthlyOverview} from './overviewSelectors';
  */
 export const useMonthlyOverview = (): MonthlyOverviewData | null => {
 	const dispatch = useAppDispatch();
-	const overview = useAppSelector(selectMonthlyOverview);
+	const overview = useAppSelector(selectOverviewState);
 
 	useEffect(() => {
 		if (overview === null) {
