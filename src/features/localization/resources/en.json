@@ -10,6 +10,8 @@
 	"billable": "Billable",
 	"chooseProjectAndActivity": "Choose project and activity on Smartphone to continue",
 	"comment": "Comment",
+	"country": "Country (ISO code)",
+	"currency": "Currency (ISO code)",
 	"createApiToken": "Create API token",
 	"delete": "Delete",
 	"addActivity": "Add Activity",
@@ -28,12 +30,14 @@
 	"editCustomer": "Edit Customer",
 	"editProject": "Edit Project",
 	"editTimesheet": "Edit Timesheet",
+	"language": "Language",
 	"enterApiToken": "Enter the API token here:",
 	"enterServerUrl": "Enter Server URL:",
 	"exportLogs": "Export logs",
 	"expectedHours": "Expected hours",
 	"monthlyBreakdown": "Monthly breakdown",
 	"total": "Total",
+	"timezone": "Timezone",
 	"onboarding": {
 		"appStillInDevelopment": "The app is still in development. Do not use for production! The app will need a re-installation with full data loss on update."
 	},

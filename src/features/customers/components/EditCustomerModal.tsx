@@ -1,6 +1,6 @@
 import {useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {
 	Button,
 	Modal,
@@ -23,6 +23,7 @@ const styles = StyleSheet.create({
 	},
 	modalContent: {
 		marginVertical: 10,
+		maxHeight: '70%',
 	},
 	switchRow: {
 		flexDirection: 'row',
@@ -64,11 +65,21 @@ export const EditCustomerModal = ({
 	const [name, setName] = useState(customer.name);
 	const [number, setNumber] = useState(customer.number);
 	const [comment, setComment] = useState(customer.comment ?? '');
+	const [country, setCountry] = useState(customer.country);
+	const [language, setLanguage] = useState(customer.language);
+	const [currency, setCurrency] = useState(customer.currency);
+	const [timezone, setTimezone] = useState(customer.timezone);
 	const [isVisible, setIsVisible] = useState(customer.visible);
 	const [isBillable, setIsBillable] = useState(customer.billable);
 
 	const onSave = useCallback(() => {
-		if (!name.trim()) {
+		if (
+			!name.trim() ||
+			!country.trim() ||
+			!language.trim() ||
+			!currency.trim() ||
+			!timezone.trim()
+		) {
 			return;
 		}
 
@@ -76,6 +87,10 @@ export const EditCustomerModal = ({
 			updateCustomer({
 				...customer,
 				name: name.trim(),
+				country: country.trim(),
+				language: language.trim(),
+				currency: currency.trim(),
+				timezone: timezone.trim(),
 				number: number.trim(),
 				comment: comment || null,
 				visible: isVisible,
@@ -85,13 +100,17 @@ export const EditCustomerModal = ({
 		onHideModal();
 	}, [
 		comment,
+		country,
+		currency,
 		customer,
 		dispatch,
 		isBillable,
 		isVisible,
+		language,
 		name,
 		number,
 		onHideModal,
+		timezone,
 	]);
 
 	return (
@@ -101,7 +120,7 @@ export const EditCustomerModal = ({
 				onDismiss={onHideModal}
 				contentContainerStyle={[styles.modal, dynamicStyles.modal]}>
 				<Text variant="headlineSmall">{t('editCustomer')}</Text>
-				<View style={styles.modalContent}>
+				<ScrollView style={styles.modalContent}>
 					<TextInput
 						label={t('name')}
 						mode="outlined"
@@ -113,6 +132,32 @@ export const EditCustomerModal = ({
 						mode="outlined"
 						value={number}
 						onChangeText={setNumber}
+					/>
+					<TextInput
+						label={t('country')}
+						mode="outlined"
+						value={country}
+						onChangeText={setCountry}
+						autoCapitalize="characters"
+					/>
+					<TextInput
+						label={t('language')}
+						mode="outlined"
+						value={language}
+						onChangeText={setLanguage}
+					/>
+					<TextInput
+						label={t('currency')}
+						mode="outlined"
+						value={currency}
+						onChangeText={setCurrency}
+						autoCapitalize="characters"
+					/>
+					<TextInput
+						label={t('timezone')}
+						mode="outlined"
+						value={timezone}
+						onChangeText={setTimezone}
 					/>
 					<TextInput
 						label={t('comment')}
@@ -129,10 +174,19 @@ export const EditCustomerModal = ({
 						<Text>{t('billable')}</Text>
 						<Switch value={isBillable} onValueChange={setIsBillable} />
 					</View>
-				</View>
+				</ScrollView>
 				<View style={styles.buttonContainer}>
 					<Button onPress={onHideModal}>{t('dismiss')}</Button>
-					<Button mode="contained" onPress={onSave} disabled={!name.trim()}>
+					<Button
+						mode="contained"
+						onPress={onSave}
+						disabled={
+							!name.trim() ||
+							!country.trim() ||
+							!language.trim() ||
+							!currency.trim() ||
+							!timezone.trim()
+						}>
 						{t('save')}
 					</Button>
 				</View>

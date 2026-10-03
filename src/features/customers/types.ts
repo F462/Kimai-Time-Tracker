@@ -3,6 +3,9 @@ export type Customer = {
 	name: string;
 	number: string;
 	comment: string | null;
+	country: string;
+	language: string;
+	timezone: string;
 	visible: boolean;
 	billable: boolean;
 	currency: string;

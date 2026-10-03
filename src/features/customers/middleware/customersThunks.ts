@@ -10,6 +10,10 @@ import {Customer} from '../types';
 
 export type CreateCustomerPayload = {
 	name: string;
+	country: string;
+	language: string;
+	currency: string;
+	timezone: string;
 	number?: string | null;
 	comment?: string | null;
 	visible?: boolean;
@@ -50,6 +54,10 @@ export const updateCustomer = createAppAsyncThunk(
 					name: customer.name,
 					number: customer.number,
 					comment: customer.comment,
+					country: customer.country,
+					language: customer.language,
+					currency: customer.currency,
+					timezone: customer.timezone,
 					visible: customer.visible,
 					billable: customer.billable,
 				},
@@ -67,6 +75,10 @@ export const createCustomer = createAppAsyncThunk<
 >('customers/createCustomer', async (payload, {dispatch}) => {
 	const body: Record<string, unknown> = {
 		name: payload.name,
+		country: payload.country,
+		language: payload.language,
+		currency: payload.currency,
+		timezone: payload.timezone,
 	};
 
 	if (payload.number !== undefined && payload.number !== null) {

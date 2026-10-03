@@ -1,6 +1,6 @@
 import {useCallback, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {StyleSheet, View} from 'react-native';
+import {ScrollView, StyleSheet, View} from 'react-native';
 import {
 	Button,
 	Modal,
@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
 	},
 	modalContent: {
 		marginVertical: 10,
+		maxHeight: '70%',
 	},
 	switchRow: {
 		flexDirection: 'row',
@@ -61,6 +62,12 @@ export const AddCustomerModal = ({
 	const [name, setName] = useState('');
 	const [number, setNumber] = useState('');
 	const [comment, setComment] = useState('');
+	const [country, setCountry] = useState('');
+	const [language, setLanguage] = useState('en');
+	const [currency, setCurrency] = useState('EUR');
+	const [timezone, setTimezone] = useState(
+		new Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+	);
 	const [isVisible, setIsVisible] = useState(true);
 	const [isBillable, setIsBillable] = useState(true);
 
@@ -69,19 +76,35 @@ export const AddCustomerModal = ({
 			setName('');
 			setNumber('');
 			setComment('');
+			setCountry('');
+			setLanguage('en');
+			setCurrency('EUR');
+			setTimezone(
+				new Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+			);
 			setIsVisible(true);
 			setIsBillable(true);
 		}
 	}, [visible]);
 
 	const onSave = useCallback(() => {
-		if (!name.trim()) {
+		if (
+			!name.trim() ||
+			!country.trim() ||
+			!language.trim() ||
+			!currency.trim() ||
+			!timezone.trim()
+		) {
 			return;
 		}
 
 		dispatch(
 			createCustomer({
 				name: name.trim(),
+				country: country.trim(),
+				language: language.trim(),
+				currency: currency.trim(),
+				timezone: timezone.trim(),
 				number: number || null,
 				comment: comment || null,
 				visible: isVisible,
@@ -90,7 +113,19 @@ export const AddCustomerModal = ({
 		).catch(console.error);
 
 		onHideModal();
-	}, [comment, dispatch, isBillable, isVisible, name, number, onHideModal]);
+	}, [
+		comment,
+		country,
+		currency,
+		dispatch,
+		isBillable,
+		isVisible,
+		language,
+		name,
+		number,
+		onHideModal,
+		timezone,
+	]);
 
 	return (
 		<Portal>
@@ -99,7 +134,7 @@ export const AddCustomerModal = ({
 				onDismiss={onHideModal}
 				contentContainerStyle={[styles.modal, dynamicStyles.modal]}>
 				<Text variant="headlineSmall">{t('addCustomer')}</Text>
-				<View style={styles.modalContent}>
+				<ScrollView style={styles.modalContent}>
 					<TextInput
 						label={t('name')}
 						mode="outlined"
@@ -111,6 +146,32 @@ export const AddCustomerModal = ({
 						mode="outlined"
 						value={number}
 						onChangeText={setNumber}
+					/>
+					<TextInput
+						label={t('country')}
+						mode="outlined"
+						value={country}
+						onChangeText={setCountry}
+						autoCapitalize="characters"
+					/>
+					<TextInput
+						label={t('language')}
+						mode="outlined"
+						value={language}
+						onChangeText={setLanguage}
+					/>
+					<TextInput
+						label={t('currency')}
+						mode="outlined"
+						value={currency}
+						onChangeText={setCurrency}
+						autoCapitalize="characters"
+					/>
+					<TextInput
+						label={t('timezone')}
+						mode="outlined"
+						value={timezone}
+						onChangeText={setTimezone}
 					/>
 					<TextInput
 						label={t('comment')}
@@ -127,10 +188,19 @@ export const AddCustomerModal = ({
 						<Text>{t('billable')}</Text>
 						<Switch value={isBillable} onValueChange={setIsBillable} />
 					</View>
-				</View>
+				</ScrollView>
 				<View style={styles.buttonContainer}>
 					<Button onPress={onHideModal}>{t('dismiss')}</Button>
-					<Button mode="contained" onPress={onSave} disabled={!name.trim()}>
+					<Button
+						mode="contained"
+						onPress={onSave}
+						disabled={
+							!name.trim() ||
+							!country.trim() ||
+							!language.trim() ||
+							!currency.trim() ||
+							!timezone.trim()
+						}>
 						{t('save')}
 					</Button>
 				</View>
