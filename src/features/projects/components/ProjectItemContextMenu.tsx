@@ -28,6 +28,7 @@ export const ProjectItemContextMenu = ({
 		<EntityItemContextMenu
 			visible={visible}
 			onHideMenu={onHideMenu}
+			title={project.name}
 			deleteTitle={t('deleteProject')}
 			deleteWarning={t('deleteProjectWarning')}
 			onConfirmDelete={onConfirmDelete}

@@ -28,6 +28,7 @@ export const CustomerItemContextMenu = ({
 		<EntityItemContextMenu
 			visible={visible}
 			onHideMenu={onHideMenu}
+			title={customer.name}
 			deleteTitle={t('deleteCustomer')}
 			deleteWarning={t('deleteCustomerWarning')}
 			onConfirmDelete={onConfirmDelete}

@@ -28,6 +28,7 @@ export const ActivityItemContextMenu = ({
 		<EntityItemContextMenu
 			visible={visible}
 			onHideMenu={onHideMenu}
+			title={activity.name}
 			deleteTitle={t('deleteActivity')}
 			deleteWarning={t('deleteActivityWarning')}
 			onConfirmDelete={onConfirmDelete}

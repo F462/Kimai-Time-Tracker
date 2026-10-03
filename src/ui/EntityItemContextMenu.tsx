@@ -12,6 +12,9 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		marginTop: 10,
 	},
+	menuTitle: {
+		marginBottom: 10,
+	},
 	modal: {
 		margin: 20,
 		padding: 20,
@@ -26,6 +29,8 @@ export type EntityItemContextMenuProps = {
 	visible: boolean;
 	/** Hides the context menu. */
 	onHideMenu: () => void;
+	/** Name of the entry the menu applies to, shown as the menu title. */
+	title: string;
 	/** Title of the deletion confirmation, e.g. `t('deleteActivity')`. */
 	deleteTitle: string;
 	/** Warning text shown in the deletion confirmation. */
@@ -46,6 +51,7 @@ export type EntityItemContextMenuProps = {
 export const EntityItemContextMenu = ({
 	visible,
 	onHideMenu,
+	title,
 	deleteTitle,
 	deleteWarning,
 	onConfirmDelete,
@@ -107,6 +113,9 @@ export const EntityItemContextMenu = ({
 				visible={visible}
 				onDismiss={onHideMenu}
 				contentContainerStyle={[styles.modal, dynamicStyles.modal]}>
+				<Text variant="headlineSmall" style={styles.menuTitle}>
+					{title}
+				</Text>
 				<List.Item
 					title={t('delete')}
 					onPress={onOpenDeleteConfirmation}
