@@ -3896,14 +3896,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@shopify/flash-list@npm:^2.3.2":
-  version: 2.3.2
-  resolution: "@shopify/flash-list@npm:2.3.2"
+"@shopify/flash-list@npm:^2.3.3":
+  version: 2.3.3
+  resolution: "@shopify/flash-list@npm:2.3.3"
   peerDependencies:
     "@babel/runtime": "*"
     react: "*"
     react-native: "*"
-  checksum: 10c0/3e58913506b1dc7f02dd0696c478fd963ede413d9d7121705a08ff505d5c21e611813ce9370068238b8983ff582ed7b8ee94f68e94f99a1ac8f600c01fff118e
+  checksum: 10c0/c94af22f8b034d9f24e8ea3628ac20597cdb00f8c250d24a8e7adb86bc2a41cf10234c2fd87315bf7a34211db87d7eba40bddda610847cb6afedd2d6a1a3ffe5
   languageName: node
   linkType: hard
 
@@ -9029,7 +9029,7 @@ __metadata:
     "@react-navigation/native": "npm:^7.5.0"
     "@reduxjs/toolkit": "npm:^2.13.0"
     "@sbaiahmed1/react-native-biometrics": "npm:^0.16.1"
-    "@shopify/flash-list": "npm:^2.3.2"
+    "@shopify/flash-list": "npm:^2.3.3"
     "@testing-library/react-native": "npm:^13.3.3"
     "@types/jest": "npm:^30.0.0"
     "@types/lodash": "npm:^4.17.25"
@@ -9057,7 +9057,7 @@ __metadata:
     react-i18next: "npm:^17.0.15"
     react-native: "npm:0.87.1"
     react-native-blob-util: "npm:^0.25.1"
-    react-native-bootsplash: "npm:^7.3.3"
+    react-native-bootsplash: "npm:^7.3.4"
     react-native-device-info: "npm:^15.0.2"
     react-native-encrypted-storage: "npm:^4.0.3"
     react-native-file-logger: "npm:^0.7.3"
@@ -9070,7 +9070,7 @@ __metadata:
     react-native-paper-select: "npm:^1.5.0"
     react-native-reanimated: "npm:^4.6.0"
     react-native-safe-area-context: "npm:^5.10.1"
-    react-native-screens: "npm:^4.27.0"
+    react-native-screens: "npm:^4.28.0"
     react-native-share: "npm:^12.3.1"
     react-native-svg: "npm:^15.15.5"
     react-native-svg-transformer: "npm:^1.5.3"
@@ -10679,9 +10679,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-bootsplash@npm:^7.3.3":
-  version: 7.3.3
-  resolution: "react-native-bootsplash@npm:7.3.3"
+"react-native-bootsplash@npm:^7.3.4":
+  version: 7.3.4
+  resolution: "react-native-bootsplash@npm:7.3.4"
   dependencies:
     "@expo/config-plugins": "npm:*"
     commander: "npm:^14.0.3"
@@ -10699,7 +10699,7 @@ __metadata:
     react-native: "*"
   bin:
     react-native-bootsplash: cli.js
-  checksum: 10c0/28729cae8bbb3a1171f8806921ca877d63c815af5e72beeba4b2ffdd655d1c02c23651de091ce8237f9590587b830f87708da13775aade0949c50f27808edba2
+  checksum: 10c0/b68470f34433aea9ab2093abf130105e712b158671dbacade05ef025d532992684837f6b123c7b8cfc004527d7d50daffc1ea93b38b8afc83b3f45055731a41d
   languageName: node
   linkType: hard
 
@@ -10878,16 +10878,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-screens@npm:^4.27.0":
-  version: 4.27.0
-  resolution: "react-native-screens@npm:4.27.0"
+"react-native-screens@npm:^4.28.0":
+  version: 4.28.0
+  resolution: "react-native-screens@npm:4.28.0"
   dependencies:
     react-freeze: "npm:^1.0.0"
     warn-once: "npm:^0.1.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10c0/357674b881189ff8933f457acadbfc3030a376d0ccdfb4b6005462aabbf38287d4d0f39a301cb94c45df6c2e09be28bcfc4d71298c8d34b8ac87ebe639e46ff9
+  checksum: 10c0/5bd57be437b1966e50f71917c26b80cac38e73d2e23bfa7fb093d8613d2d80a38ffedeb77a5ea6e2664787fba2f1ede58ced9ed2c79af786f67272b114683b59
   languageName: node
   linkType: hard
 
