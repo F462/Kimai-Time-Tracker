@@ -29,6 +29,7 @@ import {customersReducer} from 'src/features/customers/context/customersSlice';
 import {createLoggingMiddleware} from 'src/features/logging/middleware/middleware';
 import {networkReducer} from 'src/features/network/context/networkSlice';
 import {onboardingReducer} from 'src/features/onboarding/context/onboardingSlice';
+import {overviewReducer} from 'src/features/overview/context/overviewSlice';
 import {projectsReducer} from 'src/features/projects/context/projectsSlice';
 import {settingsReducer} from 'src/features/settings/context/settingsSlice';
 import {ResetSyncStateTransform} from 'src/features/synchronization/context/ResetSyncStateTransform';
@@ -42,7 +43,10 @@ import {startRootListener} from '../middleware/rootListener';
 const persistConfig = {
 	key: 'root',
 	storage: AsyncStorage,
-	blacklist: ['appState', 'network'],
+	// The overview is derived from the timesheets and the settings, so it is
+	// not persisted; it is re-calculated from the persisted timesheets on
+	// start-up.
+	blacklist: ['appState', 'network', 'overview'],
 	transforms: [ResetSyncStateTransform],
 };
 
@@ -54,6 +58,7 @@ const appReducer = combineReducers({
 	customers: customersReducer,
 	network: networkReducer,
 	onboarding: onboardingReducer,
+	overview: overviewReducer,
 	projects: projectsReducer,
 	settings: settingsReducer,
 	synchronization: synchronizationReducer,

@@ -1,6 +1,7 @@
 import React, {useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
+	ActivityIndicator,
 	RefreshControl,
 	ScrollView,
 	StyleProp,
@@ -18,14 +19,17 @@ import {useMonthlyOverview} from '../context/overviewHooks';
 import {formatSignedDurationInSeconds} from '../utils/overviewUtils';
 import {MonthDetailCard} from './MonthDetailCard';
 
-const REFRESH_INTERVAL_MS = 5000;
-
 const styles = StyleSheet.create({
 	container: {
 		gap: 16,
 	},
 	refreshView: {
 		flex: 1,
+	},
+	loadingContainer: {
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'center',
 	},
 	card: {
 		borderRadius: 16,
@@ -73,7 +77,7 @@ export const OverviewScreen = () => {
 	const {t} = useTranslation();
 	const theme = useTheme();
 
-	const monthlyOverview = useMonthlyOverview(REFRESH_INTERVAL_MS);
+	const monthlyOverview = useMonthlyOverview();
 	const standardWorkingHoursPerDay = useAppSelector(
 		selectStandardWorkingHoursPerDay,
 	);
@@ -103,6 +107,17 @@ export const OverviewScreen = () => {
 			theme.colors.error,
 		],
 	);
+
+	// The overview is computed in the background (see the overview listeners and
+	// thunk) from the timesheets in the store. Until that first calculation has
+	// run the screen has nothing to display yet.
+	if (monthlyOverview === null) {
+		return (
+			<View style={styles.loadingContainer}>
+				<ActivityIndicator />
+			</View>
+		);
+	}
 
 	const yearIsPositive = monthlyOverview.yearDeltaInSeconds >= 0;
 

@@ -139,14 +139,34 @@ export type MonthDetail = {
 };
 
 /**
- * Computes the per-day detail for a single month. Each day's delta is the
- * worked time on that day minus the expected time (the configured standard
- * working hours on working days, zero on weekends). The per-day deltas sum up
- * to the month's total delta.
+ * Maps every calendar day (keyed by `YYYY-MM-DD`) to the total seconds of
+ * worked time logged on that day. The day key and the duration of each
+ * timesheet are computed once, avoiding the repeated `dayjs` constructions a
+ * per-day scan would otherwise require.
  */
-export const getMonthDetail = (
-	month: dayjs.Dayjs,
+const buildWorkedByDay = (
 	timesheets: Array<Timesheet>,
+	now: dayjs.Dayjs,
+): Map<string, number> => {
+	const workedByDay = new Map<string, number>();
+
+	for (const timesheet of timesheets) {
+		if (timesheet.begin === undefined) {
+			continue;
+		}
+
+		const key = dayjs(timesheet.begin).format('YYYY-MM-DD');
+		const duration = getTimesheetDurationInSeconds(timesheet, now);
+
+		workedByDay.set(key, (workedByDay.get(key) ?? 0) + duration);
+	}
+
+	return workedByDay;
+};
+
+const getMonthDetailFromWorkedByDay = (
+	month: dayjs.Dayjs,
+	workedByDay: Map<string, number>,
 	now: dayjs.Dayjs,
 	standardWorkingHoursPerDay: number,
 ): MonthDetail => {
@@ -161,14 +181,7 @@ export const getMonthDetail = (
 		const day = month.date(dayOfMonth);
 		const working = isWorkingDay(day);
 		const expected = working ? standardWorkingHoursPerDay * 3600 : 0;
-		const worked = timesheets.reduce(
-			(sum, timesheet) =>
-				timesheet.begin !== undefined &&
-				dayjs(timesheet.begin).isSame(day, 'day')
-					? sum + getTimesheetDurationInSeconds(timesheet, now)
-					: sum,
-			0,
-		);
+		const worked = workedByDay.get(day.format('YYYY-MM-DD')) ?? 0;
 
 		workedSeconds += worked;
 		expectedSeconds += expected;
@@ -218,7 +231,29 @@ export const getMonthDetail = (
 };
 
 /**
+ * Computes the per-day detail for a single month. Each day's delta is the
+ * worked time on that day minus the expected time (the configured standard
+ * working hours on working days, zero on weekends). The per-day deltas sum up
+ * to the month's total delta.
+ */
+export const getMonthDetail = (
+	month: dayjs.Dayjs,
+	timesheets: Array<Timesheet>,
+	now: dayjs.Dayjs,
+	standardWorkingHoursPerDay: number,
+): MonthDetail =>
+	getMonthDetailFromWorkedByDay(
+		month,
+		buildWorkedByDay(timesheets, now),
+		now,
+		standardWorkingHoursPerDay,
+	);
+
+/**
  * Computes the per-day detail for all twelve months of the given year.
+ *
+ * The worked-by-day map is built once and reused for every month, so the
+ * timesheets are scanned a single time instead of once per day of the year.
  */
 export const getYearMonthDetails = (
 	year: dayjs.Dayjs,
@@ -226,13 +261,15 @@ export const getYearMonthDetails = (
 	now: dayjs.Dayjs,
 	standardWorkingHoursPerDay: number,
 ): Array<MonthDetail> => {
+	const workedByDay = buildWorkedByDay(timesheets, now);
+
 	const months: Array<MonthDetail> = [];
 
 	for (let month = 0; month < 12; month++) {
 		months.push(
-			getMonthDetail(
+			getMonthDetailFromWorkedByDay(
 				year.month(month),
-				timesheets,
+				workedByDay,
 				now,
 				standardWorkingHoursPerDay,
 			),
@@ -240,4 +277,56 @@ export const getYearMonthDetails = (
 	}
 
 	return months;
+};
+
+export type MonthlyOverviewData = {
+	months: Array<MonthDetail>;
+	yearDeltaInSeconds: number;
+	yearExpectedInSeconds: number;
+	yearWorkedInSeconds: number;
+	/**
+	 * The configured standard working hours per day the calculation was based
+	 * on, so consumers can detect when a stored overview has become stale
+	 * because the setting changed after it was calculated.
+	 */
+	standardWorkingHoursPerDay: number;
+};
+
+/**
+ * Aggregates the per-month breakdown of the current year into a single
+ * summary. Only days up to and including today are summed, so the expected
+ * hours of future days do not drag the totals negative.
+ */
+export const computeMonthlyOverview = (
+	now: dayjs.Dayjs,
+	yearTimesheets: Array<Timesheet>,
+	standardWorkingHoursPerDay: number,
+): MonthlyOverviewData => {
+	const months = getYearMonthDetails(
+		now,
+		yearTimesheets,
+		now,
+		standardWorkingHoursPerDay,
+	);
+
+	const pastDays = months.flatMap((month) =>
+		month.days.filter((day) => !day.isFuture),
+	);
+
+	return {
+		months,
+		yearDeltaInSeconds: pastDays.reduce(
+			(sum, day) => sum + day.deltaSeconds,
+			0,
+		),
+		yearExpectedInSeconds: pastDays.reduce(
+			(sum, day) => sum + day.expectedSeconds,
+			0,
+		),
+		yearWorkedInSeconds: pastDays.reduce(
+			(sum, day) => sum + day.workedSeconds,
+			0,
+		),
+		standardWorkingHoursPerDay,
+	};
 };
