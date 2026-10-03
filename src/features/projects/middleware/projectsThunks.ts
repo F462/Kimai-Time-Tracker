@@ -1,11 +1,21 @@
 import {api} from 'src/features/account/utils/ApiClient';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
 import {
+	projectCreated,
 	projectRemoved,
 	projectsReceived,
 	projectUpdated,
 } from '../context/projectsSlice';
 import {Project} from '../types';
+
+export type CreateProjectPayload = {
+	name: string;
+	customer: number;
+	number?: string | null;
+	comment?: string | null;
+	visible?: boolean;
+	billable?: boolean;
+};
 
 export const fetchProjects = createAppAsyncThunk(
 	'Projects/fetchProjects',
@@ -49,5 +59,31 @@ export const updateProject = createAppAsyncThunk(
 		} catch (error: any) {
 			console.warn(`Got error on update request: ${error.toString()}`);
 		}
+	},
+);
+
+export const createProject = createAppAsyncThunk<Project, CreateProjectPayload>(
+	'Projects/createProject',
+	async (payload, {dispatch}) => {
+		const body: Record<string, unknown> = {
+			name: payload.name,
+			customer: payload.customer,
+		};
+
+		if (payload.number !== undefined && payload.number !== null) {
+			body.number = payload.number;
+		}
+
+		if (payload.comment !== undefined && payload.comment !== null) {
+			body.comment = payload.comment;
+		}
+
+		body.visible = payload.visible ?? true;
+		body.billable = payload.billable ?? true;
+
+		const response = await api.post<Project>('api/projects', body);
+		dispatch(projectCreated(response));
+
+		return response;
 	},
 );

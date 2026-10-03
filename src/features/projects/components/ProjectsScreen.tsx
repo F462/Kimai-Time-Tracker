@@ -1,4 +1,7 @@
 import React, {useCallback, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {StyleSheet} from 'react-native';
+import {FAB} from 'react-native-paper';
 
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {BaseScreen} from 'src/ui/BaseScreen';
@@ -10,7 +13,16 @@ import {
 } from '../context/projectsSelectors';
 import {projectSelected} from '../context/projectsSlice';
 import {Project} from '../types';
+import {AddProjectModal} from './AddProjectModal';
 import {ProjectItemContextMenu} from './ProjectItemContextMenu';
+
+const styles = StyleSheet.create({
+	fab: {
+		position: 'absolute',
+		right: 20,
+		bottom: 20,
+	},
+});
 
 const ProjectItem = ({
 	project,
@@ -63,9 +75,22 @@ const ProjectList = () => {
 };
 
 export const ProjectsScreen = () => {
+	const {t} = useTranslation();
+	const [addModalVisible, setAddModalVisible] = useState(false);
+
+	const onShowAddModal = useCallback(() => setAddModalVisible(true), []);
+	const onHideAddModal = useCallback(() => setAddModalVisible(false), []);
+
 	return (
 		<BaseScreen>
 			<ProjectList />
+			<FAB
+				icon="plus"
+				label={t('addProject')}
+				onPress={onShowAddModal}
+				style={styles.fab}
+			/>
+			<AddProjectModal visible={addModalVisible} onHideModal={onHideAddModal} />
 		</BaseScreen>
 	);
 };

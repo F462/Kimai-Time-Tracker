@@ -33,6 +33,9 @@ const projectsSlice = createSlice({
 		projectUpdated: (state, {payload: project}: PayloadAction<Project>) => {
 			state.projects[project.id] = project;
 		},
+		projectCreated: (state, {payload: project}: PayloadAction<Project>) => {
+			state.projects[project.id] = project;
+		},
 	},
 });
 
@@ -41,5 +44,6 @@ export const {
 	projectSelected,
 	projectRemoved,
 	projectUpdated,
+	projectCreated,
 } = projectsSlice.actions;
 export const projectsReducer = projectsSlice.reducer;
