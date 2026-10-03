@@ -22,6 +22,7 @@ import {MonthDetailCard} from './MonthDetailCard';
 const styles = StyleSheet.create({
 	container: {
 		gap: 16,
+		marginHorizontal: 16,
 	},
 	refreshView: {
 		flex: 1,
