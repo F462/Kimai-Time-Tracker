@@ -3,8 +3,7 @@ import React, {useCallback} from 'react';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {BaseScreen} from 'src/ui/BaseScreen';
 import {DividedList} from 'src/ui/DividedList';
-import {ListItem} from 'src/ui/ListItem';
-import {ListItemText} from 'src/ui/ListItemText';
+import {EntityListItem} from 'src/ui/EntityListItem';
 import {
 	selectProjectList,
 	selectSelectedProjectId,
@@ -25,9 +24,11 @@ const ProjectItem = ({
 	}, [dispatch, project.id]);
 
 	return (
-		<ListItem isSelected={isSelected} onPress={onProjectItemPress}>
-			<ListItemText>{project.name}</ListItemText>
-		</ListItem>
+		<EntityListItem
+			name={project.name}
+			isSelected={isSelected}
+			onPress={onProjectItemPress}
+		/>
 	);
 };
 

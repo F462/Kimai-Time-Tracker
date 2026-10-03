@@ -3,8 +3,7 @@ import React, {useCallback, useState} from 'react';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {BaseScreen} from 'src/ui/BaseScreen';
 import {DividedList} from 'src/ui/DividedList';
-import {ListItem} from 'src/ui/ListItem';
-import {ListItemText} from 'src/ui/ListItemText';
+import {EntityListItem} from 'src/ui/EntityListItem';
 import {
 	selectActivityList,
 	selectSelectedActivityId,
@@ -30,19 +29,19 @@ const ActivityItem = ({
 	const onHideContextMenu = useCallback(() => setContextMenuVisible(false), []);
 
 	return (
-		<>
-			<ActivityItemContextMenu
-				activity={activity}
-				visible={contextMenuVisible}
-				onHideMenu={onHideContextMenu}
-			/>
-			<ListItem
-				isSelected={isSelected}
-				onPress={onSelectActivity}
-				onLongPress={onOpenContextMenu}>
-				<ListItemText>{activity.name}</ListItemText>
-			</ListItem>
-		</>
+		<EntityListItem
+			name={activity.name}
+			isSelected={isSelected}
+			onPress={onSelectActivity}
+			onLongPress={onOpenContextMenu}
+			contextMenu={
+				<ActivityItemContextMenu
+					activity={activity}
+					visible={contextMenuVisible}
+					onHideMenu={onHideContextMenu}
+				/>
+			}
+		/>
 	);
 };
 

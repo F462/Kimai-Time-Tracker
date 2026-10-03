@@ -4,6 +4,7 @@ import {Customer, CustomersState} from '../types';
 
 const initialState: CustomersState = {
 	customers: {},
+	selectedCustomerId: undefined,
 };
 
 const customersSlice = createSlice({
@@ -13,8 +14,14 @@ const customersSlice = createSlice({
 		customersReceived: (state, {payload}: PayloadAction<Array<Customer>>) => {
 			state.customers = payload;
 		},
+		customerSelected: (
+			state,
+			{payload: customerId}: PayloadAction<number | undefined>,
+		) => {
+			state.selectedCustomerId = customerId;
+		},
 	},
 });
 
-export const {customersReceived} = customersSlice.actions;
+export const {customersReceived, customerSelected} = customersSlice.actions;
 export const customersReducer = customersSlice.reducer;

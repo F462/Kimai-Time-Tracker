@@ -13,4 +13,5 @@ export type Customer = {
 
 export type CustomersState = {
 	customers: {[id: number]: Customer};
+	selectedCustomerId: number | undefined;
 };

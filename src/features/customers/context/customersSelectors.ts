@@ -13,3 +13,8 @@ export const selectCustomerList = createSelector(
 	[selectCustomers],
 	(customers) => Object.values(customers),
 );
+
+export const selectSelectedCustomerId = createSelector(
+	[selectCustomersState],
+	(customerState) => customerState.selectedCustomerId,
+);
