@@ -23,6 +23,7 @@
 	"edit": "Edit",
 	"editActivity": "Edit Activity",
 	"editCustomer": "Edit Customer",
+	"editProject": "Edit Project",
 	"editTimesheet": "Edit Timesheet",
 	"enterApiToken": "Enter the API token here:",
 	"enterServerUrl": "Enter Server URL:",

@@ -1,10 +1,11 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 
 import {useAppDispatch} from 'src/features/data/context/store';
 import {EntityItemContextMenu} from 'src/ui/EntityItemContextMenu';
 import {removeProject} from '../middleware/projectsThunks';
 import {Project} from '../types';
+import {EditProjectModal} from './EditProjectModal';
 
 type ProjectItemContextMenuProps = {
 	project: Project;
@@ -19,19 +20,34 @@ export const ProjectItemContextMenu = ({
 }: ProjectItemContextMenuProps) => {
 	const {t} = useTranslation();
 	const dispatch = useAppDispatch();
+	const [editModalVisible, setEditModalVisible] = useState(false);
 
 	const onConfirmDelete = useCallback(() => {
 		dispatch(removeProject(project.id)).catch(console.error);
 	}, [project.id, dispatch]);
 
+	const onEditPressed = useCallback(() => {
+		setEditModalVisible(true);
+	}, []);
+
+	const onHideEditModal = useCallback(() => setEditModalVisible(false), []);
+
 	return (
-		<EntityItemContextMenu
-			visible={visible}
-			onHideMenu={onHideMenu}
-			title={project.name}
-			deleteTitle={t('deleteProject')}
-			deleteWarning={t('deleteProjectWarning')}
-			onConfirmDelete={onConfirmDelete}
-		/>
+		<>
+			<EditProjectModal
+				project={project}
+				visible={editModalVisible}
+				onHideModal={onHideEditModal}
+			/>
+			<EntityItemContextMenu
+				visible={visible}
+				onHideMenu={onHideMenu}
+				title={project.name}
+				deleteTitle={t('deleteProject')}
+				deleteWarning={t('deleteProjectWarning')}
+				onConfirmDelete={onConfirmDelete}
+				onEdit={onEditPressed}
+			/>
+		</>
 	);
 };

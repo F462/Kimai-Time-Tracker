@@ -30,9 +30,16 @@ const projectsSlice = createSlice({
 				state.selectedProjectId = undefined;
 			}
 		},
+		projectUpdated: (state, {payload: project}: PayloadAction<Project>) => {
+			state.projects[project.id] = project;
+		},
 	},
 });
 
-export const {projectsReceived, projectSelected, projectRemoved} =
-	projectsSlice.actions;
+export const {
+	projectsReceived,
+	projectSelected,
+	projectRemoved,
+	projectUpdated,
+} = projectsSlice.actions;
 export const projectsReducer = projectsSlice.reducer;

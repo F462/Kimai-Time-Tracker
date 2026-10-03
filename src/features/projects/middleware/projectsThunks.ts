@@ -1,6 +1,10 @@
 import {api} from 'src/features/account/utils/ApiClient';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
-import {projectRemoved, projectsReceived} from '../context/projectsSlice';
+import {
+	projectRemoved,
+	projectsReceived,
+	projectUpdated,
+} from '../context/projectsSlice';
 import {Project} from '../types';
 
 export const fetchProjects = createAppAsyncThunk(
@@ -23,6 +27,27 @@ export const removeProject = createAppAsyncThunk<void, number>(
 			dispatch(projectRemoved(projectId));
 		} catch (error: any) {
 			console.warn(`Got error on delete request: ${error.toString()}`);
+		}
+	},
+);
+
+export const updateProject = createAppAsyncThunk(
+	'Projects/updateProject',
+	async (project: Project, {dispatch}) => {
+		try {
+			const response = await api.patch<Project>(
+				`api/projects/${project.id.toString()}`,
+				{
+					name: project.name,
+					number: project.number,
+					comment: project.comment,
+					visible: project.visible,
+					billable: project.billable,
+				},
+			);
+			dispatch(projectUpdated(response));
+		} catch (error: any) {
+			console.warn(`Got error on update request: ${error.toString()}`);
 		}
 	},
 );
