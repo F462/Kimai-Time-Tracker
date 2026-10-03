@@ -1,18 +1,20 @@
-import {configureStore, type Store} from '@reduxjs/toolkit';
+import {configureStore} from '@reduxjs/toolkit';
 import dayjs from 'dayjs';
 
 import {api} from 'src/features/account/utils/ApiClient';
+import type {AppDispatch} from 'src/features/data/context/store';
+import {synchronizationReducer} from 'src/features/synchronization/context/synchronizationSlice';
+import {synchronizeTimesheet} from 'src/features/synchronization/middleware/synchronizationThunks';
+import {timesheetEdited} from 'src/features/timesheets/context/timesheetActions';
 import {
 	timesheetsReducer,
 	timesheetsUpdated,
 } from 'src/features/timesheets/context/timesheetsSlice';
 import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
-import {TimesheetFromApi, TimesheetsState} from 'src/features/timesheets/types';
-
-type TestState = {timesheets: TimesheetsState};
+import {Timesheet, TimesheetFromApi} from 'src/features/timesheets/types';
 
 jest.mock('src/features/account/utils/ApiClient', () => ({
-	api: {get: jest.fn()},
+	api: {get: jest.fn(), post: jest.fn(), patch: jest.fn()},
 	ApiClient: {getInstance: jest.fn()},
 }));
 
@@ -38,8 +40,22 @@ const makeTimesheets = (from: number, to: number): Array<TimesheetFromApi> =>
 		makeTimesheet(from + index),
 	);
 
+const configureTestStore = () =>
+	configureStore({
+		reducer: {
+			timesheets: timesheetsReducer,
+			synchronization: synchronizationReducer,
+		},
+	});
+
+type TestStore = Omit<ReturnType<typeof configureTestStore>, 'dispatch'> & {
+	dispatch: AppDispatch;
+};
+
+const createTestStore = (): TestStore => configureTestStore() as TestStore;
+
 describe('fetchTimesheets', () => {
-	let store: Store<TestState>;
+	let store: TestStore;
 
 	const localTimesheetCount = () =>
 		Object.keys(store.getState().timesheets.timesheets).length;
@@ -47,11 +63,11 @@ describe('fetchTimesheets', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
 		(api.get as jest.Mock).mockResolvedValue([]);
-		store = configureStore({reducer: {timesheets: timesheetsReducer}});
+		store = createTestStore();
 	});
 
 	it('requests the full current year with pagination enabled', async () => {
-		await (store.dispatch as any)(fetchTimesheets());
+		await store.dispatch(fetchTimesheets());
 
 		const year = dayjs().year();
 		const requestedUrl = (api.get as jest.Mock).mock.calls[0][0] as string;
@@ -67,7 +83,7 @@ describe('fetchTimesheets', () => {
 	it('fetches a single page when all entries fit into one page', async () => {
 		(api.get as jest.Mock).mockResolvedValueOnce(makeTimesheets(1, 3));
 
-		await (store.dispatch as any)(fetchTimesheets());
+		await store.dispatch(fetchTimesheets());
 
 		expect(api.get).toHaveBeenCalledTimes(1);
 		expect(localTimesheetCount()).toBe(3);
@@ -78,7 +94,7 @@ describe('fetchTimesheets', () => {
 			.mockResolvedValueOnce(makeTimesheets(1, 500))
 			.mockResolvedValueOnce(makeTimesheets(501, 700));
 
-		await (store.dispatch as any)(fetchTimesheets());
+		await store.dispatch(fetchTimesheets());
 
 		expect(api.get).toHaveBeenCalledTimes(2);
 		expect(localTimesheetCount()).toBe(700);
@@ -97,7 +113,7 @@ describe('fetchTimesheets', () => {
 				Object.assign(new Error('HTTP 404: Not Found'), {status: 404}),
 			);
 
-		await (store.dispatch as any)(fetchTimesheets());
+		await store.dispatch(fetchTimesheets());
 
 		expect(api.get).toHaveBeenCalledTimes(2);
 		expect(localTimesheetCount()).toBe(500);
@@ -119,7 +135,7 @@ describe('fetchTimesheets', () => {
 			makeTimesheet(999),
 		]);
 
-		await (store.dispatch as any)(fetchTimesheets());
+		await store.dispatch(fetchTimesheets());
 
 		const {timesheets, timesheetIdTable} = store.getState().timesheets;
 
@@ -147,7 +163,7 @@ describe('fetchTimesheets', () => {
 
 		(api.get as jest.Mock).mockResolvedValueOnce([makeTimesheet(7)]);
 
-		await (store.dispatch as any)(fetchTimesheets());
+		await store.dispatch(fetchTimesheets());
 
 		const {timesheets, timesheetIdTable} = store.getState().timesheets;
 
@@ -157,5 +173,55 @@ describe('fetchTimesheets', () => {
 		expect(timesheetIdTable[localId]).toBeUndefined();
 		// The server timesheet was added on top
 		expect(localTimesheetCount()).toBe(2);
+	});
+
+	it('retries sync with the latest local timesheet after a running sync is interrupted by an edit', async () => {
+		const localId = 'local-edit-sync';
+		const initialTimesheet: Timesheet = {
+			id: localId,
+			begin: '2026-03-01T08:00:00',
+			end: '2026-03-01T09:00:00',
+			project: 1,
+			activity: 1,
+		};
+		const updatedTimesheet: Timesheet = {
+			...initialTimesheet,
+			end: '2026-03-01T10:00:00',
+		};
+		const firstResponse = makeTimesheet(42);
+		let resolveRequest: ((value: TimesheetFromApi) => void) | undefined;
+
+		store = createTestStore();
+		store.dispatch(
+			timesheetsUpdated({
+				timesheets: {[localId]: initialTimesheet},
+				newTimesheetsIdTable: {},
+			}),
+		);
+		(api.post as jest.Mock).mockImplementation(
+			() =>
+				new Promise<TimesheetFromApi>((resolve) => {
+					resolveRequest = resolve;
+				}),
+		);
+		(api.patch as jest.Mock).mockResolvedValue(makeTimesheet(42));
+		(api.get as jest.Mock).mockResolvedValueOnce([firstResponse]);
+
+		const firstSync = store.dispatch(
+			synchronizeTimesheet({timesheet: initialTimesheet}),
+		);
+
+		store.dispatch(timesheetEdited(updatedTimesheet));
+		await store.dispatch(synchronizeTimesheet({timesheet: updatedTimesheet}));
+
+		resolveRequest?.(firstResponse);
+		await firstSync;
+
+		await Promise.resolve();
+
+		expect((api.patch as jest.Mock).mock.calls).toHaveLength(1);
+		expect((api.patch as jest.Mock).mock.calls[0][1]).toMatchObject({
+			end: updatedTimesheet.end,
+		});
 	});
 });

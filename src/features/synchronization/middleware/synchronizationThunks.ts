@@ -14,7 +14,7 @@ import {
 	timesheetSynchronizationStarted,
 } from '../context/synchronizationSlice';
 
-const resyncTimesheetRequests: {[timesheetId: string]: boolean} = {};
+const resyncTimesheetRequests: {[timesheetId: string]: Timesheet} = {};
 
 export const deleteTimesheet = createAppAsyncThunk<
 	void,
@@ -49,11 +49,12 @@ export const synchronizeTimesheet = createAppAsyncThunk<
 >(
 	'synchronization/synchronizeTimesheet',
 	async ({timesheet}, {dispatch, getState}) => {
-		if (
-			resyncTimesheetRequests[timesheet.id] !== true &&
-			selectIsTimesheetSyncRunning(timesheet.id)(getState())
-		) {
-			resyncTimesheetRequests[timesheet.id] = true;
+		if (timesheet === undefined || timesheet.id === undefined) {
+			return;
+		}
+
+		if (selectIsTimesheetSyncRunning(timesheet.id)(getState())) {
+			resyncTimesheetRequests[timesheet.id] = timesheet;
 			return;
 		}
 
@@ -98,9 +99,12 @@ export const synchronizeTimesheet = createAppAsyncThunk<
 			console.error(`Error while syncing sheet: ${error.toString()}`);
 			dispatch(timesheetSyncFailed(timesheet.id));
 		} finally {
-			if (resyncTimesheetRequests[timesheet.id] === true) {
+			const queuedTimesheet = resyncTimesheetRequests[timesheet.id];
+			if (queuedTimesheet !== undefined) {
 				delete resyncTimesheetRequests[timesheet.id];
-				dispatch(synchronizeTimesheet({timesheet})).catch(console.error);
+				dispatch(synchronizeTimesheet({timesheet: queuedTimesheet})).catch(
+					console.error,
+				);
 			}
 		}
 	},
