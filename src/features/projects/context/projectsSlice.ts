@@ -23,8 +23,16 @@ const projectsSlice = createSlice({
 		) => {
 			state.selectedProjectId = projectId;
 		},
+		projectRemoved: (state, {payload: projectId}: PayloadAction<number>) => {
+			delete state.projects[projectId];
+
+			if (state.selectedProjectId === projectId) {
+				state.selectedProjectId = undefined;
+			}
+		},
 	},
 });
 
-export const {projectsReceived, projectSelected} = projectsSlice.actions;
+export const {projectsReceived, projectSelected, projectRemoved} =
+	projectsSlice.actions;
 export const projectsReducer = projectsSlice.reducer;

@@ -20,8 +20,16 @@ const customersSlice = createSlice({
 		) => {
 			state.selectedCustomerId = customerId;
 		},
+		customerRemoved: (state, {payload: customerId}: PayloadAction<number>) => {
+			delete state.customers[customerId];
+
+			if (state.selectedCustomerId === customerId) {
+				state.selectedCustomerId = undefined;
+			}
+		},
 	},
 });
 
-export const {customersReceived, customerSelected} = customersSlice.actions;
+export const {customersReceived, customerSelected, customerRemoved} =
+	customersSlice.actions;
 export const customersReducer = customersSlice.reducer;

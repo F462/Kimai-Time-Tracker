@@ -1,6 +1,12 @@
 {
+	"delete": "Löschen",
 	"deleteActivity": "Aktivität löschen",
 	"deleteActivityWarning": "Wenn diese Aktivität gelöscht wird, werden auch alle damit verknüpften Arbeitszeiteinträge dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+	"deleteCustomer": "Kunde löschen",
+	"deleteCustomerWarning": "Wenn dieser Kunde gelöscht wird, werden auch alle damit verknüpften Projekte, Aktivitäten und Arbeitszeiteinträge dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+	"deleteProject": "Projekt löschen",
+	"deleteProjectWarning": "Wenn dieses Projekt gelöscht wird, werden auch alle damit verknüpften Aktivitäten und Arbeitszeiteinträge dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+	"dismiss": "Verwerfen",
 	"enterApiToken": "Geben Sie hier den API Schlüssel ein:",
 	"qr": {
 		"cameraPermissionRequired": "Zur Scannung von QR-Codes ist die Kameraberechtigung erforderlich.",

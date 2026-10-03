@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {BaseScreen} from 'src/ui/BaseScreen';
@@ -10,6 +10,7 @@ import {
 } from '../context/customersSelectors';
 import {customerSelected} from '../context/customersSlice';
 import {Customer} from '../types';
+import {CustomerItemContextMenu} from './CustomerItemContextMenu';
 
 const CustomerItem = ({
 	customer,
@@ -19,16 +20,27 @@ const CustomerItem = ({
 	isSelected: boolean;
 }) => {
 	const dispatch = useAppDispatch();
+	const [contextMenuVisible, setContextMenuVisible] = useState(false);
 
 	const onSelectCustomer = useCallback(() => {
 		dispatch(customerSelected(customer.id));
 	}, [dispatch, customer.id]);
+	const onOpenContextMenu = useCallback(() => setContextMenuVisible(true), []);
+	const onHideContextMenu = useCallback(() => setContextMenuVisible(false), []);
 
 	return (
 		<EntityListItem
 			name={customer.name}
 			isSelected={isSelected}
 			onPress={onSelectCustomer}
+			onLongPress={onOpenContextMenu}
+			contextMenu={
+				<CustomerItemContextMenu
+					customer={customer}
+					visible={contextMenuVisible}
+					onHideMenu={onHideContextMenu}
+				/>
+			}
 		/>
 	);
 };
