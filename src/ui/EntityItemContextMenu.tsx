@@ -37,6 +37,13 @@ export type EntityItemContextMenuProps = {
 	deleteWarning: string;
 	/** Called when the user confirms the deletion in the confirmation dialog. */
 	onConfirmDelete: () => void;
+	/** Optional: title of the edit entry, e.g. `t('edit')`. Defaults to `t('edit')`. */
+	editTitle?: string;
+	/**
+	 * Optional: called when the user presses the "Edit" entry in the menu.
+	 * When provided, an "Edit" entry is shown above "Delete".
+	 */
+	onEdit?: () => void;
 };
 
 /**
@@ -55,6 +62,8 @@ export const EntityItemContextMenu = ({
 	deleteTitle,
 	deleteWarning,
 	onConfirmDelete,
+	editTitle,
+	onEdit,
 }: EntityItemContextMenuProps) => {
 	const theme = useTheme();
 	const {t} = useTranslation();
@@ -75,6 +84,11 @@ export const EntityItemContextMenu = ({
 		setDeleteConfirmationVisible(false);
 		onConfirmDelete();
 	}, [onConfirmDelete]);
+
+	const onEditPressed = useCallback(() => {
+		onHideMenu();
+		onEdit?.();
+	}, [onHideMenu, onEdit]);
 
 	const dynamicStyles = useStyle(
 		() => ({
@@ -116,6 +130,13 @@ export const EntityItemContextMenu = ({
 				<Text variant="headlineSmall" style={styles.menuTitle}>
 					{title}
 				</Text>
+				{onEdit && (
+					<List.Item
+						title={editTitle ?? t('edit')}
+						onPress={onEditPressed}
+						left={(props) => createListIcon(props, 'pencil-outline')}
+					/>
+				)}
 				<List.Item
 					title={t('delete')}
 					onPress={onOpenDeleteConfirmation}

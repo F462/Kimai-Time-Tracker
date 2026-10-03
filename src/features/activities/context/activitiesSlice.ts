@@ -30,9 +30,16 @@ const activitiesSlice = createSlice({
 				state.selectedActivityId = undefined;
 			}
 		},
+		activityUpdated: (state, {payload: activity}: PayloadAction<Activity>) => {
+			state.activities[activity.id] = activity;
+		},
 	},
 });
 
-export const {activitiesReceived, activitySelected, activityRemoved} =
-	activitiesSlice.actions;
+export const {
+	activitiesReceived,
+	activitySelected,
+	activityRemoved,
+	activityUpdated,
+} = activitiesSlice.actions;
 export const activitiesReducer = activitiesSlice.reducer;

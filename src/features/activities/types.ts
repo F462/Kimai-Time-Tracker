@@ -1,7 +1,7 @@
 export type Activity = {
 	id: number;
 	name: string;
-	number: string;
+	number: string | null;
 	comment: string | null;
 	visible: boolean;
 	billable: boolean;

@@ -1,10 +1,11 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 
 import {useAppDispatch} from 'src/features/data/context/store';
 import {EntityItemContextMenu} from 'src/ui/EntityItemContextMenu';
 import {removeActivity} from '../middleware/activitiesThunks';
 import {Activity} from '../types';
+import {EditActivityModal} from './EditActivityModal';
 
 type ActivityItemContextMenuProps = {
 	activity: Activity;
@@ -19,19 +20,34 @@ export const ActivityItemContextMenu = ({
 }: ActivityItemContextMenuProps) => {
 	const {t} = useTranslation();
 	const dispatch = useAppDispatch();
+	const [editModalVisible, setEditModalVisible] = useState(false);
 
 	const onConfirmDelete = useCallback(() => {
 		dispatch(removeActivity(activity.id)).catch(console.error);
 	}, [activity.id, dispatch]);
 
+	const onEditPressed = useCallback(() => {
+		setEditModalVisible(true);
+	}, []);
+
+	const onHideEditModal = useCallback(() => setEditModalVisible(false), []);
+
 	return (
-		<EntityItemContextMenu
-			visible={visible}
-			onHideMenu={onHideMenu}
-			title={activity.name}
-			deleteTitle={t('deleteActivity')}
-			deleteWarning={t('deleteActivityWarning')}
-			onConfirmDelete={onConfirmDelete}
-		/>
+		<>
+			<EditActivityModal
+				activity={activity}
+				visible={editModalVisible}
+				onHideModal={onHideEditModal}
+			/>
+			<EntityItemContextMenu
+				visible={visible}
+				onHideMenu={onHideMenu}
+				title={activity.name}
+				deleteTitle={t('deleteActivity')}
+				deleteWarning={t('deleteActivityWarning')}
+				onConfirmDelete={onConfirmDelete}
+				onEdit={onEditPressed}
+			/>
+		</>
 	);
 };
