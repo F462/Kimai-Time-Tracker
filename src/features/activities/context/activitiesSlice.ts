@@ -33,6 +33,9 @@ const activitiesSlice = createSlice({
 		activityUpdated: (state, {payload: activity}: PayloadAction<Activity>) => {
 			state.activities[activity.id] = activity;
 		},
+		activityCreated: (state, {payload: activity}: PayloadAction<Activity>) => {
+			state.activities[activity.id] = activity;
+		},
 	},
 });
 
@@ -41,5 +44,6 @@ export const {
 	activitySelected,
 	activityRemoved,
 	activityUpdated,
+	activityCreated,
 } = activitiesSlice.actions;
 export const activitiesReducer = activitiesSlice.reducer;

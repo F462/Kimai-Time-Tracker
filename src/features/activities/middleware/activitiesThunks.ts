@@ -2,10 +2,19 @@ import {api} from 'src/features/account/utils/ApiClient';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
 import {
 	activitiesReceived,
+	activityCreated,
 	activityRemoved,
 	activityUpdated,
 } from '../context/activitiesSlice';
 import {Activity} from '../types';
+
+export type CreateActivityPayload = {
+	name: string;
+	number?: string | null;
+	comment?: string | null;
+	visible?: boolean;
+	billable?: boolean;
+};
 
 export const fetchActivities = createAppAsyncThunk(
 	'activities/fetchActivities',
@@ -51,3 +60,29 @@ export const updateActivity = createAppAsyncThunk(
 		}
 	},
 );
+
+export const createActivity = createAppAsyncThunk<
+	Activity,
+	CreateActivityPayload
+>('activities/createActivity', async (payload, {dispatch}) => {
+	const body: Record<string, unknown> = {
+		name: payload.name,
+	};
+
+	if (payload.number !== undefined && payload.number !== null) {
+		body.number = payload.number;
+	}
+
+	if (payload.comment !== undefined && payload.comment !== null) {
+		body.comment = payload.comment;
+	}
+
+	body.visible = payload.visible ?? true;
+	body.billable = payload.billable ?? true;
+
+	const response = await api.post<Activity>('api/activities', body);
+
+	dispatch(activityCreated(response));
+
+	return response;
+});

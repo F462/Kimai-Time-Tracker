@@ -1,4 +1,7 @@
 import React, {useCallback, useState} from 'react';
+import {useTranslation} from 'react-i18next';
+import {StyleSheet} from 'react-native';
+import {FAB} from 'react-native-paper';
 
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {BaseScreen} from 'src/ui/BaseScreen';
@@ -11,6 +14,15 @@ import {
 import {activitySelected} from '../context/activitiesSlice';
 import {Activity} from '../types';
 import {ActivityItemContextMenu} from './ActivityItemContextMenu';
+import {AddActivityModal} from './AddActivityModal';
+
+const styles = StyleSheet.create({
+	fab: {
+		position: 'absolute',
+		right: 20,
+		bottom: 20,
+	},
+});
 
 const ActivityItem = ({
 	activity,
@@ -63,9 +75,25 @@ const ActivityList = () => {
 };
 
 export const ActivitiesScreen = () => {
+	const {t} = useTranslation();
+	const [addModalVisible, setAddModalVisible] = useState(false);
+
+	const onShowAddModal = useCallback(() => setAddModalVisible(true), []);
+	const onHideAddModal = useCallback(() => setAddModalVisible(false), []);
+
 	return (
 		<BaseScreen>
 			<ActivityList />
+			<FAB
+				icon="plus"
+				label={t('addActivity')}
+				onPress={onShowAddModal}
+				style={styles.fab}
+			/>
+			<AddActivityModal
+				visible={addModalVisible}
+				onHideModal={onHideAddModal}
+			/>
 		</BaseScreen>
 	);
 };
