@@ -1,11 +1,20 @@
 import {api} from 'src/features/account/utils/ApiClient';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
 import {
+	customerCreated,
 	customerRemoved,
 	customersReceived,
 	customerUpdated,
 } from '../context/customersSlice';
 import {Customer} from '../types';
+
+export type CreateCustomerPayload = {
+	name: string;
+	number?: string | null;
+	comment?: string | null;
+	visible?: boolean;
+	billable?: boolean;
+};
 
 export const fetchCustomers = createAppAsyncThunk(
 	'customers/fetchCustomers',
@@ -51,3 +60,29 @@ export const updateCustomer = createAppAsyncThunk(
 		}
 	},
 );
+
+export const createCustomer = createAppAsyncThunk<
+	Customer,
+	CreateCustomerPayload
+>('customers/createCustomer', async (payload, {dispatch}) => {
+	const body: Record<string, unknown> = {
+		name: payload.name,
+	};
+
+	if (payload.number !== undefined && payload.number !== null) {
+		body.number = payload.number;
+	}
+
+	if (payload.comment !== undefined && payload.comment !== null) {
+		body.comment = payload.comment;
+	}
+
+	body.visible = payload.visible ?? true;
+	body.billable = payload.billable ?? true;
+
+	const response = await api.post<Customer>('api/customers', body);
+
+	dispatch(customerCreated(response));
+
+	return response;
+});

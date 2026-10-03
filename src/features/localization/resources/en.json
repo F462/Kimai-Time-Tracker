@@ -13,6 +13,7 @@
 	"createApiToken": "Create API token",
 	"delete": "Delete",
 	"addActivity": "Add Activity",
+	"addCustomer": "Add Customer",
 	"deleteActivity": "Delete activity",
 	"deleteActivityWarning": "Deleting this activity will also permanently delete all of its linked timesheets. This action cannot be undone.",
 	"deleteCustomer": "Delete customer",

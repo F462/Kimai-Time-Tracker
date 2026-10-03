@@ -2,6 +2,7 @@
 	"billable": "Abrechenbar",
 	"delete": "Löschen",
 	"addActivity": "Aktivität hinzufügen",
+	"addCustomer": "Kunde hinzufügen",
 	"deleteActivity": "Aktivität löschen",
 	"deleteActivityWarning": "Wenn diese Aktivität gelöscht wird, werden auch alle damit verknüpften Arbeitszeiteinträge dauerhaft gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
 	"deleteCustomer": "Kunde löschen",

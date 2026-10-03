@@ -30,6 +30,9 @@ const customersSlice = createSlice({
 		customerUpdated: (state, {payload: customer}: PayloadAction<Customer>) => {
 			state.customers[customer.id] = customer;
 		},
+		customerCreated: (state, {payload: customer}: PayloadAction<Customer>) => {
+			state.customers[customer.id] = customer;
+		},
 	},
 });
 
@@ -38,5 +41,6 @@ export const {
 	customerSelected,
 	customerRemoved,
 	customerUpdated,
+	customerCreated,
 } = customersSlice.actions;
 export const customersReducer = customersSlice.reducer;
