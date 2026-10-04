@@ -4,6 +4,7 @@
 	"license": "GPL-3.0-only",
 	"private": true,
 	"scripts": {
+		"postinstall": "yarn licenses generate-disclaimer -A -r -o src/assets/license.txt",
 		"android": "react-native run-android",
 		"ios": "react-native run-ios",
 		"lint": "eslint .",
