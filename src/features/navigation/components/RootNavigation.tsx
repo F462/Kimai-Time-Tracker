@@ -56,6 +56,15 @@ const SessionUnlockComponent = () => {
 
 const RootDrawer = createDrawerNavigator();
 
+const linking = {
+	prefixes: ['kimai://'],
+	config: {
+		screens: {
+			ActiveTimesheet: 'active-timesheet',
+		},
+	},
+};
+
 const useInitialRouteName = () => {
 	const isUserLoggedIn = useSelector(selectIsUserLoggedIn);
 
@@ -80,6 +89,7 @@ export const RootNavigation = () => {
 			) : (
 				<NavigationContainer
 					theme={theme}
+					linking={linking}
 					onReady={() => {
 						BootSplash.hide().catch(console.error);
 					}}>

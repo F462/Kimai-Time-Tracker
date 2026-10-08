@@ -14,7 +14,14 @@
 		9D844D74A037475598F51B1B /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C8438A3006FA4A5B82AF8443 /* Colors.xcassets */; };
 		B7BBA3242D41554C001FB066 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7BBA3232D41554C001FB066 /* AppDelegate.swift */; };
 		FADA4D029F382D7B9839D26D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
+		F00100000000000000000001 /* WidgetBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000002 /* WidgetBridge.m */; };
+		F00100000000000000000003 /* TimesheetWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = F00100000000000000000004 /* TimesheetWidget.swift */; };
+		F00100000000000000000005 /* TimesheetWidget.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = F00100000000000000000006 /* TimesheetWidget.appex */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		F00100000000000000000020 /* PBXContainerItemProxy */ = {isa = PBXContainerItemProxy; containerPortal = 83CBB9F71A601CBA00E9B192 /* Project object */; proxyType = 1; remoteGlobalIDString = F00100000000000000000013; remoteInfo = TimesheetWidget; };
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		13B07F961A680F5B00A75B9A /* KimaiTimeTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KimaiTimeTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -29,6 +36,12 @@
 		B7BBA3232D41554C001FB066 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C8438A3006FA4A5B82AF8443 /* Colors.xcassets */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = folder.assetcatalog; name = Colors.xcassets; path = KimaiTimeTracker/Colors.xcassets; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F00100000000000000000002 /* WidgetBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WidgetBridge.m; sourceTree = "<group>"; };
+		F00100000000000000000004 /* TimesheetWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimesheetWidget.swift; sourceTree = "<group>"; };
+		F00100000000000000000006 /* TimesheetWidget.appex */ = {isa = PBXFileReference; explicitFileType = wrapper.app-extension; includeInIndex = 0; path = TimesheetWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		F00100000000000000000007 /* TimesheetWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TimesheetWidget.entitlements; sourceTree = "<group>"; };
+		F00100000000000000000008 /* TimesheetWidget-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F00100000000000000000009 /* KimaiTimeTracker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = KimaiTimeTracker.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,6 +53,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F00100000000000000000010 /* TimesheetWidget Frameworks */ = {isa = PBXFrameworksBuildPhase; buildActionMask = 2147483647; files = (); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -47,6 +61,8 @@
 			isa = PBXGroup;
 			children = (
 				B7BBA3232D41554C001FB066 /* AppDelegate.swift */,
+				F00100000000000000000002 /* WidgetBridge.m */,
+				F00100000000000000000009 /* KimaiTimeTracker.entitlements */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
@@ -57,6 +73,7 @@
 			name = KimaiTimeTracker;
 			sourceTree = "<group>";
 		};
+		F00100000000000000000011 /* TimesheetWidget */ = {isa = PBXGroup; children = (F00100000000000000000004 /* TimesheetWidget.swift */, F00100000000000000000007 /* TimesheetWidget.entitlements */, F00100000000000000000008 /* TimesheetWidget-Info.plist */, ); path = TimesheetWidget; sourceTree = "<group>"; };
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -77,6 +94,7 @@
 			isa = PBXGroup;
 			children = (
 				13B07FAE1A68108700A75B9A /* KimaiTimeTracker */,
+				F00100000000000000000011 /* TimesheetWidget */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
@@ -91,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* KimaiTimeTracker.app */,
+				F00100000000000000000006 /* TimesheetWidget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -118,17 +137,24 @@
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				00EEFC60759A1932668264C0 /* [CP] Embed Pods Frameworks */,
 				E235C05ADACE081382539298 /* [CP] Copy Pods Resources */,
+				F00100000000000000000012 /* Embed App Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				F00100000000000000000017 /* TimesheetWidget target dependency */,
 			);
 			name = KimaiTimeTracker;
 			productName = KimaiTimeTracker;
 			productReference = 13B07F961A680F5B00A75B9A /* KimaiTimeTracker.app */;
 			productType = "com.apple.product-type.application";
 		};
+		F00100000000000000000013 /* TimesheetWidget */ = {isa = PBXNativeTarget; buildConfigurationList = F00100000000000000000014 /* Build configuration list for PBXNativeTarget "TimesheetWidget" */; buildPhases = (F00100000000000000000015 /* Sources */, F00100000000000000000010 /* TimesheetWidget Frameworks */, ); buildRules = (); dependencies = (); name = TimesheetWidget; productName = TimesheetWidget; productReference = F00100000000000000000006 /* TimesheetWidget.appex */; productType = "com.apple.product-type.app-extension"; };
 /* End PBXNativeTarget section */
+
+/* Begin PBXTargetDependency section */
+		F00100000000000000000017 /* TimesheetWidget target dependency */ = {isa = PBXTargetDependency; target = F00100000000000000000013 /* TimesheetWidget */; targetProxy = F00100000000000000000020 /* PBXContainerItemProxy */; };
+/* End PBXTargetDependency section */
 
 /* Begin PBXProject section */
 		83CBB9F71A601CBA00E9B192 /* Project object */ = {
@@ -155,11 +181,13 @@
 			projectRoot = "";
 			targets = (
 				13B07F861A680F5B00A75B9A /* KimaiTimeTracker */,
+				F00100000000000000000013 /* TimesheetWidget */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		F00100000000000000000012 /* Embed App Extensions */ = {isa = PBXCopyFilesBuildPhase; buildActionMask = 2147483647; dstPath = ""; dstSubfolderSpec = 13; files = (F00100000000000000000005 /* TimesheetWidget.appex in Embed App Extensions */, ); name = "Embed App Extensions"; runOnlyForDeploymentPostprocessing = 0; };
 		13B07F8E1A680F5B00A75B9A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -255,9 +283,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				B7BBA3242D41554C001FB066 /* AppDelegate.swift in Sources */,
+				F00100000000000000000001 /* WidgetBridge.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		F00100000000000000000015 /* TimesheetWidget Sources */ = {isa = PBXSourcesBuildPhase; buildActionMask = 2147483647; files = (F00100000000000000000003 /* TimesheetWidget.swift in Sources */, ); runOnlyForDeploymentPostprocessing = 0; };
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
@@ -282,6 +312,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.f462.kimaitimetracker;
+				CODE_SIGN_ENTITLEMENTS = KimaiTimeTracker/KimaiTimeTracker.entitlements;
 				PRODUCT_NAME = KimaiTimeTracker;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -311,6 +342,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.github.f462.kimaitimetracker;
+				CODE_SIGN_ENTITLEMENTS = KimaiTimeTracker/KimaiTimeTracker.entitlements;
 				PRODUCT_NAME = KimaiTimeTracker;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
 				SWIFT_VERSION = 5.0;
@@ -319,6 +351,8 @@
 			};
 			name = Release;
 		};
+		F00100000000000000000018 /* TimesheetWidget Debug */ = {isa = XCBuildConfiguration; buildSettings = {APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_ENTITLEMENTS = TimesheetWidget/TimesheetWidget.entitlements; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = TimesheetWidget/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.github.f462.kimaitimetracker.TimesheetWidget; PRODUCT_NAME = TimesheetWidget; SDKROOT = iphoneos; SKIP_INSTALL = YES; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Debug; };
+		F00100000000000000000019 /* TimesheetWidget Release */ = {isa = XCBuildConfiguration; buildSettings = {APPLICATION_EXTENSION_API_ONLY = YES; CODE_SIGN_ENTITLEMENTS = TimesheetWidget/TimesheetWidget.entitlements; GENERATE_INFOPLIST_FILE = NO; INFOPLIST_FILE = TimesheetWidget/Info.plist; IPHONEOS_DEPLOYMENT_TARGET = 17.0; PRODUCT_BUNDLE_IDENTIFIER = com.github.f462.kimaitimetracker.TimesheetWidget; PRODUCT_NAME = TimesheetWidget; SDKROOT = iphoneos; SKIP_INSTALL = YES; SUPPORTED_PLATFORMS = "iphoneos iphonesimulator"; SWIFT_VERSION = 5.0; TARGETED_DEVICE_FAMILY = "1,2"; }; name = Release; };
 		83CBBA201A601CBA00E9B192 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -483,6 +517,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		F00100000000000000000014 /* Build configuration list for PBXNativeTarget "TimesheetWidget" */ = {isa = XCConfigurationList; buildConfigurations = (F00100000000000000000018 /* TimesheetWidget Debug */, F00100000000000000000019 /* TimesheetWidget Release */, ); defaultConfigurationIsVisible = 0; defaultConfigurationName = Release; };
 		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "KimaiTimeTracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

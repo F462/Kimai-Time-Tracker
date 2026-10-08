@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Kimai Time Tracker</string>
+    <string name="widget_worked_today">Worked today</string>
 </resources>

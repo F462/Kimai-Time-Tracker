@@ -3,6 +3,7 @@ import {Portal} from 'react-native-paper';
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 
+import {TimesheetWidgetIntegration} from 'src/features/activeTimesheet/components/TimesheetWidgetIntegration';
 import {persistor, store} from 'src/features/data/context/store';
 import i18n from 'src/features/localization/utils/i18n';
 import {RootNavigation} from 'src/features/navigation/components/RootNavigation';
@@ -20,6 +21,7 @@ function App() {
 		<Provider store={store}>
 			<ThemeProvider>
 				<PersistGate loading={null} persistor={persistor}>
+					<TimesheetWidgetIntegration />
 					<Portal.Host>
 						<SafeAreaProvider>
 							<SessionLocker />

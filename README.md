@@ -11,7 +11,10 @@ This project is about creating an Android/iOS app for [Kimai](https://github.com
 - [x] Fetch and show projects
 - [x] Fetch and show timesheets
 - [x] Start and stop new timesheets to track time, also without Internet access
+- [x] Home-screen widget showing today's worked duration and starting/stopping the active timesheet
 - [x] Smartwatch compatibility
+
+The iOS widget requires iOS 17 or later. Enable the `group.com.github.f462.kimaitimetracker` App Group for both the app and the `TimesheetWidget` extension in the Apple Developer account used for signing.
 
 ## Contributing
 
