@@ -11,8 +11,12 @@ const onboardingSlice = createSlice({
 		developmentWarningShown: (state) => {
 			state.hasDevelopmentWarningBeenShown = true;
 		},
+		notificationPermissionSkipped: (state) => {
+			state.hasSkippedNotificationPermission = true;
+		},
 	},
 });
 
-export const {developmentWarningShown} = onboardingSlice.actions;
+export const {developmentWarningShown, notificationPermissionSkipped} =
+	onboardingSlice.actions;
 export const onboardingReducer = onboardingSlice.reducer;

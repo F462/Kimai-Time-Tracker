@@ -8,3 +8,8 @@ export const selectHasDevelopmentWarningBeenShown = createSelector(
 	[selectOnboardingState],
 	(onboardingState) => onboardingState.hasDevelopmentWarningBeenShown,
 );
+
+export const selectHasSkippedNotificationPermission = createSelector(
+	[selectOnboardingState],
+	(onboardingState) => onboardingState.hasSkippedNotificationPermission,
+);

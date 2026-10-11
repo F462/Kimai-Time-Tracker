@@ -39,7 +39,14 @@
 	"total": "Total",
 	"timezone": "Timezone",
 	"onboarding": {
-		"appStillInDevelopment": "The app is still in development. Do not use for production! The app will need a re-installation with full data loss on update."
+		"appStillInDevelopment": "The app is still in development. Do not use for production! The app will need a re-installation with full data loss on update.",
+		"notificationsTitle": "Stay on top of your workday",
+		"notificationsMessage": "Allow notifications so Kimai can let you know when you have reached your daily working hours. This reminder runs at the right time, even when the app is not open.",
+		"allowNotifications": "Allow notifications",
+		"continueWithoutNotifications": "Continue without notifications",
+		"checkNotifications": "Check permission again",
+		"openNotificationSettings": "Open notification settings",
+		"notificationsDenied": "Notifications are still turned off. Enable them in system settings to continue."
 	},
 	"now": "Now",
 	"license": "License",

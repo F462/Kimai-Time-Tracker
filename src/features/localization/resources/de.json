@@ -1,5 +1,14 @@
 {
 	"billable": "Abrechenbar",
+	"onboarding": {
+		"notificationsTitle": "Den Überblick über Ihren Arbeitstag behalten",
+		"notificationsMessage": "Erlauben Sie Benachrichtigungen, damit Kimai Sie informieren kann, wenn Sie Ihre tägliche Arbeitszeit erreicht haben. Die Erinnerung kommt zur richtigen Zeit, auch wenn die App nicht geöffnet ist.",
+		"allowNotifications": "Benachrichtigungen erlauben",
+		"continueWithoutNotifications": "Ohne Benachrichtigungen fortfahren",
+		"checkNotifications": "Berechtigung erneut prüfen",
+		"openNotificationSettings": "Benachrichtigungseinstellungen öffnen",
+		"notificationsDenied": "Benachrichtigungen sind weiterhin deaktiviert. Aktivieren Sie sie in den Systemeinstellungen, um fortzufahren."
+	},
 	"delete": "Löschen",
 	"addActivity": "Aktivität hinzufügen",
 	"addCustomer": "Kunde hinzufügen",

@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import {useEffect} from 'react';
 import {useTranslation} from 'react-i18next';
+import {Platform} from 'react-native';
 import notifications, {
 	AndroidImportance,
 	TriggerType,
@@ -39,7 +40,9 @@ export const DailyWorkingHoursNotificationIntegration = () => {
 					return;
 				}
 
-				await notifications.requestPermission();
+				if (Platform.OS === 'ios') {
+					await notifications.requestPermission();
+				}
 				if (!isCurrent) {
 					return;
 				}
@@ -91,7 +94,9 @@ export const DailyWorkingHoursNotificationIntegration = () => {
 				return;
 			}
 
-			await notifications.requestPermission();
+			if (Platform.OS === 'ios') {
+				await notifications.requestPermission();
+			}
 			if (!isCurrent) {
 				return;
 			}

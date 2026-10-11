@@ -7,6 +7,7 @@ import {TimesheetWidgetIntegration} from 'src/features/activeTimesheet/component
 import {persistor, store} from 'src/features/data/context/store';
 import i18n from 'src/features/localization/utils/i18n';
 import {RootNavigation} from 'src/features/navigation/components/RootNavigation';
+import {NotificationPermissionGate} from 'src/features/onboarding/components/NotificationPermissionGate';
 import {Onboarding} from 'src/features/onboarding/components/Onboarding';
 import {ThemeProvider} from 'src/features/theming/components/ThemeProvider';
 import {DailyWorkingHoursNotificationIntegration} from 'src/features/timesheets/components/WorktimeNotificationIntegration';
@@ -22,15 +23,17 @@ function App() {
 		<Provider store={store}>
 			<ThemeProvider>
 				<PersistGate loading={null} persistor={persistor}>
-					<TimesheetWidgetIntegration />
-					<DailyWorkingHoursNotificationIntegration />
-					<Portal.Host>
-						<SafeAreaProvider>
-							<SessionLocker />
-							<Onboarding />
-							<RootNavigation />
-						</SafeAreaProvider>
-					</Portal.Host>
+					<SafeAreaProvider>
+						<NotificationPermissionGate>
+							<TimesheetWidgetIntegration />
+							<DailyWorkingHoursNotificationIntegration />
+							<Portal.Host>
+								<SessionLocker />
+								<Onboarding />
+								<RootNavigation />
+							</Portal.Host>
+						</NotificationPermissionGate>
+					</SafeAreaProvider>
 				</PersistGate>
 			</ThemeProvider>
 		</Provider>
