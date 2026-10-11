@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {v4 as uuidv4} from 'uuid';
+import uuid from 'react-native-uuid';
 
 import {api} from 'src/features/account/utils/ApiClient';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
@@ -84,7 +84,7 @@ export const fetchTimesheets = createAppAsyncThunk(
 							return idInKnownRemoteTimesheetTable;
 						}
 
-						const newId = uuidv4();
+						const newId = uuid.v4();
 
 						newTimesheetsIdTable[newId] = element.id;
 

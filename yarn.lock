@@ -9122,6 +9122,7 @@ __metadata:
     react-native-share: "npm:^12.3.1"
     react-native-svg: "npm:^15.15.5"
     react-native-svg-transformer: "npm:^1.5.3"
+    react-native-uuid: "npm:^2.0.4"
     react-native-vision-camera: "npm:^5.2.3"
     react-native-vision-camera-barcode-scanner: "npm:^5.2.3"
     react-native-worklets: "npm:^0.12.2"
@@ -9132,7 +9133,6 @@ __metadata:
     src: "link:./src"
     ts-jest: "npm:^29.4.13"
     typescript: "npm:6.0.3"
-    uuid: "npm:^14.0.2"
   languageName: unknown
   linkType: soft
 
@@ -11020,6 +11020,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-native-uuid@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "react-native-uuid@npm:2.0.4"
+  checksum: 10c0/56bcf29fa59a3e4c6374e612d9adf4e2a5e7f1000e632451f0e4bf0fbeb00664eb8657a5af7e2adb64c435e96f42c535cc20529cffcc48a03581b41ba1761d2a
+  languageName: node
+  linkType: hard
+
 "react-native-vision-camera-barcode-scanner@npm:^5.2.3":
   version: 5.2.3
   resolution: "react-native-vision-camera-barcode-scanner@npm:5.2.3"
@@ -12876,15 +12883,6 @@ __metadata:
   version: 1.0.1
   resolution: "utils-merge@npm:1.0.1"
   checksum: 10c0/02ba649de1b7ca8854bfe20a82f1dfbdda3fb57a22ab4a8972a63a34553cf7aa51bc9081cf7e001b035b88186d23689d69e71b510e610a09a4c66f68aa95b672
-  languageName: node
-  linkType: hard
-
-"uuid@npm:^14.0.2":
-  version: 14.0.2
-  resolution: "uuid@npm:14.0.2"
-  bin:
-    uuid: dist-node/bin/uuid
-  checksum: 10c0/88906237004db370b013129c8372a2149f6fa1aad7a5f78fa65ddf2ba0a8663097022300d81fa01f551efee9d6bbe8c7ab140dc6d49f1b03d289f855096990c9
   languageName: node
   linkType: hard
 

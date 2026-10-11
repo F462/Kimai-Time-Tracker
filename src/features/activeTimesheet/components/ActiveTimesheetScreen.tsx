@@ -10,7 +10,7 @@ import {
 	ViewStyle,
 } from 'react-native';
 import {Checkbox, IconButton, Text, useTheme} from 'react-native-paper';
-import {v4 as uuidv4} from 'uuid';
+import uuid from 'react-native-uuid';
 
 import AppIcon from 'src/assets/icon.svg';
 import {stopActiveTimesheet} from 'src/features/activeTimesheet/middleware/activeTimesheetThunks';
@@ -203,7 +203,7 @@ const StartButton = () => {
 	const handleStart = useCallback(() => {
 		dispatch(
 			newTimesheetStarted({
-				id: uuidv4(),
+				id: uuid.v4(),
 				begin: (nextTimesheetStartDatetime
 					? dayjs.unix(nextTimesheetStartDatetime)
 					: new Date()
