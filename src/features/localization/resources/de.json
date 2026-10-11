@@ -54,5 +54,11 @@
 	"underTime": "Restzeit",
 	"workingHoursOption": "{{hours}} Std.",
 	"workingTimeTitle": "Arbeitszeit",
+	"dailyWorkingHoursChannel": "Tägliche Arbeitszeit",
+	"dailyWorkingHoursReachedTitle": "Tägliche Arbeitszeit erreicht",
+	"dailyWorkingHoursReachedBody": "Sie haben heute {{hours}} Stunden gearbeitet.",
+	"dailyWorkingHoursNotificationSettings": "Benachrichtigung zur täglichen Arbeitszeit",
+	"manageDailyWorkingHoursNotificationSettings": "Diese Benachrichtigung in den Systemeinstellungen verwalten oder deaktivieren.",
+	"notificationsTitle": "Benachrichtigungen",
 	"workedTime": "Gearbeitete Zeit"
 }

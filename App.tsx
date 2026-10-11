@@ -9,6 +9,7 @@ import i18n from 'src/features/localization/utils/i18n';
 import {RootNavigation} from 'src/features/navigation/components/RootNavigation';
 import {Onboarding} from 'src/features/onboarding/components/Onboarding';
 import {ThemeProvider} from 'src/features/theming/components/ThemeProvider';
+import {DailyWorkingHoursNotificationIntegration} from 'src/features/timesheets/components/WorktimeNotificationIntegration';
 import {SessionLocker} from 'src/features/utils/components/SessionLocker';
 
 // Run initial configuration for i18n;
@@ -22,6 +23,7 @@ function App() {
 			<ThemeProvider>
 				<PersistGate loading={null} persistor={persistor}>
 					<TimesheetWidgetIntegration />
+					<DailyWorkingHoursNotificationIntegration />
 					<Portal.Host>
 						<SafeAreaProvider>
 							<SessionLocker />

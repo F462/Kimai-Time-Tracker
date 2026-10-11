@@ -2,7 +2,8 @@ import {Picker} from '@react-native-picker/picker';
 import {simplePrompt} from '@sbaiahmed1/react-native-biometrics';
 import React, {useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
-import {StyleSheet} from 'react-native';
+import {Linking, Platform, StyleSheet} from 'react-native';
+import notifications, {AndroidImportance} from 'react-native-notify-kit';
 import {List, Switch, useTheme} from 'react-native-paper';
 
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
@@ -129,6 +130,9 @@ const SecuritySection = () => {
 };
 
 const WORKING_HOURS_OPTIONS = [4, 6, 8, 10, 12];
+const DAILY_WORKING_HOURS_CHANNEL_ID = 'daily-working-hours';
+const NotificationBellIcon = () => <List.Icon icon="bell-outline" />;
+const SettingsChevronIcon = () => <List.Icon icon="chevron-right" />;
 
 const ClockIcon = () => <List.Icon icon="clock" />;
 
@@ -185,11 +189,53 @@ const WorkingTimeSection = () => {
 	);
 };
 
+const NotificationSettingsItem = () => {
+	const {t} = useTranslation();
+
+	const openNotificationSettings = useCallback(() => {
+		const openSettings = async () => {
+			try {
+				if (Platform.OS === 'ios') {
+					await Linking.openSettings();
+					return;
+				}
+
+				await notifications.createChannel({
+					id: DAILY_WORKING_HOURS_CHANNEL_ID,
+					name: t('dailyWorkingHoursChannel'),
+					importance: AndroidImportance.DEFAULT,
+				});
+				await notifications.openNotificationSettings(
+					DAILY_WORKING_HOURS_CHANNEL_ID,
+				);
+			} catch (error) {
+				console.warn('Unable to open notification settings:', error);
+			}
+		};
+
+		openSettings().catch(console.warn);
+	}, [t]);
+
+	return (
+		<List.Section>
+			<List.Subheader>{t('notificationsTitle')}</List.Subheader>
+			<List.Item
+				title={t('dailyWorkingHoursNotificationSettings')}
+				description={t('manageDailyWorkingHoursNotificationSettings')}
+				left={NotificationBellIcon}
+				right={SettingsChevronIcon}
+				onPress={openNotificationSettings}
+			/>
+		</List.Section>
+	);
+};
+
 export const SettingsScreen = () => {
 	return (
 		<BaseScreen>
 			<DisplaySection />
 			<WorkingTimeSection />
+			<NotificationSettingsItem />
 			<SecuritySection />
 		</BaseScreen>
 	);

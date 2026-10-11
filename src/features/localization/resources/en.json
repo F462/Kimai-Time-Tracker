@@ -92,5 +92,11 @@
 	"workingHoursOption": "{{hours}} h",
 	"workingTimeTitle": "Working time",
 	"workingTimeToday": "Working time today:",
+	"dailyWorkingHoursChannel": "Daily working hours",
+	"dailyWorkingHoursReachedTitle": "Daily working hours reached",
+	"dailyWorkingHoursReachedBody": "You have worked {{hours}} hours today.",
+	"dailyWorkingHoursNotificationSettings": "Daily working-hours notification",
+	"manageDailyWorkingHoursNotificationSettings": "Manage or turn off this notification in system settings.",
+	"notificationsTitle": "Notifications",
 	"workedTime": "Worked time"
 }
