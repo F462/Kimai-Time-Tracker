@@ -2,7 +2,7 @@
     android:id="@+id/widget_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_vertical"
+    android:gravity="center"
     android:orientation="horizontal"
     android:paddingHorizontal="8dp"
     android:paddingVertical="4dp"
@@ -12,30 +12,26 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:gravity="center_horizontal"
         android:orientation="vertical">
-
-      <TextView
-        android:id="@+id/worked_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Worked today"
-        android:textColor="#303030"
-        android:textSize="12sp" />
 
       <TextView
         android:id="@+id/static_duration"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:textColor="#111111"
-        android:textSize="26sp"
+        android:textSize="30sp"
         android:textStyle="bold" />
 
-      <Chronometer
-        android:id="@+id/chronometer"
+      <TextView
+        android:id="@+id/project_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="#111111"
-        android:textSize="26sp"
-        android:textStyle="bold" />
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="2"
+        android:textColor="#303030"
+        android:textSize="12sp" />
     </LinearLayout>
 </LinearLayout>

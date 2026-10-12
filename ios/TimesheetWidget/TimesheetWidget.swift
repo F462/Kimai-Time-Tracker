@@ -8,11 +8,20 @@ struct TimesheetWidgetEntry: TimelineEntry {
   let workedSeconds: Int
   let active: Bool
   let primaryContainer: String
+  let projectName: String
+  let activityName: String
 }
 
 struct TimesheetWidgetProvider: TimelineProvider {
   func placeholder(in context: Context) -> TimesheetWidgetEntry {
-    TimesheetWidgetEntry(date: .now, workedSeconds: 0, active: false, primaryContainer: "#99FA7A")
+    TimesheetWidgetEntry(
+      date: .now,
+      workedSeconds: 0,
+      active: false,
+      primaryContainer: "#99FA7A",
+      projectName: "",
+      activityName: ""
+    )
   }
 
   func getSnapshot(in context: Context, completion: @escaping (TimesheetWidgetEntry) -> Void) {
@@ -21,7 +30,8 @@ struct TimesheetWidgetProvider: TimelineProvider {
 
   func getTimeline(in context: Context, completion: @escaping (Timeline<TimesheetWidgetEntry>) -> Void) {
     let entry = makeEntry()
-    completion(Timeline(entries: [entry], policy: .after(.now.addingTimeInterval(900))))
+    let refreshInterval: TimeInterval = entry.active ? 60 : 900
+    completion(Timeline(entries: [entry], policy: .after(.now.addingTimeInterval(refreshInterval))))
   }
 
   private func makeEntry() -> TimesheetWidgetEntry {
@@ -37,11 +47,15 @@ struct TimesheetWidgetProvider: TimelineProvider {
       ? max(0, Int(now.timeIntervalSince(snapshotAt)))
       : 0
     let primaryContainer = state["primaryContainer"] as? String ?? "#99FA7A"
+    let projectName = state["projectName"] as? String ?? ""
+    let activityName = state["activityName"] as? String ?? ""
     return TimesheetWidgetEntry(
       date: now,
       workedSeconds: snapshotIsToday ? workedSeconds + elapsedSinceSnapshot : 0,
       active: active,
-      primaryContainer: primaryContainer
+      primaryContainer: primaryContainer,
+      projectName: projectName,
+      activityName: activityName
     )
   }
 }
@@ -65,30 +79,35 @@ struct TimesheetWidgetView: View {
     )
   }
 
-  private var durationText: Text {
-    if entry.active {
-      let timerStart = Date.now.addingTimeInterval(TimeInterval(-entry.workedSeconds))
-      return Text(timerStart, style: .timer)
-    }
-    let hours = entry.workedSeconds / 3600
-    let minutes = (entry.workedSeconds % 3600) / 60
-    let seconds = entry.workedSeconds % 60
-    return Text(String(format: "%02d:%02d:%02d", hours, minutes, seconds))
+  private var durationText: String {
+    String(format: "%02d:%02d", entry.workedSeconds / 3600, (entry.workedSeconds % 3600) / 60)
+  }
+
+  private var projectActivityText: String {
+    [entry.projectName, entry.activityName]
+      .filter { !$0.isEmpty }
+      .joined(separator: " · ")
   }
 
   var body: some View {
     Link(destination: URL(string: "kimai://active-timesheet")!) {
-      VStack(alignment: .leading, spacing: 2) {
-        Text("Worked today")
-          .font(.caption)
-          .foregroundStyle(.secondary)
-        durationText
-          .font(.system(size: 28, weight: .semibold, design: .rounded).monospacedDigit())
-          .minimumScaleFactor(0.65)
+      VStack(alignment: .center, spacing: 2) {
+        Text(durationText)
+          .font(.system(size: 32, weight: .semibold, design: .rounded).monospacedDigit())
+          .minimumScaleFactor(0.7)
           .lineLimit(1)
-          .frame(maxWidth: .infinity, alignment: .leading)
+          .frame(maxWidth: .infinity, alignment: .center)
+        if !projectActivityText.isEmpty {
+          Text(projectActivityText)
+            .font(.caption)
+            .foregroundStyle(.secondary)
+            .lineLimit(2)
+            .minimumScaleFactor(0.8)
+            .multilineTextAlignment(.center)
+            .frame(maxWidth: .infinity, alignment: .center)
+        }
       }
-      .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+          .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
       .contentShape(Rectangle())
     }
     .accessibilityLabel("Open Active Timesheet")

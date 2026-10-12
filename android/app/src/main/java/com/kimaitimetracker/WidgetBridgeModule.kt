@@ -23,6 +23,8 @@ class WidgetBridgeModule(context: ReactApplicationContext) : ReactContextBaseJav
       .putLong("activeBeginAt", state.getDouble("activeBeginAt").toLong())
       .putLong("snapshotAt", state.getDouble("snapshotAt").toLong())
       .putString("primaryContainer", state.getString("primaryContainer"))
+      .putString("projectName", state.getString("projectName"))
+      .putString("activityName", state.getString("activityName"))
       .apply()
 
     val manager = AppWidgetManager.getInstance(reactApplicationContext)
