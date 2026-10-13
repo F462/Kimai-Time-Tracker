@@ -7,17 +7,16 @@ import notifications, {AndroidImportance} from 'react-native-notify-kit';
 import {List, Switch, useTheme} from 'react-native-paper';
 
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
+import {useAppNavigation} from 'src/features/navigation/context/hooks';
 import {useStyle} from 'src/features/theming/utils/useStyle';
 import {BaseScreen} from 'src/ui/BaseScreen';
 import {
 	selectAppTheme,
 	selectIsBiometricsToUnlockEnabled,
-	selectStandardWorkingHoursPerDay,
 } from '../context/settingsSelectors';
 import {
 	appThemeSet,
 	biometricsToUnlockEnabledStateSet,
-	standardWorkingHoursPerDaySet,
 } from '../context/settingsSlice';
 import {AppTheme} from '../types';
 
@@ -129,61 +128,23 @@ const SecuritySection = () => {
 	);
 };
 
-const WORKING_HOURS_OPTIONS = [4, 6, 8, 10, 12];
 const DAILY_WORKING_HOURS_CHANNEL_ID = 'daily-working-hours';
 const NotificationBellIcon = () => <List.Icon icon="bell-outline" />;
 const SettingsChevronIcon = () => <List.Icon icon="chevron-right" />;
-
-const ClockIcon = () => <List.Icon icon="clock" />;
-
-const WorkingHoursSelection = () => {
-	const {t} = useTranslation();
-	const dispatch = useAppDispatch();
-	const theme = useTheme();
-
-	const standardWorkingHoursPerDay = useAppSelector(
-		selectStandardWorkingHoursPerDay,
-	);
-
-	const dynamicStyles = useStyle(
-		() => ({
-			workingHoursPicker: {
-				color: theme.colors.onSurface,
-			},
-		}),
-		[theme.colors.onSurface],
-	);
-
-	return (
-		<Picker
-			style={[styles.themePicker, dynamicStyles.workingHoursPicker]}
-			selectedValue={standardWorkingHoursPerDay}
-			selectionColor={theme.colors.primary}
-			dropdownIconColor={dynamicStyles.workingHoursPicker.color}
-			mode="dropdown"
-			onValueChange={(itemValue: number) =>
-				dispatch(standardWorkingHoursPerDaySet(itemValue))
-			}>
-			{WORKING_HOURS_OPTIONS.map((hours) => (
-				<Picker.Item
-					key={hours}
-					label={t('workingHoursOption', {hours})}
-					value={hours}
-				/>
-			))}
-		</Picker>
-	);
-};
+const WorkContractIcon = () => <List.Icon icon="briefcase-outline" />;
 
 const WorkingTimeSection = () => {
 	const {t} = useTranslation();
+	const navigation = useAppNavigation();
 	return (
 		<List.Section>
 			<List.Subheader>{t('workingTimeTitle')}</List.Subheader>
 			<List.Item
-				title={t('standardWorkingHoursPerDay')}
-				left={ClockIcon}
-				right={WorkingHoursSelection}
+				title={t('workContract')}
+				description={t('workContractDescription')}
+				left={WorkContractIcon}
+				right={SettingsChevronIcon}
+				onPress={() => navigation.navigate('WorkContract')}
 			/>
 		</List.Section>
 	);

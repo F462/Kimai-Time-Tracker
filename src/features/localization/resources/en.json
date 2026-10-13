@@ -54,7 +54,7 @@
 	"name": "Name",
 	"number": "Number",
 	"overtime": "Overtime",
-	"overtimeBasedOnWorkingHours": "Overtime is calculated based on {{hours}} h of standard working hours per working day.",
+	"overtimeBasedOnWorkingHours": "Overtime is calculated from your work contract.",
 	"pleaseAuthenticateToContinue": "Please authenticate to continue",
 	"qr": {
 		"cameraPermissionRequired": "Camera permission is required to scan QR codes.",
@@ -82,14 +82,26 @@
 		"Overview": "Overview",
 		"Projects": "Projects",
 		"Settings": "Settings",
-		"Timesheets": "Timesheets"
+		"Timesheets": "Timesheets",
+		"WorkContract": "Work contract"
 	},
 	"securityTitle": "Security",
 	"selectActivity": "Select Activity",
 	"selectCustomer": "Select Customer",
 	"selectProject": "Select Project",
 	"serverVersion": "Server version {{version}}",
-	"standardWorkingHoursPerDay": "Standard working hours per day",
+	"workContract": "Work contract",
+	"workContractDescription": "Set your contracted hours for each day of the week.",
+	"weekdays": {
+		"monday": "Monday",
+		"tuesday": "Tuesday",
+		"wednesday": "Wednesday",
+		"thursday": "Thursday",
+		"friday": "Friday",
+		"saturday": "Saturday",
+		"sunday": "Sunday"
+	},
+	"dayOff": "Off",
 	"synchronize": "Synchronize",
 	"underTime": "Time remaining",
 	"useBiometrics": "Use biometrics to unlock",

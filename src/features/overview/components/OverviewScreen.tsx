@@ -11,8 +11,7 @@ import {
 } from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
 
-import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
-import {selectStandardWorkingHoursPerDay} from 'src/features/settings/context/settingsSelectors';
+import {useAppDispatch} from 'src/features/data/context/store';
 import {useStyle} from 'src/features/theming/utils/useStyle';
 import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
 import {useMonthlyOverview} from '../context/overviewHooks';
@@ -79,9 +78,6 @@ export const OverviewScreen = () => {
 	const theme = useTheme();
 
 	const monthlyOverview = useMonthlyOverview();
-	const standardWorkingHoursPerDay = useAppSelector(
-		selectStandardWorkingHoursPerDay,
-	);
 
 	const dynamicStyles = useStyle(
 		() => ({
@@ -145,9 +141,7 @@ export const OverviewScreen = () => {
 				<Text
 					variant="bodySmall"
 					style={[styles.footerText, dynamicStyles.footerText]}>
-					{t('overtimeBasedOnWorkingHours', {
-						hours: standardWorkingHoursPerDay,
-					})}
+					{t('overtimeBasedOnWorkingHours')}
 				</Text>
 
 				<Text variant="titleMedium" style={dynamicStyles.sectionTitle}>

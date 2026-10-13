@@ -6,6 +6,7 @@ import {CustomersScreen} from 'src/features/customers/components/CustomersScreen
 import {OverviewScreen} from 'src/features/overview/components/OverviewScreen';
 import {ProjectsScreen} from 'src/features/projects/components/ProjectsScreen';
 import {SettingsScreen} from 'src/features/settings/components/SettingsScreen';
+import {WorkContractScreen} from 'src/features/settings/components/WorkContractScreen';
 import {TimesheetsScreen} from 'src/features/timesheets/components/TimesheetsScreen';
 import {createDrawerIconFunction} from './components/DrawerItemIcon';
 import {ScreenParameters} from './ScreenParameters';
@@ -69,6 +70,13 @@ export const screens: Array<{
 		component: SettingsScreen,
 		options: {
 			drawerIcon: createDrawerIconFunction('cog'),
+		},
+	},
+	{
+		name: 'WorkContract',
+		component: WorkContractScreen,
+		options: {
+			drawerIcon: createDrawerIconFunction('calendar-clock'),
 		},
 	},
 	{

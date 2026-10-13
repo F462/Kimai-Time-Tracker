@@ -1,6 +1,12 @@
 import dayjs from 'dayjs';
 
+import {WORK_DAYS, WorkContractHours} from 'src/features/settings/types';
 import {Timesheet} from 'src/features/timesheets/types';
+
+export const getWorkContractHoursForDate = (
+	workContractHoursPerDay: WorkContractHours,
+	date: dayjs.Dayjs,
+): number => workContractHoursPerDay[WORK_DAYS[(date.day() + 6) % 7]];
 
 /**
  * Returns the duration of a single timesheet in seconds.
@@ -71,9 +77,9 @@ export const countWorkingDays = (
 export const calculateOvertimeInSeconds = (
 	totalWorkingSeconds: number,
 	workingDays: number,
-	standardWorkingHoursPerDay: number,
+	workingHoursPerDay: number,
 ): number => {
-	const expectedSeconds = workingDays * standardWorkingHoursPerDay * 3600;
+	const expectedSeconds = workingDays * workingHoursPerDay * 3600;
 	return totalWorkingSeconds - expectedSeconds;
 };
 
@@ -104,13 +110,12 @@ export const formatSignedDurationInSeconds = (seconds: number): string =>
 	`${seconds < 0 ? '-' : '+'}${formatDurationInSeconds(seconds)}`;
 
 /**
- * Returns whether the given date is a working day (Monday to Friday,
- * inclusive). Weekends are not working days.
+ * Returns whether the work contract assigns hours to the given date.
  */
-export const isWorkingDay = (date: dayjs.Dayjs): boolean => {
-	const dayOfWeek = date.day();
-	return dayOfWeek >= 1 && dayOfWeek <= 5;
-};
+export const isWorkingDay = (
+	date: dayjs.Dayjs,
+	workContractHoursPerDay: WorkContractHours,
+): boolean => getWorkContractHoursForDate(workContractHoursPerDay, date) > 0;
 
 export type MonthDayDetail = {
 	dayOfMonth: number;
@@ -168,7 +173,7 @@ const getMonthDetailFromWorkedByDay = (
 	month: dayjs.Dayjs,
 	workedByDay: Map<string, number>,
 	now: dayjs.Dayjs,
-	standardWorkingHoursPerDay: number,
+	workContractHoursPerDay: WorkContractHours,
 ): MonthDetail => {
 	const daysInMonth = month.daysInMonth();
 	const days: Array<MonthDayDetail> = [];
@@ -179,8 +184,12 @@ const getMonthDetailFromWorkedByDay = (
 
 	for (let dayOfMonth = 1; dayOfMonth <= daysInMonth; dayOfMonth++) {
 		const day = month.date(dayOfMonth);
-		const working = isWorkingDay(day);
-		const expected = working ? standardWorkingHoursPerDay * 3600 : 0;
+		const expectedHours = getWorkContractHoursForDate(
+			workContractHoursPerDay,
+			day,
+		);
+		const working = isWorkingDay(day, workContractHoursPerDay);
+		const expected = expectedHours * 3600;
 		const worked = workedByDay.get(day.format('YYYY-MM-DD')) ?? 0;
 
 		workedSeconds += worked;
@@ -240,13 +249,13 @@ export const getMonthDetail = (
 	month: dayjs.Dayjs,
 	timesheets: Array<Timesheet>,
 	now: dayjs.Dayjs,
-	standardWorkingHoursPerDay: number,
+	workContractHoursPerDay: WorkContractHours,
 ): MonthDetail =>
 	getMonthDetailFromWorkedByDay(
 		month,
 		buildWorkedByDay(timesheets, now),
 		now,
-		standardWorkingHoursPerDay,
+		workContractHoursPerDay,
 	);
 
 /**
@@ -259,7 +268,7 @@ export const getYearMonthDetails = (
 	year: dayjs.Dayjs,
 	timesheets: Array<Timesheet>,
 	now: dayjs.Dayjs,
-	standardWorkingHoursPerDay: number,
+	workContractHoursPerDay: WorkContractHours,
 ): Array<MonthDetail> => {
 	const workedByDay = buildWorkedByDay(timesheets, now);
 
@@ -271,7 +280,7 @@ export const getYearMonthDetails = (
 				year.month(month),
 				workedByDay,
 				now,
-				standardWorkingHoursPerDay,
+				workContractHoursPerDay,
 			),
 		);
 	}
@@ -289,7 +298,7 @@ export type MonthlyOverviewData = {
 	 * on, so consumers can detect when a stored overview has become stale
 	 * because the setting changed after it was calculated.
 	 */
-	standardWorkingHoursPerDay: number;
+	workContractHoursPerDay: WorkContractHours;
 };
 
 /**
@@ -300,13 +309,13 @@ export type MonthlyOverviewData = {
 export const computeMonthlyOverview = (
 	now: dayjs.Dayjs,
 	yearTimesheets: Array<Timesheet>,
-	standardWorkingHoursPerDay: number,
+	workContractHoursPerDay: WorkContractHours,
 ): MonthlyOverviewData => {
 	const months = getYearMonthDetails(
 		now,
 		yearTimesheets,
 		now,
-		standardWorkingHoursPerDay,
+		workContractHoursPerDay,
 	);
 
 	const pastDays = months.flatMap((month) =>
@@ -327,6 +336,6 @@ export const computeMonthlyOverview = (
 			(sum, day) => sum + day.workedSeconds,
 			0,
 		),
-		standardWorkingHoursPerDay,
+		workContractHoursPerDay,
 	};
 };

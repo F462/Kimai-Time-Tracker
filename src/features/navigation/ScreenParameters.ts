@@ -7,5 +7,6 @@ export type ScreenParameters = {
 	Overview: undefined;
 	Projects: undefined;
 	Settings: undefined;
+	WorkContract: undefined;
 	Timesheets: {onlyShowNonDoneEntries?: boolean};
 };

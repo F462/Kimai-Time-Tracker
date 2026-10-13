@@ -1,11 +1,27 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-import {AppTheme, SettingsState} from '../types';
+import {
+	AppTheme,
+	SettingsState,
+	WORK_DAYS,
+	WorkContractHours,
+	WorkDay,
+} from '../types';
+
+const DEFAULT_WORK_CONTRACT_HOURS: WorkContractHours = {
+	monday: 8,
+	tuesday: 8,
+	wednesday: 8,
+	thursday: 8,
+	friday: 8,
+	saturday: 0,
+	sunday: 0,
+};
 
 const initialState: SettingsState = {
 	appTheme: AppTheme.SYSTEM,
 	isBiometricsToUnlockEnabled: false,
-	standardWorkingHoursPerDay: 8,
+	workContractHoursPerDay: DEFAULT_WORK_CONTRACT_HOURS,
 };
 
 const settingsSlice = createSlice({
@@ -21,11 +37,16 @@ const settingsSlice = createSlice({
 		) => {
 			state.isBiometricsToUnlockEnabled = biometricsEnabled;
 		},
-		standardWorkingHoursPerDaySet: (
+		workContractHoursPerDaySet: (
 			state,
-			{payload: standardWorkingHoursPerDay}: PayloadAction<number>,
+			{
+				payload,
+			}: PayloadAction<{
+				day: WorkDay;
+				hours: number;
+			}>,
 		) => {
-			state.standardWorkingHoursPerDay = standardWorkingHoursPerDay;
+			state.workContractHoursPerDay[payload.day] = payload.hours;
 		},
 	},
 });
@@ -33,6 +54,14 @@ const settingsSlice = createSlice({
 export const {
 	appThemeSet,
 	biometricsToUnlockEnabledStateSet,
-	standardWorkingHoursPerDaySet,
+	workContractHoursPerDaySet,
 } = settingsSlice.actions;
 export const settingsReducer = settingsSlice.reducer;
+
+export const migrateLegacyWorkingHours = (legacyHours: number) =>
+	Object.fromEntries(
+		WORK_DAYS.map((day) => [
+			day,
+			day === 'saturday' || day === 'sunday' ? 0 : legacyHours,
+		]),
+	) as WorkContractHours;

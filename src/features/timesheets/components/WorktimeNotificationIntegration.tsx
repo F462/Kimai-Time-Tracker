@@ -8,8 +8,11 @@ import notifications, {
 } from 'react-native-notify-kit';
 
 import {useAppSelector} from 'src/features/data/context/store';
-import {getWorkingHoursInSeconds} from 'src/features/overview/utils/overviewUtils';
-import {selectStandardWorkingHoursPerDay} from 'src/features/settings/context/settingsSelectors';
+import {
+	getWorkContractHoursForDate,
+	getWorkingHoursInSeconds,
+} from 'src/features/overview/utils/overviewUtils';
+import {selectWorkContractHoursPerDay} from 'src/features/settings/context/settingsSelectors';
 import {
 	selectActiveTimesheet,
 	selectTimesheetListOfCurrentDay,
@@ -21,10 +24,12 @@ export const DailyWorkingHoursNotificationIntegration = () => {
 	const {t} = useTranslation();
 	const timesheets = useAppSelector(selectTimesheetListOfCurrentDay);
 	const activeTimesheet = useAppSelector(selectActiveTimesheet);
-	const standardWorkingHoursPerDay = useAppSelector(
-		selectStandardWorkingHoursPerDay,
+	const workContractHoursPerDay = useAppSelector(selectWorkContractHoursPerDay);
+	const standardWorkingHoursToday = getWorkContractHoursForDate(
+		workContractHoursPerDay,
+		dayjs(),
 	);
-	const dailyWorkingHoursSeconds = standardWorkingHoursPerDay * 60 * 60;
+	const dailyWorkingHoursSeconds = standardWorkingHoursToday * 60 * 60;
 	const workedSeconds = getWorkingHoursInSeconds(timesheets, dayjs());
 
 	useEffect(() => {
@@ -32,6 +37,11 @@ export const DailyWorkingHoursNotificationIntegration = () => {
 		const notificationId = `${NOTIFICATION_CHANNEL_ID}-${dayjs().format('YYYY-MM-DD')}`;
 
 		const updateNotification = async () => {
+			if (dailyWorkingHoursSeconds <= 0) {
+				await notifications.cancelTriggerNotification(notificationId);
+				return;
+			}
+
 			if (activeTimesheet && workedSeconds < dailyWorkingHoursSeconds) {
 				const triggerTimestamp =
 					Date.now() + (dailyWorkingHoursSeconds - workedSeconds) * 1000;
@@ -63,10 +73,10 @@ export const DailyWorkingHoursNotificationIntegration = () => {
 					{
 						id: notificationId,
 						title: t('dailyWorkingHoursReachedTitle', {
-							hours: standardWorkingHoursPerDay,
+							hours: standardWorkingHoursToday,
 						}),
 						body: t('dailyWorkingHoursReachedBody', {
-							hours: standardWorkingHoursPerDay,
+							hours: standardWorkingHoursToday,
 						}),
 						android: {channelId: NOTIFICATION_CHANNEL_ID},
 					},
@@ -111,10 +121,10 @@ export const DailyWorkingHoursNotificationIntegration = () => {
 			await notifications.displayNotification({
 				id: notificationId,
 				title: t('dailyWorkingHoursReachedTitle', {
-					hours: standardWorkingHoursPerDay,
+					hours: standardWorkingHoursToday,
 				}),
 				body: t('dailyWorkingHoursReachedBody', {
-					hours: standardWorkingHoursPerDay,
+					hours: standardWorkingHoursToday,
 				}),
 				android: {channelId: NOTIFICATION_CHANNEL_ID},
 			});
@@ -127,7 +137,7 @@ export const DailyWorkingHoursNotificationIntegration = () => {
 	}, [
 		activeTimesheet,
 		dailyWorkingHoursSeconds,
-		standardWorkingHoursPerDay,
+		standardWorkingHoursToday,
 		t,
 		workedSeconds,
 	]);

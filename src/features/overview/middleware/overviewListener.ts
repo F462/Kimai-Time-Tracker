@@ -1,5 +1,5 @@
 import {AppStartListening} from 'src/features/data/context/store';
-import {standardWorkingHoursPerDaySet} from 'src/features/settings/context/settingsSlice';
+import {workContractHoursPerDaySet} from 'src/features/settings/context/settingsSlice';
 import {timesheetsUpdated} from 'src/features/timesheets/context/timesheetsSlice';
 import {computeOverview} from './overviewThunks';
 
@@ -21,7 +21,7 @@ const recomputeOverviewOnStandardWorkingHoursChanged = (
 	startListening: AppStartListening,
 ) => {
 	startListening({
-		actionCreator: standardWorkingHoursPerDaySet,
+		actionCreator: workContractHoursPerDaySet,
 		effect: async (_, listenerApi) => {
 			await listenerApi.dispatch(computeOverview());
 		},

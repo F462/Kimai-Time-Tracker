@@ -14,7 +14,7 @@ export const selectIsBiometricsToUnlockEnabled = createSelector(
 	(settings) => settings.isBiometricsToUnlockEnabled,
 );
 
-export const selectStandardWorkingHoursPerDay = createSelector(
+export const selectWorkContractHoursPerDay = createSelector(
 	[selectSettingsState],
-	(settings) => settings.standardWorkingHoursPerDay,
+	(settings) => settings.workContractHoursPerDay,
 );

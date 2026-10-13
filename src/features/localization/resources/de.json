@@ -55,11 +55,23 @@
 	"monthlyBreakdown": "Monatsübersicht",
 	"total": "Gesamt",
 	"screenTitles": {
-		"Overview": "Übersicht"
+		"Overview": "Übersicht",
+		"WorkContract": "Arbeitsvertrag"
 	},
 	"overtime": "Überstunden",
-	"overtimeBasedOnWorkingHours": "Überstunden werden basierend auf {{hours}} Std. regulärer Arbeitszeit pro Arbeitstag berechnet.",
-	"standardWorkingHoursPerDay": "Reguläre Arbeitsstunden pro Tag",
+	"overtimeBasedOnWorkingHours": "Überstunden werden anhand Ihres Arbeitsvertrags berechnet.",
+	"workContract": "Arbeitsvertrag",
+	"workContractDescription": "Legen Sie Ihre vertraglichen Stunden für jeden Wochentag fest.",
+	"weekdays": {
+		"monday": "Montag",
+		"tuesday": "Dienstag",
+		"wednesday": "Mittwoch",
+		"thursday": "Donnerstag",
+		"friday": "Freitag",
+		"saturday": "Samstag",
+		"sunday": "Sonntag"
+	},
+	"dayOff": "Frei",
 	"underTime": "Restzeit",
 	"workingHoursOption": "{{hours}} Std.",
 	"workingTimeTitle": "Arbeitszeit",

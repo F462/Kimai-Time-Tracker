@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
-import {selectStandardWorkingHoursPerDay} from 'src/features/settings/context/settingsSelectors';
+import {selectWorkContractHoursPerDay} from 'src/features/settings/context/settingsSelectors';
 import {selectTimesheetListOfCurrentYear} from '../context/overviewSelectors';
 import {overviewUpdated} from '../context/overviewSlice';
 import {computeMonthlyOverview} from '../utils/overviewUtils';
@@ -20,12 +20,11 @@ export const computeOverview = createAppAsyncThunk(
 	(_, {getState, dispatch}) => {
 		const now = dayjs();
 		const yearTimesheets = selectTimesheetListOfCurrentYear(getState());
-		const standardWorkingHoursPerDay =
-			selectStandardWorkingHoursPerDay(getState());
+		const workContractHoursPerDay = selectWorkContractHoursPerDay(getState());
 
 		dispatch(
 			overviewUpdated(
-				computeMonthlyOverview(now, yearTimesheets, standardWorkingHoursPerDay),
+				computeMonthlyOverview(now, yearTimesheets, workContractHoursPerDay),
 			),
 		);
 	},

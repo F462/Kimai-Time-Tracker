@@ -10,6 +10,7 @@ import {
 // eslint-disable-next-line no-restricted-imports
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 import {
+	createMigrate,
 	FLUSH,
 	PAUSE,
 	PERSIST,
@@ -31,7 +32,10 @@ import {networkReducer} from 'src/features/network/context/networkSlice';
 import {onboardingReducer} from 'src/features/onboarding/context/onboardingSlice';
 import {overviewReducer} from 'src/features/overview/context/overviewSlice';
 import {projectsReducer} from 'src/features/projects/context/projectsSlice';
-import {settingsReducer} from 'src/features/settings/context/settingsSlice';
+import {
+	migrateLegacyWorkingHours,
+	settingsReducer,
+} from 'src/features/settings/context/settingsSlice';
 import {ResetSyncStateTransform} from 'src/features/synchronization/context/ResetSyncStateTransform';
 import {synchronizationReducer} from 'src/features/synchronization/context/synchronizationSlice';
 import {
@@ -42,7 +46,32 @@ import {startRootListener} from '../middleware/rootListener';
 
 const persistConfig = {
 	key: 'root',
+	version: 1,
 	storage: AsyncStorage,
+	migrate: createMigrate({
+		1: (state) => {
+			const persistedState = state as typeof state & {
+				settings?: Record<string, unknown>;
+			};
+			const settings = persistedState?.settings;
+			if (!settings || settings.workContractHoursPerDay) {
+				return persistedState;
+			}
+			const legacyHours = settings.standardWorkingHoursPerDay;
+			const settingsWithoutLegacyHours = {...settings};
+			delete settingsWithoutLegacyHours.standardWorkingHoursPerDay;
+
+			return {
+				...persistedState,
+				settings: {
+					...settingsWithoutLegacyHours,
+					workContractHoursPerDay: migrateLegacyWorkingHours(
+						typeof legacyHours === 'number' ? legacyHours : 8,
+					),
+				},
+			};
+		},
+	}),
 	// The overview is derived from the timesheets and the settings, so it is
 	// not persisted; it is re-calculated from the persisted timesheets on
 	// start-up.

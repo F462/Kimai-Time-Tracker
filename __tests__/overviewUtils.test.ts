@@ -9,9 +9,20 @@ import {
 	getTimesheetDurationInSeconds,
 	getWorkingHoursInSeconds,
 } from 'src/features/overview/utils/overviewUtils';
+import {WorkContractHours} from 'src/features/settings/types';
 import {Timesheet} from 'src/features/timesheets/types';
 
 dayjs.extend(duration);
+
+const standardWorkContract: WorkContractHours = {
+	monday: 8,
+	tuesday: 8,
+	wednesday: 8,
+	thursday: 8,
+	friday: 8,
+	saturday: 0,
+	sunday: 0,
+};
 
 describe('overviewUtils', () => {
 	describe('getTimesheetDurationInSeconds', () => {
@@ -138,34 +149,47 @@ describe('overviewUtils', () => {
 		const month = dayjs('2026-01-01'); // January 2026, 31 days, the 1st is a Thursday
 
 		it('lays out the days in rows of exactly seven entries (Monday to Sunday)', () => {
-			const detail = getMonthDetail(month, [], now, 8);
+			const detail = getMonthDetail(month, [], now, standardWorkContract);
 			expect(detail.weeks.every((week) => week.length === 7)).toBe(true);
 			// 31 days + 3 leading nulls = 34 cells -> padded to 35 (5 full weeks)
 			expect(detail.weeks.length).toBe(5);
 		});
 
 		it('pads the leading cells so the 1st lands on the correct weekday', () => {
-			const detail = getMonthDetail(month, [], now, 8);
+			const detail = getMonthDetail(month, [], now, standardWorkContract);
 			// Jan 1 2026 is a Thursday -> Mon, Tue, Wed are empty
 			expect(detail.weeks[0].slice(0, 3)).toEqual([null, null, null]);
 			expect(detail.weeks[0][3]?.dayOfMonth).toBe(1);
 		});
 
 		it('pads the trailing cells of the last week with null', () => {
-			const detail = getMonthDetail(month, [], now, 8);
+			const detail = getMonthDetail(month, [], now, standardWorkContract);
 			const lastWeek = detail.weeks[detail.weeks.length - 1];
 			// Jan 31 2026 is a Saturday -> the Sunday slot is empty
 			expect(lastWeek[lastWeek.length - 1]).toBeNull();
 		});
 
 		it('keeps the day order intact across all weeks', () => {
-			const detail = getMonthDetail(month, [], now, 8);
+			const detail = getMonthDetail(month, [], now, standardWorkContract);
 			const flattened = detail.weeks
 				.flat()
 				.filter((cell): cell is NonNullable<typeof cell> => cell !== null);
 			expect(flattened.map((cell) => cell.dayOfMonth)).toEqual(
 				Array.from({length: 31}, (_, index) => index + 1),
 			);
+		});
+
+		it('applies distinct contract hours to weekend days', () => {
+			const detail = getMonthDetail(month, [], now, {
+				...standardWorkContract,
+				saturday: 4,
+				sunday: 2,
+			});
+
+			expect(detail.days[2].expectedSeconds).toBe(4 * 3600);
+			expect(detail.days[3].expectedSeconds).toBe(2 * 3600);
+			expect(detail.days[2].isWorkingDay).toBe(true);
+			expect(detail.days[3].isWorkingDay).toBe(true);
 		});
 	});
 });
