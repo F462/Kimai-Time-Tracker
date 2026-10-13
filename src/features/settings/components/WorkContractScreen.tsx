@@ -1,7 +1,7 @@
 import {Picker} from '@react-native-picker/picker';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
-import {StyleSheet, View} from 'react-native';
+import {RefreshControl, ScrollView, StyleSheet, View} from 'react-native';
 import {
 	ActivityIndicator,
 	Icon,
@@ -17,13 +17,20 @@ import {BaseScreen} from 'src/ui/BaseScreen';
 import {
 	selectHasWorkContractHoursSyncStatus,
 	selectIsWorkContractHoursSyncInProgress,
+	selectIsWorkContractHoursSyncPending,
 	selectWorkContractHoursPerDay,
 } from '../context/settingsSelectors';
 import {workContractHoursPerDaySet} from '../context/settingsSlice';
-import {abortWorkContractHoursSync} from '../middleware/settingsThunks';
+import {
+	abortWorkContractHoursSync,
+	synchronizeWorkContractHours,
+} from '../middleware/settingsThunks';
 import {WORK_DAYS, WorkDay} from '../types';
 
 const styles = StyleSheet.create({
+	scrollView: {
+		flex: 1,
+	},
 	picker: {
 		width: 120,
 	},
@@ -124,19 +131,39 @@ const WorkDayHoursSelection = ({day}: {day: WorkDay}) => {
 
 export const WorkContractScreen = () => {
 	const {t} = useTranslation();
+	const dispatch = useAppDispatch();
+	const isSyncPending = useAppSelector(selectIsWorkContractHoursSyncPending);
+	const [refreshing, setRefreshing] = React.useState(false);
+	const onRefresh = React.useCallback(() => {
+		setRefreshing(true);
+		dispatch(
+			synchronizeWorkContractHours({
+				direction: isSyncPending ? 'push' : 'pull',
+			}),
+		).then(
+			() => setRefreshing(false),
+			() => setRefreshing(false),
+		);
+	}, [dispatch, isSyncPending]);
 
 	return (
 		<BaseScreen>
-			<WorkContractSyncStatus />
-			<List.Section>
-				<List.Subheader>{t('workContractDescription')}</List.Subheader>
-				{WORK_DAYS.map((day) => (
-					<View key={day} style={styles.dayRow}>
-						<Text variant="bodyLarge">{t(`weekdays.${day}`)}</Text>
-						<WorkDayHoursSelection day={day} />
-					</View>
-				))}
-			</List.Section>
+			<ScrollView
+				style={styles.scrollView}
+				refreshControl={
+					<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+				}>
+				<WorkContractSyncStatus />
+				<List.Section>
+					<List.Subheader>{t('workContractDescription')}</List.Subheader>
+					{WORK_DAYS.map((day) => (
+						<View key={day} style={styles.dayRow}>
+							<Text variant="bodyLarge">{t(`weekdays.${day}`)}</Text>
+							<WorkDayHoursSelection day={day} />
+						</View>
+					))}
+				</List.Section>
+			</ScrollView>
 		</BaseScreen>
 	);
 };
