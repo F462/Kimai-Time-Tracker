@@ -95,6 +95,42 @@ export class ApiClient {
 				if (errorData?.message) {
 					errorMessage = errorData.message;
 				}
+				// Kimai 2 reports validation failures (HTTP 400) as
+				//   { code, message, errors: { children: { <field>: { errors: [msg, ...] } } } }
+				// Surface the per-field messages so the generic
+				// "Validation Failed" message becomes actionable.
+				const children = errorData?.errors?.children;
+				if (
+					children &&
+					typeof children === 'object' &&
+					!Array.isArray(children)
+				) {
+					const details = Object.entries(children)
+						.map(([field, entry]: [string, any]) => {
+							const messages = Array.isArray(entry?.errors)
+								? entry.errors.join('; ')
+								: '';
+							return messages ? `${field}: ${messages}` : '';
+						})
+						.filter((detail: string) => detail.length > 0);
+					if (details.length > 0) {
+						errorMessage = `${errorMessage}: ${details.join('; ')}`;
+					}
+				} else if (
+					Array.isArray(errorData?.violations) &&
+					errorData.violations.length > 0
+				) {
+					const details = errorData.violations
+						.map((v: {propertyPath?: string; message?: string}) =>
+							v?.propertyPath
+								? `${v.propertyPath}: ${v.message ?? ''}`
+								: (v?.message ?? ''),
+						)
+						.filter((detail: string) => detail.length > 0);
+					if (details.length > 0) {
+						errorMessage = `${errorMessage}: ${details.join('; ')}`;
+					}
+				}
 			} catch {
 				// Fallback to HTTP status if body isn't JSON
 			}

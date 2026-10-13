@@ -5,7 +5,7 @@ import {useAppDispatch} from 'src/features/data/context/store';
 import {EntityItemContextMenu} from 'src/ui/EntityItemContextMenu';
 import {removeCustomer} from '../middleware/customersThunks';
 import {Customer} from '../types';
-import {EditCustomerModal} from './EditCustomerModal';
+import {CustomerModal} from './CustomerModal';
 
 type CustomerItemContextMenuProps = {
 	customer: Customer;
@@ -34,7 +34,7 @@ export const CustomerItemContextMenu = ({
 
 	return (
 		<>
-			<EditCustomerModal
+			<CustomerModal
 				customer={customer}
 				visible={editModalVisible}
 				onHideModal={onHideEditModal}

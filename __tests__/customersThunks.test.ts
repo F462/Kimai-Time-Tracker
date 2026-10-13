@@ -4,6 +4,7 @@ import {api} from 'src/features/account/utils/ApiClient';
 import {customersReducer} from 'src/features/customers/context/customersSlice';
 import {
 	createCustomer,
+	fetchCustomerColors,
 	updateCustomer,
 } from 'src/features/customers/middleware/customersThunks';
 import {Customer} from 'src/features/customers/types';
@@ -22,7 +23,6 @@ const makeCustomer = (): Customer => ({
 	country: 'US',
 	language: 'en',
 	currency: 'USD',
-	timezone: 'America/New_York',
 	visible: true,
 	billable: true,
 	metaFields: [],
@@ -53,7 +53,6 @@ describe('customer thunks', () => {
 				country: customer.country,
 				language: customer.language,
 				currency: customer.currency,
-				timezone: customer.timezone,
 			}),
 		);
 
@@ -62,11 +61,22 @@ describe('customer thunks', () => {
 			country: customer.country,
 			language: customer.language,
 			currency: customer.currency,
-			timezone: customer.timezone,
+			timezone: expect.any(String),
 			visible: true,
 			billable: true,
 		});
 		expect(store.getState().customers.customers[customer.id]).toEqual(customer);
+	});
+
+	it('fetches the server-configured customer colors', async () => {
+		const colors = {Red: '#ff0000', Blue: '#0000ff'};
+		(api.get as jest.Mock).mockResolvedValue(colors);
+		const store = configureTestStore() as TestStore;
+
+		await expect(
+			store.dispatch(fetchCustomerColors()).unwrap(),
+		).resolves.toEqual(colors);
+		expect(api.get).toHaveBeenCalledWith('api/config/colors');
 	});
 
 	it('patches all required customer fields when updating', async () => {
@@ -83,10 +93,53 @@ describe('customer thunks', () => {
 			country: customer.country,
 			language: customer.language,
 			currency: customer.currency,
-			timezone: customer.timezone,
+			color: customer.color,
 			visible: customer.visible,
 			billable: customer.billable,
 		});
 		expect(store.getState().customers.customers[customer.id]).toEqual(customer);
+	});
+
+	it('rejects with the server error when creating is rejected', async () => {
+		const customer = makeCustomer();
+		(api.post as jest.Mock).mockRejectedValue(
+			new Error('Validation Failed: color: The selected choice is invalid.'),
+		);
+		const store = configureTestStore() as TestStore;
+
+		const resultAction = await store.dispatch(
+			createCustomer({
+				name: customer.name,
+				country: customer.country,
+				language: customer.language,
+				currency: customer.currency,
+			}),
+		);
+
+		if (!createCustomer.rejected.match(resultAction)) {
+			throw new Error('Expected the createCustomer thunk to be rejected');
+		}
+		expect(resultAction.error?.message).toBe(
+			'Validation Failed: color: The selected choice is invalid.',
+		);
+		expect(store.getState().customers.customers).toEqual({});
+	});
+
+	it('rejects with the server error when updating is rejected', async () => {
+		const customer = makeCustomer();
+		(api.patch as jest.Mock).mockRejectedValue(
+			new Error('Validation Failed: color: The selected choice is invalid.'),
+		);
+		const store = configureTestStore() as TestStore;
+
+		const resultAction = await store.dispatch(updateCustomer(customer));
+
+		if (!updateCustomer.rejected.match(resultAction)) {
+			throw new Error('Expected the updateCustomer thunk to be rejected');
+		}
+		expect(resultAction.error?.message).toBe(
+			'Validation Failed: color: The selected choice is invalid.',
+		);
+		expect(store.getState().customers.customers).toEqual({});
 	});
 });

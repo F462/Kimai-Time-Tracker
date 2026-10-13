@@ -13,11 +13,25 @@ export type CreateCustomerPayload = {
 	country: string;
 	language: string;
 	currency: string;
-	timezone: string;
+	timezone?: string;
 	number?: string | null;
 	comment?: string | null;
+	color?: string | null;
 	visible?: boolean;
 	billable?: boolean;
+};
+
+export const fetchCustomerColors = createAppAsyncThunk(
+	'customers/fetchCustomerColors',
+	async () => api.get<Record<string, string>>('api/config/colors'),
+);
+
+const resolveDefaultTimezone = (): string => {
+	try {
+		return new Intl.DateTimeFormat().resolvedOptions().timeZone ?? 'UTC';
+	} catch {
+		return 'UTC';
+	}
 };
 
 export const fetchCustomers = createAppAsyncThunk(
@@ -57,14 +71,16 @@ export const updateCustomer = createAppAsyncThunk(
 					country: customer.country,
 					language: customer.language,
 					currency: customer.currency,
-					timezone: customer.timezone,
+					color: customer.color,
 					visible: customer.visible,
 					billable: customer.billable,
 				},
 			);
 			dispatch(customerUpdated(response));
+			return response;
 		} catch (error: any) {
 			console.warn(`Got error on update request: ${error.toString()}`);
+			throw error;
 		}
 	},
 );
@@ -78,7 +94,7 @@ export const createCustomer = createAppAsyncThunk<
 		country: payload.country,
 		language: payload.language,
 		currency: payload.currency,
-		timezone: payload.timezone,
+		timezone: payload.timezone ?? resolveDefaultTimezone(),
 	};
 
 	if (payload.number !== undefined && payload.number !== null) {
@@ -87,6 +103,10 @@ export const createCustomer = createAppAsyncThunk<
 
 	if (payload.comment !== undefined && payload.comment !== null) {
 		body.comment = payload.comment;
+	}
+
+	if (payload.color !== undefined && payload.color !== null) {
+		body.color = payload.color;
 	}
 
 	body.visible = payload.visible ?? true;
