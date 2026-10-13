@@ -5,7 +5,6 @@ export type Customer = {
 	comment: string | null;
 	country: string;
 	language: string;
-	timezone: string;
 	visible: boolean;
 	billable: boolean;
 	currency: string;

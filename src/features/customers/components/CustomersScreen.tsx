@@ -14,8 +14,8 @@ import {
 import {customerSelected} from '../context/customersSlice';
 import {fetchCustomers} from '../middleware/customersThunks';
 import {Customer} from '../types';
-import {AddCustomerModal} from './AddCustomerModal';
 import {CustomerItemContextMenu} from './CustomerItemContextMenu';
+import {CustomerModal} from './CustomerModal';
 
 const styles = StyleSheet.create({
 	fab: {
@@ -94,10 +94,7 @@ export const CustomersScreen = () => {
 				onPress={onShowAddModal}
 				style={styles.fab}
 			/>
-			<AddCustomerModal
-				visible={addModalVisible}
-				onHideModal={onHideAddModal}
-			/>
+			<CustomerModal visible={addModalVisible} onHideModal={onHideAddModal} />
 		</BaseScreen>
 	);
 };

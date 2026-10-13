@@ -22,7 +22,6 @@ const makeCustomer = (): Customer => ({
 	country: 'US',
 	language: 'en',
 	currency: 'USD',
-	timezone: 'America/New_York',
 	visible: true,
 	billable: true,
 	metaFields: [],
@@ -53,7 +52,6 @@ describe('customer thunks', () => {
 				country: customer.country,
 				language: customer.language,
 				currency: customer.currency,
-				timezone: customer.timezone,
 			}),
 		);
 
@@ -62,7 +60,7 @@ describe('customer thunks', () => {
 			country: customer.country,
 			language: customer.language,
 			currency: customer.currency,
-			timezone: customer.timezone,
+			timezone: expect.any(String),
 			visible: true,
 			billable: true,
 		});
@@ -83,7 +81,7 @@ describe('customer thunks', () => {
 			country: customer.country,
 			language: customer.language,
 			currency: customer.currency,
-			timezone: customer.timezone,
+			color: customer.color,
 			visible: customer.visible,
 			billable: customer.billable,
 		});
