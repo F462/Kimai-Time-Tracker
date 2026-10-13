@@ -6,7 +6,10 @@ import {
 	settingsReducer,
 	workContractHoursPerDaySet,
 } from 'src/features/settings/context/settingsSlice';
-import {synchronizeWorkContractHours} from 'src/features/settings/middleware/settingsThunks';
+import {
+	abortWorkContractHoursSync,
+	synchronizeWorkContractHours,
+} from 'src/features/settings/middleware/settingsThunks';
 import {WorkContractHours} from 'src/features/settings/types';
 
 jest.mock('src/features/account/utils/ApiClient', () => ({
@@ -51,7 +54,9 @@ describe('work-contract hours synchronization', () => {
 
 		await store.dispatch(synchronizeWorkContractHours({direction: 'pull'}));
 
-		expect(api.get).toHaveBeenCalledWith('api/users/me');
+		expect(api.get).toHaveBeenCalledWith('api/users/me', {
+			signal: expect.anything(),
+		});
 		expect(store.getState().settings.workContractHoursPerDay).toEqual(
 			serverHours,
 		);
@@ -100,16 +105,20 @@ describe('work-contract hours synchronization', () => {
 
 		await store.dispatch(synchronizeWorkContractHours({direction: 'push'}));
 
-		expect(api.patch).toHaveBeenCalledWith('api/users/42/preferences', [
-			{
-				name: 'work_monday',
-				value: String(expectedHours.monday * 3600),
-			},
-			{
-				name: 'work_thursday',
-				value: String(expectedHours.thursday * 3600),
-			},
-		]);
+		expect(api.patch).toHaveBeenCalledWith(
+			'api/users/42/preferences',
+			[
+				{
+					name: 'work_monday',
+					value: String(expectedHours.monday * 3600),
+				},
+				{
+					name: 'work_thursday',
+					value: String(expectedHours.thursday * 3600),
+				},
+			],
+			{signal: expect.anything()},
+		);
 		expect(store.getState().settings.workContractHoursSyncPending).toBe(false);
 	});
 
@@ -162,6 +171,36 @@ describe('work-contract hours synchronization', () => {
 
 		await store.dispatch(synchronizeWorkContractHours({direction: 'push'}));
 
+		expect(api.patch).not.toHaveBeenCalled();
+	});
+
+	it('aborts an active sync and restores the last synchronized hours', async () => {
+		(api.get as jest.Mock).mockImplementation(
+			(_endpoint: string, {signal}: {signal: AbortSignal}) =>
+				new Promise((_resolve, reject) => {
+					signal.addEventListener('abort', () => {
+						const error = new Error('Aborted');
+						error.name = 'AbortError';
+						reject(error);
+					});
+				}),
+		);
+		const store = configureTestStore() as TestStore;
+		store.dispatch(workContractHoursPerDaySet({day: 'monday', hours: 4}));
+		const syncRequest = store.dispatch(
+			synchronizeWorkContractHours({direction: 'push'}),
+		);
+		await Promise.resolve();
+
+		await store.dispatch(abortWorkContractHoursSync());
+		await syncRequest;
+
+		expect((api.get as jest.Mock).mock.calls[0][1].signal.aborted).toBe(true);
+		expect(store.getState().settings.workContractHoursPerDay.monday).toBe(8);
+		expect(store.getState().settings.workContractHoursSyncPending).toBe(false);
+		expect(store.getState().settings.workContractHoursSyncInProgress).toBe(
+			false,
+		);
 		expect(api.patch).not.toHaveBeenCalled();
 	});
 });

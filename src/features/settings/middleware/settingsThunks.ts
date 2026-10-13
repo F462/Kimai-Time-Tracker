@@ -1,4 +1,5 @@
 import {api} from 'src/features/account/utils/ApiClient';
+import type {AppDispatch} from 'src/features/data/context/store';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
 import {
 	selectIsWorkContractHoursSyncPending,
@@ -6,6 +7,7 @@ import {
 } from '../context/settingsSelectors';
 import {
 	workContractHoursPerDaySynchronized,
+	workContractHoursSyncAborted,
 	workContractHoursSyncCompleted,
 	workContractHoursSyncFinished,
 	workContractHoursSyncStarted,
@@ -15,6 +17,8 @@ import {WORK_DAYS} from '../types';
 const WORK_CONTRACT_HOURS_PREFERENCE_PREFIX = 'work_';
 
 let workContractSyncQueue: Promise<void> = Promise.resolve();
+let workContractSyncGeneration = 0;
+let activeWorkContractSyncController: AbortController | undefined;
 
 type UserPreference = {
 	name: string;
@@ -51,17 +55,34 @@ export const synchronizeWorkContractHours = createAppAsyncThunk<
 >(
 	'settings/synchronizeWorkContractHours',
 	async ({direction}, {dispatch, getState}) => {
+		const generation = workContractSyncGeneration;
 		const synchronize = async () => {
+			if (generation !== workContractSyncGeneration) {
+				return;
+			}
 			if (
 				direction === 'pull' &&
 				selectIsWorkContractHoursSyncPending(getState())
 			) {
 				return;
 			}
+			if (
+				direction === 'push' &&
+				!selectIsWorkContractHoursSyncPending(getState())
+			) {
+				return;
+			}
 
+			const controller = new AbortController();
+			activeWorkContractSyncController = controller;
 			dispatch(workContractHoursSyncStarted());
 			try {
-				const user = await api.get<CurrentUser>('api/users/me');
+				const user = await api.get<CurrentUser>('api/users/me', {
+					signal: controller.signal,
+				});
+				if (generation !== workContractSyncGeneration) {
+					return;
+				}
 				const workPreferences = (user.preferences ?? []).flatMap(
 					(preference) => {
 						const day = getWorkDay(preference.name);
@@ -98,17 +119,31 @@ export const synchronizeWorkContractHours = createAppAsyncThunk<
 
 				const workContractHoursPerDay =
 					selectWorkContractHoursPerDay(getState());
-				await api.patch(`api/users/${user.id}/preferences`, [
-					...workPreferences.map(({day, preference}) => ({
-						name: preference.name,
-						value: String(workContractHoursPerDay[day] * 60 * 60),
-					})),
-				]);
+				await api.patch(
+					`api/users/${user.id}/preferences`,
+					[
+						...workPreferences.map(({day, preference}) => ({
+							name: preference.name,
+							value: String(workContractHoursPerDay[day] * 60 * 60),
+						})),
+					],
+					{signal: controller.signal},
+				);
+				if (generation !== workContractSyncGeneration) {
+					return;
+				}
 				dispatch(workContractHoursSyncCompleted(workContractHoursPerDay));
 			} catch (error) {
-				console.error('Unable to synchronize work-contract hours:', error);
+				if (generation === workContractSyncGeneration) {
+					console.error('Unable to synchronize work-contract hours:', error);
+				}
 			} finally {
-				dispatch(workContractHoursSyncFinished());
+				if (activeWorkContractSyncController === controller) {
+					activeWorkContractSyncController = undefined;
+				}
+				if (generation === workContractSyncGeneration) {
+					dispatch(workContractHoursSyncFinished());
+				}
 			}
 		};
 
@@ -120,3 +155,10 @@ export const synchronizeWorkContractHours = createAppAsyncThunk<
 		await request;
 	},
 );
+
+export const abortWorkContractHoursSync = () => (dispatch: AppDispatch) => {
+	workContractSyncGeneration += 1;
+	activeWorkContractSyncController?.abort();
+	activeWorkContractSyncController = undefined;
+	dispatch(workContractHoursSyncAborted());
+};

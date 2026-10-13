@@ -5,6 +5,7 @@ import {StyleSheet, View} from 'react-native';
 import {
 	ActivityIndicator,
 	Icon,
+	IconButton,
 	List,
 	Text,
 	useTheme,
@@ -19,6 +20,7 @@ import {
 	selectWorkContractHoursPerDay,
 } from '../context/settingsSelectors';
 import {workContractHoursPerDaySet} from '../context/settingsSlice';
+import {abortWorkContractHoursSync} from '../middleware/settingsThunks';
 import {WORK_DAYS, WorkDay} from '../types';
 
 const styles = StyleSheet.create({
@@ -41,6 +43,7 @@ const styles = StyleSheet.create({
 	},
 	syncStatusText: {
 		marginLeft: 12,
+		flex: 1,
 	},
 });
 
@@ -48,6 +51,7 @@ const HOURS_OPTIONS = [0, 4, 6, 8, 10, 12];
 
 const WorkContractSyncStatus = () => {
 	const {t} = useTranslation();
+	const dispatch = useAppDispatch();
 	const theme = useTheme();
 	const hasSyncStatus = useAppSelector(selectHasWorkContractHoursSyncStatus);
 	const isSyncInProgress = useAppSelector(
@@ -76,6 +80,13 @@ const WorkContractSyncStatus = () => {
 						: 'workContractSyncPending',
 				)}
 			</Text>
+			<IconButton
+				icon="close"
+				accessibilityLabel={t('abortWorkContractSync')}
+				onPress={() => {
+					dispatch(abortWorkContractHoursSync());
+				}}
+			/>
 		</View>
 	);
 };

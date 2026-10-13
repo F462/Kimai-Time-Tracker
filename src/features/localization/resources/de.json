@@ -64,6 +64,7 @@
 	"workContractDescription": "Legen Sie Ihre vertraglichen Stunden für jeden Wochentag fest.",
 	"workContractSyncInProgress": "Vertragsstunden werden synchronisiert...",
 	"workContractSyncPending": "Vertragsstunden warten auf Synchronisierung.",
+	"abortWorkContractSync": "Synchronisierung der Vertragsstunden abbrechen",
 	"weekdays": {
 		"monday": "Montag",
 		"tuesday": "Dienstag",

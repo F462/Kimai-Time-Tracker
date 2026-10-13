@@ -94,6 +94,7 @@
 	"workContractDescription": "Set your contracted hours for each day of the week.",
 	"workContractSyncInProgress": "Synchronizing work-contract hours...",
 	"workContractSyncPending": "Work-contract hours are waiting to synchronize.",
+	"abortWorkContractSync": "Cancel work-contract synchronization",
 	"weekdays": {
 		"monday": "Monday",
 		"tuesday": "Tuesday",

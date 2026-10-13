@@ -22,6 +22,7 @@ const initialState: SettingsState = {
 	appTheme: AppTheme.SYSTEM,
 	isBiometricsToUnlockEnabled: false,
 	workContractHoursPerDay: DEFAULT_WORK_CONTRACT_HOURS,
+	workContractHoursLastSynchronized: DEFAULT_WORK_CONTRACT_HOURS,
 	workContractHoursSyncPending: false,
 	workContractHoursSyncInProgress: false,
 };
@@ -48,6 +49,11 @@ const settingsSlice = createSlice({
 				hours: number;
 			}>,
 		) => {
+			if (!state.workContractHoursLastSynchronized) {
+				state.workContractHoursLastSynchronized = {
+					...state.workContractHoursPerDay,
+				};
+			}
 			state.workContractHoursPerDay[payload.day] = payload.hours;
 			state.workContractHoursSyncPending = true;
 		},
@@ -56,7 +62,16 @@ const settingsSlice = createSlice({
 			{payload}: PayloadAction<WorkContractHours>,
 		) => {
 			state.workContractHoursPerDay = payload;
+			state.workContractHoursLastSynchronized = payload;
 			state.workContractHoursSyncPending = false;
+		},
+		workContractHoursSyncAborted: (state) => {
+			state.workContractHoursPerDay = {
+				...(state.workContractHoursLastSynchronized ??
+					state.workContractHoursPerDay),
+			};
+			state.workContractHoursSyncPending = false;
+			state.workContractHoursSyncInProgress = false;
 		},
 		workContractHoursSyncStarted: (state) => {
 			state.workContractHoursSyncInProgress = true;
@@ -68,6 +83,7 @@ const settingsSlice = createSlice({
 			state,
 			{payload}: PayloadAction<WorkContractHours>,
 		) => {
+			state.workContractHoursLastSynchronized = payload;
 			if (
 				WORK_DAYS.every(
 					(day) => state.workContractHoursPerDay[day] === payload[day],
@@ -84,6 +100,7 @@ export const {
 	biometricsToUnlockEnabledStateSet,
 	workContractHoursPerDaySet,
 	workContractHoursPerDaySynchronized,
+	workContractHoursSyncAborted,
 	workContractHoursSyncStarted,
 	workContractHoursSyncFinished,
 	workContractHoursSyncCompleted,
