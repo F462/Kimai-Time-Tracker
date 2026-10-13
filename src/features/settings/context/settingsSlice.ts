@@ -65,6 +65,21 @@ const settingsSlice = createSlice({
 			state.workContractHoursLastSynchronized = payload;
 			state.workContractHoursSyncPending = false;
 		},
+		workContractHoursSyncReconciled: (
+			state,
+			{
+				payload,
+			}: PayloadAction<{
+				hours: WorkContractHours;
+				lastSynchronized: WorkContractHours;
+			}>,
+		) => {
+			state.workContractHoursPerDay = payload.hours;
+			state.workContractHoursLastSynchronized = payload.lastSynchronized;
+			state.workContractHoursSyncPending = WORK_DAYS.some(
+				(day) => payload.hours[day] !== payload.lastSynchronized[day],
+			);
+		},
 		workContractHoursSyncAborted: (state) => {
 			state.workContractHoursPerDay = {
 				...(state.workContractHoursLastSynchronized ??
@@ -100,6 +115,7 @@ export const {
 	biometricsToUnlockEnabledStateSet,
 	workContractHoursPerDaySet,
 	workContractHoursPerDaySynchronized,
+	workContractHoursSyncReconciled,
 	workContractHoursSyncAborted,
 	workContractHoursSyncStarted,
 	workContractHoursSyncFinished,

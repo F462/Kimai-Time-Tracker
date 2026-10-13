@@ -96,7 +96,7 @@ describe('work-contract hours synchronization', () => {
 			id: 42,
 			preferences: [
 				{name: 'work_monday', value: '28800'},
-				{name: 'work_thursday', value: '14400'},
+				{name: 'work_thursday', value: '28800'},
 			],
 		});
 		const store = configureTestStore() as TestStore;
@@ -112,13 +112,38 @@ describe('work-contract hours synchronization', () => {
 					name: 'work_monday',
 					value: String(expectedHours.monday * 3600),
 				},
-				{
-					name: 'work_thursday',
-					value: String(expectedHours.thursday * 3600),
-				},
 			],
 			{signal: expect.anything()},
 		);
+		expect(store.getState().settings.workContractHoursSyncPending).toBe(false);
+	});
+
+	it('keeps server-changed hours and only pushes client-only changes', async () => {
+		(api.get as jest.Mock).mockResolvedValue({
+			id: 42,
+			preferences: [
+				{name: 'work_monday', value: '21600'},
+				{name: 'work_tuesday', value: '21600'},
+				{name: 'work_wednesday', value: '28800'},
+			],
+		});
+		(api.patch as jest.Mock).mockResolvedValue({});
+		const store = configureTestStore() as TestStore;
+		store.dispatch(workContractHoursPerDaySet({day: 'monday', hours: 4}));
+		store.dispatch(workContractHoursPerDaySet({day: 'wednesday', hours: 6}));
+
+		await store.dispatch(synchronizeWorkContractHours({direction: 'push'}));
+
+		expect(api.patch).toHaveBeenCalledWith(
+			'api/users/42/preferences',
+			[{name: 'work_wednesday', value: '21600'}],
+			expect.objectContaining({signal: expect.anything()}),
+		);
+		expect(store.getState().settings.workContractHoursPerDay).toMatchObject({
+			monday: 6,
+			tuesday: 6,
+			wednesday: 6,
+		});
 		expect(store.getState().settings.workContractHoursSyncPending).toBe(false);
 	});
 

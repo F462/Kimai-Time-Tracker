@@ -10,9 +10,10 @@ import {
 	workContractHoursSyncAborted,
 	workContractHoursSyncCompleted,
 	workContractHoursSyncFinished,
+	workContractHoursSyncReconciled,
 	workContractHoursSyncStarted,
 } from '../context/settingsSlice';
-import {WORK_DAYS} from '../types';
+import {WORK_DAYS, WorkDay} from '../types';
 
 const WORK_CONTRACT_HOURS_PREFERENCE_PREFIX = 'work_';
 
@@ -117,22 +118,54 @@ export const synchronizeWorkContractHours = createAppAsyncThunk<
 					return;
 				}
 
-				const workContractHoursPerDay =
-					selectWorkContractHoursPerDay(getState());
-				await api.patch(
-					`api/users/${user.id}/preferences`,
-					[
-						...workPreferences.map(({day, preference}) => ({
-							name: preference.name,
-							value: String(workContractHoursPerDay[day] * 60 * 60),
-						})),
-					],
-					{signal: controller.signal},
+				const localHours = selectWorkContractHoursPerDay(getState());
+				const lastSynchronized =
+					getState().settings.workContractHoursLastSynchronized;
+				const remoteHours = {...lastSynchronized};
+				const reconciledHours = {...localHours};
+				const preferencesToUpdate: Array<{
+					day: WorkDay;
+					preference: UserPreference;
+				}> = [];
+				for (const {day, preference} of workPreferences) {
+					const serverHours = parseWorkHoursInSeconds(preference.value);
+					if (serverHours === undefined) {
+						if (localHours[day] !== lastSynchronized[day]) {
+							preferencesToUpdate.push({day, preference});
+						}
+						continue;
+					}
+
+					remoteHours[day] = serverHours;
+					if (serverHours !== lastSynchronized[day]) {
+						reconciledHours[day] = serverHours;
+					} else if (localHours[day] !== lastSynchronized[day]) {
+						preferencesToUpdate.push({day, preference});
+					}
+				}
+
+				dispatch(
+					workContractHoursSyncReconciled({
+						hours: reconciledHours,
+						lastSynchronized: remoteHours,
+					}),
 				);
+				if (preferencesToUpdate.length > 0) {
+					await api.patch(
+						`api/users/${user.id}/preferences`,
+						preferencesToUpdate.map(({day, preference}) => ({
+							name: preference.name,
+							value: String(reconciledHours[day] * 60 * 60),
+						})),
+						{signal: controller.signal},
+					);
+				}
 				if (generation !== workContractSyncGeneration) {
 					return;
 				}
-				dispatch(workContractHoursSyncCompleted(workContractHoursPerDay));
+				if (preferencesToUpdate.length > 0) {
+					dispatch(workContractHoursSyncCompleted(reconciledHours));
+				}
 			} catch (error) {
 				if (generation === workContractSyncGeneration) {
 					console.error('Unable to synchronize work-contract hours:', error);
