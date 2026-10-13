@@ -22,4 +22,5 @@ export type SettingsState = {
 	appTheme: AppTheme;
 	isBiometricsToUnlockEnabled: boolean;
 	workContractHoursPerDay: WorkContractHours;
+	workContractHoursSyncPending: boolean;
 };

@@ -18,3 +18,8 @@ export const selectWorkContractHoursPerDay = createSelector(
 	[selectSettingsState],
 	(settings) => settings.workContractHoursPerDay,
 );
+
+export const selectIsWorkContractHoursSyncPending = createSelector(
+	[selectSettingsState],
+	(settings) => settings.workContractHoursSyncPending === true,
+);

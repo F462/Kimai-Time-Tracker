@@ -22,6 +22,7 @@ const initialState: SettingsState = {
 	appTheme: AppTheme.SYSTEM,
 	isBiometricsToUnlockEnabled: false,
 	workContractHoursPerDay: DEFAULT_WORK_CONTRACT_HOURS,
+	workContractHoursSyncPending: false,
 };
 
 const settingsSlice = createSlice({
@@ -47,6 +48,26 @@ const settingsSlice = createSlice({
 			}>,
 		) => {
 			state.workContractHoursPerDay[payload.day] = payload.hours;
+			state.workContractHoursSyncPending = true;
+		},
+		workContractHoursPerDaySynchronized: (
+			state,
+			{payload}: PayloadAction<WorkContractHours>,
+		) => {
+			state.workContractHoursPerDay = payload;
+			state.workContractHoursSyncPending = false;
+		},
+		workContractHoursSyncCompleted: (
+			state,
+			{payload}: PayloadAction<WorkContractHours>,
+		) => {
+			if (
+				WORK_DAYS.every(
+					(day) => state.workContractHoursPerDay[day] === payload[day],
+				)
+			) {
+				state.workContractHoursSyncPending = false;
+			}
 		},
 	},
 });
@@ -55,6 +76,8 @@ export const {
 	appThemeSet,
 	biometricsToUnlockEnabledStateSet,
 	workContractHoursPerDaySet,
+	workContractHoursPerDaySynchronized,
+	workContractHoursSyncCompleted,
 } = settingsSlice.actions;
 export const settingsReducer = settingsSlice.reducer;
 
