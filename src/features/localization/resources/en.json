@@ -92,6 +92,8 @@
 	"serverVersion": "Server version {{version}}",
 	"workContract": "Work contract",
 	"workContractDescription": "Set your contracted hours for each day of the week.",
+	"workContractSyncInProgress": "Synchronizing work-contract hours...",
+	"workContractSyncPending": "Work-contract hours are waiting to synchronize.",
 	"weekdays": {
 		"monday": "Monday",
 		"tuesday": "Tuesday",

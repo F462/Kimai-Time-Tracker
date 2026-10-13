@@ -23,6 +23,7 @@ const initialState: SettingsState = {
 	isBiometricsToUnlockEnabled: false,
 	workContractHoursPerDay: DEFAULT_WORK_CONTRACT_HOURS,
 	workContractHoursSyncPending: false,
+	workContractHoursSyncInProgress: false,
 };
 
 const settingsSlice = createSlice({
@@ -57,6 +58,12 @@ const settingsSlice = createSlice({
 			state.workContractHoursPerDay = payload;
 			state.workContractHoursSyncPending = false;
 		},
+		workContractHoursSyncStarted: (state) => {
+			state.workContractHoursSyncInProgress = true;
+		},
+		workContractHoursSyncFinished: (state) => {
+			state.workContractHoursSyncInProgress = false;
+		},
 		workContractHoursSyncCompleted: (
 			state,
 			{payload}: PayloadAction<WorkContractHours>,
@@ -77,6 +84,8 @@ export const {
 	biometricsToUnlockEnabledStateSet,
 	workContractHoursPerDaySet,
 	workContractHoursPerDaySynchronized,
+	workContractHoursSyncStarted,
+	workContractHoursSyncFinished,
 	workContractHoursSyncCompleted,
 } = settingsSlice.actions;
 export const settingsReducer = settingsSlice.reducer;

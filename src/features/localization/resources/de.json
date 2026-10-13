@@ -62,6 +62,8 @@
 	"overtimeBasedOnWorkingHours": "Überstunden werden anhand Ihres Arbeitsvertrags berechnet.",
 	"workContract": "Arbeitsvertrag",
 	"workContractDescription": "Legen Sie Ihre vertraglichen Stunden für jeden Wochentag fest.",
+	"workContractSyncInProgress": "Vertragsstunden werden synchronisiert...",
+	"workContractSyncPending": "Vertragsstunden warten auf Synchronisierung.",
 	"weekdays": {
 		"monday": "Montag",
 		"tuesday": "Dienstag",

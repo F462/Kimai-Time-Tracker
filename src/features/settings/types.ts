@@ -23,4 +23,5 @@ export type SettingsState = {
 	isBiometricsToUnlockEnabled: boolean;
 	workContractHoursPerDay: WorkContractHours;
 	workContractHoursSyncPending: boolean;
+	workContractHoursSyncInProgress: boolean;
 };

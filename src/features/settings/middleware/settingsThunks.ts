@@ -7,6 +7,8 @@ import {
 import {
 	workContractHoursPerDaySynchronized,
 	workContractHoursSyncCompleted,
+	workContractHoursSyncFinished,
+	workContractHoursSyncStarted,
 } from '../context/settingsSlice';
 import {WORK_DAYS} from '../types';
 
@@ -57,6 +59,7 @@ export const synchronizeWorkContractHours = createAppAsyncThunk<
 				return;
 			}
 
+			dispatch(workContractHoursSyncStarted());
 			try {
 				const user = await api.get<CurrentUser>('api/users/me');
 				const workPreferences = (user.preferences ?? []).flatMap(
@@ -104,6 +107,8 @@ export const synchronizeWorkContractHours = createAppAsyncThunk<
 				dispatch(workContractHoursSyncCompleted(workContractHoursPerDay));
 			} catch (error) {
 				console.error('Unable to synchronize work-contract hours:', error);
+			} finally {
+				dispatch(workContractHoursSyncFinished());
 			}
 		};
 

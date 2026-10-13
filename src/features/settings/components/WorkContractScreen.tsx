@@ -2,12 +2,22 @@ import {Picker} from '@react-native-picker/picker';
 import React from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
-import {List, Text, useTheme} from 'react-native-paper';
+import {
+	ActivityIndicator,
+	Icon,
+	List,
+	Text,
+	useTheme,
+} from 'react-native-paper';
 
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {useStyle} from 'src/features/theming/utils/useStyle';
 import {BaseScreen} from 'src/ui/BaseScreen';
-import {selectWorkContractHoursPerDay} from '../context/settingsSelectors';
+import {
+	selectHasWorkContractHoursSyncStatus,
+	selectIsWorkContractHoursSyncInProgress,
+	selectWorkContractHoursPerDay,
+} from '../context/settingsSelectors';
 import {workContractHoursPerDaySet} from '../context/settingsSlice';
 import {WORK_DAYS, WorkDay} from '../types';
 
@@ -22,9 +32,53 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		paddingHorizontal: 16,
 	},
+	syncStatus: {
+		minHeight: 48,
+		flexDirection: 'row',
+		alignItems: 'center',
+		paddingHorizontal: 16,
+		paddingVertical: 8,
+	},
+	syncStatusText: {
+		marginLeft: 12,
+	},
 });
 
 const HOURS_OPTIONS = [0, 4, 6, 8, 10, 12];
+
+const WorkContractSyncStatus = () => {
+	const {t} = useTranslation();
+	const theme = useTheme();
+	const hasSyncStatus = useAppSelector(selectHasWorkContractHoursSyncStatus);
+	const isSyncInProgress = useAppSelector(
+		selectIsWorkContractHoursSyncInProgress,
+	);
+
+	if (!hasSyncStatus) {
+		return null;
+	}
+
+	return (
+		<View style={styles.syncStatus} accessibilityRole="progressbar">
+			{isSyncInProgress ? (
+				<ActivityIndicator size="small" />
+			) : (
+				<Icon
+					source="cloud-upload-outline"
+					size={20}
+					color={theme.colors.primary}
+				/>
+			)}
+			<Text style={styles.syncStatusText}>
+				{t(
+					isSyncInProgress
+						? 'workContractSyncInProgress'
+						: 'workContractSyncPending',
+				)}
+			</Text>
+		</View>
+	);
+};
 
 const WorkDayHoursSelection = ({day}: {day: WorkDay}) => {
 	const {t} = useTranslation();
@@ -62,6 +116,7 @@ export const WorkContractScreen = () => {
 
 	return (
 		<BaseScreen>
+			<WorkContractSyncStatus />
 			<List.Section>
 				<List.Subheader>{t('workContractDescription')}</List.Subheader>
 				{WORK_DAYS.map((day) => (

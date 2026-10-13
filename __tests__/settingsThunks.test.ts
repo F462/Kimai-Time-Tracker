@@ -58,6 +58,34 @@ describe('work-contract hours synchronization', () => {
 		expect(api.patch).not.toHaveBeenCalled();
 	});
 
+	it('tracks an active request separately from pending changes', async () => {
+		let resolveUser: (user: {id: number; preferences: []}) => void = () => {};
+		(api.get as jest.Mock).mockImplementation(
+			() =>
+				new Promise((resolve) => {
+					resolveUser = resolve;
+				}),
+		);
+		const store = configureTestStore() as TestStore;
+
+		const syncRequest = store.dispatch(
+			synchronizeWorkContractHours({direction: 'pull'}),
+		);
+		await Promise.resolve();
+
+		expect(store.getState().settings.workContractHoursSyncInProgress).toBe(
+			true,
+		);
+		expect(store.getState().settings.workContractHoursSyncPending).toBe(false);
+
+		resolveUser({id: 42, preferences: []});
+		await syncRequest;
+
+		expect(store.getState().settings.workContractHoursSyncInProgress).toBe(
+			false,
+		);
+	});
+
 	it('updates the configured server preference after a local change', async () => {
 		(api.get as jest.Mock).mockResolvedValue({
 			id: 42,

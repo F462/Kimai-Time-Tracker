@@ -6,6 +6,10 @@ import {selectIsUserLoggingIn} from 'src/features/appState/context/appStateSelec
 import {useAppSelector} from 'src/features/data/context/store';
 import {useAppNavigation} from 'src/features/navigation/context/hooks';
 import {selectIsInternetReachable} from 'src/features/network/context/networkSelector';
+import {
+	selectHasWorkContractHoursSyncStatus,
+	selectIsWorkContractHoursSyncInProgress,
+} from 'src/features/settings/context/settingsSelectors';
 import {selectAreAllTimesheetsInSync} from '../context/synchronizationSelectors';
 
 export const SynchronizationIndicator = () => {
@@ -15,6 +19,12 @@ export const SynchronizationIndicator = () => {
 	const isInternetReachable = useAppSelector(selectIsInternetReachable);
 	const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
 	const isUserLoggingIn = useAppSelector(selectIsUserLoggingIn);
+	const hasWorkContractSyncStatus = useAppSelector(
+		selectHasWorkContractHoursSyncStatus,
+	);
+	const isWorkContractSyncInProgress = useAppSelector(
+		selectIsWorkContractHoursSyncInProgress,
+	);
 
 	const iconToDisplay = useMemo(() => {
 		const {iconString, iconCallback} = (() => {
@@ -24,6 +34,10 @@ export const SynchronizationIndicator = () => {
 				return {iconString: 'cloud-alert'};
 			} else if (isUserLoggingIn === true) {
 				return {iconString: 'cloud-refresh'};
+			} else if (isWorkContractSyncInProgress) {
+				return {iconString: 'cloud-sync'};
+			} else if (hasWorkContractSyncStatus) {
+				return {iconString: 'cloud-upload-outline'};
 			} else if (areAllTimesheetsInSync) {
 				return {iconString: 'cloud-check-outline'};
 			} else {
@@ -41,6 +55,8 @@ export const SynchronizationIndicator = () => {
 		isInternetReachable,
 		isUserLoggedIn,
 		isUserLoggingIn,
+		hasWorkContractSyncStatus,
+		isWorkContractSyncInProgress,
 		navigation,
 	]);
 
