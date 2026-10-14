@@ -183,9 +183,12 @@ const WorkDayHoursSelection = ({day}: {day: WorkDay}) => {
 			const selectedHours =
 				selectedTime.getHours() + selectedTime.getMinutes() / 60;
 			setText(formatDuration(selectedHours));
+			if (selectedHours === hours) {
+				return;
+			}
 			dispatch(workContractHoursPerDaySet({day, hours: selectedHours}));
 		},
-		[day, dispatch],
+		[day, dispatch, hours],
 	);
 	const onEndEditing = React.useCallback(() => {
 		const parsedHours = parseDuration(text);
@@ -195,6 +198,9 @@ const WorkDayHoursSelection = ({day}: {day: WorkDay}) => {
 		}
 
 		setText(formatDuration(parsedHours));
+		if (parsedHours === hours) {
+			return;
+		}
 		dispatch(workContractHoursPerDaySet({day, hours: parsedHours}));
 	}, [day, dispatch, hours, text]);
 	React.useEffect(() => {
