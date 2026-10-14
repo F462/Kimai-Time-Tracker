@@ -1,4 +1,4 @@
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import {IconButton} from 'react-native-paper';
 
 import {selectIsUserLoggedIn} from 'src/features/account/context/accountSelectors';
@@ -11,9 +11,11 @@ import {
 	selectIsWorkContractHoursSyncInProgress,
 } from 'src/features/settings/context/settingsSelectors';
 import {selectAreAllTimesheetsInSync} from '../context/synchronizationSelectors';
+import {SynchronizeModal} from './SynchronizeModal';
 
 export const SynchronizationIndicator = () => {
 	const navigation = useAppNavigation();
+	const [isSyncModalVisible, setSyncModalVisible] = useState(false);
 
 	const areAllTimesheetsInSync = useAppSelector(selectAreAllTimesheetsInSync);
 	const isInternetReachable = useAppSelector(selectIsInternetReachable);
@@ -34,10 +36,13 @@ export const SynchronizationIndicator = () => {
 				return {iconString: 'cloud-alert'};
 			} else if (isUserLoggingIn === true) {
 				return {iconString: 'cloud-refresh'};
-			} else if (isWorkContractSyncInProgress) {
-				return {iconString: 'cloud-sync'};
 			} else if (hasWorkContractSyncStatus) {
-				return {iconString: 'cloud-upload-outline'};
+				return {
+					iconString: isWorkContractSyncInProgress
+						? 'cloud-sync'
+						: 'cloud-upload-outline',
+					iconCallback: () => setSyncModalVisible(true),
+				};
 			} else if (areAllTimesheetsInSync) {
 				return {iconString: 'cloud-check-outline'};
 			} else {
@@ -60,5 +65,13 @@ export const SynchronizationIndicator = () => {
 		navigation,
 	]);
 
-	return iconToDisplay;
+	return (
+		<>
+			{iconToDisplay}
+			<SynchronizeModal
+				visible={isSyncModalVisible}
+				onHide={() => setSyncModalVisible(false)}
+			/>
+		</>
+	);
 };

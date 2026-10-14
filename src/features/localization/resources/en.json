@@ -94,6 +94,7 @@
 	"workContractDescription": "Set your contracted hours for each day of the week.",
 	"workContractSyncInProgress": "Synchronizing work-contract hours...",
 	"workContractSyncPending": "Work-contract hours are waiting to synchronize.",
+	"workContractSyncDone": "Work-contract hours are synchronized.",
 	"abortWorkContractSync": "Cancel work-contract synchronization",
 	"weekdays": {
 		"monday": "Monday",
@@ -104,6 +105,7 @@
 		"saturday": "Saturday",
 		"sunday": "Sunday"
 	},
+	"synchronizationTitle": "Synchronization",
 	"synchronize": "Synchronize",
 	"underTime": "Time remaining",
 	"useBiometrics": "Use biometrics to unlock",
