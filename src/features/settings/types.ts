@@ -24,5 +24,6 @@ export type SettingsState = {
 	workContractHoursPerDay: WorkContractHours;
 	workContractHoursLastSynchronized: WorkContractHours;
 	workContractHoursSyncPending: boolean;
+	workContractHoursSyncWaiting: boolean;
 	workContractHoursSyncInProgress: boolean;
 };

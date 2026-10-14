@@ -34,25 +34,23 @@ type TestStore = Omit<ReturnType<typeof configureTestStore>, 'dispatch'> & {
 };
 
 describe('settings synchronization listener', () => {
-	it('retries pending hours when internet becomes reachable', async () => {
+	it('synchronizes pending hours when internet becomes reachable', async () => {
 		const listenerMiddleware = createListenerMiddleware();
 		startSettingsListeners(
 			listenerMiddleware.startListening as AppStartListening,
 		);
 		const store = configureTestStore(listenerMiddleware) as TestStore;
-		(api.get as jest.Mock)
-			.mockRejectedValueOnce(new Error('offline'))
-			.mockResolvedValueOnce({
-				id: 42,
-				preferences: [{name: 'work_monday', value: '28800'}],
-			});
+		(api.get as jest.Mock).mockResolvedValueOnce({
+			id: 42,
+			preferences: [{name: 'work_monday', value: '28800'}],
+		});
 		(api.patch as jest.Mock).mockResolvedValue({});
-		const logError = jest.spyOn(console, 'error').mockImplementation();
 
 		store.dispatch(workContractHoursPerDaySet({day: 'monday', hours: 4}));
 		await new Promise<void>((resolve) => setTimeout(resolve, 0));
 
 		expect(store.getState().settings.workContractHoursSyncPending).toBe(true);
+		expect(api.get).not.toHaveBeenCalled();
 
 		store.dispatch(internetReachabilityChanged(true));
 		await new Promise<void>((resolve) => setTimeout(resolve, 0));
@@ -61,6 +59,5 @@ describe('settings synchronization listener', () => {
 		expect(store.getState().settings.workContractHoursSyncPending).toBe(false);
 
 		listenerMiddleware.clearListeners();
-		logError.mockRestore();
 	});
 });

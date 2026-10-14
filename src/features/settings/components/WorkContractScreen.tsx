@@ -6,6 +6,7 @@ import {useTranslation} from 'react-i18next';
 import {RefreshControl, ScrollView, StyleSheet, View} from 'react-native';
 import {
 	ActivityIndicator,
+	Button,
 	Icon,
 	IconButton,
 	List,
@@ -17,9 +18,9 @@ import {
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {BaseScreen} from 'src/ui/BaseScreen';
 import {
-	selectHasWorkContractHoursSyncStatus,
 	selectIsWorkContractHoursSyncInProgress,
 	selectIsWorkContractHoursSyncPending,
+	selectIsWorkContractHoursSyncWaiting,
 	selectWorkContractHoursPerDay,
 } from '../context/settingsSelectors';
 import {workContractHoursPerDaySet} from '../context/settingsSlice';
@@ -55,6 +56,9 @@ const styles = StyleSheet.create({
 		marginLeft: 12,
 		flex: 1,
 	},
+	synchronizeButton: {
+		flex: 1,
+	},
 });
 
 const formatDuration = (hours: number) => {
@@ -84,41 +88,70 @@ const parseDuration = (value: string) => {
 const WorkContractSyncStatus = () => {
 	const {t} = useTranslation();
 	const dispatch = useAppDispatch();
-	const theme = useTheme();
-	const hasSyncStatus = useAppSelector(selectHasWorkContractHoursSyncStatus);
 	const isSyncInProgress = useAppSelector(
 		selectIsWorkContractHoursSyncInProgress,
 	);
+	const isSyncPending = useAppSelector(selectIsWorkContractHoursSyncPending);
+	const isSyncWaiting = useAppSelector(selectIsWorkContractHoursSyncWaiting);
+	const theme = useTheme();
 
-	if (!hasSyncStatus) {
-		return null;
-	}
-
-	return (
-		<View style={styles.syncStatus} accessibilityRole="progressbar">
-			{isSyncInProgress ? (
+	if (isSyncInProgress) {
+		return (
+			<View style={styles.syncStatus} accessibilityRole="progressbar">
 				<ActivityIndicator size="small" />
-			) : (
+				<Text style={styles.syncStatusText}>
+					{t('workContractSyncInProgress')}
+				</Text>
+				<IconButton
+					icon="close"
+					accessibilityLabel={t('abortWorkContractSync')}
+					onPress={() => {
+						dispatch(abortWorkContractHoursSync());
+					}}
+				/>
+			</View>
+		);
+	}
+	if (isSyncWaiting) {
+		return (
+			<View style={styles.syncStatus}>
 				<Icon
 					source="cloud-upload-outline"
 					size={20}
 					color={theme.colors.primary}
 				/>
-			)}
-			<Text style={styles.syncStatusText}>
-				{t(
-					isSyncInProgress
-						? 'workContractSyncInProgress'
-						: 'workContractSyncPending',
-				)}
-			</Text>
-			<IconButton
-				icon="close"
-				accessibilityLabel={t('abortWorkContractSync')}
+				<Text style={styles.syncStatusText}>
+					{t('workContractSyncPending')}
+				</Text>
+				<IconButton
+					icon="close"
+					accessibilityLabel={t('abortWorkContractSync')}
+					onPress={() => {
+						dispatch(abortWorkContractHoursSync());
+					}}
+				/>
+			</View>
+		);
+	}
+
+	return (
+		<View style={styles.syncStatus}>
+			<Button
+				mode="contained"
+				style={styles.synchronizeButton}
+				disabled={!isSyncPending}
+				icon="cloud-upload-outline"
 				onPress={() => {
-					dispatch(abortWorkContractHoursSync());
-				}}
-			/>
+					dispatch(
+						synchronizeWorkContractHours({
+							direction: isSyncPending ? 'push' : 'pull',
+						}),
+					)
+						.unwrap()
+						.catch(() => undefined);
+				}}>
+				{t('synchronize')}
+			</Button>
 		</View>
 	);
 };

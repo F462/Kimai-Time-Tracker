@@ -1,6 +1,7 @@
 import {api} from 'src/features/account/utils/ApiClient';
 import type {AppDispatch} from 'src/features/data/context/store';
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
+import {selectIsInternetReachable} from 'src/features/network/context/networkSelector';
 import {
 	selectIsWorkContractHoursSyncPending,
 	selectWorkContractHoursPerDay,
@@ -12,6 +13,7 @@ import {
 	workContractHoursSyncFinished,
 	workContractHoursSyncReconciled,
 	workContractHoursSyncStarted,
+	workContractHoursSyncWaiting,
 } from '../context/settingsSlice';
 import {WORK_DAYS, WorkDay} from '../types';
 
@@ -71,6 +73,13 @@ export const synchronizeWorkContractHours = createAppAsyncThunk<
 				direction === 'push' &&
 				!selectIsWorkContractHoursSyncPending(getState())
 			) {
+				return;
+			}
+			if (
+				direction === 'push' &&
+				selectIsInternetReachable(getState()) === false
+			) {
+				dispatch(workContractHoursSyncWaiting());
 				return;
 			}
 
@@ -168,6 +177,12 @@ export const synchronizeWorkContractHours = createAppAsyncThunk<
 				}
 			} catch (error) {
 				if (generation === workContractSyncGeneration) {
+					if (
+						direction === 'push' &&
+						selectIsInternetReachable(getState()) === false
+					) {
+						dispatch(workContractHoursSyncWaiting());
+					}
 					console.error('Unable to synchronize work-contract hours:', error);
 				}
 			} finally {

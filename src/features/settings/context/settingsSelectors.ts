@@ -29,10 +29,17 @@ export const selectIsWorkContractHoursSyncInProgress = createSelector(
 	(settings) => settings.workContractHoursSyncInProgress === true,
 );
 
+export const selectIsWorkContractHoursSyncWaiting = createSelector(
+	[selectSettingsState],
+	(settings) => settings.workContractHoursSyncWaiting === true,
+);
+
 export const selectHasWorkContractHoursSyncStatus = createSelector(
 	[
 		selectIsWorkContractHoursSyncPending,
+		selectIsWorkContractHoursSyncWaiting,
 		selectIsWorkContractHoursSyncInProgress,
 	],
-	(isPending, isInProgress) => isPending || isInProgress,
+	(isPending, isWaiting, isInProgress) =>
+		isPending || isWaiting || isInProgress,
 );

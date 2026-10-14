@@ -3,6 +3,10 @@ import {configureStore} from '@reduxjs/toolkit';
 import {api} from 'src/features/account/utils/ApiClient';
 import type {AppDispatch} from 'src/features/data/context/store';
 import {
+	internetReachabilityChanged,
+	networkReducer,
+} from 'src/features/network/context/networkSlice';
+import {
 	settingsReducer,
 	workContractHoursPerDaySet,
 } from 'src/features/settings/context/settingsSlice';
@@ -28,7 +32,9 @@ const serverHours: WorkContractHours = {
 };
 
 const configureTestStore = () =>
-	configureStore({reducer: {settings: settingsReducer}});
+	configureStore({
+		reducer: {settings: settingsReducer, network: networkReducer},
+	});
 
 type TestStore = Omit<ReturnType<typeof configureTestStore>, 'dispatch'> & {
 	dispatch: AppDispatch;
@@ -168,6 +174,23 @@ describe('work-contract hours synchronization', () => {
 		expect(api.patch).toHaveBeenCalledTimes(1);
 		expect(store.getState().settings.workContractHoursSyncPending).toBe(false);
 		logError.mockRestore();
+	});
+
+	it('shows a requested push as waiting while offline and aborts it', async () => {
+		const store = configureTestStore() as TestStore;
+		store.dispatch(workContractHoursPerDaySet({day: 'monday', hours: 4}));
+		store.dispatch(internetReachabilityChanged(false));
+
+		await store.dispatch(synchronizeWorkContractHours({direction: 'push'}));
+
+		expect(api.get).not.toHaveBeenCalled();
+		expect(store.getState().settings.workContractHoursSyncPending).toBe(true);
+		expect(store.getState().settings.workContractHoursSyncWaiting).toBe(true);
+
+		await store.dispatch(abortWorkContractHoursSync());
+
+		expect(store.getState().settings.workContractHoursSyncWaiting).toBe(false);
+		expect(store.getState().settings.workContractHoursSyncPending).toBe(false);
 	});
 
 	it('does not overwrite a pending local schedule with a server pull', async () => {

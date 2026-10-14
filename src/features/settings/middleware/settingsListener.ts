@@ -2,7 +2,6 @@ import {userLoggedIn} from 'src/features/account/context/accountActions';
 import {AppStartListening} from 'src/features/data/context/store';
 import {internetReachabilityChanged} from 'src/features/network/context/networkSlice';
 import {selectIsWorkContractHoursSyncPending} from '../context/settingsSelectors';
-import {workContractHoursPerDaySet} from '../context/settingsSlice';
 import {synchronizeWorkContractHours} from './settingsThunks';
 
 export const startSettingsListeners = (startListening: AppStartListening) => {
@@ -17,15 +16,6 @@ export const startSettingsListeners = (startListening: AppStartListening) => {
 						? 'push'
 						: 'pull',
 				}),
-			);
-		},
-	});
-
-	startListening({
-		actionCreator: workContractHoursPerDaySet,
-		effect: async (_, listenerApi) => {
-			await listenerApi.dispatch(
-				synchronizeWorkContractHours({direction: 'push'}),
 			);
 		},
 	});

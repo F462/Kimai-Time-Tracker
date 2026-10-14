@@ -65,6 +65,7 @@
 	"workContractSyncInProgress": "Vertragsstunden werden synchronisiert...",
 	"workContractSyncPending": "Vertragsstunden warten auf Synchronisierung.",
 	"abortWorkContractSync": "Synchronisierung der Vertragsstunden abbrechen",
+	"synchronize": "Synchronisieren",
 	"weekdays": {
 		"monday": "Montag",
 		"tuesday": "Dienstag",

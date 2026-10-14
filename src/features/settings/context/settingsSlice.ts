@@ -24,6 +24,7 @@ const initialState: SettingsState = {
 	workContractHoursPerDay: DEFAULT_WORK_CONTRACT_HOURS,
 	workContractHoursLastSynchronized: DEFAULT_WORK_CONTRACT_HOURS,
 	workContractHoursSyncPending: false,
+	workContractHoursSyncWaiting: false,
 	workContractHoursSyncInProgress: false,
 };
 
@@ -55,7 +56,11 @@ const settingsSlice = createSlice({
 				};
 			}
 			state.workContractHoursPerDay[payload.day] = payload.hours;
-			state.workContractHoursSyncPending = true;
+			state.workContractHoursSyncPending = WORK_DAYS.some(
+				(day) =>
+					state.workContractHoursPerDay[day] !==
+					state.workContractHoursLastSynchronized[day],
+			);
 		},
 		workContractHoursPerDaySynchronized: (
 			state,
@@ -64,6 +69,7 @@ const settingsSlice = createSlice({
 			state.workContractHoursPerDay = payload;
 			state.workContractHoursLastSynchronized = payload;
 			state.workContractHoursSyncPending = false;
+			state.workContractHoursSyncWaiting = false;
 		},
 		workContractHoursSyncReconciled: (
 			state,
@@ -79,6 +85,10 @@ const settingsSlice = createSlice({
 			state.workContractHoursSyncPending = WORK_DAYS.some(
 				(day) => payload.hours[day] !== payload.lastSynchronized[day],
 			);
+			state.workContractHoursSyncWaiting = false;
+		},
+		workContractHoursSyncWaiting: (state) => {
+			state.workContractHoursSyncWaiting = true;
 		},
 		workContractHoursSyncAborted: (state) => {
 			state.workContractHoursPerDay = {
@@ -86,9 +96,11 @@ const settingsSlice = createSlice({
 					state.workContractHoursPerDay),
 			};
 			state.workContractHoursSyncPending = false;
+			state.workContractHoursSyncWaiting = false;
 			state.workContractHoursSyncInProgress = false;
 		},
 		workContractHoursSyncStarted: (state) => {
+			state.workContractHoursSyncWaiting = false;
 			state.workContractHoursSyncInProgress = true;
 		},
 		workContractHoursSyncFinished: (state) => {
@@ -106,6 +118,7 @@ const settingsSlice = createSlice({
 			) {
 				state.workContractHoursSyncPending = false;
 			}
+			state.workContractHoursSyncWaiting = false;
 		},
 	},
 });
@@ -116,6 +129,7 @@ export const {
 	workContractHoursPerDaySet,
 	workContractHoursPerDaySynchronized,
 	workContractHoursSyncReconciled,
+	workContractHoursSyncWaiting,
 	workContractHoursSyncAborted,
 	workContractHoursSyncStarted,
 	workContractHoursSyncFinished,
