@@ -47,6 +47,33 @@ jest.mock('react-native-encrypted-storage', () => ({
 	clear: jest.fn(() => Promise.resolve())
 }));
 
+// react-native-paper resolves its icons through this package, whose entry
+// requires a binary .ttf font that Jest cannot parse. Mock it so the icon
+// loader succeeds instead of falling back to the "no icon library installed"
+// warning.
+jest.mock('@react-native-vector-icons/material-design-icons', () => {
+	const React = require('react');
+	const {Text} = require('react-native');
+	const MaterialDesignIcons = ({name, size, ...props}) =>
+		React.createElement(Text, props, name || '');
+	MaterialDesignIcons.displayName = 'MaterialDesignIcons';
+	return {
+		__esModule: true,
+		default: MaterialDesignIcons,
+		MaterialDesignIcons,
+	};
+});
+
+// Return a static time instead of scheduling a real setInterval. A live
+// interval is an open handle that keeps a Jest worker process from exiting
+// gracefully after the test that rendered it has finished.
+jest.mock('src/features/utils/useTime', () => {
+	const dayjs = require('dayjs');
+	return {
+		useTime: () => dayjs(),
+	};
+});
+
 jest.mock('react-native-bootsplash', () => {
 	return {
 		hide: jest.fn().mockResolvedValue(),

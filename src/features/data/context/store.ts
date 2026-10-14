@@ -47,6 +47,12 @@ import {startRootListener} from '../middleware/rootListener';
 const persistConfig = {
 	key: 'root',
 	version: 1,
+	// Disable the rehydration timeout. redux-persist schedules a setTimeout for
+	// this timeout when persistStore runs, and that timer is never cleaned up,
+	// which keeps the Jest worker process alive (test leak). Rehydration itself
+	// is driven by the storage promise chain, so this only removes the redundant
+	// timeout safety net.
+	timeout: 0,
 	storage: AsyncStorage,
 	migrate: createMigrate({
 		1: (state) => {
