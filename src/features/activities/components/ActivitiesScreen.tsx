@@ -12,6 +12,7 @@ import {
 	selectSelectedActivityId,
 } from '../context/activitiesSelectors';
 import {activitySelected} from '../context/activitiesSlice';
+import {fetchActivities} from '../middleware/activitiesThunks';
 import {Activity} from '../types';
 import {ActivityItemContextMenu} from './ActivityItemContextMenu';
 import {AddActivityModal} from './AddActivityModal';
@@ -58,12 +59,15 @@ const ActivityItem = ({
 };
 
 const ActivityList = () => {
+	const dispatch = useAppDispatch();
 	const activityList = useAppSelector(selectActivityList);
 	const selectedActivityId = useAppSelector(selectSelectedActivityId);
+	const onRefresh = useCallback(() => dispatch(fetchActivities()), [dispatch]);
 
 	return (
 		<DividedList
 			data={activityList}
+			onRefresh={onRefresh}
 			renderItem={({item}) => (
 				<ActivityItem
 					activity={item}

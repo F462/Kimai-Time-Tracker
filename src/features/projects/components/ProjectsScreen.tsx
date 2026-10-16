@@ -12,6 +12,7 @@ import {
 	selectSelectedProjectId,
 } from '../context/projectsSelectors';
 import {projectSelected} from '../context/projectsSlice';
+import {fetchProjects} from '../middleware/projectsThunks';
 import {Project} from '../types';
 import {AddProjectModal} from './AddProjectModal';
 import {ProjectItemContextMenu} from './ProjectItemContextMenu';
@@ -58,12 +59,15 @@ const ProjectItem = ({
 };
 
 const ProjectList = () => {
+	const dispatch = useAppDispatch();
 	const projectList = useAppSelector(selectProjectList);
 	const selectedProjectId = useAppSelector(selectSelectedProjectId);
+	const onRefresh = useCallback(() => dispatch(fetchProjects()), [dispatch]);
 
 	return (
 		<DividedList
 			data={projectList}
+			onRefresh={onRefresh}
 			renderItem={({item}) => (
 				<ProjectItem
 					project={item}

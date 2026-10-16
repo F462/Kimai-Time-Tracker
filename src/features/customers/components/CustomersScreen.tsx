@@ -12,6 +12,7 @@ import {
 	selectSelectedCustomerId,
 } from '../context/customersSelectors';
 import {customerSelected} from '../context/customersSlice';
+import {fetchCustomers} from '../middleware/customersThunks';
 import {Customer} from '../types';
 import {AddCustomerModal} from './AddCustomerModal';
 import {CustomerItemContextMenu} from './CustomerItemContextMenu';
@@ -58,12 +59,15 @@ const CustomerItem = ({
 };
 
 const CustomerList = () => {
+	const dispatch = useAppDispatch();
 	const customerList = useAppSelector(selectCustomerList);
 	const selectedCustomerId = useAppSelector(selectSelectedCustomerId);
+	const onRefresh = useCallback(() => dispatch(fetchCustomers()), [dispatch]);
 
 	return (
 		<DividedList
 			data={customerList}
+			onRefresh={onRefresh}
 			renderItem={({item}) => (
 				<CustomerItem
 					customer={item}
