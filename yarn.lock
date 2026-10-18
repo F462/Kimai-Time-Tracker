@@ -7686,15 +7686,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^26.4.7":
-  version: 26.4.7
-  resolution: "i18next@npm:26.4.7"
+"i18next@npm:^26.5.2":
+  version: 26.5.2
+  resolution: "i18next@npm:26.5.2"
   peerDependencies:
     typescript: ^5 || ^6 || ^7
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/cf282613ad426fd1c4607487ed3d54eadc01a08f7e1e3ecca7aa4235cab72451ec322d30aee4028146cbfa88652456b727089cecfdd5b4667316d64001316692
+  checksum: 10c0/b2edaba4af8f907d685bb133b8878cc1f03a7eaac3e76937da736b819d6d9500a82f516441b272994e9988c227bbcbbbc38fd185b4a2f67ab6bf9884ecf31167
   languageName: node
   linkType: hard
 
@@ -9069,14 +9069,14 @@ __metadata:
     eslint-plugin-prettier: "npm:^5.5.7"
     eslint-plugin-simple-import-sort: "npm:^14.0.0"
     http-status-codes: "npm:^2.3.0"
-    i18next: "npm:^26.4.7"
+    i18next: "npm:^26.5.2"
     jest: "npm:^30.5.2"
     lodash: "npm:^4.18.1"
     node-addon-api: "npm:^8.9.2"
     path: "npm:^0.12.7"
     prettier: "npm:3.9.10"
     react: "npm:19.3.1"
-    react-i18next: "npm:^17.0.20"
+    react-i18next: "npm:^17.1.0"
     react-native: "npm:0.88.0"
     react-native-blob-util: "npm:^0.25.1"
     react-native-bootsplash: "npm:^7.3.4"
@@ -9088,12 +9088,12 @@ __metadata:
     react-native-localize: "npm:^3.7.2"
     react-native-nitro-image: "npm:^0.15.2"
     react-native-nitro-modules: "npm:^0.37.1"
-    react-native-notify-kit: "npm:^10.8.1"
+    react-native-notify-kit: "npm:^10.9.0"
     react-native-paper: "npm:^5.15.3"
     react-native-paper-select: "npm:^1.5.0"
     react-native-reanimated: "npm:^4.7.1"
     react-native-safe-area-context: "npm:^5.10.1"
-    react-native-screens: "npm:^4.28.0"
+    react-native-screens: "npm:^4.30.0"
     react-native-share: "npm:^12.3.1"
     react-native-svg: "npm:^15.16.0"
     react-native-svg-transformer: "npm:^1.5.3"
@@ -10633,9 +10633,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^17.0.20":
-  version: 17.0.20
-  resolution: "react-i18next@npm:17.0.20"
+"react-i18next@npm:^17.1.0":
+  version: 17.1.0
+  resolution: "react-i18next@npm:17.1.0"
   dependencies:
     "@babel/runtime": "npm:^7.29.7"
     html-parse-stringify: "npm:^4.0.1"
@@ -10651,7 +10651,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/6f64a038abf8365c2fcbad3cba40b1f89d1ea9a598e93ba73347022f8827cc532effa462ecf9a33246e8c88021d55d847f6daf8b34b21fb35514805398a59901
+  checksum: 10c0/5ba9de18304f8fc20511de9f64f2a71594cb607c55b06692463867721f256770ae71489639bd96554bc556b5b310d495cff526ebbbaac091f9bae0ca8f547f24
   languageName: node
   linkType: hard
 
@@ -10823,15 +10823,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-notify-kit@npm:^10.8.1":
-  version: 10.8.1
-  resolution: "react-native-notify-kit@npm:10.8.1"
+"react-native-notify-kit@npm:^10.9.0":
+  version: 10.9.0
+  resolution: "react-native-notify-kit@npm:10.9.0"
   dependencies:
     "@expo/image-utils": "npm:^0.8.14"
     chalk: "npm:^4.1.0"
     commander: "npm:^12.0.0"
     plist: "npm:^3.1.0"
-    xcode: "npm:^3.0.1"
+    simple-plist: "npm:^1.3.1"
   peerDependencies:
     expo: "*"
     react-native: ">=0.73.0"
@@ -10842,14 +10842,14 @@ __metadata:
       optional: true
     plist:
       optional: true
-    xcode:
+    simple-plist:
       optional: true
   peerDependenciesMeta:
     expo:
       optional: true
   bin:
     react-native-notify-kit: cli/bin/react-native-notify-kit
-  checksum: 10c0/f080f0b61f7f36df0cba6ac12832d9c61181155079e3c5e9077399fc07aa48ce5c1d7240f4bda2bf3542649155341c7e9d2618fc929b2738801f08d9c4740bef
+  checksum: 10c0/45088a00b7f8e82c8aba2136f73958da97ed775c658909568b62a44c06f409c26e49ccd704e9a478340f728983d879f2090dfcf3347bda2dcf1138f66c47a0b1
   languageName: node
   linkType: hard
 
@@ -10910,16 +10910,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-screens@npm:^4.28.0":
-  version: 4.28.0
-  resolution: "react-native-screens@npm:4.28.0"
+"react-native-screens@npm:^4.30.0":
+  version: 4.30.0
+  resolution: "react-native-screens@npm:4.30.0"
   dependencies:
     react-freeze: "npm:^1.0.0"
     warn-once: "npm:^0.1.0"
   peerDependencies:
     react: "*"
     react-native: "*"
-  checksum: 10c0/5bd57be437b1966e50f71917c26b80cac38e73d2e23bfa7fb093d8613d2d80a38ffedeb77a5ea6e2664787fba2f1ede58ced9ed2c79af786f67272b114683b59
+  checksum: 10c0/9f5d4f0710a67362d4c3df8b998e8cf22d8d8eaa1a1a0185b5a34588b0aa922d346baf22a9e89c43a46f2d0b04c64e9f9e658411114a9e97fd228e29553f6cb8
   languageName: node
   linkType: hard
 
@@ -11761,7 +11761,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"simple-plist@npm:^1.1.0":
+"simple-plist@npm:^1.1.0, simple-plist@npm:^1.3.1":
   version: 1.4.0
   resolution: "simple-plist@npm:1.4.0"
   dependencies:
