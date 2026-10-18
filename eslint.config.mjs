@@ -3,6 +3,7 @@
  */
 
 import cspell from '@cspell/eslint-plugin';
+import {fixupConfigRules, fixupPluginRules} from '@eslint/compat';
 import {FlatCompat} from '@eslint/eslintrc';
 import js from '@eslint/js';
 import typescriptEslint from '@typescript-eslint/eslint-plugin';
@@ -31,14 +32,16 @@ export default defineConfig([
 		'.yarn/',
 	]),
 	{
-		extends: compat.extends('@react-native', 'plugin:prettier/recommended'),
+		extends: fixupConfigRules(
+			compat.extends('@react-native', 'plugin:prettier/recommended'),
+		),
 
 		plugins: {
-			'@typescript-eslint': typescriptEslint,
-			react,
-			'react-native': reactNative,
-			'@cspell': cspell,
-			'simple-import-sort': simpleImportSort,
+			'@typescript-eslint': fixupPluginRules(typescriptEslint),
+			react: fixupPluginRules(react),
+			'react-native': fixupPluginRules(reactNative),
+			'@cspell': fixupPluginRules(cspell),
+			'simple-import-sort': fixupPluginRules(simpleImportSort),
 		},
 
 		languageOptions: {
