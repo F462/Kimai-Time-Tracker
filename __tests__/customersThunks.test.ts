@@ -130,9 +130,13 @@ describe('customer thunks', () => {
 		(api.patch as jest.Mock).mockRejectedValue(
 			new Error('Validation Failed: color: The selected choice is invalid.'),
 		);
+		const consoleWarnSpy = jest
+			.spyOn(console, 'warn')
+			.mockImplementation(() => {});
 		const store = configureTestStore() as TestStore;
 
 		const resultAction = await store.dispatch(updateCustomer(customer));
+		consoleWarnSpy.mockRestore();
 
 		if (!updateCustomer.rejected.match(resultAction)) {
 			throw new Error('Expected the updateCustomer thunk to be rejected');
