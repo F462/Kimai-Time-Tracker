@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {useEffect} from 'react';
+import {useEffect, useRef} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Platform} from 'react-native';
 import notifications, {
@@ -32,6 +32,14 @@ export const DailyWorkingHoursNotificationIntegration = () => {
 	const dailyWorkingHoursSeconds = standardWorkingHoursToday * 60 * 60;
 	const workedSeconds = getWorkingHoursInSeconds(timesheets, dayjs());
 
+	// True once this session has observed the working hours below the daily
+	// threshold. The "work hours reached" notification must only be delivered
+	// once, at the moment the threshold is crossed. If the app is opened and
+	// the hours have already been reached (e.g. by an earlier session or an OS
+	// trigger that fired while the app was closed), we must NOT re-show the
+	// notification simply because the app was opened.
+	const hasSeenUnderThresholdRef = useRef(false);
+
 	useEffect(() => {
 		let isCurrent = true;
 		const notificationId = `${NOTIFICATION_CHANNEL_ID}-${dayjs().format('YYYY-MM-DD')}`;
@@ -43,6 +51,7 @@ export const DailyWorkingHoursNotificationIntegration = () => {
 			}
 
 			if (activeTimesheet && workedSeconds < dailyWorkingHoursSeconds) {
+				hasSeenUnderThresholdRef.current = true;
 				const triggerTimestamp =
 					Date.now() + (dailyWorkingHoursSeconds - workedSeconds) * 1000;
 				if (dayjs(triggerTimestamp).isAfter(dayjs().endOf('day'))) {
@@ -90,6 +99,14 @@ export const DailyWorkingHoursNotificationIntegration = () => {
 
 			await notifications.cancelTriggerNotification(notificationId);
 			if (!isCurrent || workedSeconds < dailyWorkingHoursSeconds) {
+				return;
+			}
+
+			// Only deliver the notification when the threshold was actually crossed
+			// during this session (i.e. we were under the daily hours earlier). If
+			// the app was opened and the hours were already reached, this is false
+			// and we skip the re-display.
+			if (!hasSeenUnderThresholdRef.current) {
 				return;
 			}
 
