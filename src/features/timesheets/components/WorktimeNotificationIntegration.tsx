@@ -87,7 +87,10 @@ export const DailyWorkingHoursNotificationIntegration = () => {
 						body: t('dailyWorkingHoursReachedBody', {
 							hours: standardWorkingHoursToday,
 						}),
-						android: {channelId: NOTIFICATION_CHANNEL_ID},
+						android: {
+							channelId: NOTIFICATION_CHANNEL_ID,
+							smallIcon: 'ic_launcher',
+						},
 					},
 					{
 						type: TriggerType.TIMESTAMP,
@@ -143,7 +146,10 @@ export const DailyWorkingHoursNotificationIntegration = () => {
 				body: t('dailyWorkingHoursReachedBody', {
 					hours: standardWorkingHoursToday,
 				}),
-				android: {channelId: NOTIFICATION_CHANNEL_ID},
+				android: {
+					channelId: NOTIFICATION_CHANNEL_ID,
+					smallIcon: 'ic_launcher',
+				},
 			});
 		};
 
