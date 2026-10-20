@@ -4,7 +4,6 @@ import {ScrollView, StyleSheet, View} from 'react-native';
 import {getLocales} from 'react-native-localize';
 import {
 	Button,
-	IconButton,
 	Modal,
 	Portal,
 	Switch,
@@ -269,7 +268,6 @@ export const CustomerModal = ({
 					<Text variant="titleLarge">
 						{isEdit ? t('editCustomer') : t('addCustomer')}
 					</Text>
-					<IconButton icon="close" onPress={onHideModal} />
 				</View>
 				{saveError !== null && (
 					<View style={styles.errorContainer}>
