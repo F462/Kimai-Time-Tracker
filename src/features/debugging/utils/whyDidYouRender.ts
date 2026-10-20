@@ -5,7 +5,12 @@ if (__DEV__) {
 	const ReactRedux = require('react-redux');
 
 	// These are library-internal components we don't care about
-	const exclude = [/^InputLabel$/, /^Pressable$/];
+	const exclude = [
+		/^InputLabel$/,
+		/^Pressable$/,
+		/^ViewHolderInternal$/,
+		/^ViewHolderCollection$/,
+	];
 
 	whyDidYouRender(React, {
 		trackAllPureComponents: true,
