@@ -8,6 +8,11 @@ export type Customer = {
 	visible: boolean;
 	billable: boolean;
 	currency: string;
+	company?: string;
+	street?: string;
+	zipcode?: string;
+	city?: string;
+	timezone?: string;
 	metaFields: Array<unknown>;
 	teams: Array<unknown>;
 	color: string | null;

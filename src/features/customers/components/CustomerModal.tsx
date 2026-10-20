@@ -4,6 +4,7 @@ import {ScrollView, StyleSheet, View} from 'react-native';
 import {getLocales} from 'react-native-localize';
 import {
 	Button,
+	List,
 	Modal,
 	Portal,
 	Switch,
@@ -21,7 +22,7 @@ import {
 	updateCustomer,
 } from '../middleware/customersThunks';
 import {Customer} from '../types';
-import {COUNTRIES, CURRENCIES, LANGUAGES} from '../utils/options';
+import {COUNTRIES, CURRENCIES, LANGUAGES, TIMEZONES} from '../utils/options';
 import {CustomerColorField} from './CustomerColorField';
 
 const styles = StyleSheet.create({
@@ -80,6 +81,19 @@ const defaultCountryFromLocale = (): string => {
 	return 'DE';
 };
 
+const defaultTimezone = (): string => {
+	try {
+		return new Intl.DateTimeFormat().resolvedOptions().timeZone ?? 'UTC';
+	} catch {
+		return 'UTC';
+	}
+};
+
+const timezoneOptions = (timezone: string) =>
+	TIMEZONES.some((option) => option.value === timezone)
+		? TIMEZONES
+		: [{value: timezone, label: timezone}, ...TIMEZONES];
+
 type CustomerModalProps = {
 	customer?: Customer;
 	visible: boolean;
@@ -112,7 +126,13 @@ export const CustomerModal = ({
 	const [name, setName] = useState('');
 	const [number, setNumber] = useState('');
 	const [comment, setComment] = useState('');
+	const [company, setCompany] = useState('');
+	const [street, setStreet] = useState('');
+	const [zipcode, setZipcode] = useState('');
+	const [city, setCity] = useState('');
 	const [country, setCountry] = useState('DE');
+	const [timezone, setTimezone] = useState('UTC');
+	const [addressExpanded, setAddressExpanded] = useState(false);
 	const [language, setLanguage] = useState('en');
 	const [currency, setCurrency] = useState('EUR');
 	const [color, setColor] = useState<string | null>(null);
@@ -134,11 +154,16 @@ export const CustomerModal = ({
 			setName(customer.name);
 			setNumber(customer.number);
 			setComment(customer.comment ?? '');
+			setCompany(customer.company ?? '');
+			setStreet(customer.street ?? '');
+			setZipcode(customer.zipcode ?? '');
+			setCity(customer.city ?? '');
 			setCountry(
 				customer.country && customer.country.length > 0
 					? customer.country
 					: defaultCountryFromLocale(),
 			);
+			setTimezone(customer.timezone || defaultTimezone());
 			setLanguage(customer.language);
 			setCurrency(customer.currency);
 			setColor(customer.color);
@@ -148,13 +173,19 @@ export const CustomerModal = ({
 			setName('');
 			setNumber('');
 			setComment('');
+			setCompany('');
+			setStreet('');
+			setZipcode('');
+			setCity('');
 			setCountry(defaultCountryFromLocale());
+			setTimezone(defaultTimezone());
 			setLanguage('en');
 			setCurrency('EUR');
 			setColor(null);
 			setIsVisible(true);
 			setIsBillable(true);
 		}
+		setAddressExpanded(false);
 	}, [visible, customer]);
 
 	useEffect(() => {
@@ -205,6 +236,11 @@ export const CustomerModal = ({
 					...customer,
 					name: name.trim(),
 					country,
+					company,
+					street,
+					zipcode,
+					city,
+					timezone,
 					language,
 					currency,
 					number: number.trim(),
@@ -224,6 +260,11 @@ export const CustomerModal = ({
 				createCustomer({
 					name: name.trim(),
 					country,
+					company: company || undefined,
+					street: street || undefined,
+					zipcode: zipcode || undefined,
+					city: city || undefined,
+					timezone,
 					language,
 					currency,
 					number: number || null,
@@ -244,8 +285,10 @@ export const CustomerModal = ({
 	}, [
 		color,
 		comment,
+		company,
 		country,
 		currency,
+		city,
 		customer,
 		dispatch,
 		extractErrorMessage,
@@ -256,6 +299,9 @@ export const CustomerModal = ({
 		name,
 		number,
 		onHideModal,
+		street,
+		timezone,
+		zipcode,
 	]);
 
 	return (
@@ -309,14 +355,57 @@ export const CustomerModal = ({
 						onChangeText={setNumber}
 						style={styles.field}
 					/>
-					<View style={styles.field}>
-						<OptionSelector
-							options={COUNTRIES}
-							selectedValue={country}
-							label={`${t('country')} *`}
-							onSelection={setCountry}
+					<List.Accordion
+						title={t('address')}
+						expanded={addressExpanded}
+						onPress={() => setAddressExpanded((expanded) => !expanded)}>
+						<TextInput
+							label={t('company')}
+							mode="outlined"
+							value={company}
+							onChangeText={setCompany}
+							style={styles.field}
 						/>
-					</View>
+						<TextInput
+							label={t('address')}
+							mode="outlined"
+							value={street}
+							onChangeText={setStreet}
+							multiline
+							numberOfLines={3}
+							style={styles.field}
+						/>
+						<TextInput
+							label={t('postalCode')}
+							mode="outlined"
+							value={zipcode}
+							onChangeText={setZipcode}
+							style={styles.field}
+						/>
+						<TextInput
+							label={t('city')}
+							mode="outlined"
+							value={city}
+							onChangeText={setCity}
+							style={styles.field}
+						/>
+						<View style={styles.field}>
+							<OptionSelector
+								options={COUNTRIES}
+								selectedValue={country}
+								label={`${t('country')} *`}
+								onSelection={setCountry}
+							/>
+						</View>
+						<View style={styles.field}>
+							<OptionSelector
+								options={timezoneOptions(timezone)}
+								selectedValue={timezone}
+								label={`${t('timezone')} *`}
+								onSelection={setTimezone}
+							/>
+						</View>
+					</List.Accordion>
 					<View style={styles.field}>
 						<OptionSelector
 							options={LANGUAGES}

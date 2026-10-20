@@ -16,6 +16,10 @@ export type CreateCustomerPayload = {
 	timezone?: string;
 	number?: string | null;
 	comment?: string | null;
+	company?: string;
+	street?: string;
+	zipcode?: string;
+	city?: string;
 	color?: string | null;
 	visible?: boolean;
 	billable?: boolean;
@@ -69,6 +73,11 @@ export const updateCustomer = createAppAsyncThunk(
 					number: customer.number,
 					comment: customer.comment,
 					country: customer.country,
+					company: customer.company ?? '',
+					street: customer.street ?? '',
+					zipcode: customer.zipcode ?? '',
+					city: customer.city ?? '',
+					timezone: customer.timezone,
 					language: customer.language,
 					currency: customer.currency,
 					color: customer.color,
@@ -92,6 +101,10 @@ export const createCustomer = createAppAsyncThunk<
 	const body: Record<string, unknown> = {
 		name: payload.name,
 		country: payload.country,
+		company: payload.company,
+		street: payload.street,
+		zipcode: payload.zipcode,
+		city: payload.city,
 		language: payload.language,
 		currency: payload.currency,
 		timezone: payload.timezone ?? resolveDefaultTimezone(),

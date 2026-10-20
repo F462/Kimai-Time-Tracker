@@ -121,3 +121,33 @@ export const COUNTRIES: Array<SelectOption> = [
 	{value: 'UA', label: 'Ukraine'},
 	{value: 'US', label: 'United States'},
 ];
+
+const DEFAULT_TIMEZONES = [
+	'UTC',
+	'Europe/Berlin',
+	'Europe/London',
+	'Europe/Paris',
+	'America/Los_Angeles',
+	'America/New_York',
+	'Asia/Tokyo',
+];
+
+const getTimezones = (): Array<string> => {
+	try {
+		const intlWithTimezones = Intl as typeof Intl & {
+			supportedValuesOf?: (key: 'timeZone') => Array<string>;
+		};
+		return (
+			intlWithTimezones.supportedValuesOf?.('timeZone') ?? DEFAULT_TIMEZONES
+		);
+	} catch {
+		return DEFAULT_TIMEZONES;
+	}
+};
+
+export const TIMEZONES: Array<SelectOption> = getTimezones().map(
+	(timezone) => ({
+		value: timezone,
+		label: timezone.replaceAll('_', ' '),
+	}),
+);
