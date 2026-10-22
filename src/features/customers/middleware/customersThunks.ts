@@ -23,6 +23,11 @@ export type CreateCustomerPayload = {
 	color?: string | null;
 	visible?: boolean;
 	billable?: boolean;
+	vatId?: string;
+	invoiceEmail?: string;
+	buyerReference?: string;
+	invoiceTemplate?: string;
+	invoiceText?: string;
 };
 
 export const fetchCustomerColors = createAppAsyncThunk(
@@ -83,6 +88,18 @@ export const updateCustomer = createAppAsyncThunk(
 					color: customer.color,
 					visible: customer.visible,
 					billable: customer.billable,
+					// These are returned by the API, so sending them (even empty)
+					// lets the user clear the value.
+					vatId: customer.vatId ?? '',
+					invoiceEmail: customer.invoiceEmail ?? '',
+					buyerReference: customer.buyerReference ?? '',
+					// The API does not return these on GET, so we only send them
+					// when they carry a value. Sending an empty string would wipe
+					// data we were unable to read back.
+					...(customer.invoiceText ? {invoiceText: customer.invoiceText} : {}),
+					...(customer.invoiceTemplate
+						? {invoiceTemplate: customer.invoiceTemplate}
+						: {}),
 				},
 			);
 			dispatch(customerUpdated(response));
@@ -124,6 +141,27 @@ export const createCustomer = createAppAsyncThunk<
 
 	body.visible = payload.visible ?? true;
 	body.billable = payload.billable ?? true;
+
+	// Invoice settings: only sent when a value is present.
+	if (payload.vatId) {
+		body.vatId = payload.vatId;
+	}
+
+	if (payload.invoiceEmail) {
+		body.invoiceEmail = payload.invoiceEmail;
+	}
+
+	if (payload.buyerReference) {
+		body.buyerReference = payload.buyerReference;
+	}
+
+	if (payload.invoiceTemplate) {
+		body.invoiceTemplate = payload.invoiceTemplate;
+	}
+
+	if (payload.invoiceText) {
+		body.invoiceText = payload.invoiceText;
+	}
 
 	const response = await api.post<Customer>('api/customers', body);
 

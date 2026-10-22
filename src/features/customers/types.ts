@@ -16,6 +16,12 @@ export type Customer = {
 	metaFields: Array<unknown>;
 	teams: Array<unknown>;
 	color: string | null;
+	// Invoice settings (Kimai customer invoice fields)
+	vatId?: string;
+	invoiceEmail?: string;
+	buyerReference?: string;
+	invoiceTemplate?: string;
+	invoiceText?: string;
 };
 
 export type CustomersState = {

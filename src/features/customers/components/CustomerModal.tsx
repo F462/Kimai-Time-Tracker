@@ -117,8 +117,18 @@ export const CustomerModal = ({
 			errorText: {
 				color: theme.colors.error,
 			},
+			invoiceHelp: {
+				color: theme.colors.onSurfaceVariant,
+				marginTop: 4,
+				marginBottom: 10,
+				paddingHorizontal: 16,
+			},
 		}),
-		[theme.colors.background, theme.colors.error],
+		[
+			theme.colors.background,
+			theme.colors.error,
+			theme.colors.onSurfaceVariant,
+		],
 	);
 
 	const isEdit = customer !== undefined;
@@ -142,6 +152,12 @@ export const CustomerModal = ({
 	const [isVisible, setIsVisible] = useState(true);
 	const [isBillable, setIsBillable] = useState(true);
 	const [saveError, setSaveError] = useState<string | null>(null);
+	const [invoiceExpanded, setInvoiceExpanded] = useState(false);
+	const [vatId, setVatId] = useState('');
+	const [invoiceEmail, setInvoiceEmail] = useState('');
+	const [buyerReference, setBuyerReference] = useState('');
+	const [invoiceTemplate, setInvoiceTemplate] = useState('');
+	const [invoiceText, setInvoiceText] = useState('');
 
 	useEffect(() => {
 		if (!visible) {
@@ -169,6 +185,11 @@ export const CustomerModal = ({
 			setColor(customer.color);
 			setIsVisible(customer.visible);
 			setIsBillable(customer.billable);
+			setVatId(customer.vatId ?? '');
+			setInvoiceEmail(customer.invoiceEmail ?? '');
+			setBuyerReference(customer.buyerReference ?? '');
+			setInvoiceTemplate(customer.invoiceTemplate ?? '');
+			setInvoiceText(customer.invoiceText ?? '');
 		} else {
 			setName('');
 			setNumber('');
@@ -184,8 +205,14 @@ export const CustomerModal = ({
 			setColor(null);
 			setIsVisible(true);
 			setIsBillable(true);
+			setVatId('');
+			setInvoiceEmail('');
+			setBuyerReference('');
+			setInvoiceTemplate('');
+			setInvoiceText('');
 		}
 		setAddressExpanded(false);
+		setInvoiceExpanded(false);
 	}, [visible, customer]);
 
 	useEffect(() => {
@@ -248,6 +275,11 @@ export const CustomerModal = ({
 					color,
 					visible: isVisible,
 					billable: isBillable,
+					vatId: vatId.trim(),
+					invoiceEmail: invoiceEmail.trim(),
+					buyerReference: buyerReference.trim(),
+					invoiceTemplate: invoiceTemplate.trim(),
+					invoiceText: invoiceText.trim(),
 				}),
 			);
 
@@ -272,6 +304,11 @@ export const CustomerModal = ({
 					color,
 					visible: isVisible,
 					billable: isBillable,
+					vatId: vatId.trim() || undefined,
+					invoiceEmail: invoiceEmail.trim() || undefined,
+					buyerReference: buyerReference.trim() || undefined,
+					invoiceTemplate: invoiceTemplate.trim() || undefined,
+					invoiceText: invoiceText.trim() || undefined,
 				}),
 			);
 
@@ -283,6 +320,7 @@ export const CustomerModal = ({
 
 		onHideModal();
 	}, [
+		buyerReference,
 		color,
 		comment,
 		company,
@@ -295,12 +333,16 @@ export const CustomerModal = ({
 		isBillable,
 		isValid,
 		isVisible,
+		invoiceEmail,
+		invoiceTemplate,
+		invoiceText,
 		language,
 		name,
 		number,
 		onHideModal,
 		street,
 		timezone,
+		vatId,
 		zipcode,
 	]);
 
@@ -405,6 +447,59 @@ export const CustomerModal = ({
 								onSelection={setTimezone}
 							/>
 						</View>
+					</List.Accordion>
+					<List.Accordion
+						title={t('invoices')}
+						expanded={invoiceExpanded}
+						onPress={() => setInvoiceExpanded((expanded) => !expanded)}>
+						<TextInput
+							label={t('vatId')}
+							mode="outlined"
+							value={vatId}
+							onChangeText={setVatId}
+							autoCapitalize="characters"
+							style={styles.field}
+						/>
+						<TextInput
+							label={t('invoiceEmail')}
+							mode="outlined"
+							value={invoiceEmail}
+							onChangeText={setInvoiceEmail}
+							keyboardType="email-address"
+							autoCapitalize="none"
+							textContentType="emailAddress"
+							style={styles.field}
+						/>
+						<TextInput
+							label={t('buyerReference')}
+							mode="outlined"
+							value={buyerReference}
+							onChangeText={setBuyerReference}
+							style={styles.field}
+						/>
+						<TextInput
+							label={t('invoiceTemplate')}
+							mode="outlined"
+							value={invoiceTemplate}
+							onChangeText={setInvoiceTemplate}
+							autoCapitalize="none"
+							style={styles.field}
+						/>
+						<Text variant="bodySmall" style={dynamicStyles.invoiceHelp}>
+							{t('invoiceTemplateHelp')}
+						</Text>
+						<TextInput
+							label={t('invoiceText')}
+							mode="outlined"
+							value={invoiceText}
+							onChangeText={setInvoiceText}
+							multiline
+							numberOfLines={4}
+							style={styles.field}
+						/>
+						<Text variant="bodySmall" style={dynamicStyles.invoiceHelp}>
+							{t('invoiceTextHelp')}
+						</Text>
 					</List.Accordion>
 					<View style={styles.field}>
 						<OptionSelector

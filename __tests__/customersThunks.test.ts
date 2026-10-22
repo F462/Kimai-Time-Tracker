@@ -115,8 +115,43 @@ describe('customer thunks', () => {
 			color: customer.color,
 			visible: customer.visible,
 			billable: customer.billable,
+			// These round-trip fields are always sent (even empty).
+			vatId: '',
+			invoiceEmail: '',
+			buyerReference: '',
+			// These are NOT returned by the API, so they must be omitted
+			// when empty to avoid wiping existing data.
 		});
+		const sentBody = (api.patch as jest.Mock).mock.calls[0][1];
+		expect(sentBody).not.toHaveProperty('invoiceTemplate');
+		expect(sentBody).not.toHaveProperty('invoiceText');
 		expect(store.getState().customers.customers[customer.id]).toEqual(customer);
+	});
+
+	it('sends invoice template and text on update only when set', async () => {
+		const customer = makeCustomer();
+		(api.patch as jest.Mock).mockResolvedValue(customer);
+		const store = configureTestStore() as TestStore;
+
+		await store.dispatch(
+			updateCustomer({
+				...customer,
+				vatId: 'DE123456789',
+				invoiceEmail: 'billing@example.com',
+				buyerReference: 'PO-2026-1',
+				invoiceTemplate: 'Standard',
+				invoiceText: 'Thanks for your business.',
+			}),
+		);
+
+		const sentBody = (api.patch as jest.Mock).mock.calls[0][1];
+		expect(sentBody).toMatchObject({
+			vatId: 'DE123456789',
+			invoiceEmail: 'billing@example.com',
+			buyerReference: 'PO-2026-1',
+			invoiceTemplate: 'Standard',
+			invoiceText: 'Thanks for your business.',
+		});
 	});
 
 	it('rejects with the server error when creating is rejected', async () => {
