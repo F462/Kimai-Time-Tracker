@@ -14,8 +14,8 @@ import {
 import {projectSelected} from '../context/projectsSlice';
 import {fetchProjects} from '../middleware/projectsThunks';
 import {Project} from '../types';
-import {AddProjectModal} from './AddProjectModal';
 import {ProjectItemContextMenu} from './ProjectItemContextMenu';
+import {ProjectModal} from './ProjectModal';
 
 const styles = StyleSheet.create({
 	fab: {
@@ -94,7 +94,7 @@ export const ProjectsScreen = () => {
 				onPress={onShowAddModal}
 				style={styles.fab}
 			/>
-			<AddProjectModal visible={addModalVisible} onHideModal={onHideAddModal} />
+			<ProjectModal visible={addModalVisible} onHideModal={onHideAddModal} />
 		</BaseScreen>
 	);
 };

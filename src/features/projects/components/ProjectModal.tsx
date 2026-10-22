@@ -17,7 +17,8 @@ import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {useStyle} from 'src/features/theming/utils/useStyle';
 import {parseSelectedId} from 'src/features/timesheets/utils/functions';
 import {BaseSelector} from 'src/ui/Selectors/BaseSelector';
-import {createProject} from '../middleware/projectsThunks';
+import {createProject, updateProject} from '../middleware/projectsThunks';
+import {Project} from '../types';
 
 const styles = StyleSheet.create({
 	modal: {
@@ -40,19 +41,27 @@ const styles = StyleSheet.create({
 	},
 });
 
-type AddProjectModalProps = {
+type ProjectModalProps = {
+	/**
+	 * The project to edit. When `undefined`, the modal is in "add" mode and
+	 * creates a new project; when set, it is in "edit" mode and updates the
+	 * given project.
+	 */
+	project?: Project;
 	visible: boolean;
 	onHideModal: () => void;
 };
 
-export const AddProjectModal = ({
+export const ProjectModal = ({
+	project,
 	visible,
 	onHideModal,
-}: AddProjectModalProps) => {
+}: ProjectModalProps) => {
 	const dispatch = useAppDispatch();
 	const theme = useTheme();
 	const {t} = useTranslation();
 	const customerList = useAppSelector(selectCustomerList);
+	const isEdit = project !== undefined;
 
 	const dynamicStyles = useStyle(
 		() => ({
@@ -71,7 +80,18 @@ export const AddProjectModal = ({
 	const [isBillable, setIsBillable] = useState(true);
 
 	useEffect(() => {
-		if (visible) {
+		if (!visible) {
+			return;
+		}
+
+		if (project) {
+			setName(project.name);
+			setCustomer(undefined);
+			setNumber(project.number);
+			setComment(project.comment ?? '');
+			setIsVisible(project.visible);
+			setIsBillable(project.billable);
+		} else {
 			setName('');
 			setCustomer(undefined);
 			setNumber('');
@@ -79,7 +99,7 @@ export const AddProjectModal = ({
 			setIsVisible(true);
 			setIsBillable(true);
 		}
-	}, [visible]);
+	}, [visible, project]);
 
 	const onCustomerSelection = useCallback(
 		(
@@ -93,21 +113,38 @@ export const AddProjectModal = ({
 		[customerList],
 	);
 
+	const canSave = name.trim() !== '' && (isEdit || customer !== undefined);
+
 	const onSave = useCallback(() => {
-		if (!name.trim() || !customer) {
+		if (!name.trim()) {
 			return;
 		}
 
-		dispatch(
-			createProject({
-				name: name.trim(),
-				customer: customer.id,
-				number: number.trim() || null,
-				comment: comment.trim() || null,
-				visible: isVisible,
-				billable: isBillable,
-			}),
-		).catch(console.error);
+		if (project) {
+			dispatch(
+				updateProject({
+					...project,
+					name: name.trim(),
+					number: number.trim(),
+					comment: comment.trim() || null,
+					visible: isVisible,
+					billable: isBillable,
+				}),
+			).catch(console.error);
+		} else if (customer) {
+			dispatch(
+				createProject({
+					name: name.trim(),
+					customer: customer.id,
+					number: number.trim() || null,
+					comment: comment.trim() || null,
+					visible: isVisible,
+					billable: isBillable,
+				}),
+			).catch(console.error);
+		} else {
+			return;
+		}
 
 		onHideModal();
 	}, [
@@ -119,6 +156,7 @@ export const AddProjectModal = ({
 		name,
 		number,
 		onHideModal,
+		project,
 	]);
 
 	return (
@@ -127,7 +165,9 @@ export const AddProjectModal = ({
 				visible={visible}
 				onDismiss={onHideModal}
 				contentContainerStyle={[styles.modal, dynamicStyles.modal]}>
-				<Text variant="headlineSmall">{t('addProject')}</Text>
+				<Text variant="headlineSmall">
+					{t(isEdit ? 'editProject' : 'addProject')}
+				</Text>
 				<View style={styles.modalContent}>
 					<TextInput
 						label={t('name')}
@@ -135,12 +175,14 @@ export const AddProjectModal = ({
 						value={name}
 						onChangeText={setName}
 					/>
-					<BaseSelector
-						elements={customerList}
-						selectedElement={customer}
-						label={t('selectCustomer')}
-						onSelection={onCustomerSelection}
-					/>
+					{!isEdit && (
+						<BaseSelector
+							elements={customerList}
+							selectedElement={customer}
+							label={t('selectCustomer')}
+							onSelection={onCustomerSelection}
+						/>
+					)}
 					<TextInput
 						label={t('number')}
 						mode="outlined"
@@ -165,10 +207,7 @@ export const AddProjectModal = ({
 				</View>
 				<View style={styles.buttonContainer}>
 					<Button onPress={onHideModal}>{t('dismiss')}</Button>
-					<Button
-						mode="contained"
-						onPress={onSave}
-						disabled={!name.trim() || !customer}>
+					<Button mode="contained" onPress={onSave} disabled={!canSave}>
 						{t('save')}
 					</Button>
 				</View>

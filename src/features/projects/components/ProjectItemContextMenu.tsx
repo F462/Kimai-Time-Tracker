@@ -5,7 +5,7 @@ import {useAppDispatch} from 'src/features/data/context/store';
 import {EntityItemContextMenu} from 'src/ui/EntityItemContextMenu';
 import {removeProject} from '../middleware/projectsThunks';
 import {Project} from '../types';
-import {EditProjectModal} from './EditProjectModal';
+import {ProjectModal} from './ProjectModal';
 
 type ProjectItemContextMenuProps = {
 	project: Project;
@@ -34,7 +34,7 @@ export const ProjectItemContextMenu = ({
 
 	return (
 		<>
-			<EditProjectModal
+			<ProjectModal
 				project={project}
 				visible={editModalVisible}
 				onHideModal={onHideEditModal}

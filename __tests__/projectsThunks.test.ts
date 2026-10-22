@@ -18,6 +18,7 @@ const makeProject = (): Project => ({
 	name: 'Website refresh',
 	start: null,
 	end: null,
+	lockedUntil: null,
 	comment: 'Launch work',
 	visible: true,
 	billable: true,
@@ -61,6 +62,7 @@ describe('createProject', () => {
 			comment: project.comment,
 			visible: true,
 			billable: true,
+			globalActivities: true,
 		});
 		expect(store.getState().projects.projects[project.id]).toEqual(project);
 	});
