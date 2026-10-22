@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
 	combineReducers,
 	configureStore,
@@ -27,6 +26,7 @@ import {activeTimesheetReducer} from 'src/features/activeTimesheet/context/activ
 import {activitiesReducer} from 'src/features/activities/context/activitiesSlice';
 import {appStateReducer} from 'src/features/appState/context/appStateSlice';
 import {customersReducer} from 'src/features/customers/context/customersSlice';
+import fileStorage from 'src/features/data/context/fileStorage';
 import {createLoggingMiddleware} from 'src/features/logging/middleware/middleware';
 import {networkReducer} from 'src/features/network/context/networkSlice';
 import {onboardingReducer} from 'src/features/onboarding/context/onboardingSlice';
@@ -53,7 +53,7 @@ const persistConfig = {
 	// is driven by the storage promise chain, so this only removes the redundant
 	// timeout safety net.
 	timeout: 0,
-	storage: AsyncStorage,
+	storage: fileStorage,
 	migrate: createMigrate({
 		1: (state) => {
 			const persistedState = state as typeof state & {

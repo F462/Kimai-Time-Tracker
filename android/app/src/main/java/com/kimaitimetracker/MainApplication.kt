@@ -15,6 +15,7 @@ class MainApplication : Application(), ReactApplication {
       packageList =
         PackageList(this).packages.apply {
           add(com.github.f462.kimaitimetracker.WidgetBridgePackage())
+          add(com.github.f462.kimaitimetracker.SharedFolderStoragePackage())
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // add(MyReactNativePackage())
         },

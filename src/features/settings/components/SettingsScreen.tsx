@@ -1,11 +1,16 @@
 import {Picker} from '@react-native-picker/picker';
 import {simplePrompt} from '@sbaiahmed1/react-native-biometrics';
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Linking, Platform, StyleSheet} from 'react-native';
 import notifications, {AndroidImportance} from 'react-native-notify-kit';
 import {List, Switch, useTheme} from 'react-native-paper';
 
+import fileStorage from 'src/features/data/context/fileStorage';
+import {
+	pickSharedFolder,
+	releaseSharedFolder,
+} from 'src/features/data/context/sharedFolderStorage';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {useAppNavigation} from 'src/features/navigation/context/hooks';
 import {useStyle} from 'src/features/theming/utils/useStyle';
@@ -27,6 +32,8 @@ const styles = StyleSheet.create({
 });
 
 const LightDarkIcon = () => <List.Icon icon="theme-light-dark" />;
+const LocalStorageFolderIcon = () => <List.Icon icon="folder-outline" />;
+const SettingsChevronIcon = () => <List.Icon icon="chevron-right" />;
 
 const ThemeSelection = () => {
 	const {t} = useTranslation();
@@ -73,6 +80,104 @@ const DisplaySection = () => {
 				right={ThemeSelection}
 			/>
 		</List.Section>
+	);
+};
+
+const LocalStorageLocation = () => {
+	const {t} = useTranslation();
+	const [directory, setDirectory] = useState('');
+	const [error, setError] = useState('');
+	const [saving, setSaving] = useState(false);
+
+	useEffect(() => {
+		fileStorage
+			.getDirectory()
+			.then(setDirectory)
+			.catch((storageError) =>
+				console.warn('Unable to read storage path:', storageError),
+			);
+	}, []);
+
+	const chooseDirectory = async () => {
+		let selectedFolder:
+			Awaited<ReturnType<typeof pickSharedFolder>> | undefined;
+		setSaving(true);
+		setError('');
+		try {
+			selectedFolder = await pickSharedFolder();
+			await fileStorage.setExternalDirectory(
+				selectedFolder.uri,
+				selectedFolder.name,
+			);
+			setDirectory(await fileStorage.getDirectory());
+		} catch (storageError) {
+			console.warn('Shared folder selection failed:', storageError);
+			if (selectedFolder) {
+				releaseSharedFolder(selectedFolder.uri).catch(console.warn);
+			}
+			const errorCode = (storageError as {code?: string})?.code;
+			if (
+				errorCode !== 'E_CANCELLED' &&
+				!(
+					storageError instanceof Error &&
+					storageError.message === 'E_CANCELLED'
+				)
+			) {
+				let message = t('storageFolderSaveError');
+				if (errorCode === 'E_PERSIST_PERMISSION_UNSUPPORTED') {
+					message = t('storageFolderPersistentPermissionUnsupported');
+				} else if (errorCode === 'E_WRITE_PERMISSION_MISSING') {
+					message = t('storageFolderWritePermissionMissing');
+				}
+				setError(message);
+			}
+		} finally {
+			setSaving(false);
+		}
+	};
+
+	const switchToPrivateStorage = async () => {
+		setSaving(true);
+		setError('');
+		try {
+			await fileStorage.setExternalDirectory(null);
+			setDirectory(await fileStorage.getDirectory());
+		} catch (storageError) {
+			setError(t('storageFolderSaveError'));
+			console.warn('Unable to switch to app storage:', storageError);
+		} finally {
+			setSaving(false);
+		}
+	};
+
+	return (
+		<>
+			<List.Section>
+				<List.Subheader>{t('localStorageTitle')}</List.Subheader>
+				<List.Item
+					title={t('chooseSharedFolder')}
+					description={directory || t('defaultStoragePath')}
+					left={LocalStorageFolderIcon}
+					right={SettingsChevronIcon}
+					onPress={() => {
+						chooseDirectory().catch(console.warn);
+					}}
+					disabled={saving}
+				/>
+				<List.Item title={t('sharedFolderDescription')} />
+				{directory ? (
+					<List.Item
+						title={t('usePrivateStorage')}
+						left={SettingsChevronIcon}
+						onPress={() => {
+							switchToPrivateStorage().catch(console.warn);
+						}}
+						disabled={saving}
+					/>
+				) : null}
+				{error ? <List.Item title={error} /> : null}
+			</List.Section>
+		</>
 	);
 };
 
@@ -130,7 +235,6 @@ const SecuritySection = () => {
 
 const DAILY_WORKING_HOURS_CHANNEL_ID = 'daily-working-hours';
 const NotificationBellIcon = () => <List.Icon icon="bell-outline" />;
-const SettingsChevronIcon = () => <List.Icon icon="chevron-right" />;
 const WorkContractIcon = () => <List.Icon icon="briefcase-outline" />;
 
 const WorkingTimeSection = () => {
@@ -195,6 +299,7 @@ export const SettingsScreen = () => {
 	return (
 		<BaseScreen>
 			<DisplaySection />
+			<LocalStorageLocation />
 			<WorkingTimeSection />
 			<NotificationSettingsItem />
 			<SecuritySection />

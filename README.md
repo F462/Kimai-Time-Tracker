@@ -10,6 +10,7 @@ This project is about creating an Android/iOS app for [Kimai](https://github.com
 - [x] Fetch and show customers
 - [x] Fetch and show projects
 - [x] Fetch and show timesheets
+- [x] Persist synchronized data and local timesheets for offline use, optionally in a user-selected shared folder
 - [x] Start and stop new timesheets to track time, also without Internet access
 - [x] Home-screen widget showing today's worked duration and starting/stopping the active timesheet
 - [x] Smartwatch compatibility
