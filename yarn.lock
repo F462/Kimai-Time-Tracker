@@ -3537,9 +3537,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-community/datetimepicker@npm:^9.2.1":
-  version: 9.2.1
-  resolution: "@react-native-community/datetimepicker@npm:9.2.1"
+"@react-native-community/datetimepicker@npm:^9.2.2":
+  version: 9.2.2
+  resolution: "@react-native-community/datetimepicker@npm:9.2.2"
   dependencies:
     invariant: "npm:^2.2.4"
   peerDependencies:
@@ -3552,7 +3552,7 @@ __metadata:
       optional: true
     react-native-windows:
       optional: true
-  checksum: 10c0/6d6c4703506d6c3e8f933461094fcb23227a88481af2de13179004aa54537fd7d74ae4566860f90a784b5636516bbd463b8af844543fb85db5dc9cdfc4c0381e
+  checksum: 10c0/fc8c5206a5e7d532685752819e0eecea3b4f34944905bf0ec1f3c0f032e914c090b0bcf62d9063293530d6fe92b9631429503fe4e5e4172c3b557f7de7f79576
   languageName: node
   linkType: hard
 
@@ -3576,15 +3576,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/common@npm:^13.0.4":
-  version: 13.0.4
-  resolution: "@react-native-vector-icons/common@npm:13.0.4"
+"@react-native-vector-icons/common@npm:^14.0.0":
+  version: 14.0.0
+  resolution: "@react-native-vector-icons/common@npm:14.0.0"
   dependencies:
     find-up: "npm:^8.0.0"
     picocolors: "npm:^1.1.1"
     plist: "npm:^3.1.0"
   peerDependencies:
-    "@react-native-vector-icons/get-image": ^13.0.2
+    "@react-native-vector-icons/get-image": ^14.0.0
     "@react-native/assets-registry": "*"
     expo-font: "*"
     react: "*"
@@ -3598,15 +3598,15 @@ __metadata:
       optional: true
   bin:
     rnvi-update-plist: lib/commonjs/scripts/updatePlist.js
-  checksum: 10c0/34fd2982f263adbb34ba6895f52b2dc6a907ad6f7480a72d71cc9d9113301912e56da124729a7cb7307addf747aaf9ecd0a7301218fa1fd1fd1d5641fb6cff84
+  checksum: 10c0/ac5fbf875a4636079767278fe7dfb01b4d024198ef909dd964b85f7dd411fb4b37bd4747eeeeb09be99579a920557775903a111f43b51c8ad51f216948db4742
   languageName: node
   linkType: hard
 
-"@react-native-vector-icons/material-design-icons@npm:^13.1.5":
-  version: 13.1.5
-  resolution: "@react-native-vector-icons/material-design-icons@npm:13.1.5"
+"@react-native-vector-icons/material-design-icons@npm:^14.0.0":
+  version: 14.0.0
+  resolution: "@react-native-vector-icons/material-design-icons@npm:14.0.0"
   dependencies:
-    "@react-native-vector-icons/common": "npm:^13.0.4"
+    "@react-native-vector-icons/common": "npm:^14.0.0"
   peerDependencies:
     expo: "*"
     react: "*"
@@ -3614,7 +3614,7 @@ __metadata:
   peerDependenciesMeta:
     expo:
       optional: true
-  checksum: 10c0/94f2903eb8b92157abac23e6a659d3b1d3df14fbc34826c87f0edf1ad27a6c4ab05cd67ab83cee2cf6d8b6ac0822055cbf4aa1903e33e95b3988badc8875e6dc
+  checksum: 10c0/7a010467dafee93b044e7a8ab545369cb023751154b40ab31185a7706cfe8690bd0cd3d8024cf2c6a2b2bcd7a44113f88c532da11c2ec5b445c1d26224255764
   languageName: node
   linkType: hard
 
@@ -3988,9 +3988,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sbaiahmed1/react-native-biometrics@npm:^0.16.1":
-  version: 0.16.1
-  resolution: "@sbaiahmed1/react-native-biometrics@npm:0.16.1"
+"@sbaiahmed1/react-native-biometrics@npm:^0.17.0":
+  version: 0.17.0
+  resolution: "@sbaiahmed1/react-native-biometrics@npm:0.17.0"
   peerDependencies:
     expo: ">=52.0.0"
     react: "*"
@@ -3998,7 +3998,7 @@ __metadata:
   peerDependenciesMeta:
     expo:
       optional: true
-  checksum: 10c0/3cb02058b568ff3ea3878dd7eda20c79a2707840f44998d440a921db7c67d1d76f240519069261479d4529531e3864d6343a731d569d5c045d0cc3a7c3154c03
+  checksum: 10c0/83f37879bf91c328f65a91837759584053bc268c744fc5428c03a7dbdbc4117992df8def1e53871fc15bb567a9a66749528038ccc4490303e8ba4efef3db16f4
   languageName: node
   linkType: hard
 
@@ -4373,10 +4373,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:^4.17.26":
-  version: 4.17.26
-  resolution: "@types/lodash@npm:4.17.26"
-  checksum: 10c0/7f8a95db94698f009e59c612deaba1ee98ac738156926f4c1c062853b9e46fe5fb3a7a34a15ad2f2c846f7c24b0e61e0109dfac2d9e4fa8eaa71330fd0862ea3
+"@types/lodash@npm:^4.17.27":
+  version: 4.17.27
+  resolution: "@types/lodash@npm:4.17.27"
+  checksum: 10c0/3769c022437664352a78234b8d9f6ba24693893552ef4192e507bbc7412dc621098afad0bc36f9d03855f629b143c01f3574afb2f818abcb447ebba066ad16bf
   languageName: node
   linkType: hard
 
@@ -7949,15 +7949,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^26.5.2":
-  version: 26.5.2
-  resolution: "i18next@npm:26.5.2"
+"i18next@npm:^26.5.5":
+  version: 26.5.5
+  resolution: "i18next@npm:26.5.5"
   peerDependencies:
     typescript: ^5 || ^6 || ^7
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/b2edaba4af8f907d685bb133b8878cc1f03a7eaac3e76937da736b819d6d9500a82f516441b272994e9988c227bbcbbbc38fd185b4a2f67ab6bf9884ecf31167
+  checksum: 10c0/055759d895689a8f23ad2a907b747cce2de64136de7e33c47efaf4bf350232c5e01d5be202860eb62d8cb3afa912fb6ead2e55f2bc7f6c0b1528b0e90acf4ba7
   languageName: node
   linkType: hard
 
@@ -9296,10 +9296,10 @@ __metadata:
     "@react-native-community/cli": "npm:20.2.0"
     "@react-native-community/cli-platform-android": "npm:20.2.0"
     "@react-native-community/cli-platform-ios": "npm:20.2.0"
-    "@react-native-community/datetimepicker": "npm:^9.2.1"
+    "@react-native-community/datetimepicker": "npm:^9.2.2"
     "@react-native-community/netinfo": "npm:^12.0.1"
     "@react-native-picker/picker": "npm:^2.11.4"
-    "@react-native-vector-icons/material-design-icons": "npm:^13.1.5"
+    "@react-native-vector-icons/material-design-icons": "npm:^14.0.0"
     "@react-native/babel-preset": "npm:0.88.0"
     "@react-native/eslint-config": "npm:0.88.0"
     "@react-native/jest-preset": "npm:0.88.0"
@@ -9309,11 +9309,11 @@ __metadata:
     "@react-navigation/drawer": "npm:^7.14.4"
     "@react-navigation/native": "npm:^7.5.1"
     "@reduxjs/toolkit": "npm:^2.13.0"
-    "@sbaiahmed1/react-native-biometrics": "npm:^0.16.1"
+    "@sbaiahmed1/react-native-biometrics": "npm:^0.17.0"
     "@shopify/flash-list": "npm:^2.3.3"
     "@testing-library/react-native": "npm:^13.3.3"
     "@types/jest": "npm:^30.0.0"
-    "@types/lodash": "npm:^4.17.26"
+    "@types/lodash": "npm:^4.17.27"
     "@types/react": "npm:^19.3.0"
     "@types/react-test-renderer": "npm:^19.3.0"
     "@welldone-software/why-did-you-render": "npm:^10.0.1"
@@ -9328,14 +9328,14 @@ __metadata:
     eslint-plugin-prettier: "npm:^5.5.7"
     eslint-plugin-simple-import-sort: "npm:^14.0.0"
     http-status-codes: "npm:^2.3.0"
-    i18next: "npm:^26.5.2"
+    i18next: "npm:^26.5.5"
     jest: "npm:^30.5.2"
     lodash: "npm:^4.18.1"
     node-addon-api: "npm:^8.9.2"
     path: "npm:^0.12.7"
     prettier: "npm:3.9.10"
     react: "npm:19.3.1"
-    react-i18next: "npm:^17.1.0"
+    react-i18next: "npm:^17.1.2"
     react-native: "npm:0.88.0"
     react-native-blob-util: "npm:^0.25.1"
     react-native-bootsplash: "npm:^7.3.4"
@@ -10895,9 +10895,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^17.1.0":
-  version: 17.1.0
-  resolution: "react-i18next@npm:17.1.0"
+"react-i18next@npm:^17.1.2":
+  version: 17.1.2
+  resolution: "react-i18next@npm:17.1.2"
   dependencies:
     "@babel/runtime": "npm:^7.29.7"
     html-parse-stringify: "npm:^4.0.1"
@@ -10913,7 +10913,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/5ba9de18304f8fc20511de9f64f2a71594cb607c55b06692463867721f256770ae71489639bd96554bc556b5b310d495cff526ebbbaac091f9bae0ca8f547f24
+  checksum: 10c0/9a837eb441d0e4ea56b3940f86e5b69dd6ee3ea538b067772b91bb855657f9dd9806e22835952f5437f84539d7425f227a8010edd906bd9fb933c1a5955fca42
   languageName: node
   linkType: hard
 
