@@ -23,7 +23,8 @@ const SYNC_STATE_ICON_SIZE = 15;
 const styles = StyleSheet.create({
 	card: {
 		alignItems: 'center',
-		borderRadius: 10,
+		borderRadius: 14,
+		borderWidth: 1,
 		flexDirection: 'row',
 		gap: 12,
 		marginHorizontal: 12,
@@ -227,15 +228,17 @@ export const TimesheetItem = ({timesheet}: TimesheetItemProps) => {
 	const dynamicStyles = useStyle(
 		() => ({
 			card: {
-				backgroundColor: contextMenuVisible
-					? theme.colors.primaryContainer
-					: theme.colors.surfaceVariant,
+				backgroundColor: theme.colors.surface,
+				borderColor: contextMenuVisible
+					? theme.colors.primary
+					: theme.colors.outlineVariant,
 			},
 		}),
 		[
 			contextMenuVisible,
-			theme.colors.primaryContainer,
-			theme.colors.surfaceVariant,
+			theme.colors.primary,
+			theme.colors.outlineVariant,
+			theme.colors.surface,
 		],
 	);
 
