@@ -69,6 +69,7 @@ const ProjectList = () => {
 		<DividedList
 			data={projectList}
 			onRefresh={onRefresh}
+			showDividers={false}
 			renderItem={({item}) => (
 				<ProjectItem
 					project={item}

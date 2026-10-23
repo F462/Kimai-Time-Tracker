@@ -68,6 +68,7 @@ const ActivityList = () => {
 		<DividedList
 			data={activityList}
 			onRefresh={onRefresh}
+			showDividers={false}
 			renderItem={({item}) => (
 				<ActivityItem
 					activity={item}

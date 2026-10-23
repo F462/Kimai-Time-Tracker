@@ -6,7 +6,7 @@ export function DividedList<T>({
 	data,
 	renderItem,
 	onRefresh,
-	showDividers = true,
+	showDividers = false,
 }: {
 	data: Array<T>;
 	renderItem: React.ComponentProps<typeof FlatList<T>>['renderItem'];

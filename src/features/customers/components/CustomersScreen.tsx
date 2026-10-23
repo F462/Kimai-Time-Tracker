@@ -68,6 +68,7 @@ const CustomerList = () => {
 		<DividedList
 			data={customerList}
 			onRefresh={onRefresh}
+			showDividers={false}
 			renderItem={({item}) => (
 				<CustomerItem
 					customer={item}
