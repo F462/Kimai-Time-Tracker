@@ -1,6 +1,6 @@
 import React, {useMemo} from 'react';
 import {StyleProp, StyleSheet, ViewStyle} from 'react-native';
-import {Checkbox} from 'react-native-paper';
+import {RadioButton, useTheme} from 'react-native-paper';
 
 import {PressableOpacity} from './PressableOpacity';
 
@@ -25,6 +25,7 @@ export const ListItem = ({
 	onPress?: () => void;
 	onLongPress?: () => void;
 }>) => {
+	const theme = useTheme();
 	const combinedStyle = useMemo(() => [styles.container, style], [style]);
 	return (
 		<PressableOpacity
@@ -33,7 +34,11 @@ export const ListItem = ({
 			onLongPress={onLongPress}
 			disabled={onPress === undefined}>
 			{isSelected === undefined ? null : (
-				<Checkbox status={isSelected ? 'checked' : 'unchecked'} />
+				<RadioButton
+					status={isSelected ? 'checked' : 'unchecked'}
+					value={String(isSelected)}
+					color={theme.colors.primary}
+				/>
 			)}
 			{children}
 		</PressableOpacity>
