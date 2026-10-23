@@ -2,15 +2,16 @@ import dayjs from 'dayjs';
 import React, {useCallback, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
-import {ActivityIndicator, Icon, useTheme} from 'react-native-paper';
+import {ActivityIndicator, Icon, Text, useTheme} from 'react-native-paper';
 
-import {selectActivityName} from 'src/features/activities/context/activitiesSelectors';
+import {selectActivity} from 'src/features/activities/context/activitiesSelectors';
 import {useAppSelector} from 'src/features/data/context/store';
-import {selectProjectName} from 'src/features/projects/context/projectsSelectors';
+import {selectProject} from 'src/features/projects/context/projectsSelectors';
 import {selectSyncState} from 'src/features/synchronization/context/synchronizationSelectors';
 import {SyncState} from 'src/features/synchronization/types';
 import {useStyle} from 'src/features/theming/utils/useStyle';
 import {useTime} from 'src/features/utils/useTime';
+import {ColorIndicator} from 'src/ui/ColorIndicator';
 import {ListItem} from 'src/ui/ListItem';
 import {ListItemText} from 'src/ui/ListItemText';
 import {PressableOpacity} from 'src/ui/PressableOpacity';
@@ -20,21 +21,64 @@ import {TimesheetItemContextMenu} from './TimesheetItemContextMenu';
 const SYNC_STATE_ICON_SIZE = 15;
 
 const styles = StyleSheet.create({
+	card: {
+		alignItems: 'center',
+		borderRadius: 10,
+		flexDirection: 'row',
+		gap: 12,
+		marginHorizontal: 12,
+		marginVertical: 6,
+		padding: 14,
+	},
+	detailsText: {
+		flexShrink: 1,
+		fontWeight: '500',
+	},
+	detailField: {
+		alignItems: 'center',
+		flex: 1,
+		flexDirection: 'row',
+		gap: 5,
+	},
+	projectDetailField: {
+		justifyContent: 'flex-end',
+	},
+	projectText: {
+		textAlign: 'right',
+	},
 	datetimeText: {
 		flex: 1,
-		textAlign: 'center',
+		fontVariant: ['tabular-nums'],
+	},
+	startDatetimeText: {
+		textAlign: 'right',
 	},
 	flex: {
 		flex: 1,
-	},
-	row: {
-		flexDirection: 'row',
 	},
 	syncStateIconContainer: {
 		alignSelf: 'center',
 	},
 	timesheetDetailsContainer: {
-		justifyContent: 'space-around',
+		flex: 1,
+		alignItems: 'center',
+		gap: 4,
+		marginHorizontal: 0,
+		marginVertical: 0,
+		marginTop: 6,
+	},
+	timeContainer: {
+		alignItems: 'baseline',
+		flex: 0,
+		flexDirection: 'row',
+		gap: 4,
+		marginHorizontal: 0,
+		marginVertical: 0,
+	},
+	duration: {
+		textAlignVertical: 'center',
+		fontVariant: ['tabular-nums'],
+		fontWeight: '700',
 	},
 });
 
@@ -49,6 +93,7 @@ const SynchronizationStateIcon = ({
 }: {
 	synchronizationState?: SyncState;
 }) => {
+	const theme = useTheme();
 	const iconSource = (() => {
 		switch (synchronizationState) {
 			case SyncState.NOT_STARTED:
@@ -63,7 +108,18 @@ const SynchronizationStateIcon = ({
 		}
 	})();
 
-	return <Icon source={iconSource} size={SYNC_STATE_ICON_SIZE} />;
+	const color = (() => {
+		switch (synchronizationState) {
+			case SyncState.FAILED:
+				return theme.colors.error;
+			case SyncState.DONE:
+				return theme.colors.primary;
+			default:
+				return theme.colors.onSurfaceVariant;
+		}
+	})();
+
+	return <Icon color={color} source={iconSource} size={SYNC_STATE_ICON_SIZE} />;
 };
 
 type TimesheetItemProps = {
@@ -106,7 +162,11 @@ const TimesheetDurationDisplay = ({timesheet}: TimesheetItemProps) => {
 		return dayjs.duration(duration).format('HH:mm');
 	}, [now, timesheet.begin, timesheet.duration, timesheet.end]);
 
-	return <ListItemText>({displayedDuration})</ListItemText>;
+	return (
+		<Text variant="titleSmall" style={styles.duration}>
+			{displayedDuration}
+		</Text>
+	);
 };
 
 const TimesheetTimeDisplay = ({timesheet}: TimesheetItemProps) => {
@@ -116,30 +176,41 @@ const TimesheetTimeDisplay = ({timesheet}: TimesheetItemProps) => {
 	const displayedTimeEnd = useDisplayedDatetime(timesheet.end);
 
 	return (
-		<ListItem>
-			<ListItemText style={styles.datetimeText}>
+		<ListItem style={styles.timeContainer}>
+			<ListItemText style={[styles.datetimeText, styles.startDatetimeText]}>
 				{displayedTimeStart}
 			</ListItemText>
 			<ListItemText> - </ListItemText>
 			<ListItemText style={styles.datetimeText}>
 				{displayedTimeEnd ?? t('now')}
 			</ListItemText>
-			<View />
-			<TimesheetDurationDisplay timesheet={timesheet} />
 		</ListItem>
 	);
 };
 
 const TimesheetDetails = ({timesheet}: TimesheetItemProps) => {
-	const displayedActivity = useAppSelector(
-		selectActivityName(timesheet.activity),
-	);
-	const displayedProject = useAppSelector(selectProjectName(timesheet.project));
+	const activity = useAppSelector(selectActivity(timesheet.activity));
+	const project = useAppSelector(selectProject(timesheet.project));
 
 	return (
 		<ListItem style={styles.timesheetDetailsContainer}>
-			{displayedActivity && <ListItemText>{displayedActivity}</ListItemText>}
-			{displayedProject && <ListItemText>{displayedProject}</ListItemText>}
+			{project?.name && (
+				<View style={[styles.detailField, styles.projectDetailField]}>
+					<ListItemText style={[styles.detailsText, styles.projectText]}>
+						{project.name}
+					</ListItemText>
+					<ColorIndicator color={project.color} />
+				</View>
+			)}
+			{project?.name && activity?.name && <ListItemText> · </ListItemText>}
+			{activity?.name && (
+				<View style={styles.detailField}>
+					<ColorIndicator color={activity.color} />
+					<ListItemText style={styles.detailsText}>
+						{activity.name}
+					</ListItemText>
+				</View>
+			)}
 		</ListItem>
 	);
 };
@@ -155,13 +226,17 @@ export const TimesheetItem = ({timesheet}: TimesheetItemProps) => {
 
 	const dynamicStyles = useStyle(
 		() => ({
-			pressable: {
+			card: {
 				backgroundColor: contextMenuVisible
-					? theme.colors.primary
-					: theme.colors.background,
+					? theme.colors.primaryContainer
+					: theme.colors.surfaceVariant,
 			},
 		}),
-		[contextMenuVisible, theme.colors.background, theme.colors.primary],
+		[
+			contextMenuVisible,
+			theme.colors.primaryContainer,
+			theme.colors.surfaceVariant,
+		],
 	);
 
 	return (
@@ -172,13 +247,14 @@ export const TimesheetItem = ({timesheet}: TimesheetItemProps) => {
 				onHideMenu={hideContextMenu}
 			/>
 			<PressableOpacity
-				style={[styles.row, dynamicStyles.pressable]}
+				style={[styles.card, dynamicStyles.card]}
 				onPress={onItemPress}>
 				<TimesheetSyncIndicator timesheet={timesheet} />
 				<View style={styles.flex}>
 					<TimesheetTimeDisplay timesheet={timesheet} />
 					<TimesheetDetails timesheet={timesheet} />
 				</View>
+				<TimesheetDurationDisplay timesheet={timesheet} />
 			</PressableOpacity>
 		</>
 	);

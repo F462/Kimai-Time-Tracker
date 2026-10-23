@@ -14,6 +14,7 @@ export const TimesheetList = ({data}: {data: Array<Timesheet>}) => {
 		<DividedList
 			data={data}
 			onRefresh={onRefresh}
+			showDividers={false}
 			renderItem={({item}) => <TimesheetItem timesheet={item} />}
 		/>
 	);
