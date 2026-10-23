@@ -8,5 +8,5 @@ export type ScreenParameters = {
 	Projects: undefined;
 	Settings: undefined;
 	WorkContract: undefined;
-	Timesheets: {onlyShowNonDoneEntries?: boolean};
+	Timesheets: {date?: string; onlyShowNonDoneEntries?: boolean};
 };

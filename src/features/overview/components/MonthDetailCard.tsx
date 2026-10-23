@@ -4,6 +4,7 @@ import {StyleSheet, View} from 'react-native';
 import {Text, useTheme} from 'react-native-paper';
 
 import {useStyle} from 'src/features/theming/utils/useStyle';
+import {PressableOpacity} from 'src/ui/PressableOpacity';
 import {
 	formatSignedDurationInSeconds,
 	MonthDayDetail,
@@ -60,6 +61,7 @@ const styles = StyleSheet.create({
 
 type MonthDetailCardProps = {
 	detail: MonthDetail;
+	onDayPress: (date: string) => void;
 };
 
 const getDeltaColor = (
@@ -82,11 +84,13 @@ const DayCell = ({
 	positiveColor,
 	negativeColor,
 	neutralColor,
+	onPress,
 }: {
 	day: MonthDayDetail;
 	positiveColor: string;
 	negativeColor: string;
 	neutralColor: string;
+	onPress: (date: string) => void;
 }) => {
 	const showPlaceholder = !day.hasData && !day.isWorkingDay;
 	const color = showPlaceholder
@@ -99,7 +103,11 @@ const DayCell = ({
 			);
 
 	return (
-		<View style={styles.dayCell}>
+		<PressableOpacity
+			accessibilityRole="button"
+			accessibilityLabel={day.date}
+			onPress={() => onPress(day.date)}
+			style={styles.dayCell}>
 			<Text
 				variant="labelSmall"
 				style={[styles.dayNumber, {color: neutralColor}]}>
@@ -112,11 +120,10 @@ const DayCell = ({
 					? '-'
 					: formatSignedDurationInSeconds(day.deltaSeconds)}
 			</Text>
-		</View>
+		</PressableOpacity>
 	);
 };
-
-export const MonthDetailCard = ({detail}: MonthDetailCardProps) => {
+export const MonthDetailCard = ({detail, onDayPress}: MonthDetailCardProps) => {
 	const theme = useTheme();
 
 	// The summary only accounts for days that are not in the future, so the
@@ -194,6 +201,7 @@ export const MonthDetailCard = ({detail}: MonthDetailCardProps) => {
 									positiveColor={dynamicStyles.dayPositive.color}
 									negativeColor={dynamicStyles.dayNegative.color}
 									neutralColor={dynamicStyles.neutral.color}
+									onPress={onDayPress}
 								/>
 							),
 						)}

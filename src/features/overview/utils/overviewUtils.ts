@@ -118,6 +118,7 @@ export const isWorkingDay = (
 ): boolean => getWorkContractHoursForDate(workContractHoursPerDay, date) > 0;
 
 export type MonthDayDetail = {
+	date: string;
 	dayOfMonth: number;
 	workedSeconds: number;
 	expectedSeconds: number;
@@ -199,6 +200,7 @@ const getMonthDetailFromWorkedByDay = (
 		}
 
 		days.push({
+			date: day.format('YYYY-MM-DD'),
 			dayOfMonth,
 			workedSeconds: worked,
 			expectedSeconds: expected,

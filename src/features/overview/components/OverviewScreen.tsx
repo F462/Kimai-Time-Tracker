@@ -12,6 +12,7 @@ import {
 import {Text, useTheme} from 'react-native-paper';
 
 import {useAppDispatch} from 'src/features/data/context/store';
+import {useAppNavigation} from 'src/features/navigation/context/hooks';
 import {useStyle} from 'src/features/theming/utils/useStyle';
 import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
 import {useMonthlyOverview} from '../context/overviewHooks';
@@ -76,6 +77,7 @@ const RefreshView = ({children, style}: RefreshViewProps) => {
 export const OverviewScreen = () => {
 	const {t} = useTranslation();
 	const theme = useTheme();
+	const navigation = useAppNavigation();
 
 	const monthlyOverview = useMonthlyOverview();
 
@@ -148,7 +150,11 @@ export const OverviewScreen = () => {
 					{t('monthlyBreakdown')}
 				</Text>
 				{monthlyOverview.months.map((month) => (
-					<MonthDetailCard key={month.month} detail={month} />
+					<MonthDetailCard
+						key={month.month}
+						detail={month}
+						onDayPress={(date) => navigation.navigate('Timesheets', {date})}
+					/>
 				))}
 			</View>
 		</RefreshView>

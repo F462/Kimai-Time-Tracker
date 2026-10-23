@@ -35,6 +35,16 @@ export const selectTimesheetList = createSelector(
 		}),
 );
 
+export const selectTimesheetListForDate = createSelector(
+	[selectTimesheetList, (_state: RootState, date: string) => date],
+	(timesheets, date) =>
+		timesheets.filter(
+			(timesheet) =>
+				timesheet.begin !== undefined &&
+				dayjs(timesheet.begin).format('YYYY-MM-DD') === date,
+		),
+);
+
 export const selectErroneousTimesheetList = createSelector(
 	[selectTimesheetList, selectTimesheetSynchronizationState],
 	(timesheets, timesheetSynchronizationState) =>

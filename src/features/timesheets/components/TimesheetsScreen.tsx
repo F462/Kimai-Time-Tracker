@@ -7,32 +7,26 @@ import {BaseScreen} from 'src/ui/BaseScreen';
 import {
 	selectErroneousTimesheetList,
 	selectTimesheetList,
+	selectTimesheetListForDate,
 } from '../context/timesheetsSelectors';
 import {TimesheetList} from './TimesheetList';
-
-const TimesheetListWithAllTimesheets = () => {
-	const timesheetList = useAppSelector(selectTimesheetList);
-
-	return <TimesheetList data={timesheetList} />;
-};
-
-const TimesheetListWithErroneousTimesheets = () => {
-	const timesheetList = useAppSelector(selectErroneousTimesheetList);
-
-	return <TimesheetList data={timesheetList} />;
-};
 
 export const TimesheetsScreen = () => {
 	const route = useRoute<RouteProp<ScreenParameters>>();
 	const onlyShowNonDoneEntries = route.params?.onlyShowNonDoneEntries;
+	const date = route.params?.date;
+	const timesheetList = useAppSelector((state) => {
+		if (onlyShowNonDoneEntries) {
+			return selectErroneousTimesheetList(state);
+		}
+		return date
+			? selectTimesheetListForDate(state, date)
+			: selectTimesheetList(state);
+	});
 
 	return (
 		<BaseScreen>
-			{onlyShowNonDoneEntries ? (
-				<TimesheetListWithErroneousTimesheets />
-			) : (
-				<TimesheetListWithAllTimesheets />
-			)}
+			<TimesheetList data={timesheetList} />
 		</BaseScreen>
 	);
 };
