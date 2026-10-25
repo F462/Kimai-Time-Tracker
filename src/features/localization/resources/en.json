@@ -127,6 +127,7 @@
 	},
 	"save": "Save",
 	"scanQrCode": "Scan QR Code",
+	"specificTime": "Specific time",
 	"screenTitles": {
 		"About": "About",
 		"Account": "Account",
