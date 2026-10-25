@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
 	},
 	timePicker: {
 		flex: 1,
+		minWidth: 20,
 	},
 });
 
