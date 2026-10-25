@@ -50,12 +50,31 @@ export const filterTimesheetList = (
 	timesheets: Array<Timesheet>,
 	projectId: number | undefined,
 	activityId: number | undefined,
+	fromDate: string | null,
+	toDate: string | null,
 ) =>
-	timesheets.filter(
-		(timesheet) =>
-			(projectId === undefined || timesheet.project === projectId) &&
-			(activityId === undefined || timesheet.activity === activityId),
-	);
+	timesheets.filter((timesheet) => {
+		if (
+			(projectId !== undefined && timesheet.project !== projectId) ||
+			(activityId !== undefined && timesheet.activity !== activityId)
+		) {
+			return false;
+		}
+
+		if (fromDate === null && toDate === null) {
+			return true;
+		}
+
+		if (!timesheet.begin || !dayjs(timesheet.begin).isValid()) {
+			return false;
+		}
+
+		const beginDate = dayjs(timesheet.begin).format('YYYY-MM-DD');
+		return (
+			(fromDate === null || beginDate >= fromDate) &&
+			(toDate === null || beginDate <= toDate)
+		);
+	});
 
 export const selectErroneousTimesheetList = createSelector(
 	[selectTimesheetList, selectTimesheetSynchronizationState],

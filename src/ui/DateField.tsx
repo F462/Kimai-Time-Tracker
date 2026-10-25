@@ -2,7 +2,7 @@ import RNDateTimePicker, {
 	DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 import {useCallback, useMemo, useState} from 'react';
-import {Platform, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 import {Text, TextInput, useTheme} from 'react-native-paper';
 
 import {
@@ -51,12 +51,7 @@ export const DateField = ({
 
 	const onChange = useCallback(
 		(event: DateTimePickerEvent, selectedDate?: Date) => {
-			// On iOS the native picker stays open until dismissed, so close it
-			// ourselves after a selection. On Android the picker dismisses on
-			// its own, so the second "dismiss" event is ignored.
-			if (Platform.OS === 'ios') {
-				setShow(false);
-			}
+			setShow(false);
 
 			if (event.type !== 'set' || selectedDate === undefined) {
 				return;
@@ -78,13 +73,6 @@ export const DateField = ({
 				placeholder={placeholder ?? 'DD.MM.YYYY'}
 				style={styles.field}
 				left={
-					<TextInput.Icon
-						icon="calendar"
-						accessibilityLabel={label}
-						onPress={() => setShow(true)}
-					/>
-				}
-				right={
 					hasValue ? (
 						<TextInput.Icon
 							icon="close-circle"
@@ -93,6 +81,13 @@ export const DateField = ({
 							onPress={() => onValueChange(null)}
 						/>
 					) : undefined
+				}
+				right={
+					<TextInput.Icon
+						icon="calendar"
+						accessibilityLabel={label}
+						onPress={() => setShow(true)}
+					/>
 				}
 			/>
 			{description ? (

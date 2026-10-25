@@ -34,14 +34,38 @@ describe('filterTimesheetList', () => {
 	];
 
 	it('combines project and activity filters and leaves unset filters open', () => {
-		expect(filterTimesheetList(timesheets, 1, 10).map(({id}) => id)).toEqual([
-			'one',
-		]);
 		expect(
-			filterTimesheetList(timesheets, 2, undefined).map(({id}) => id),
+			filterTimesheetList(timesheets, 1, 10, null, null).map(({id}) => id),
+		).toEqual(['one']);
+		expect(
+			filterTimesheetList(timesheets, 2, undefined, null, null).map(
+				({id}) => id,
+			),
 		).toEqual(['three']);
-		expect(filterTimesheetList(timesheets, undefined, undefined)).toEqual(
-			timesheets,
-		);
+		expect(
+			filterTimesheetList(timesheets, undefined, undefined, null, null),
+		).toEqual(timesheets);
+	});
+
+	it('includes both date boundaries and excludes invalid or missing starts', () => {
+		const dateRangeTimesheets = [
+			{id: 'before', begin: '2026-10-22T23:59:00'},
+			{id: 'from', begin: '2026-10-23T00:00:00'},
+			{id: 'inside', begin: '2026-10-24T12:00:00'},
+			{id: 'to', begin: '2026-10-25T23:59:00'},
+			{id: 'after', begin: '2026-10-26T00:00:00'},
+			{id: 'missing'},
+			{id: 'invalid', begin: 'not-a-date'},
+		];
+
+		expect(
+			filterTimesheetList(
+				dateRangeTimesheets,
+				undefined,
+				undefined,
+				'2026-10-23',
+				'2026-10-25',
+			).map(({id}) => id),
+		).toEqual(['from', 'inside', 'to']);
 	});
 });

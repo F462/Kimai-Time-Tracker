@@ -6,9 +6,6 @@
  * `Date` objects, so this module bridges the two and also provides a locale
  * aware display format for the text field.
  */
-import dayjs from 'dayjs';
-import {getLocales} from 'react-native-localize';
-
 /** Coerce a `Date` object to a local `YYYY-MM-DD` string. */
 export const toDateStr = (date: Date): string => {
 	const year = date.getFullYear();
@@ -39,20 +36,8 @@ export const fromDateStr = (value: string | null | undefined): Date | null => {
 };
 
 /**
- * Resolve the dayjs locale to use for display, falling back to `en`.
- */
-const displayLocale = (): string => {
-	try {
-		const locale = getLocales()[0]?.languageCode ?? 'en';
-		return locale;
-	} catch {
-		return 'en';
-	}
-};
-
-/**
- * Format a `YYYY-MM-DD` string the way the user expects (e.g. `22.10.2026`
- * in a German locale). Returns an empty string when the value is empty.
+ * Format a `YYYY-MM-DD` string as `DD.MM.YYYY`. Returns an empty string when
+ * the value is empty.
  */
 export const formatDateDisplay = (value: string | null | undefined): string => {
 	if (!value) {
@@ -64,7 +49,7 @@ export const formatDateDisplay = (value: string | null | undefined): string => {
 		return value;
 	}
 
-	// `LL` is the locale-aware long date format (see the global dayjs setup
-	// in features/localization/utils/dayjs.ts).
-	return dayjs(date).locale(displayLocale()).format('LL');
+	const day = String(date.getDate()).padStart(2, '0');
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	return `${day}.${month}.${date.getFullYear()}`;
 };
