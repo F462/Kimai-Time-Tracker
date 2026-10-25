@@ -9,6 +9,7 @@ import {
 	selectTimesheetSynchronizationState,
 } from 'src/features/synchronization/context/synchronizationSelectors';
 import {SyncState} from 'src/features/synchronization/types';
+import {Timesheet} from '../types';
 
 const selectTimesheetsState = (state: RootState) => state.timesheets;
 
@@ -44,6 +45,17 @@ export const selectTimesheetListForDate = createSelector(
 				dayjs(timesheet.begin).format('YYYY-MM-DD') === date,
 		),
 );
+
+export const filterTimesheetList = (
+	timesheets: Array<Timesheet>,
+	projectId: number | undefined,
+	activityId: number | undefined,
+) =>
+	timesheets.filter(
+		(timesheet) =>
+			(projectId === undefined || timesheet.project === projectId) &&
+			(activityId === undefined || timesheet.activity === activityId),
+	);
 
 export const selectErroneousTimesheetList = createSelector(
 	[selectTimesheetList, selectTimesheetSynchronizationState],

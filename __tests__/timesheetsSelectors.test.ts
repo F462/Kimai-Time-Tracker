@@ -1,5 +1,8 @@
 import {RootState} from 'src/features/data/context/store';
-import {selectTimesheetListForDate} from 'src/features/timesheets/context/timesheetsSelectors';
+import {
+	filterTimesheetList,
+	selectTimesheetListForDate,
+} from 'src/features/timesheets/context/timesheetsSelectors';
 
 describe('selectTimesheetListForDate', () => {
 	it('returns only timesheets beginning on the selected calendar day', () => {
@@ -20,5 +23,25 @@ describe('selectTimesheetListForDate', () => {
 			'later',
 			'selected',
 		]);
+	});
+});
+
+describe('filterTimesheetList', () => {
+	const timesheets = [
+		{id: 'one', project: 1, activity: 10},
+		{id: 'two', project: 1, activity: 20},
+		{id: 'three', project: 2, activity: 10},
+	];
+
+	it('combines project and activity filters and leaves unset filters open', () => {
+		expect(filterTimesheetList(timesheets, 1, 10).map(({id}) => id)).toEqual([
+			'one',
+		]);
+		expect(
+			filterTimesheetList(timesheets, 2, undefined).map(({id}) => id),
+		).toEqual(['three']);
+		expect(filterTimesheetList(timesheets, undefined, undefined)).toEqual(
+			timesheets,
+		);
 	});
 });

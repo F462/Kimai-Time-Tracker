@@ -9,6 +9,7 @@ type BaseSelectorProps<T extends BaseElement> = {
 	elements: Array<T>;
 	selectedElement: T | undefined;
 	label: string;
+	emptyOptionLabel?: string;
 	onSelection: React.ComponentProps<typeof PaperSelect>['onSelection'];
 	/**
 	 * Optional. Renders a leading element (e.g. a color swatch or an icon)
@@ -41,32 +42,36 @@ export function BaseSelector<T extends BaseElement>({
 	elements,
 	selectedElement,
 	label,
+	emptyOptionLabel,
 	onSelection,
 	renderLeadingElement,
 }: BaseSelectorProps<T>) {
 	const theme = useTheme();
 	const elementList = useMemo(() => {
-		return Object.values(elements ?? {}).map((item) => ({
+		const items = Object.values(elements ?? {}).map((item) => ({
 			_id: item.id.toString(),
 			value: item.name,
 		}));
-	}, [elements]);
+		return emptyOptionLabel
+			? [{_id: '', value: emptyOptionLabel}, ...items]
+			: items;
+	}, [elements, emptyOptionLabel]);
 
 	const selectedArrayList = useMemo(() => {
 		return [
 			{
 				_id: selectedElement?.id.toString() ?? '',
-				value: selectedElement?.name ?? '',
+				value: selectedElement?.name ?? emptyOptionLabel ?? '',
 			},
 		];
-	}, [selectedElement?.id, selectedElement?.name]);
+	}, [emptyOptionLabel, selectedElement?.id, selectedElement?.name]);
 
 	const selectedForDisplay = selectedElement ?? elements[0];
 
 	return (
 		<PaperSelect
 			label={label}
-			value={selectedElement?.name ?? ''}
+			value={selectedElement?.name ?? emptyOptionLabel ?? ''}
 			onSelection={onSelection}
 			arrayList={elementList}
 			selectedArrayList={selectedArrayList}

@@ -13,10 +13,14 @@ import {BaseSelector} from './BaseSelector';
 type ActivitySelectorProps = {
 	selectedActivity: Activity | undefined;
 	onSelectActivity: (activity: Activity | undefined) => void;
+	label?: string;
+	emptyOptionLabel?: string;
 };
 export const ActivitySelector = ({
 	selectedActivity,
 	onSelectActivity,
+	label,
+	emptyOptionLabel,
 }: ActivitySelectorProps) => {
 	const {t} = useTranslation();
 
@@ -44,7 +48,8 @@ export const ActivitySelector = ({
 		<BaseSelector
 			elements={activitiesList}
 			selectedElement={selectedActivity}
-			label={t('selectActivity')}
+			label={label ?? t('selectActivity')}
+			emptyOptionLabel={emptyOptionLabel}
 			onSelection={convertSelectionToActivity}
 		/>
 	);

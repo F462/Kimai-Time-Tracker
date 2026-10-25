@@ -13,10 +13,14 @@ import {BaseSelector} from './BaseSelector';
 type ProjectSelectorProps = {
 	selectedProject: Project | undefined;
 	onSelectProject: (project: Project | undefined) => void;
+	label?: string;
+	emptyOptionLabel?: string;
 };
 export const ProjectSelector = ({
 	selectedProject,
 	onSelectProject,
+	label,
+	emptyOptionLabel,
 }: ProjectSelectorProps) => {
 	const {t} = useTranslation();
 
@@ -44,7 +48,8 @@ export const ProjectSelector = ({
 		<BaseSelector
 			elements={projectList}
 			selectedElement={selectedProject}
-			label={t('selectProject')}
+			label={label ?? t('selectProject')}
+			emptyOptionLabel={emptyOptionLabel}
 			onSelection={convertSelectionToProject}
 		/>
 	);

@@ -13,5 +13,6 @@ export const parseSelectedId = (element: ListItem) => {
 		return undefined;
 	}
 
-	return parseInt(element._id, 10);
+	const selectedId = parseInt(element._id, 10);
+	return Number.isNaN(selectedId) ? undefined : selectedId;
 };
