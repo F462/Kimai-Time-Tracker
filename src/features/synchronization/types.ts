@@ -9,4 +9,7 @@ export type SynchronizationState = {
 	timesheets: {
 		[id: string]: SyncState;
 	};
+	errors: {
+		[id: string]: string;
+	};
 };

@@ -37,6 +37,12 @@ export const selectSyncState = (timesheetIdToCheck: string) =>
 		(timesheetSyncStates) => timesheetSyncStates[timesheetIdToCheck],
 	);
 
+export const selectSyncError = (timesheetIdToCheck: string) =>
+	createSelector(
+		[selectSynchronizationState],
+		(synchronizationState) => synchronizationState.errors[timesheetIdToCheck],
+	);
+
 export const selectIsTimesheetSyncNeeded = (timesheetIdToCheck: string) =>
 	createSelector([selectSyncState(timesheetIdToCheck)], isTimesheetSyncNeeded);
 

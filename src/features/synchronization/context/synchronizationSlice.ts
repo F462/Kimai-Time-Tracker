@@ -9,6 +9,7 @@ import {SynchronizationState, SyncState} from '../types';
 
 const initialState: SynchronizationState = {
 	timesheets: {},
+	errors: {},
 };
 
 const synchronizationSlice = createSlice({
@@ -17,6 +18,7 @@ const synchronizationSlice = createSlice({
 	reducers: {
 		timesheetSynchronizationStarted(state, {payload: id}) {
 			state.timesheets[id] = SyncState.RUNNING;
+			delete state.errors[id];
 		},
 		timesheetSynced: (
 			state,
@@ -28,9 +30,21 @@ const synchronizationSlice = createSlice({
 			}>,
 		) => {
 			state.timesheets[localId] = SyncState.DONE;
+			delete state.errors[localId];
 		},
-		timesheetSyncFailed(state, {payload: id}) {
+		timesheetSyncFailed(
+			state,
+			{
+				payload: {id, errorMessage},
+			}: PayloadAction<{
+				id: string;
+				errorMessage?: string;
+			}>,
+		) {
 			state.timesheets[id] = SyncState.FAILED;
+			if (errorMessage !== undefined) {
+				state.errors[id] = errorMessage;
+			}
 		},
 	},
 	extraReducers: (builder) => {
@@ -38,6 +52,7 @@ const synchronizationSlice = createSlice({
 			.addCase(timesheetStopped, (state, {payload: timesheetId}) => {
 				if (state.timesheets[timesheetId] !== SyncState.RUNNING) {
 					state.timesheets[timesheetId] = SyncState.NOT_STARTED;
+					delete state.errors[timesheetId];
 				}
 			})
 			.addMatcher(
@@ -45,6 +60,7 @@ const synchronizationSlice = createSlice({
 				(state, {payload: timesheet}) => {
 					if (state.timesheets[timesheet.id] !== SyncState.RUNNING) {
 						state.timesheets[timesheet.id] = SyncState.NOT_STARTED;
+						delete state.errors[timesheet.id];
 					}
 				},
 			);

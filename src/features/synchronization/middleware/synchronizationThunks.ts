@@ -97,7 +97,14 @@ export const synchronizeTimesheet = createAppAsyncThunk<
 			await dispatch(fetchTimesheets());
 		} catch (error: any) {
 			console.error(`Error while syncing sheet: ${error.toString()}`);
-			dispatch(timesheetSyncFailed(timesheet.id));
+			dispatch(
+				timesheetSyncFailed({
+					id: timesheet.id,
+					errorMessage:
+						(error?.message as string | undefined) ??
+						(error != null ? String(error) : 'Synchronization failed'),
+				}),
+			);
 		} finally {
 			const queuedTimesheet = resyncTimesheetRequests[timesheet.id];
 			if (queuedTimesheet !== undefined) {

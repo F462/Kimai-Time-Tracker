@@ -7,7 +7,10 @@ import {ActivityIndicator, Icon, Text, useTheme} from 'react-native-paper';
 import {selectActivity} from 'src/features/activities/context/activitiesSelectors';
 import {useAppSelector} from 'src/features/data/context/store';
 import {selectProject} from 'src/features/projects/context/projectsSelectors';
-import {selectSyncState} from 'src/features/synchronization/context/synchronizationSelectors';
+import {
+	selectSyncError,
+	selectSyncState,
+} from 'src/features/synchronization/context/synchronizationSelectors';
 import {SyncState} from 'src/features/synchronization/types';
 import {useStyle} from 'src/features/theming/utils/useStyle';
 import {useTime} from 'src/features/utils/useTime';
@@ -22,14 +25,21 @@ const SYNC_STATE_ICON_SIZE = 15;
 
 const styles = StyleSheet.create({
 	card: {
-		alignItems: 'center',
 		borderRadius: 14,
 		borderWidth: 1,
-		flexDirection: 'row',
-		gap: 12,
+		flexDirection: 'column',
+		gap: 6,
 		marginHorizontal: 12,
 		marginVertical: 6,
 		padding: 14,
+	},
+	cardRow: {
+		alignItems: 'center',
+		flexDirection: 'row',
+		gap: 12,
+	},
+	syncErrorText: {
+		paddingHorizontal: 2,
 	},
 	detailsText: {
 		flexShrink: 1,
@@ -218,6 +228,7 @@ const TimesheetDetails = ({timesheet}: TimesheetItemProps) => {
 
 export const TimesheetItem = ({timesheet}: TimesheetItemProps) => {
 	const theme = useTheme();
+	const syncError = useAppSelector(selectSyncError(timesheet.id));
 
 	const [contextMenuVisible, setContextMenuVisible] = useState(false);
 	const onItemPress = useCallback(() => {
@@ -252,12 +263,22 @@ export const TimesheetItem = ({timesheet}: TimesheetItemProps) => {
 			<PressableOpacity
 				style={[styles.card, dynamicStyles.card]}
 				onPress={onItemPress}>
-				<TimesheetSyncIndicator timesheet={timesheet} />
-				<View style={styles.flex}>
-					<TimesheetTimeDisplay timesheet={timesheet} />
-					<TimesheetDetails timesheet={timesheet} />
+				<View style={styles.cardRow}>
+					<TimesheetSyncIndicator timesheet={timesheet} />
+					<View style={styles.flex}>
+						<TimesheetTimeDisplay timesheet={timesheet} />
+						<TimesheetDetails timesheet={timesheet} />
+					</View>
+					<TimesheetDurationDisplay timesheet={timesheet} />
 				</View>
-				<TimesheetDurationDisplay timesheet={timesheet} />
+				{syncError != null && (
+					<Text
+						numberOfLines={2}
+						variant="labelSmall"
+						style={[styles.syncErrorText, {color: theme.colors.error}]}>
+						{syncError}
+					</Text>
+				)}
 			</PressableOpacity>
 		</>
 	);
