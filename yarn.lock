@@ -7949,15 +7949,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:^26.5.5":
-  version: 26.5.5
-  resolution: "i18next@npm:26.5.5"
+"i18next@npm:^26.5.10":
+  version: 26.5.10
+  resolution: "i18next@npm:26.5.10"
   peerDependencies:
     typescript: ^5 || ^6 || ^7
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/055759d895689a8f23ad2a907b747cce2de64136de7e33c47efaf4bf350232c5e01d5be202860eb62d8cb3afa912fb6ead2e55f2bc7f6c0b1528b0e90acf4ba7
+  checksum: 10c0/8377a89144f0c94997410a68f3219b5d516c5e98235a8213fbbc0fffc1f67663680bbd76c6053bf50ad52ee967c269f4c07c97514a01ddc838919a935be1ac72
   languageName: node
   linkType: hard
 
@@ -9328,14 +9328,14 @@ __metadata:
     eslint-plugin-prettier: "npm:^5.5.7"
     eslint-plugin-simple-import-sort: "npm:^14.0.0"
     http-status-codes: "npm:^2.3.0"
-    i18next: "npm:^26.5.5"
+    i18next: "npm:^26.5.10"
     jest: "npm:^30.5.2"
     lodash: "npm:^4.18.1"
     node-addon-api: "npm:^8.9.2"
     path: "npm:^0.12.7"
     prettier: "npm:3.9.10"
     react: "npm:19.3.1"
-    react-i18next: "npm:^17.1.2"
+    react-i18next: "npm:^17.1.9"
     react-native: "npm:0.88.0"
     react-native-blob-util: "npm:^0.25.1"
     react-native-bootsplash: "npm:^7.3.4"
@@ -9347,7 +9347,7 @@ __metadata:
     react-native-localize: "npm:^3.7.2"
     react-native-nitro-image: "npm:^0.15.2"
     react-native-nitro-modules: "npm:^0.37.1"
-    react-native-notify-kit: "npm:^10.9.0"
+    react-native-notify-kit: "npm:^10.9.1"
     react-native-paper: "npm:^5.15.3"
     react-native-paper-select: "npm:^1.5.0"
     react-native-reanimated: "npm:^4.7.1"
@@ -10895,9 +10895,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:^17.1.2":
-  version: 17.1.2
-  resolution: "react-i18next@npm:17.1.2"
+"react-i18next@npm:^17.1.9":
+  version: 17.1.9
+  resolution: "react-i18next@npm:17.1.9"
   dependencies:
     "@babel/runtime": "npm:^7.29.7"
     html-parse-stringify: "npm:^4.0.1"
@@ -10913,7 +10913,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/9a837eb441d0e4ea56b3940f86e5b69dd6ee3ea538b067772b91bb855657f9dd9806e22835952f5437f84539d7425f227a8010edd906bd9fb933c1a5955fca42
+  checksum: 10c0/f3c263df1d152a6a757cd47895c86568fa36cd583ac659276afa9c5a97e6babd72e3197f22587862f7382de628428e39f757b6d67ad03ebbfd333296237d44d7
   languageName: node
   linkType: hard
 
@@ -11085,9 +11085,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-native-notify-kit@npm:^10.9.0":
-  version: 10.9.0
-  resolution: "react-native-notify-kit@npm:10.9.0"
+"react-native-notify-kit@npm:^10.9.1":
+  version: 10.9.1
+  resolution: "react-native-notify-kit@npm:10.9.1"
   dependencies:
     "@expo/image-utils": "npm:^0.8.14"
     chalk: "npm:^4.1.0"
@@ -11111,7 +11111,7 @@ __metadata:
       optional: true
   bin:
     react-native-notify-kit: cli/bin/react-native-notify-kit
-  checksum: 10c0/45088a00b7f8e82c8aba2136f73958da97ed775c658909568b62a44c06f409c26e49ccd704e9a478340f728983d879f2090dfcf3347bda2dcf1138f66c47a0b1
+  checksum: 10c0/e22b867615e430ccd9171714059c500164fad63eaf6434e6c23e8b181cfc2e93e7a49df371756d5ba1ef3f5d716eac20e961e538d1eab87569db7e691f629462
   languageName: node
   linkType: hard
 
