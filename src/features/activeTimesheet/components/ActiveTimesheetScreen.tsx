@@ -9,7 +9,7 @@ import {
 	View,
 	ViewStyle,
 } from 'react-native';
-import {Checkbox, IconButton, Text, useTheme} from 'react-native-paper';
+import {IconButton, SegmentedButtons, Text, useTheme} from 'react-native-paper';
 import uuid from 'react-native-uuid';
 
 import AppIcon from 'src/assets/icon.svg';
@@ -67,6 +67,9 @@ const styles = StyleSheet.create({
 		flex: 1,
 		textAlign: 'right',
 	},
+	segmentedButtons: {
+		marginVertical: 10,
+	},
 });
 
 const StopButton = () => {
@@ -99,18 +102,18 @@ const ActiveTimesheetContent = () => {
 const DatetimeSelector = () => {
 	const dispatch = useAppDispatch();
 	const {t} = useTranslation();
-	const [useCurrentTime, setUseCurrentTime] = useState(true);
+	const [startMode, setStartMode] = useState<'now' | 'fixed'>('now');
 
 	useEffect(() => {
 		dispatch(
 			nextTimesheetStartDatetimeSet(
-				useCurrentTime ? undefined : dayjs().unix(),
+				startMode === 'now' ? undefined : dayjs().unix(),
 			),
 		);
-	}, [dispatch, useCurrentTime]);
+	}, [dispatch, startMode]);
 
-	const toggleUseCurrentTime = useCallback(
-		() => setUseCurrentTime((prev) => !prev),
+	const handleStartModeChange = useCallback(
+		(value: string) => setStartMode(value as 'now' | 'fixed'),
 		[],
 	);
 
@@ -126,12 +129,16 @@ const DatetimeSelector = () => {
 
 	return (
 		<View>
-			<Checkbox.Item
-				label={t('useCurrentDateTime')}
-				status={useCurrentTime ? 'checked' : 'unchecked'}
-				onPress={toggleUseCurrentTime}
+			<SegmentedButtons
+				style={styles.segmentedButtons}
+				value={startMode}
+				onValueChange={handleStartModeChange}
+				buttons={[
+					{value: 'now', label: t('now')},
+					{value: 'fixed', label: t('specificTime')},
+				]}
 			/>
-			{useCurrentTime === false ? (
+			{startMode === 'fixed' ? (
 				<DateTimePicker
 					initialValue={dateUnixTimestamp}
 					onDateTimePick={handleDateTimePick}

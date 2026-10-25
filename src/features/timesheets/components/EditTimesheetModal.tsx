@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 	},
 	segmentedButtons: {
-		marginVertical: 5,
+		marginVertical: 10,
 	},
 });
 
