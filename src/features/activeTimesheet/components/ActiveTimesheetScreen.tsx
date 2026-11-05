@@ -50,6 +50,10 @@ const styles = StyleSheet.create({
 	mainContainer: {
 		margin: 20,
 		gap: 20,
+		flex: 1,
+	},
+	scrollableContent: {
+		flex: 1,
 	},
 	startButton: {
 		alignSelf: 'center',
@@ -315,7 +319,7 @@ const DayWorkingHours = () => {
 const TimesheetListOfCurrentDay = () => {
 	const timesheetList = useAppSelector(selectTimesheetListOfCurrentDay);
 
-	return <TimesheetList data={timesheetList} />;
+	return <TimesheetList data={timesheetList} scrollEnabled={false} />;
 };
 
 export const ActiveTimesheetScreen = () => {
@@ -323,15 +327,15 @@ export const ActiveTimesheetScreen = () => {
 
 	return (
 		<View style={styles.mainContainer}>
-			<RefreshView>
-				<DayWorkingHours />
+			<DayWorkingHours />
+			<RefreshView style={styles.scrollableContent}>
 				{timesheet !== undefined ? (
 					<ActiveTimesheetContent />
 				) : (
 					<NonActiveTimesheetContent />
 				)}
+				<TimesheetListOfCurrentDay />
 			</RefreshView>
-			<TimesheetListOfCurrentDay />
 		</View>
 	);
 };

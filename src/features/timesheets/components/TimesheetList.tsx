@@ -6,7 +6,13 @@ import {fetchTimesheets} from '../middleware/timesheetsThunks';
 import {Timesheet} from '../types';
 import {TimesheetItem} from './TimesheetItem';
 
-export const TimesheetList = ({data}: {data: Array<Timesheet>}) => {
+export const TimesheetList = ({
+	data,
+	scrollEnabled = true,
+}: {
+	data: Array<Timesheet>;
+	scrollEnabled?: boolean;
+}) => {
 	const dispatch = useAppDispatch();
 	const onRefresh = useCallback(() => dispatch(fetchTimesheets()), [dispatch]);
 
@@ -15,6 +21,7 @@ export const TimesheetList = ({data}: {data: Array<Timesheet>}) => {
 			data={data}
 			onRefresh={onRefresh}
 			showDividers={false}
+			scrollEnabled={scrollEnabled}
 			renderItem={({item}) => <TimesheetItem timesheet={item} />}
 		/>
 	);
