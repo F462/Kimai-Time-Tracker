@@ -1,11 +1,12 @@
 import {Picker} from '@react-native-picker/picker';
 import {simplePrompt} from '@sbaiahmed1/react-native-biometrics';
-import React, {useCallback} from 'react';
+import React, {useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Linking, Platform, StyleSheet} from 'react-native';
+import {Alert, Linking, Platform, ScrollView, StyleSheet} from 'react-native';
 import notifications, {AndroidImportance} from 'react-native-notify-kit';
 import {List, Switch, useTheme} from 'react-native-paper';
 
+import {exportData} from 'src/features/backup/middleware/backupThunks';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {useAppNavigation} from 'src/features/navigation/context/hooks';
 import {useStyle} from 'src/features/theming/utils/useStyle';
@@ -128,6 +129,41 @@ const SecuritySection = () => {
 	);
 };
 
+const BackupIcon = () => <List.Icon icon="backup-restore" />;
+
+const DataSection = () => {
+	const {t} = useTranslation();
+	const dispatch = useAppDispatch();
+	const [isExporting, setIsExporting] = useState(false);
+
+	const onBackup = useCallback(() => {
+		if (isExporting) {
+			return;
+		}
+
+		setIsExporting(true);
+		dispatch(exportData())
+			.catch((error) => {
+				console.error('Exporting the backup failed', error);
+				Alert.alert(t('warning'), t('backupDataError'));
+			})
+			.finally(() => setIsExporting(false));
+	}, [dispatch, isExporting, t]);
+
+	return (
+		<List.Section>
+			<List.Subheader>{t('dataTitle')}</List.Subheader>
+			<List.Item
+				title={t('backupData')}
+				description={t('backupDataDescription')}
+				left={BackupIcon}
+				onPress={onBackup}
+				disabled={isExporting}
+			/>
+		</List.Section>
+	);
+};
+
 const DAILY_WORKING_HOURS_CHANNEL_ID = 'daily-working-hours';
 const NotificationBellIcon = () => <List.Icon icon="bell-outline" />;
 const SettingsChevronIcon = () => <List.Icon icon="chevron-right" />;
@@ -194,10 +230,13 @@ const NotificationSettingsItem = () => {
 export const SettingsScreen = () => {
 	return (
 		<BaseScreen>
-			<DisplaySection />
-			<WorkingTimeSection />
-			<NotificationSettingsItem />
-			<SecuritySection />
+			<ScrollView keyboardShouldPersistTaps="handled">
+				<DisplaySection />
+				<WorkingTimeSection />
+				<NotificationSettingsItem />
+				<SecuritySection />
+				<DataSection />
+			</ScrollView>
 		</BaseScreen>
 	);
 };
