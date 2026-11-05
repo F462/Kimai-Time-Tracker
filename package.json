@@ -5,7 +5,7 @@
 	"private": true,
 	"scripts": {
 		"postinstall": "yarn licenses generate-disclaimer -A -r -o src/assets/license.txt",
-		"android": "react-native run-android",
+		"android": "node scripts/android.ts",
 		"ios": "react-native run-ios",
 		"lint": "eslint .",
 		"start": "react-native start",
