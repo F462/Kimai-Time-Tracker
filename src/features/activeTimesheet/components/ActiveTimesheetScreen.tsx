@@ -25,6 +25,7 @@ import {
 	selectSelectedProjectId,
 } from 'src/features/projects/context/projectsSelectors';
 import {projectSelected} from 'src/features/projects/context/projectsSlice';
+import {useResponsiveScale} from 'src/features/theming/utils/useResponsiveScale';
 import {useStyle} from 'src/features/theming/utils/useStyle';
 import {TimesheetList} from 'src/features/timesheets/components/TimesheetList';
 import {useWorkingHoursOfCurrentDayInSeconds} from 'src/features/timesheets/context/timesheetHooks';
@@ -76,9 +77,12 @@ const styles = StyleSheet.create({
 	},
 });
 
+const ICON_SIZE = 200;
+
 const StopButton = () => {
 	const dispatch = useAppDispatch();
 	const theme = useTheme();
+	const scale = useResponsiveScale();
 
 	const handleStop = useCallback(() => {
 		dispatch(stopActiveTimesheet()).catch(console.warn);
@@ -87,9 +91,9 @@ const StopButton = () => {
 	return (
 		<IconButton
 			icon="stop"
-			style={styles.startButton}
+			style={[styles.startButton, {padding: 20 * scale}]}
 			iconColor={theme.colors.primary}
-			size={200}
+			size={ICON_SIZE * scale}
 			onPress={handleStop}
 		/>
 	);
@@ -208,8 +212,9 @@ const StartButton = () => {
 	const nextTimesheetStartDatetime = useAppSelector(
 		selectNextTimesheetStartDate,
 	);
+	const scale = useResponsiveScale();
 
-	const iconSize = 200;
+	const iconSize = ICON_SIZE * scale;
 
 	const handleStart = useCallback(() => {
 		dispatch(
@@ -231,7 +236,9 @@ const StartButton = () => {
 	]);
 
 	return canTimesheetBeStarted ? (
-		<PressableOpacity style={styles.startButton} onPress={handleStart}>
+		<PressableOpacity
+			style={[styles.startButton, {padding: 20 * scale}]}
+			onPress={handleStart}>
 			<AppIcon width={iconSize} height={iconSize} />
 		</PressableOpacity>
 	) : null;

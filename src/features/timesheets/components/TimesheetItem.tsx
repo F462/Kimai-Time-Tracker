@@ -12,6 +12,7 @@ import {
 	selectSyncState,
 } from 'src/features/synchronization/context/synchronizationSelectors';
 import {SyncState} from 'src/features/synchronization/types';
+import {useResponsiveScale} from 'src/features/theming/utils/useResponsiveScale';
 import {useStyle} from 'src/features/theming/utils/useStyle';
 import {useTime} from 'src/features/utils/useTime';
 import {ColorIndicator} from 'src/ui/ColorIndicator';
@@ -22,6 +23,26 @@ import {Timesheet} from '../types';
 import {TimesheetItemContextMenu} from './TimesheetItemContextMenu';
 
 const SYNC_STATE_ICON_SIZE = 15;
+const COLOR_INDICATOR_SIZE = 18;
+
+/**
+ * Base (unscaled) metrics of the react-native-paper MD3 text variants used in
+ * this file. They are multiplied by the responsive scale so the card looks
+ * proportionally consistent across devices with different logical screen sizes.
+ */
+const TEXT_VARIANTS = {
+	bodyMedium: {fontSize: 14, lineHeight: 20},
+	titleSmall: {fontSize: 14, lineHeight: 20},
+	labelSmall: {fontSize: 11, lineHeight: 16},
+} as const;
+
+const scaledTextStyle = (
+	scale: number,
+	variant: keyof typeof TEXT_VARIANTS,
+): {fontSize: number; lineHeight: number} => ({
+	fontSize: TEXT_VARIANTS[variant].fontSize * scale,
+	lineHeight: TEXT_VARIANTS[variant].lineHeight * scale,
+});
 
 const styles = StyleSheet.create({
 	card: {
@@ -101,8 +122,10 @@ const useDisplayedDatetime = (timestamp: string | null | undefined) =>
 
 const SynchronizationStateIcon = ({
 	synchronizationState,
+	size,
 }: {
 	synchronizationState?: SyncState;
+	size: number;
 }) => {
 	const theme = useTheme();
 	const iconSource = (() => {
@@ -130,28 +153,34 @@ const SynchronizationStateIcon = ({
 		}
 	})();
 
-	return <Icon color={color} source={iconSource} size={SYNC_STATE_ICON_SIZE} />;
+	return <Icon color={color} source={iconSource} size={size} />;
 };
 
 type TimesheetItemProps = {
 	timesheet: Timesheet;
+	/** Responsive scale factor for the card's text, icons, and spacing. */
+	scale: number;
 };
 
-const TimesheetSyncIndicator = ({timesheet}: TimesheetItemProps) => {
+const TimesheetSyncIndicator = ({timesheet, scale}: TimesheetItemProps) => {
 	const synchronizationState = useAppSelector(selectSyncState(timesheet.id));
+	const iconSize = SYNC_STATE_ICON_SIZE * scale;
 
 	return (
 		<View style={styles.syncStateIconContainer}>
 			{synchronizationState === SyncState.RUNNING ? (
-				<ActivityIndicator size={SYNC_STATE_ICON_SIZE} />
+				<ActivityIndicator size={iconSize} />
 			) : (
-				<SynchronizationStateIcon synchronizationState={synchronizationState} />
+				<SynchronizationStateIcon
+					synchronizationState={synchronizationState}
+					size={iconSize}
+				/>
 			)}
 		</View>
 	);
 };
 
-const TimesheetDurationDisplay = ({timesheet}: TimesheetItemProps) => {
+const TimesheetDurationDisplay = ({timesheet, scale}: TimesheetItemProps) => {
 	const now = useTime(20_000);
 
 	const displayedDuration = useMemo(() => {
@@ -174,50 +203,68 @@ const TimesheetDurationDisplay = ({timesheet}: TimesheetItemProps) => {
 	}, [now, timesheet.begin, timesheet.duration, timesheet.end]);
 
 	return (
-		<Text variant="titleSmall" style={styles.duration}>
+		<Text
+			variant="titleSmall"
+			style={[styles.duration, scaledTextStyle(scale, 'titleSmall')]}>
 			{displayedDuration}
 		</Text>
 	);
 };
 
-const TimesheetTimeDisplay = ({timesheet}: TimesheetItemProps) => {
+const TimesheetTimeDisplay = ({timesheet, scale}: TimesheetItemProps) => {
 	const {t} = useTranslation();
 
 	const displayedTimeStart = useDisplayedDatetime(timesheet.begin);
 	const displayedTimeEnd = useDisplayedDatetime(timesheet.end);
+	const textStyle = scaledTextStyle(scale, 'bodyMedium');
 
 	return (
-		<ListItem style={styles.timeContainer}>
-			<ListItemText style={[styles.datetimeText, styles.startDatetimeText]}>
+		<ListItem style={[styles.timeContainer, {gap: 4 * scale}]}>
+			<ListItemText
+				style={[styles.datetimeText, styles.startDatetimeText, textStyle]}>
 				{displayedTimeStart}
 			</ListItemText>
-			<ListItemText> - </ListItemText>
-			<ListItemText style={styles.datetimeText}>
+			<ListItemText style={textStyle}> - </ListItemText>
+			<ListItemText style={[styles.datetimeText, textStyle]}>
 				{displayedTimeEnd ?? t('now')}
 			</ListItemText>
 		</ListItem>
 	);
 };
 
-const TimesheetDetails = ({timesheet}: TimesheetItemProps) => {
+const TimesheetDetails = ({timesheet, scale}: TimesheetItemProps) => {
 	const activity = useAppSelector(selectActivity(timesheet.activity));
 	const project = useAppSelector(selectProject(timesheet.project));
+	const textStyle = scaledTextStyle(scale, 'bodyMedium');
+	const indicatorSize = COLOR_INDICATOR_SIZE * scale;
 
 	return (
-		<ListItem style={styles.timesheetDetailsContainer}>
+		<ListItem
+			style={[
+				styles.timesheetDetailsContainer,
+				{gap: 4 * scale, marginTop: 6 * scale},
+			]}>
 			{project?.name && (
-				<View style={[styles.detailField, styles.projectDetailField]}>
-					<ListItemText style={[styles.detailsText, styles.projectText]}>
+				<View
+					style={[
+						styles.detailField,
+						styles.projectDetailField,
+						{gap: 5 * scale},
+					]}>
+					<ListItemText
+						style={[styles.detailsText, styles.projectText, textStyle]}>
 						{project.name}
 					</ListItemText>
-					<ColorIndicator color={project.color} />
+					<ColorIndicator color={project.color} size={indicatorSize} />
 				</View>
 			)}
-			{project?.name && activity?.name && <ListItemText> · </ListItemText>}
+			{project?.name && activity?.name && (
+				<ListItemText style={textStyle}> · </ListItemText>
+			)}
 			{activity?.name && (
-				<View style={styles.detailField}>
-					<ColorIndicator color={activity.color} />
-					<ListItemText style={styles.detailsText}>
+				<View style={[styles.detailField, {gap: 5 * scale}]}>
+					<ColorIndicator color={activity.color} size={indicatorSize} />
+					<ListItemText style={[styles.detailsText, textStyle]}>
 						{activity.name}
 					</ListItemText>
 				</View>
@@ -226,8 +273,9 @@ const TimesheetDetails = ({timesheet}: TimesheetItemProps) => {
 	);
 };
 
-export const TimesheetItem = ({timesheet}: TimesheetItemProps) => {
+export const TimesheetItem = ({timesheet}: {timesheet: Timesheet}) => {
 	const theme = useTheme();
+	const scale = useResponsiveScale();
 	const syncError = useAppSelector(selectSyncError(timesheet.id));
 
 	const [contextMenuVisible, setContextMenuVisible] = useState(false);
@@ -243,10 +291,22 @@ export const TimesheetItem = ({timesheet}: TimesheetItemProps) => {
 				borderColor: contextMenuVisible
 					? theme.colors.primary
 					: theme.colors.outlineVariant,
+				borderRadius: 14 * scale,
+				gap: 6 * scale,
+				marginHorizontal: 12 * scale,
+				marginVertical: 6 * scale,
+				padding: 14 * scale,
+			},
+			cardRow: {
+				gap: 12 * scale,
+			},
+			syncErrorText: {
+				paddingHorizontal: 2 * scale,
 			},
 		}),
 		[
 			contextMenuVisible,
+			scale,
 			theme.colors.primary,
 			theme.colors.outlineVariant,
 			theme.colors.surface,
@@ -263,19 +323,24 @@ export const TimesheetItem = ({timesheet}: TimesheetItemProps) => {
 			<PressableOpacity
 				style={[styles.card, dynamicStyles.card]}
 				onPress={onItemPress}>
-				<View style={styles.cardRow}>
-					<TimesheetSyncIndicator timesheet={timesheet} />
+				<View style={[styles.cardRow, dynamicStyles.cardRow]}>
+					<TimesheetSyncIndicator timesheet={timesheet} scale={scale} />
 					<View style={styles.flex}>
-						<TimesheetTimeDisplay timesheet={timesheet} />
-						<TimesheetDetails timesheet={timesheet} />
+						<TimesheetTimeDisplay timesheet={timesheet} scale={scale} />
+						<TimesheetDetails timesheet={timesheet} scale={scale} />
 					</View>
-					<TimesheetDurationDisplay timesheet={timesheet} />
+					<TimesheetDurationDisplay timesheet={timesheet} scale={scale} />
 				</View>
 				{syncError != null && (
 					<Text
 						numberOfLines={2}
 						variant="labelSmall"
-						style={[styles.syncErrorText, {color: theme.colors.error}]}>
+						style={[
+							styles.syncErrorText,
+							dynamicStyles.syncErrorText,
+							scaledTextStyle(scale, 'labelSmall'),
+							{color: theme.colors.error},
+						]}>
 						{syncError}
 					</Text>
 				)}
