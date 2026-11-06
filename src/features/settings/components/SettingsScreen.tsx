@@ -1,12 +1,16 @@
 import {Picker} from '@react-native-picker/picker';
 import {simplePrompt} from '@sbaiahmed1/react-native-biometrics';
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Alert, Linking, Platform, ScrollView, StyleSheet} from 'react-native';
 import notifications, {AndroidImportance} from 'react-native-notify-kit';
 import {List, Switch, useTheme} from 'react-native-paper';
 
-import {exportData} from 'src/features/backup/middleware/backupThunks';
+import {
+	chooseBackupFolder,
+	exportData,
+	getBackupFolder,
+} from 'src/features/backup/middleware/backupThunks';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {useAppNavigation} from 'src/features/navigation/context/hooks';
 import {useStyle} from 'src/features/theming/utils/useStyle';
@@ -134,7 +138,38 @@ const BackupIcon = () => <List.Icon icon="backup-restore" />;
 const DataSection = () => {
 	const {t} = useTranslation();
 	const dispatch = useAppDispatch();
+	const [hasBackupFolder, setHasBackupFolder] = useState(false);
 	const [isExporting, setIsExporting] = useState(false);
+	const [isChoosingFolder, setIsChoosingFolder] = useState(false);
+
+	useEffect(() => {
+		dispatch(getBackupFolder())
+			.unwrap()
+			.then(setHasBackupFolder)
+			.catch((error) =>
+				console.error('Loading the backup folder failed', error),
+			);
+	}, [dispatch]);
+
+	const onChooseBackupFolder = useCallback(() => {
+		if (isChoosingFolder || isExporting) {
+			return;
+		}
+
+		setIsChoosingFolder(true);
+		dispatch(chooseBackupFolder())
+			.unwrap()
+			.then((folderSelected) => {
+				if (folderSelected) {
+					setHasBackupFolder(true);
+				}
+			})
+			.catch((error) => {
+				console.error('Selecting the backup folder failed', error);
+				Alert.alert(t('warning'), t('backupDataError'));
+			})
+			.finally(() => setIsChoosingFolder(false));
+	}, [dispatch, isChoosingFolder, isExporting, t]);
 
 	const onBackup = useCallback(() => {
 		if (isExporting) {
@@ -154,11 +189,20 @@ const DataSection = () => {
 		<List.Section>
 			<List.Subheader>{t('dataTitle')}</List.Subheader>
 			<List.Item
+				title={t('backupFolder')}
+				description={t(
+					hasBackupFolder ? 'backupFolderSelected' : 'backupFolderDescription',
+				)}
+				left={BackupIcon}
+				onPress={onChooseBackupFolder}
+				disabled={isChoosingFolder || isExporting}
+			/>
+			<List.Item
 				title={t('backupData')}
 				description={t('backupDataDescription')}
 				left={BackupIcon}
 				onPress={onBackup}
-				disabled={isExporting}
+				disabled={!hasBackupFolder || isExporting || isChoosingFolder}
 			/>
 		</List.Section>
 	);
