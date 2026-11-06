@@ -282,6 +282,7 @@ const TimesheetDetails = ({timesheet, scale}: TimesheetItemProps) => {
 export const TimesheetItem = ({timesheet}: {timesheet: Timesheet}) => {
 	const theme = useTheme();
 	const scale = useResponsiveScale();
+	const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
 	const syncError = useAppSelector(selectSyncError(timesheet.id));
 
 	const [contextMenuVisible, setContextMenuVisible] = useState(false);
@@ -337,7 +338,7 @@ export const TimesheetItem = ({timesheet}: {timesheet: Timesheet}) => {
 					</View>
 					<TimesheetDurationDisplay timesheet={timesheet} scale={scale} />
 				</View>
-				{syncError != null && (
+				{isUserLoggedIn && syncError != null && (
 					<Text
 						numberOfLines={2}
 						variant="labelSmall"
