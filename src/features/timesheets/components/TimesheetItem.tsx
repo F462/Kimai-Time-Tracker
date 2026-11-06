@@ -4,6 +4,7 @@ import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
 import {ActivityIndicator, Icon, Text, useTheme} from 'react-native-paper';
 
+import {selectIsUserLoggedIn} from 'src/features/account/context/accountSelectors';
 import {selectActivity} from 'src/features/activities/context/activitiesSelectors';
 import {useAppSelector} from 'src/features/data/context/store';
 import {selectProject} from 'src/features/projects/context/projectsSelectors';
@@ -163,8 +164,13 @@ type TimesheetItemProps = {
 };
 
 const TimesheetSyncIndicator = ({timesheet, scale}: TimesheetItemProps) => {
+	const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
 	const synchronizationState = useAppSelector(selectSyncState(timesheet.id));
 	const iconSize = SYNC_STATE_ICON_SIZE * scale;
+
+	if (!isUserLoggedIn) {
+		return null;
+	}
 
 	return (
 		<View style={styles.syncStateIconContainer}>

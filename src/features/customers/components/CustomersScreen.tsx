@@ -3,6 +3,7 @@ import {useTranslation} from 'react-i18next';
 import {StyleSheet} from 'react-native';
 import {FAB} from 'react-native-paper';
 
+import {selectIsUserLoggedIn} from 'src/features/account/context/accountSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {BaseScreen} from 'src/ui/BaseScreen';
 import {DividedList} from 'src/ui/DividedList';
@@ -33,6 +34,7 @@ const CustomerItem = ({
 	isSelected: boolean;
 }) => {
 	const dispatch = useAppDispatch();
+	const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
 	const [contextMenuVisible, setContextMenuVisible] = useState(false);
 
 	const onSelectCustomer = useCallback(() => {
@@ -44,7 +46,7 @@ const CustomerItem = ({
 	return (
 		<EntityListItem
 			name={customer.name}
-			isSyncPending={customer.id < 0}
+			isSyncPending={isUserLoggedIn && customer.id < 0}
 			isSelected={isSelected}
 			onPress={onSelectCustomer}
 			onLongPress={onOpenContextMenu}

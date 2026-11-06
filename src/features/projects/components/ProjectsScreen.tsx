@@ -3,6 +3,7 @@ import {useTranslation} from 'react-i18next';
 import {StyleSheet} from 'react-native';
 import {FAB} from 'react-native-paper';
 
+import {selectIsUserLoggedIn} from 'src/features/account/context/accountSelectors';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {BaseScreen} from 'src/ui/BaseScreen';
 import {DividedList} from 'src/ui/DividedList';
@@ -33,6 +34,7 @@ const ProjectItem = ({
 	isSelected: boolean;
 }) => {
 	const dispatch = useAppDispatch();
+	const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
 	const [contextMenuVisible, setContextMenuVisible] = useState(false);
 
 	const onProjectItemPress = useCallback(() => {
@@ -45,7 +47,7 @@ const ProjectItem = ({
 		<EntityListItem
 			name={project.name}
 			color={project.color}
-			isSyncPending={project.id < 0}
+			isSyncPending={isUserLoggedIn && project.id < 0}
 			isSelected={isSelected}
 			onPress={onProjectItemPress}
 			onLongPress={onOpenContextMenu}
