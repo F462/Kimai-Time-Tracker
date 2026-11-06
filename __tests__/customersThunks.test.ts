@@ -1,17 +1,28 @@
 import {configureStore} from '@reduxjs/toolkit';
 
 import {api} from 'src/features/account/utils/ApiClient';
-import {customersReducer} from 'src/features/customers/context/customersSlice';
+import {
+	customerSelected,
+	customersReceived,
+	customersReducer,
+} from 'src/features/customers/context/customersSlice';
 import {
 	createCustomer,
 	fetchCustomerColors,
+	synchronizeLocalCustomers,
 	updateCustomer,
 } from 'src/features/customers/middleware/customersThunks';
 import {Customer} from 'src/features/customers/types';
 import type {AppDispatch} from 'src/features/data/context/store';
 
 jest.mock('src/features/account/utils/ApiClient', () => ({
-	api: {get: jest.fn(), post: jest.fn(), patch: jest.fn(), delete: jest.fn()},
+	api: {
+		get: jest.fn(),
+		post: jest.fn(),
+		patch: jest.fn(),
+		delete: jest.fn(),
+		isConfigured: jest.fn(),
+	},
 	ApiClient: {getInstance: jest.fn()},
 }));
 
@@ -45,6 +56,7 @@ type TestStore = Omit<ReturnType<typeof configureTestStore>, 'dispatch'> & {
 describe('customer thunks', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
+		(api.isConfigured as jest.Mock).mockReturnValue(true);
 	});
 
 	it('posts all required customer fields when creating', async () => {
@@ -80,6 +92,73 @@ describe('customer thunks', () => {
 			billable: true,
 		});
 		expect(store.getState().customers.customers[customer.id]).toEqual(customer);
+	});
+
+	it('creates and stores a customer locally when not logged in', async () => {
+		(api.isConfigured as jest.Mock).mockReturnValue(false);
+		const store = configureTestStore() as TestStore;
+
+		const result = await store.dispatch(
+			createCustomer({
+				name: 'Offline customer',
+				country: 'US',
+				language: 'en',
+				currency: 'USD',
+			}),
+		);
+
+		expect(api.post).not.toHaveBeenCalled();
+		expect(createCustomer.fulfilled.match(result)).toBe(true);
+		if (createCustomer.fulfilled.match(result)) {
+			expect(result.payload.id).toBe(-1);
+			expect(store.getState().customers.customers[-1]).toEqual(
+				expect.objectContaining({
+					name: 'Offline customer',
+					country: 'US',
+					language: 'en',
+					currency: 'USD',
+					visible: true,
+					billable: true,
+				}),
+			);
+		}
+	});
+
+	it('keeps local customers on fetch and remaps them after synchronization', async () => {
+		(api.isConfigured as jest.Mock).mockReturnValue(false);
+		const store = configureTestStore() as TestStore;
+		await store.dispatch(
+			createCustomer({
+				name: 'Offline customer',
+				country: 'US',
+				language: 'en',
+				currency: 'USD',
+			}),
+		);
+		store.dispatch(customerSelected(-1));
+		store.dispatch(customersReceived([makeCustomer()]));
+
+		expect(store.getState().customers.customers[-1]?.name).toBe(
+			'Offline customer',
+		);
+
+		const syncedCustomer = {...makeCustomer(), id: 21};
+		(api.isConfigured as jest.Mock).mockReturnValue(true);
+		(api.post as jest.Mock).mockResolvedValue(syncedCustomer);
+		await store.dispatch(synchronizeLocalCustomers());
+
+		expect(api.post).toHaveBeenCalledWith(
+			'api/customers',
+			expect.objectContaining({
+				name: 'Offline customer',
+				country: 'US',
+				language: 'en',
+				currency: 'USD',
+			}),
+		);
+		expect(store.getState().customers.customers[-1]).toBeUndefined();
+		expect(store.getState().customers.customers[21]).toEqual(syncedCustomer);
+		expect(store.getState().customers.selectedCustomerId).toBe(21);
 	});
 
 	it('fetches the server-configured customer colors', async () => {
@@ -156,9 +235,11 @@ describe('customer thunks', () => {
 
 	it('rejects with the server error when creating is rejected', async () => {
 		const customer = makeCustomer();
-		(api.post as jest.Mock).mockRejectedValue(
+		const serverError = Object.assign(
 			new Error('Validation Failed: color: The selected choice is invalid.'),
+			{status: 400},
 		);
+		(api.post as jest.Mock).mockRejectedValue(serverError);
 		const store = configureTestStore() as TestStore;
 
 		const resultAction = await store.dispatch(

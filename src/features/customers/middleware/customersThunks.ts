@@ -4,6 +4,7 @@ import {
 	customerCreated,
 	customerRemoved,
 	customersReceived,
+	customerSynced,
 	customerUpdated,
 } from '../context/customersSlice';
 import {Customer} from '../types';
@@ -43,6 +44,92 @@ const resolveDefaultTimezone = (): string => {
 	}
 };
 
+const createCustomerBody = (payload: CreateCustomerPayload) => {
+	const body: Record<string, unknown> = {
+		name: payload.name,
+		country: payload.country,
+		company: payload.company,
+		street: payload.street,
+		zipcode: payload.zipcode,
+		city: payload.city,
+		language: payload.language,
+		currency: payload.currency,
+		timezone: payload.timezone ?? resolveDefaultTimezone(),
+	};
+
+	if (payload.number !== undefined && payload.number !== null) {
+		body.number = payload.number;
+	}
+
+	if (payload.comment !== undefined && payload.comment !== null) {
+		body.comment = payload.comment;
+	}
+
+	if (payload.color !== undefined && payload.color !== null) {
+		body.color = payload.color;
+	}
+
+	body.visible = payload.visible ?? true;
+	body.billable = payload.billable ?? true;
+
+	if (payload.vatId) {
+		body.vatId = payload.vatId;
+	}
+
+	if (payload.invoiceEmail) {
+		body.invoiceEmail = payload.invoiceEmail;
+	}
+
+	if (payload.buyerReference) {
+		body.buyerReference = payload.buyerReference;
+	}
+
+	if (payload.invoiceTemplate) {
+		body.invoiceTemplate = payload.invoiceTemplate;
+	}
+
+	if (payload.invoiceText) {
+		body.invoiceText = payload.invoiceText;
+	}
+
+	return body;
+};
+
+const createLocalCustomer = (
+	payload: CreateCustomerPayload,
+	customers: {[id: number]: Customer},
+): Customer => {
+	const localIds = Object.keys(customers)
+		.map(Number)
+		.filter((id) => Number.isInteger(id) && id < 0);
+	const id = localIds.length > 0 ? Math.min(...localIds) - 1 : -1;
+
+	return {
+		id,
+		name: payload.name,
+		number: payload.number ?? '',
+		comment: payload.comment ?? null,
+		country: payload.country,
+		company: payload.company,
+		street: payload.street,
+		zipcode: payload.zipcode,
+		city: payload.city,
+		timezone: payload.timezone ?? resolveDefaultTimezone(),
+		language: payload.language,
+		currency: payload.currency,
+		visible: payload.visible ?? true,
+		billable: payload.billable ?? true,
+		metaFields: [],
+		teams: [],
+		color: payload.color ?? null,
+		vatId: payload.vatId,
+		invoiceEmail: payload.invoiceEmail,
+		buyerReference: payload.buyerReference,
+		invoiceTemplate: payload.invoiceTemplate,
+		invoiceText: payload.invoiceText,
+	};
+};
+
 export const fetchCustomers = createAppAsyncThunk(
 	'customers/fetchCustomers',
 	async (_, {dispatch}) => {
@@ -58,6 +145,11 @@ export const fetchCustomers = createAppAsyncThunk(
 export const removeCustomer = createAppAsyncThunk<void, number>(
 	'customers/removeCustomer',
 	async (customerId, {dispatch}) => {
+		if (customerId < 0) {
+			dispatch(customerRemoved(customerId));
+			return;
+		}
+
 		try {
 			await api.delete(`api/customers/${customerId.toString()}`);
 			dispatch(customerRemoved(customerId));
@@ -70,6 +162,11 @@ export const removeCustomer = createAppAsyncThunk<void, number>(
 export const updateCustomer = createAppAsyncThunk(
 	'customers/updateCustomer',
 	async (customer: Customer, {dispatch}) => {
+		if (customer.id < 0) {
+			dispatch(customerUpdated(customer));
+			return customer;
+		}
+
 		try {
 			const response = await api.patch<Customer>(
 				`api/customers/${customer.id.toString()}`,
@@ -114,58 +211,58 @@ export const updateCustomer = createAppAsyncThunk(
 export const createCustomer = createAppAsyncThunk<
 	Customer,
 	CreateCustomerPayload
->('customers/createCustomer', async (payload, {dispatch}) => {
-	const body: Record<string, unknown> = {
-		name: payload.name,
-		country: payload.country,
-		company: payload.company,
-		street: payload.street,
-		zipcode: payload.zipcode,
-		city: payload.city,
-		language: payload.language,
-		currency: payload.currency,
-		timezone: payload.timezone ?? resolveDefaultTimezone(),
+>('customers/createCustomer', async (payload, {dispatch, getState}) => {
+	const saveLocally = () => {
+		const customer = createLocalCustomer(
+			payload,
+			getState().customers.customers,
+		);
+		dispatch(customerCreated(customer));
+		return customer;
 	};
 
-	if (payload.number !== undefined && payload.number !== null) {
-		body.number = payload.number;
+	if (!api.isConfigured()) {
+		return saveLocally();
 	}
 
-	if (payload.comment !== undefined && payload.comment !== null) {
-		body.comment = payload.comment;
+	try {
+		const response = await api.post<Customer>(
+			'api/customers',
+			createCustomerBody(payload),
+		);
+		dispatch(customerCreated(response));
+		return response;
+	} catch (error: any) {
+		if (error?.status === undefined) {
+			return saveLocally();
+		}
+		throw error;
 	}
-
-	if (payload.color !== undefined && payload.color !== null) {
-		body.color = payload.color;
-	}
-
-	body.visible = payload.visible ?? true;
-	body.billable = payload.billable ?? true;
-
-	// Invoice settings: only sent when a value is present.
-	if (payload.vatId) {
-		body.vatId = payload.vatId;
-	}
-
-	if (payload.invoiceEmail) {
-		body.invoiceEmail = payload.invoiceEmail;
-	}
-
-	if (payload.buyerReference) {
-		body.buyerReference = payload.buyerReference;
-	}
-
-	if (payload.invoiceTemplate) {
-		body.invoiceTemplate = payload.invoiceTemplate;
-	}
-
-	if (payload.invoiceText) {
-		body.invoiceText = payload.invoiceText;
-	}
-
-	const response = await api.post<Customer>('api/customers', body);
-
-	dispatch(customerCreated(response));
-
-	return response;
 });
+
+export const synchronizeLocalCustomers = createAppAsyncThunk(
+	'customers/synchronizeLocalCustomers',
+	async (_, {dispatch, getState}) => {
+		if (!api.isConfigured()) {
+			return;
+		}
+
+		const localCustomers = Object.values(getState().customers.customers)
+			.filter((customer) => customer.id < 0)
+			.sort((first, second) => first.id - second.id);
+
+		for (const customer of localCustomers) {
+			try {
+				const response = await api.post<Customer>(
+					'api/customers',
+					createCustomerBody(customer),
+				);
+				dispatch(customerSynced({localId: customer.id, customer: response}));
+			} catch (error: any) {
+				console.warn(
+					`Could not synchronize local customer: ${error.toString()}`,
+				);
+			}
+		}
+	},
+);
