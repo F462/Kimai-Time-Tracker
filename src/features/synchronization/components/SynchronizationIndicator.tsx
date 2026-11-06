@@ -39,9 +39,18 @@ export const SynchronizationIndicator = () => {
 	const iconToDisplay = useMemo(() => {
 		const {iconString, iconCallback} = (() => {
 			if (isInternetReachable === false) {
-				return {iconString: 'cloud-off-outline'};
+				return {
+					iconString: 'cloud-off-outline',
+					iconCallback:
+						isUserLoggedIn === false
+							? () => navigation.navigate('Account')
+							: undefined,
+				};
 			} else if (isUserLoggedIn === false) {
-				return {iconString: 'cloud-alert'};
+				return {
+					iconString: 'cloud-alert',
+					iconCallback: () => navigation.navigate('Account'),
+				};
 			} else if (isUserLoggingIn === true) {
 				return {iconString: 'cloud-refresh'};
 			} else if (hasUnsynchronizedCustomers || hasUnsynchronizedProjects) {
