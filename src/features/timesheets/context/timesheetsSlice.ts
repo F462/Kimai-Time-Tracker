@@ -5,6 +5,7 @@ import {
 	newTimesheetStarted,
 	timesheetStopped,
 } from 'src/features/activeTimesheet/context/activeTimesheetSlice';
+import {activitySynced} from 'src/features/activities/context/activitiesSlice';
 import {timesheetSynced} from 'src/features/synchronization/context/synchronizationSlice';
 import {Timesheet, TimesheetsState} from '../types';
 import {timesheetEdited} from './timesheetActions';
@@ -68,6 +69,13 @@ const timesheetsSlice = createSlice({
 
 				state.timesheetIdTable[localId] = remoteId;
 			});
+		builder.addCase(activitySynced, (state, {payload: {localId, activity}}) => {
+			for (const timesheet of Object.values(state.timesheets)) {
+				if (timesheet.activity === localId) {
+					timesheet.activity = activity.id;
+				}
+			}
+		});
 	},
 });
 

@@ -12,9 +12,14 @@ const activitiesSlice = createSlice({
 	initialState,
 	reducers: {
 		activitiesReceived: (state, {payload}: PayloadAction<Array<Activity>>) => {
+			const localActivities = Object.values(state.activities).filter(
+				(activity) => activity.id < 0,
+			);
 			state.activities = payload.reduce(
 				(container, element) => ({...container, [element.id]: element}),
-				{},
+				Object.fromEntries(
+					localActivities.map((activity) => [activity.id, activity]),
+				),
 			);
 		},
 		activitySelected: (
@@ -36,6 +41,18 @@ const activitiesSlice = createSlice({
 		activityCreated: (state, {payload: activity}: PayloadAction<Activity>) => {
 			state.activities[activity.id] = activity;
 		},
+		activitySynced: (
+			state,
+			{
+				payload: {localId, activity},
+			}: PayloadAction<{localId: number; activity: Activity}>,
+		) => {
+			delete state.activities[localId];
+			state.activities[activity.id] = activity;
+			if (state.selectedActivityId === localId) {
+				state.selectedActivityId = activity.id;
+			}
+		},
 	},
 });
 
@@ -45,5 +62,6 @@ export const {
 	activityRemoved,
 	activityUpdated,
 	activityCreated,
+	activitySynced,
 } = activitiesSlice.actions;
 export const activitiesReducer = activitiesSlice.reducer;

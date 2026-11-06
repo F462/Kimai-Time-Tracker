@@ -4,6 +4,7 @@ import {
 	activitiesReceived,
 	activityCreated,
 	activityRemoved,
+	activitySynced,
 	activityUpdated,
 } from '../context/activitiesSlice';
 import {Activity} from '../types';
@@ -14,6 +15,47 @@ export type CreateActivityPayload = {
 	comment?: string | null;
 	visible?: boolean;
 	billable?: boolean;
+};
+
+const createActivityBody = (payload: CreateActivityPayload) => {
+	const body: Record<string, unknown> = {
+		name: payload.name,
+		visible: payload.visible ?? true,
+		billable: payload.billable ?? true,
+	};
+
+	if (payload.number !== undefined && payload.number !== null) {
+		body.number = payload.number;
+	}
+
+	if (payload.comment !== undefined && payload.comment !== null) {
+		body.comment = payload.comment;
+	}
+
+	return body;
+};
+
+const createLocalActivity = (
+	payload: CreateActivityPayload,
+	activities: {[id: number]: Activity},
+): Activity => {
+	const localIds = Object.keys(activities)
+		.map(Number)
+		.filter((id) => Number.isInteger(id) && id < 0);
+	const id = localIds.length > 0 ? Math.min(...localIds) - 1 : -1;
+
+	return {
+		id,
+		name: payload.name,
+		number: payload.number ?? null,
+		comment: payload.comment ?? null,
+		visible: payload.visible ?? true,
+		billable: payload.billable ?? true,
+		currency: '',
+		metaFields: [],
+		teams: [],
+		color: null,
+	};
 };
 
 export const fetchActivities = createAppAsyncThunk(
@@ -31,6 +73,11 @@ export const fetchActivities = createAppAsyncThunk(
 export const removeActivity = createAppAsyncThunk<void, number>(
 	'activities/removeActivity',
 	async (activityId, {dispatch}) => {
+		if (activityId < 0) {
+			dispatch(activityRemoved(activityId));
+			return;
+		}
+
 		try {
 			await api.delete(`api/activities/${activityId.toString()}`);
 			dispatch(activityRemoved(activityId));
@@ -43,6 +90,11 @@ export const removeActivity = createAppAsyncThunk<void, number>(
 export const updateActivity = createAppAsyncThunk(
 	'activities/updateActivity',
 	async (activity: Activity, {dispatch}) => {
+		if (activity.id < 0) {
+			dispatch(activityUpdated(activity));
+			return;
+		}
+
 		try {
 			const response = await api.patch<Activity>(
 				`api/activities/${activity.id.toString()}`,
@@ -64,25 +116,58 @@ export const updateActivity = createAppAsyncThunk(
 export const createActivity = createAppAsyncThunk<
 	Activity,
 	CreateActivityPayload
->('activities/createActivity', async (payload, {dispatch}) => {
-	const body: Record<string, unknown> = {
-		name: payload.name,
+>('activities/createActivity', async (payload, {dispatch, getState}) => {
+	const saveLocally = () => {
+		const activity = createLocalActivity(
+			payload,
+			getState().activities.activities,
+		);
+		dispatch(activityCreated(activity));
+		return activity;
 	};
 
-	if (payload.number !== undefined && payload.number !== null) {
-		body.number = payload.number;
+	if (!api.isConfigured()) {
+		return saveLocally();
 	}
 
-	if (payload.comment !== undefined && payload.comment !== null) {
-		body.comment = payload.comment;
+	try {
+		const response = await api.post<Activity>(
+			'api/activities',
+			createActivityBody(payload),
+		);
+		dispatch(activityCreated(response));
+		return response;
+	} catch (error: any) {
+		if (error?.status === undefined) {
+			return saveLocally();
+		}
+		throw error;
 	}
-
-	body.visible = payload.visible ?? true;
-	body.billable = payload.billable ?? true;
-
-	const response = await api.post<Activity>('api/activities', body);
-
-	dispatch(activityCreated(response));
-
-	return response;
 });
+
+export const synchronizeLocalActivities = createAppAsyncThunk(
+	'activities/synchronizeLocalActivities',
+	async (_, {dispatch, getState}) => {
+		if (!api.isConfigured()) {
+			return;
+		}
+
+		const localActivities = Object.values(getState().activities.activities)
+			.filter((activity) => activity.id < 0)
+			.sort((first, second) => first.id - second.id);
+
+		for (const activity of localActivities) {
+			try {
+				const response = await api.post<Activity>(
+					'api/activities',
+					createActivityBody(activity),
+				);
+				dispatch(activitySynced({localId: activity.id, activity: response}));
+			} catch (error: any) {
+				console.warn(
+					`Could not synchronize local activity: ${error.toString()}`,
+				);
+			}
+		}
+	},
+);
