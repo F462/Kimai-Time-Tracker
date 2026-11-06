@@ -3,9 +3,11 @@ import {IconButton} from 'react-native-paper';
 
 import {selectIsUserLoggedIn} from 'src/features/account/context/accountSelectors';
 import {selectIsUserLoggingIn} from 'src/features/appState/context/appStateSelectors';
+import {selectHasUnsynchronizedCustomers} from 'src/features/customers/context/customersSelectors';
 import {useAppSelector} from 'src/features/data/context/store';
 import {useAppNavigation} from 'src/features/navigation/context/hooks';
 import {selectIsInternetReachable} from 'src/features/network/context/networkSelector';
+import {selectHasUnsynchronizedProjects} from 'src/features/projects/context/projectsSelectors';
 import {
 	selectHasWorkContractHoursSyncStatus,
 	selectIsWorkContractHoursSyncInProgress,
@@ -18,6 +20,12 @@ export const SynchronizationIndicator = () => {
 	const [isSyncModalVisible, setSyncModalVisible] = useState(false);
 
 	const areAllTimesheetsInSync = useAppSelector(selectAreAllTimesheetsInSync);
+	const hasUnsynchronizedCustomers = useAppSelector(
+		selectHasUnsynchronizedCustomers,
+	);
+	const hasUnsynchronizedProjects = useAppSelector(
+		selectHasUnsynchronizedProjects,
+	);
 	const isInternetReachable = useAppSelector(selectIsInternetReachable);
 	const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
 	const isUserLoggingIn = useAppSelector(selectIsUserLoggingIn);
@@ -36,6 +44,11 @@ export const SynchronizationIndicator = () => {
 				return {iconString: 'cloud-alert'};
 			} else if (isUserLoggingIn === true) {
 				return {iconString: 'cloud-refresh'};
+			} else if (hasUnsynchronizedCustomers || hasUnsynchronizedProjects) {
+				return {
+					iconString: 'cloud-upload-outline',
+					iconCallback: () => setSyncModalVisible(true),
+				};
 			} else if (hasWorkContractSyncStatus) {
 				return {
 					iconString: isWorkContractSyncInProgress
@@ -57,6 +70,8 @@ export const SynchronizationIndicator = () => {
 		return <IconButton icon={iconString} onPress={iconCallback} size={30} />;
 	}, [
 		areAllTimesheetsInSync,
+		hasUnsynchronizedCustomers,
+		hasUnsynchronizedProjects,
 		isInternetReachable,
 		isUserLoggedIn,
 		isUserLoggingIn,

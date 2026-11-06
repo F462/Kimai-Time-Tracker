@@ -13,6 +13,11 @@ export const selectProjectList = createSelector([selectProjects], (projects) =>
 	Object.values(projects),
 );
 
+export const selectHasUnsynchronizedProjects = createSelector(
+	[selectProjects],
+	(projects) => Object.values(projects).some((project) => project.id < 0),
+);
+
 export const selectSelectedProjectId = createSelector(
 	[selectProjectsState],
 	(projectState) => projectState.selectedProjectId,

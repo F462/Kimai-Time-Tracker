@@ -11,7 +11,11 @@ import {
 	useTheme,
 } from 'react-native-paper';
 
+import {selectHasUnsynchronizedCustomers} from 'src/features/customers/context/customersSelectors';
+import {synchronizeLocalCustomers} from 'src/features/customers/middleware/customersThunks';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
+import {selectHasUnsynchronizedProjects} from 'src/features/projects/context/projectsSelectors';
+import {synchronizeLocalProjects} from 'src/features/projects/middleware/projectsThunks';
 import {
 	selectIsWorkContractHoursSyncInProgress,
 	selectIsWorkContractHoursSyncPending,
@@ -129,12 +133,91 @@ const WorkContractJob = () => {
 	);
 };
 
+const LocalCustomersJobIcon = () => <List.Icon icon="account-group-outline" />;
+
+const LocalCustomersJobAction = () => {
+	const {t} = useTranslation();
+	const dispatch = useAppDispatch();
+	const isSyncPending = useAppSelector(selectHasUnsynchronizedCustomers);
+
+	return (
+		<IconButton
+			icon={isSyncPending ? 'cloud-upload-outline' : 'check'}
+			disabled={!isSyncPending}
+			accessibilityLabel={t(isSyncPending ? 'synchronize' : 'entitySyncDone')}
+			onPress={() => {
+				dispatch(synchronizeLocalCustomers())
+					.unwrap()
+					.catch(() => undefined);
+			}}
+		/>
+	);
+};
+
+const LocalCustomersJob = () => {
+	const {t} = useTranslation();
+	const isSyncPending = useAppSelector(selectHasUnsynchronizedCustomers);
+
+	return (
+		<List.Item
+			title={t('screenTitles.Customers')}
+			description={t(isSyncPending ? 'entitySyncPending' : 'entitySyncDone')}
+			left={LocalCustomersJobIcon}
+			right={LocalCustomersJobAction}
+		/>
+	);
+};
+
+const LocalProjectsJobIcon = () => (
+	<List.Icon icon="briefcase-variant-outline" />
+);
+
+const LocalProjectsJobAction = () => {
+	const {t} = useTranslation();
+	const dispatch = useAppDispatch();
+	const isSyncPending = useAppSelector(selectHasUnsynchronizedProjects);
+	const hasUnsynchronizedCustomers = useAppSelector(
+		selectHasUnsynchronizedCustomers,
+	);
+
+	return (
+		<IconButton
+			icon={isSyncPending ? 'cloud-upload-outline' : 'check'}
+			disabled={!isSyncPending || hasUnsynchronizedCustomers}
+			accessibilityLabel={t(isSyncPending ? 'synchronize' : 'entitySyncDone')}
+			onPress={() => {
+				dispatch(synchronizeLocalProjects())
+					.unwrap()
+					.catch(() => undefined);
+			}}
+		/>
+	);
+};
+
+const LocalProjectsJob = () => {
+	const {t} = useTranslation();
+	const isSyncPending = useAppSelector(selectHasUnsynchronizedProjects);
+
+	return (
+		<List.Item
+			title={t('screenTitles.Projects')}
+			description={t(isSyncPending ? 'entitySyncPending' : 'entitySyncDone')}
+			left={LocalProjectsJobIcon}
+			right={LocalProjectsJobAction}
+		/>
+	);
+};
+
 type SyncJob = {
 	key: string;
 	Component: React.ComponentType;
 };
 
-const syncJobs: SyncJob[] = [{key: 'workContract', Component: WorkContractJob}];
+const syncJobs: SyncJob[] = [
+	{key: 'customers', Component: LocalCustomersJob},
+	{key: 'projects', Component: LocalProjectsJob},
+	{key: 'workContract', Component: WorkContractJob},
+];
 
 type SynchronizeModalProps = {
 	visible: boolean;

@@ -168,6 +168,7 @@
 	"workContractSyncInProgress": "Synchronizing work-contract hours...",
 	"workContractSyncPending": "Work-contract hours are waiting to synchronize.",
 	"workContractSyncDone": "Work-contract hours are synchronized.",
+	"entitySyncDone": "Synchronized",
 	"abortWorkContractSync": "Cancel work-contract synchronization",
 	"weekdays": {
 		"monday": "Monday",
