@@ -4,6 +4,7 @@ import {
 	projectCreated,
 	projectRemoved,
 	projectsReceived,
+	projectSynced,
 	projectUpdated,
 } from '../context/projectsSlice';
 import {Project} from '../types';
@@ -46,6 +47,106 @@ export type CreateProjectPayload = {
 	teams?: Array<number>;
 };
 
+const createProjectBody = (payload: CreateProjectPayload) => {
+	const body: Record<string, unknown> = {
+		name: payload.name,
+		customer: payload.customer,
+	};
+
+	if (payload.number !== undefined && payload.number !== null) {
+		body.number = payload.number;
+	}
+
+	if (payload.comment !== undefined && payload.comment !== null) {
+		body.comment = payload.comment;
+	}
+
+	body.visible = payload.visible ?? true;
+	body.billable = payload.billable ?? true;
+	body.globalActivities = payload.globalActivities ?? true;
+
+	if (payload.color) {
+		body.color = payload.color;
+	}
+
+	if (payload.start) {
+		body.start = payload.start;
+	}
+
+	if (payload.end) {
+		body.end = payload.end;
+	}
+
+	if (payload.lockedUntil) {
+		body.lockedUntil = payload.lockedUntil;
+	}
+
+	if (payload.orderNumber) {
+		body.orderNumber = payload.orderNumber;
+	}
+
+	if (payload.orderDate) {
+		body.orderDate = payload.orderDate;
+	}
+
+	if (payload.invoiceText) {
+		body.invoiceText = payload.invoiceText;
+	}
+
+	if (payload.budget) {
+		body.budget = payload.budget;
+	}
+
+	if (payload.timeBudget) {
+		body.timeBudget = payload.timeBudget;
+	}
+
+	if (payload.budgetType) {
+		body.budgetType = payload.budgetType;
+	}
+
+	if (payload.teams && payload.teams.length > 0) {
+		body.teams = payload.teams;
+	}
+
+	return body;
+};
+
+const createLocalProject = (
+	payload: CreateProjectPayload,
+	projects: {[id: number]: Project},
+	customerName: string,
+): Project => {
+	const localIds = Object.keys(projects)
+		.map(Number)
+		.filter((id) => Number.isInteger(id) && id < 0);
+	const id = localIds.length > 0 ? Math.min(...localIds) - 1 : -1;
+
+	return {
+		id,
+		parentTitle: customerName,
+		customer: payload.customer,
+		name: payload.name,
+		start: payload.start ?? null,
+		end: payload.end ?? null,
+		lockedUntil: payload.lockedUntil ?? null,
+		comment: payload.comment ?? null,
+		visible: payload.visible ?? true,
+		billable: payload.billable ?? true,
+		globalActivities: payload.globalActivities ?? true,
+		number: payload.number ?? '',
+		color: payload.color ?? null,
+		budget: payload.budget,
+		timeBudget: payload.timeBudget,
+		budgetType: payload.budgetType,
+		orderNumber: payload.orderNumber,
+		orderDate: payload.orderDate,
+		invoiceText: payload.invoiceText,
+		metaFields: [],
+		teams: payload.teams ?? [],
+	};
+};
+
 export const fetchProjects = createAppAsyncThunk(
 	'Projects/fetchProjects',
 	async (_, {dispatch}) => {
@@ -61,6 +162,11 @@ export const fetchProjects = createAppAsyncThunk(
 export const removeProject = createAppAsyncThunk<void, number>(
 	'Projects/removeProject',
 	async (projectId, {dispatch}) => {
+		if (projectId < 0) {
+			dispatch(projectRemoved(projectId));
+			return;
+		}
+
 		try {
 			await api.delete(`api/projects/${projectId.toString()}`);
 			dispatch(projectRemoved(projectId));
@@ -82,6 +188,11 @@ export const fetchTeams = createAppAsyncThunk('Projects/fetchTeams', async () =>
 export const updateProject = createAppAsyncThunk(
 	'Projects/updateProject',
 	async (project: Project, {dispatch}) => {
+		if (project.id < 0) {
+			dispatch(projectUpdated(project));
+			return project;
+		}
+
 		try {
 			const body: Record<string, unknown> = {
 				name: project.name,
@@ -121,71 +232,83 @@ export const updateProject = createAppAsyncThunk(
 
 export const createProject = createAppAsyncThunk<Project, CreateProjectPayload>(
 	'Projects/createProject',
-	async (payload, {dispatch}) => {
-		const body: Record<string, unknown> = {
-			name: payload.name,
-			customer: payload.customer,
+	async (payload, {dispatch, getState}) => {
+		const saveLocally = () => {
+			const customerName =
+				getState().customers.customers[payload.customer]?.name ?? '';
+			const project = createLocalProject(
+				payload,
+				getState().projects.projects,
+				customerName,
+			);
+			dispatch(projectCreated(project));
+			return project;
 		};
 
-		if (payload.number !== undefined && payload.number !== null) {
-			body.number = payload.number;
+		if (!api.isConfigured()) {
+			return saveLocally();
 		}
 
-		if (payload.comment !== undefined && payload.comment !== null) {
-			body.comment = payload.comment;
+		try {
+			const response = await api.post<Project>(
+				'api/projects',
+				createProjectBody(payload),
+			);
+			dispatch(projectCreated(response));
+			return response;
+		} catch (error: any) {
+			if (error?.status === undefined) {
+				return saveLocally();
+			}
+			throw error;
+		}
+	},
+);
+
+export const synchronizeLocalProjects = createAppAsyncThunk(
+	'Projects/synchronizeLocalProjects',
+	async (_, {dispatch, getState}) => {
+		if (!api.isConfigured()) {
+			return;
 		}
 
-		body.visible = payload.visible ?? true;
-		body.billable = payload.billable ?? true;
-		body.globalActivities = payload.globalActivities ?? true;
+		const localProjects = Object.values(getState().projects.projects)
+			.filter((project) => project.id < 0)
+			.sort((first, second) => first.id - second.id);
 
-		if (payload.color) {
-			body.color = payload.color;
+		for (const project of localProjects) {
+			try {
+				const response = await api.post<Project>(
+					'api/projects',
+					createProjectBody({
+						name: project.name,
+						customer: project.customer,
+						number: project.number,
+						comment: project.comment,
+						visible: project.visible,
+						billable: project.billable,
+						globalActivities: project.globalActivities,
+						color: project.color,
+						start: project.start,
+						end: project.end,
+						lockedUntil: project.lockedUntil,
+						budget: project.budget,
+						timeBudget: project.timeBudget,
+						budgetType: project.budgetType,
+						orderNumber: project.orderNumber,
+						orderDate: project.orderDate,
+						invoiceText: project.invoiceText,
+						teams: project.teams.filter(
+							(team): team is number => typeof team === 'number',
+						),
+					}),
+				);
+				dispatch(projectSynced({localId: project.id, project: response}));
+			} catch (error: any) {
+				console.warn(
+					`Could not synchronize local project: ${error.toString()}`,
+				);
+			}
 		}
-
-		if (payload.start) {
-			body.start = payload.start;
-		}
-
-		if (payload.end) {
-			body.end = payload.end;
-		}
-
-		if (payload.lockedUntil) {
-			body.lockedUntil = payload.lockedUntil;
-		}
-
-		if (payload.orderNumber) {
-			body.orderNumber = payload.orderNumber;
-		}
-
-		if (payload.orderDate) {
-			body.orderDate = payload.orderDate;
-		}
-
-		if (payload.invoiceText) {
-			body.invoiceText = payload.invoiceText;
-		}
-
-		if (payload.budget) {
-			body.budget = payload.budget;
-		}
-
-		if (payload.timeBudget) {
-			body.timeBudget = payload.timeBudget;
-		}
-
-		if (payload.budgetType) {
-			body.budgetType = payload.budgetType;
-		}
-
-		if (payload.teams && payload.teams.length > 0) {
-			body.teams = payload.teams;
-		}
-
-		const response = await api.post<Project>('api/projects', body);
-		dispatch(projectCreated(response));
-
-		return response;
 	},
 );

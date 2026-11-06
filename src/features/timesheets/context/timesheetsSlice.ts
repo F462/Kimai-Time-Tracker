@@ -6,6 +6,7 @@ import {
 	timesheetStopped,
 } from 'src/features/activeTimesheet/context/activeTimesheetSlice';
 import {activitySynced} from 'src/features/activities/context/activitiesSlice';
+import {projectSynced} from 'src/features/projects/context/projectsSlice';
 import {timesheetSynced} from 'src/features/synchronization/context/synchronizationSlice';
 import {Timesheet, TimesheetsState} from '../types';
 import {timesheetEdited} from './timesheetActions';
@@ -73,6 +74,13 @@ const timesheetsSlice = createSlice({
 			for (const timesheet of Object.values(state.timesheets)) {
 				if (timesheet.activity === localId) {
 					timesheet.activity = activity.id;
+				}
+			}
+		});
+		builder.addCase(projectSynced, (state, {payload: {localId, project}}) => {
+			for (const timesheet of Object.values(state.timesheets)) {
+				if (timesheet.project === localId) {
+					timesheet.project = project.id;
 				}
 			}
 		});
