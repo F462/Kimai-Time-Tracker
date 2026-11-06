@@ -10,6 +10,7 @@ import {
 	chooseBackupFolder,
 	exportData,
 	getBackupFolder,
+	getBackupFolderPath,
 } from 'src/features/backup/middleware/backupThunks';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {useAppNavigation} from 'src/features/navigation/context/hooks';
@@ -174,6 +175,7 @@ const DataSection = () => {
 	const {t} = useTranslation();
 	const dispatch = useAppDispatch();
 	const [hasBackupFolder, setHasBackupFolder] = useState(false);
+	const [backupFolderPath, setBackupFolderPath] = useState<string | null>(null);
 	const [isExporting, setIsExporting] = useState(false);
 	const [isChoosingFolder, setIsChoosingFolder] = useState(false);
 
@@ -183,6 +185,12 @@ const DataSection = () => {
 			.then(setHasBackupFolder)
 			.catch((error) =>
 				console.error('Loading the backup folder failed', error),
+			);
+		dispatch(getBackupFolderPath())
+			.unwrap()
+			.then(setBackupFolderPath)
+			.catch((error) =>
+				console.error('Loading the backup folder path failed', error),
 			);
 	}, [dispatch]);
 
@@ -197,6 +205,12 @@ const DataSection = () => {
 			.then((folderSelected) => {
 				if (folderSelected) {
 					setHasBackupFolder(true);
+					dispatch(getBackupFolderPath())
+						.unwrap()
+						.then(setBackupFolderPath)
+						.catch((error) =>
+							console.error('Loading the backup folder path failed', error),
+						);
 				}
 			})
 			.catch((error) => {
@@ -225,9 +239,14 @@ const DataSection = () => {
 			<List.Subheader>{t('dataTitle')}</List.Subheader>
 			<List.Item
 				title={t('backupFolder')}
-				description={t(
-					hasBackupFolder ? 'backupFolderSelected' : 'backupFolderDescription',
-				)}
+				description={
+					backupFolderPath ??
+					t(
+						hasBackupFolder
+							? 'backupFolderSelected'
+							: 'backupFolderDescription',
+					)
+				}
 				left={BackupIcon}
 				onPress={onChooseBackupFolder}
 				disabled={isChoosingFolder || isExporting}

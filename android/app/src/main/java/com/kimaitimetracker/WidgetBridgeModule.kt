@@ -6,6 +6,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Environment
 import android.provider.DocumentsContract
 import android.util.Log
 import com.facebook.react.bridge.ReactApplicationContext
@@ -14,6 +15,7 @@ import com.facebook.react.bridge.ActivityEventListener
 import com.facebook.react.bridge.Promise
 import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.ReadableMap
+import java.io.File
 import java.io.IOException
 
 class WidgetBridgeModule(context: ReactApplicationContext) : ReactContextBaseJavaModule(context), ActivityEventListener {
@@ -49,6 +51,11 @@ class WidgetBridgeModule(context: ReactApplicationContext) : ReactContextBaseJav
   @ReactMethod
   fun getBackupFolder(promise: Promise) {
     promise.resolve(backupFolderUri() != null)
+  }
+
+  @ReactMethod
+  fun getBackupFolderPath(promise: Promise) {
+    promise.resolve(backupFolderUri()?.let(::backupFolderPath))
   }
 
   @ReactMethod
@@ -142,6 +149,21 @@ class WidgetBridgeModule(context: ReactApplicationContext) : ReactContextBaseJav
     .getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
     .getString(BACKUP_FOLDER_URI_KEY, null)
     ?.let(Uri::parse)
+
+  private fun backupFolderPath(folderUri: Uri): String {
+    val documentId = DocumentsContract.getTreeDocumentId(folderUri)
+    val separator = documentId.indexOf(':')
+    if (separator < 0) return folderUri.toString()
+
+    val volumeId = documentId.substring(0, separator)
+    val relativePath = documentId.substring(separator + 1)
+    val volumePath = if (volumeId.equals("primary", ignoreCase = true)) {
+      Environment.getExternalStorageDirectory().absolutePath
+    } else {
+      File("/storage", volumeId).absolutePath
+    }
+    return File(volumePath, relativePath).absolutePath
+  }
 
   private fun findBackupDocument(folderUri: Uri, fileName: String): Uri? = try {
     val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(

@@ -42,6 +42,26 @@ RCT_REMAP_METHOD(getBackupFolder,
   resolve(@YES);
 }
 
+RCT_REMAP_METHOD(getBackupFolderPath,
+                 getBackupFolderPathWithResolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+  NSData *bookmark = [[NSUserDefaults standardUserDefaults] dataForKey:@"backupFolderBookmark"];
+  if (bookmark == nil) {
+    resolve([NSNull null]);
+    return;
+  }
+
+  BOOL isStale = NO;
+  NSError *error = nil;
+  NSURL *folderURL = [NSURL URLByResolvingBookmarkData:bookmark options:0 relativeToURL:nil bookmarkDataIsStale:&isStale error:&error];
+  if (folderURL == nil || error != nil || isStale) {
+    resolve([NSNull null]);
+    return;
+  }
+  resolve(folderURL.path);
+}
+
 RCT_REMAP_METHOD(chooseBackupFolder,
                  chooseBackupFolderWithResolver:(RCTPromiseResolveBlock)resolve
                  rejecter:(RCTPromiseRejectBlock)reject)

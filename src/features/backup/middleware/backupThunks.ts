@@ -9,6 +9,7 @@ const BACKUP_FILE_NAME = 'kimai-backup.json';
 type BackupSaver = {
 	chooseBackupFolder: () => Promise<boolean>;
 	getBackupFolder: () => Promise<boolean>;
+	getBackupFolderPath: () => Promise<string | null>;
 	saveBackup: (contents: string, fileName: string) => Promise<boolean>;
 };
 
@@ -18,6 +19,11 @@ let isAutomaticBackupInProgress = false;
 export const getBackupFolder = createAppAsyncThunk<boolean, void>(
 	'backup/getBackupFolder',
 	async () => getBackupSaver().getBackupFolder(),
+);
+
+export const getBackupFolderPath = createAppAsyncThunk<string | null, void>(
+	'backup/getBackupFolderPath',
+	async () => getBackupSaver().getBackupFolderPath(),
 );
 
 export const chooseBackupFolder = createAppAsyncThunk<boolean, void>(
