@@ -44,6 +44,7 @@ const ActivityItem = ({
 	return (
 		<EntityListItem
 			name={activity.name}
+			isSyncPending={activity.id < 0}
 			isSelected={isSelected}
 			onPress={onSelectActivity}
 			onLongPress={onOpenContextMenu}
