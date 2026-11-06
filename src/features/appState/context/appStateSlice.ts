@@ -1,4 +1,4 @@
-import {createSlice, isAnyOf} from '@reduxjs/toolkit';
+import {createAction, createSlice, isAnyOf} from '@reduxjs/toolkit';
 
 import {
 	loginUser,
@@ -40,4 +40,5 @@ const appStateSlice = createSlice({
 });
 
 export const {userUnlockedSession, sessionLocked} = appStateSlice.actions;
+export const appBecameActive = createAction('appState/appBecameActive');
 export const appStateReducer = appStateSlice.reducer;

@@ -17,13 +17,15 @@ import {useStyle} from 'src/features/theming/utils/useStyle';
 import {BaseScreen} from 'src/ui/BaseScreen';
 import {
 	selectAppTheme,
+	selectAutomaticBackupIntervalDays,
 	selectIsBiometricsToUnlockEnabled,
 } from '../context/settingsSelectors';
 import {
 	appThemeSet,
+	automaticBackupIntervalDaysSet,
 	biometricsToUnlockEnabledStateSet,
 } from '../context/settingsSlice';
-import {AppTheme} from '../types';
+import {AppTheme, AutomaticBackupIntervalDays} from '../types';
 
 const styles = StyleSheet.create({
 	themePicker: {
@@ -135,6 +137,39 @@ const SecuritySection = () => {
 
 const BackupIcon = () => <List.Icon icon="backup-restore" />;
 
+const BackupIntervalPicker = ({disabled}: {disabled: boolean}) => {
+	const {t} = useTranslation();
+	const dispatch = useAppDispatch();
+	const theme = useTheme();
+	const intervalDays = useAppSelector(selectAutomaticBackupIntervalDays);
+
+	return (
+		<Picker
+			style={[styles.themePicker, {color: theme.colors.onSurface}]}
+			selectedValue={intervalDays}
+			selectionColor={theme.colors.primary}
+			dropdownIconColor={theme.colors.onSurface}
+			mode="dropdown"
+			enabled={!disabled}
+			onValueChange={(value: AutomaticBackupIntervalDays) =>
+				dispatch(automaticBackupIntervalDaysSet(value))
+			}>
+			<Picker.Item label={t('automaticBackupDisabled')} value={0} />
+			{([1, 7, 14, 30] as const).map((days) => (
+				<Picker.Item
+					key={days}
+					label={t('automaticBackupEveryDays', {days})}
+					value={days}
+				/>
+			))}
+		</Picker>
+	);
+};
+
+const getBackupIntervalRight = (disabled: boolean) => () => (
+	<BackupIntervalPicker disabled={disabled} />
+);
+
 const DataSection = () => {
 	const {t} = useTranslation();
 	const dispatch = useAppDispatch();
@@ -196,6 +231,14 @@ const DataSection = () => {
 				left={BackupIcon}
 				onPress={onChooseBackupFolder}
 				disabled={isChoosingFolder || isExporting}
+			/>
+			<List.Item
+				title={t('automaticBackup')}
+				description={t('automaticBackupDescription')}
+				left={BackupIcon}
+				right={getBackupIntervalRight(
+					!hasBackupFolder || isChoosingFolder || isExporting,
+				)}
 			/>
 			<List.Item
 				title={t('backupData')}

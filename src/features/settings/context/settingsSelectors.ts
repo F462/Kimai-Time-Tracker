@@ -14,6 +14,11 @@ export const selectIsBiometricsToUnlockEnabled = createSelector(
 	(settings) => settings.isBiometricsToUnlockEnabled,
 );
 
+export const selectAutomaticBackupIntervalDays = createSelector(
+	[selectSettingsState],
+	(settings) => settings.automaticBackupIntervalDays ?? 0,
+);
+
 export const selectWorkContractHoursPerDay = createSelector(
 	[selectSettingsState],
 	(settings) => settings.workContractHoursPerDay,

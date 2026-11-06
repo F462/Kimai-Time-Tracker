@@ -2,6 +2,7 @@ import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 import {
 	AppTheme,
+	AutomaticBackupIntervalDays,
 	SettingsState,
 	WORK_DAYS,
 	WorkContractHours,
@@ -21,6 +22,8 @@ const DEFAULT_WORK_CONTRACT_HOURS: WorkContractHours = {
 const initialState: SettingsState = {
 	appTheme: AppTheme.SYSTEM,
 	isBiometricsToUnlockEnabled: false,
+	automaticBackupIntervalDays: 0,
+	lastAutomaticBackupAt: null,
 	workContractHoursPerDay: DEFAULT_WORK_CONTRACT_HOURS,
 	workContractHoursLastSynchronized: DEFAULT_WORK_CONTRACT_HOURS,
 	workContractHoursSyncPending: false,
@@ -40,6 +43,18 @@ const settingsSlice = createSlice({
 			{payload: biometricsEnabled}: PayloadAction<boolean>,
 		) => {
 			state.isBiometricsToUnlockEnabled = biometricsEnabled;
+		},
+		automaticBackupIntervalDaysSet: (
+			state,
+			{payload: intervalDays}: PayloadAction<AutomaticBackupIntervalDays>,
+		) => {
+			state.automaticBackupIntervalDays = intervalDays;
+		},
+		automaticBackupCompleted: (
+			state,
+			{payload: timestamp}: PayloadAction<number>,
+		) => {
+			state.lastAutomaticBackupAt = timestamp;
 		},
 		workContractHoursPerDaySet: (
 			state,
@@ -126,6 +141,8 @@ const settingsSlice = createSlice({
 export const {
 	appThemeSet,
 	biometricsToUnlockEnabledStateSet,
+	automaticBackupIntervalDaysSet,
+	automaticBackupCompleted,
 	workContractHoursPerDaySet,
 	workContractHoursPerDaySynchronized,
 	workContractHoursSyncReconciled,

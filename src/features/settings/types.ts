@@ -18,9 +18,13 @@ export const WORK_DAYS = [
 export type WorkDay = (typeof WORK_DAYS)[number];
 export type WorkContractHours = Record<WorkDay, number>;
 
+export type AutomaticBackupIntervalDays = 0 | 1 | 7 | 14 | 30;
+
 export type SettingsState = {
 	appTheme: AppTheme;
 	isBiometricsToUnlockEnabled: boolean;
+	automaticBackupIntervalDays: AutomaticBackupIntervalDays;
+	lastAutomaticBackupAt: number | null;
 	workContractHoursPerDay: WorkContractHours;
 	workContractHoursLastSynchronized: WorkContractHours;
 	workContractHoursSyncPending: boolean;
