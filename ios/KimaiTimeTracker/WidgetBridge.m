@@ -6,6 +6,8 @@
 @interface WidgetBridge : NSObject <RCTBridgeModule, UIDocumentPickerDelegate>
 @property (nonatomic, copy) RCTPromiseResolveBlock folderResolve;
 @property (nonatomic, copy) RCTPromiseRejectBlock folderReject;
+@property (nonatomic, copy) RCTPromiseResolveBlock importResolve;
+@property (nonatomic, copy) RCTPromiseRejectBlock importReject;
 @end
 
 @implementation WidgetBridge
@@ -67,7 +69,7 @@ RCT_REMAP_METHOD(chooseBackupFolder,
                  rejecter:(RCTPromiseRejectBlock)reject)
 {
   dispatch_async(dispatch_get_main_queue(), ^{
-    if (self.folderResolve != nil) {
+    if (self.folderResolve != nil || self.importResolve != nil) {
       reject(@"E_BACKUP_IN_PROGRESS", @"A backup operation is already in progress", nil);
       return;
     }
@@ -93,6 +95,46 @@ RCT_REMAP_METHOD(chooseBackupFolder,
       self.folderResolve = nil;
       self.folderReject = nil;
       reject(@"E_BACKUP_PICKER", @"Could not open the backup destination picker", nil);
+      return;
+    }
+    while (presenter.presentedViewController != nil) {
+      presenter = presenter.presentedViewController;
+    }
+    [presenter presentViewController:picker animated:YES completion:nil];
+  });
+}
+
+RCT_REMAP_METHOD(chooseBackupFile,
+                 chooseBackupFileWithResolver:(RCTPromiseResolveBlock)resolve
+                 rejecter:(RCTPromiseRejectBlock)reject)
+{
+  dispatch_async(dispatch_get_main_queue(), ^{
+    if (self.folderResolve != nil || self.importResolve != nil) {
+      reject(@"E_BACKUP_IN_PROGRESS", @"A backup operation is already in progress", nil);
+      return;
+    }
+
+    self.importResolve = resolve;
+    self.importReject = reject;
+    UIDocumentPickerViewController *picker = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:@[UTType.json] asCopy:YES];
+    picker.delegate = self;
+    UIWindow *keyWindow = nil;
+    for (UIScene *scene in UIApplication.sharedApplication.connectedScenes) {
+      if (![scene isKindOfClass:[UIWindowScene class]] || scene.activationState != UISceneActivationStateForegroundActive) {
+        continue;
+      }
+      for (UIWindow *window in ((UIWindowScene *)scene).windows) {
+        if (window.isKeyWindow) {
+          keyWindow = window;
+          break;
+        }
+      }
+    }
+    UIViewController *presenter = keyWindow.rootViewController;
+    if (presenter == nil) {
+      self.importResolve = nil;
+      self.importReject = nil;
+      reject(@"E_BACKUP_PICKER", @"Could not open the backup file picker", nil);
       return;
     }
     while (presenter.presentedViewController != nil) {
@@ -141,6 +183,22 @@ RCT_REMAP_METHOD(saveBackup,
 
 - (void)documentPicker:(UIDocumentPickerViewController *)controller didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls
 {
+  if (self.importResolve != nil) {
+    NSURL *fileURL = urls.firstObject;
+    NSError *error = nil;
+    NSString *contents = fileURL == nil ? nil : [NSString stringWithContentsOfURL:fileURL encoding:NSUTF8StringEncoding error:&error];
+    if (contents == nil || error != nil) {
+      self.importReject(@"E_BACKUP_READ", @"Could not read the selected backup file", error);
+      self.importResolve = nil;
+      self.importReject = nil;
+      return;
+    }
+    self.importResolve(contents);
+    self.importResolve = nil;
+    self.importReject = nil;
+    return;
+  }
+
   NSURL *folderURL = urls.firstObject;
   if (folderURL == nil) {
     [self finishWithResult:[NSNull null]];
@@ -163,6 +221,12 @@ RCT_REMAP_METHOD(saveBackup,
 
 - (void)documentPickerWasCancelled:(UIDocumentPickerViewController *)controller
 {
+  if (self.importResolve != nil) {
+    self.importResolve([NSNull null]);
+    self.importResolve = nil;
+    self.importReject = nil;
+    return;
+  }
   [self finishWithResult:[NSNull null]];
 }
 

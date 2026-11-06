@@ -2,12 +2,15 @@ import {NativeModules} from 'react-native';
 
 import {createAppAsyncThunk} from 'src/features/data/middleware/createAppAsyncThunk';
 import {automaticBackupCompleted} from 'src/features/settings/context/settingsSlice';
+import {backupDataImported} from '../context/backupActions';
 import {buildBackupPayload} from '../utils/buildBackupPayload';
+import {parseBackupPayload} from '../utils/parseBackupPayload';
 
 const BACKUP_FILE_NAME = 'kimai-backup.json';
 
 type BackupSaver = {
 	chooseBackupFolder: () => Promise<boolean>;
+	chooseBackupFile: () => Promise<string | null>;
 	getBackupFolder: () => Promise<boolean>;
 	getBackupFolderPath: () => Promise<string | null>;
 	saveBackup: (contents: string, fileName: string) => Promise<boolean>;
@@ -49,6 +52,20 @@ export const exportData = createAppAsyncThunk<boolean, void>(
 			console.info('App data backup saved');
 		}
 		return saved;
+	},
+);
+
+export const importData = createAppAsyncThunk<boolean, void>(
+	'backup/importData',
+	async (_payload, {dispatch}) => {
+		const contents = await getBackupSaver().chooseBackupFile();
+		if (contents === null) {
+			return false;
+		}
+
+		const {data} = parseBackupPayload(contents);
+		dispatch(backupDataImported(data));
+		return true;
 	},
 );
 

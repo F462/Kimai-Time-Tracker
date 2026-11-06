@@ -20,6 +20,7 @@ import java.io.IOException
 
 class WidgetBridgeModule(context: ReactApplicationContext) : ReactContextBaseJavaModule(context), ActivityEventListener {
   private var backupPromise: Promise? = null
+  private var importPromise: Promise? = null
 
   init {
     context.addActivityEventListener(this)
@@ -60,7 +61,7 @@ class WidgetBridgeModule(context: ReactApplicationContext) : ReactContextBaseJav
 
   @ReactMethod
   fun chooseBackupFolder(promise: Promise) {
-    if (backupPromise != null) {
+    if (backupPromise != null || importPromise != null) {
       promise.reject("E_BACKUP_IN_PROGRESS", "A backup operation is already in progress")
       return
     }
@@ -84,6 +85,33 @@ class WidgetBridgeModule(context: ReactApplicationContext) : ReactContextBaseJav
     } catch (error: Exception) {
       backupPromise = null
       promise.reject("E_BACKUP_PICKER", "Could not open the backup destination picker", error)
+    }
+  }
+
+  @ReactMethod
+  fun chooseBackupFile(promise: Promise) {
+    if (backupPromise != null || importPromise != null) {
+      promise.reject("E_BACKUP_IN_PROGRESS", "A backup operation is already in progress")
+      return
+    }
+
+    val activity = reactApplicationContext.currentActivity
+    if (activity == null) {
+      promise.reject("E_NO_ACTIVITY", "No activity is available to open a backup")
+      return
+    }
+
+    importPromise = promise
+    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+      addCategory(Intent.CATEGORY_OPENABLE)
+      type = "application/json"
+      addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+    }
+    try {
+      activity.startActivityForResult(intent, BACKUP_FILE_REQUEST_CODE)
+    } catch (error: Exception) {
+      importPromise = null
+      promise.reject("E_BACKUP_PICKER", "Could not open the backup file picker", error)
     }
   }
 
@@ -120,6 +148,26 @@ class WidgetBridgeModule(context: ReactApplicationContext) : ReactContextBaseJav
   }
 
   override fun onActivityResult(activity: Activity, requestCode: Int, resultCode: Int, data: Intent?) {
+    if (requestCode == BACKUP_FILE_REQUEST_CODE) {
+      val promise = importPromise ?: return
+      importPromise = null
+      val uri = data?.data
+      if (resultCode != Activity.RESULT_OK || uri == null) {
+        promise.resolve(null)
+        return
+      }
+
+      try {
+        val contents = reactApplicationContext.contentResolver.openInputStream(uri)
+          ?.bufferedReader(Charsets.UTF_8)
+          ?.use { it.readText() }
+          ?: throw IOException("Could not read the selected backup file")
+        promise.resolve(contents)
+      } catch (error: Exception) {
+        promise.reject("E_BACKUP_READ", "Could not read the selected backup file", error)
+      }
+      return
+    }
     if (requestCode != BACKUP_FOLDER_REQUEST_CODE) return
 
     val promise = backupPromise ?: return
@@ -198,6 +246,7 @@ class WidgetBridgeModule(context: ReactApplicationContext) : ReactContextBaseJav
   companion object {
     private const val TAG = "WidgetBridge"
     private const val BACKUP_FOLDER_REQUEST_CODE = 7301
+    private const val BACKUP_FILE_REQUEST_CODE = 7302
     private const val PREFERENCES_NAME = "kimai-time-tracker"
     private const val BACKUP_FOLDER_URI_KEY = "backupFolderUri"
   }

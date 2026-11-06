@@ -11,6 +11,7 @@ import {
 	exportData,
 	getBackupFolder,
 	getBackupFolderPath,
+	importData,
 } from 'src/features/backup/middleware/backupThunks';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
 import {useAppNavigation} from 'src/features/navigation/context/hooks';
@@ -180,6 +181,7 @@ const DataSection = () => {
 	const [hasBackupFolder, setHasBackupFolder] = useState(false);
 	const [backupFolderPath, setBackupFolderPath] = useState<string | null>(null);
 	const [isExporting, setIsExporting] = useState(false);
+	const [isImporting, setIsImporting] = useState(false);
 	const [isChoosingFolder, setIsChoosingFolder] = useState(false);
 
 	useEffect(() => {
@@ -198,7 +200,7 @@ const DataSection = () => {
 	}, [dispatch]);
 
 	const onChooseBackupFolder = useCallback(() => {
-		if (isChoosingFolder || isExporting) {
+		if (isChoosingFolder || isExporting || isImporting) {
 			return;
 		}
 
@@ -221,10 +223,10 @@ const DataSection = () => {
 				Alert.alert(t('warning'), t('backupDataError'));
 			})
 			.finally(() => setIsChoosingFolder(false));
-	}, [dispatch, isChoosingFolder, isExporting, t]);
+	}, [dispatch, isChoosingFolder, isExporting, isImporting, t]);
 
 	const onBackup = useCallback(() => {
-		if (isExporting) {
+		if (isExporting || isImporting) {
 			return;
 		}
 
@@ -235,9 +237,38 @@ const DataSection = () => {
 				Alert.alert(t('warning'), t('backupDataError'));
 			})
 			.finally(() => setIsExporting(false));
-	}, [dispatch, isExporting, t]);
+	}, [dispatch, isExporting, isImporting, t]);
+
+	const onRestore = useCallback(() => {
+		if (isImporting || isExporting || isChoosingFolder) {
+			return;
+		}
+
+		Alert.alert(t('restoreDataConfirmTitle'), t('restoreDataConfirmMessage'), [
+			{text: t('cancel'), style: 'cancel'},
+			{
+				text: t('restoreData'),
+				style: 'destructive',
+				onPress: () => {
+					setIsImporting(true);
+					dispatch(importData())
+						.unwrap()
+						.then((restored) => {
+							if (restored) {
+								Alert.alert(t('restoreData'), t('restoreDataSuccess'));
+							}
+						})
+						.catch((error) => {
+							console.error('Restoring the backup failed', error);
+							Alert.alert(t('warning'), t('restoreDataError'));
+						})
+						.finally(() => setIsImporting(false));
+				},
+			},
+		]);
+	}, [dispatch, isChoosingFolder, isExporting, isImporting, t]);
 	const backupActionsDisabled =
-		!hasBackupFolder || isExporting || isChoosingFolder;
+		!hasBackupFolder || isExporting || isImporting || isChoosingFolder;
 
 	return (
 		<List.Section>
@@ -271,6 +302,13 @@ const DataSection = () => {
 				onPress={onBackup}
 				style={backupActionsDisabled && styles.disabled}
 				disabled={backupActionsDisabled}
+			/>
+			<List.Item
+				title={t('restoreData')}
+				description={t('restoreDataDescription')}
+				left={BackupIcon}
+				onPress={onRestore}
+				disabled={isExporting || isImporting || isChoosingFolder}
 			/>
 		</List.Section>
 	);

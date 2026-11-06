@@ -26,6 +26,7 @@ import {accountReducer} from 'src/features/account/context/accountSlice';
 import {activeTimesheetReducer} from 'src/features/activeTimesheet/context/activeTimesheetSlice';
 import {activitiesReducer} from 'src/features/activities/context/activitiesSlice';
 import {appStateReducer} from 'src/features/appState/context/appStateSlice';
+import {backupDataImported} from 'src/features/backup/context/backupActions';
 import {customersReducer} from 'src/features/customers/context/customersSlice';
 import {createLoggingMiddleware} from 'src/features/logging/middleware/middleware';
 import {networkReducer} from 'src/features/network/context/networkSlice';
@@ -38,6 +39,7 @@ import {
 } from 'src/features/settings/context/settingsSlice';
 import {ResetSyncStateTransform} from 'src/features/synchronization/context/ResetSyncStateTransform';
 import {synchronizationReducer} from 'src/features/synchronization/context/synchronizationSlice';
+import {SyncState} from 'src/features/synchronization/types';
 import {
 	timesheetsReducer,
 	timesheetsUpdated,
@@ -100,12 +102,44 @@ const appReducer = combineReducers({
 	timesheets: timesheetsReducer,
 });
 
-const rootReducer = (
+export const rootReducer = (
 	state: ReturnType<typeof appReducer> | undefined,
 	action: UnknownAction,
 ) => {
 	if (action.type === userLoggedOut.type) {
 		return appReducer(undefined, action);
+	}
+	if (backupDataImported.match(action)) {
+		const defaults = appReducer(undefined, action);
+		const importedData = action.payload;
+		const synchronization = {
+			...importedData.synchronization,
+			timesheets: Object.fromEntries(
+				Object.entries(importedData.synchronization.timesheets).map(
+					([id, syncState]) => [
+						id,
+						syncState === SyncState.RUNNING ? SyncState.NOT_STARTED : syncState,
+					],
+				),
+			),
+		};
+
+		return appReducer(
+			{
+				...defaults,
+				...state,
+				...importedData,
+				overview: null,
+				settings: {
+					...defaults.settings,
+					...importedData.settings,
+					workContractHoursSyncWaiting: false,
+					workContractHoursSyncInProgress: false,
+				},
+				synchronization,
+			},
+			action,
+		);
 	}
 
 	return appReducer(state, action);
