@@ -29,6 +29,9 @@ import {
 import {AppTheme, AutomaticBackupIntervalDays} from '../types';
 
 const styles = StyleSheet.create({
+	disabled: {
+		opacity: 0.38,
+	},
 	themePicker: {
 		width: 150,
 	},
@@ -233,6 +236,8 @@ const DataSection = () => {
 			})
 			.finally(() => setIsExporting(false));
 	}, [dispatch, isExporting, t]);
+	const backupActionsDisabled =
+		!hasBackupFolder || isExporting || isChoosingFolder;
 
 	return (
 		<List.Section>
@@ -255,16 +260,17 @@ const DataSection = () => {
 				title={t('automaticBackup')}
 				description={t('automaticBackupDescription')}
 				left={BackupIcon}
-				right={getBackupIntervalRight(
-					!hasBackupFolder || isChoosingFolder || isExporting,
-				)}
+				right={getBackupIntervalRight(backupActionsDisabled)}
+				style={backupActionsDisabled && styles.disabled}
+				disabled={backupActionsDisabled}
 			/>
 			<List.Item
 				title={t('backupData')}
 				description={t('backupDataDescription')}
 				left={BackupIcon}
 				onPress={onBackup}
-				disabled={!hasBackupFolder || isExporting || isChoosingFolder}
+				style={backupActionsDisabled && styles.disabled}
+				disabled={backupActionsDisabled}
 			/>
 		</List.Section>
 	);
