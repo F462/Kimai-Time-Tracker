@@ -1,6 +1,7 @@
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 import {StyleSheet, View} from 'react-native';
-import {useTheme} from 'react-native-paper';
+import {Icon, useTheme} from 'react-native-paper';
 
 import {ColorIndicator} from './ColorIndicator';
 import {ListItem} from './ListItem';
@@ -29,12 +30,17 @@ const styles = StyleSheet.create({
 	colorIndicator: {
 		marginLeft: 8,
 	},
+	syncPendingIcon: {
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
 });
 
 export type EntityListItemProps = {
 	name: string;
 	color?: string | null;
 	isSelected?: boolean;
+	isSyncPending?: boolean;
 	onPress?: () => void;
 	/**
 	 * Handler for a long press of the item, e.g. to open a context menu. The
@@ -60,11 +66,13 @@ export const EntityListItem = ({
 	name,
 	color,
 	isSelected,
+	isSyncPending = false,
 	onPress,
 	onLongPress,
 	contextMenu,
 }: EntityListItemProps) => {
 	const theme = useTheme();
+	const {t} = useTranslation();
 
 	return (
 		<>
@@ -85,6 +93,20 @@ export const EntityListItem = ({
 					},
 				]}>
 				<View style={styles.content}>
+					{isSyncPending ? (
+						<View
+							accessible
+							accessibilityRole="image"
+							accessibilityLabel={t('entitySyncPending')}
+							testID="entity-list-item-sync-pending"
+							style={styles.syncPendingIcon}>
+							<Icon
+								source="timer-sand"
+								size={18}
+								color={theme.colors.onSurfaceVariant}
+							/>
+						</View>
+					) : null}
 					<ListItemText style={styles.itemText}>{name}</ListItemText>
 					{color ? (
 						<ColorIndicator

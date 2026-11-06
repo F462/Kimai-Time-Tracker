@@ -180,6 +180,7 @@
 	},
 	"synchronizationTitle": "Synchronization",
 	"synchronize": "Synchronize",
+	"entitySyncPending": "Waiting to synchronize",
 	"underTime": "Time remaining",
 	"useBiometrics": "Use biometrics to unlock",
 	"useCurrentDateTime": "Use current date and time",

@@ -176,6 +176,7 @@
 	"abortWorkContractSync": "Synchronisierung der Vertragsstunden abbrechen",
 	"synchronizationTitle": "Synchronisation",
 	"synchronize": "Synchronisieren",
+	"entitySyncPending": "Wartet auf Synchronisierung",
 	"weekdays": {
 		"monday": "Montag",
 		"tuesday": "Dienstag",

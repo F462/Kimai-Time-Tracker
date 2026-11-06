@@ -44,6 +44,7 @@ const CustomerItem = ({
 	return (
 		<EntityListItem
 			name={customer.name}
+			isSyncPending={customer.id < 0}
 			isSelected={isSelected}
 			onPress={onSelectCustomer}
 			onLongPress={onOpenContextMenu}

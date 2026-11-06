@@ -45,6 +45,7 @@ const ProjectItem = ({
 		<EntityListItem
 			name={project.name}
 			color={project.color}
+			isSyncPending={project.id < 0}
 			isSelected={isSelected}
 			onPress={onProjectItemPress}
 			onLongPress={onOpenContextMenu}
