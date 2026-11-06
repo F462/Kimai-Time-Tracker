@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 import React, {useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {
@@ -15,6 +16,7 @@ import {useAppDispatch} from 'src/features/data/context/store';
 import {useAppNavigation} from 'src/features/navigation/context/hooks';
 import {useStyle} from 'src/features/theming/utils/useStyle';
 import {fetchTimesheets} from 'src/features/timesheets/middleware/timesheetsThunks';
+import {OptionSelector} from 'src/ui/Selectors/OptionSelector';
 import {useMonthlyOverview} from '../context/overviewHooks';
 import {formatSignedDurationInSeconds} from '../utils/overviewUtils';
 import {MonthDetailCard} from './MonthDetailCard';
@@ -81,12 +83,11 @@ export const OverviewScreen = () => {
 
 	const monthlyOverview = useMonthlyOverview();
 
+	const [selectedMonth, setSelectedMonth] = useState(() => dayjs().month());
+
 	const dynamicStyles = useStyle(
 		() => ({
 			footerText: {
-				color: theme.colors.onSurfaceVariant,
-			},
-			sectionTitle: {
 				color: theme.colors.onSurfaceVariant,
 			},
 			yearTotal: {
@@ -119,6 +120,9 @@ export const OverviewScreen = () => {
 	}
 
 	const yearIsPositive = monthlyOverview.yearDeltaInSeconds >= 0;
+	const selectedMonthDetail =
+		monthlyOverview.months.find((month) => month.month === selectedMonth) ??
+		null;
 
 	return (
 		<RefreshView style={styles.refreshView}>
@@ -146,16 +150,22 @@ export const OverviewScreen = () => {
 					{t('overtimeBasedOnWorkingHours')}
 				</Text>
 
-				<Text variant="titleMedium" style={dynamicStyles.sectionTitle}>
-					{t('monthlyBreakdown')}
-				</Text>
-				{monthlyOverview.months.map((month) => (
+				<OptionSelector
+					options={monthlyOverview.months.map((month) => ({
+						value: String(month.month),
+						label: month.label,
+					}))}
+					selectedValue={String(selectedMonth)}
+					label={t('monthlyBreakdown')}
+					onSelection={(value) => setSelectedMonth(Number(value))}
+				/>
+
+				{selectedMonthDetail && (
 					<MonthDetailCard
-						key={month.month}
-						detail={month}
+						detail={selectedMonthDetail}
 						onDayPress={(date) => navigation.navigate('Timesheets', {date})}
 					/>
-				))}
+				)}
 			</View>
 		</RefreshView>
 	);
