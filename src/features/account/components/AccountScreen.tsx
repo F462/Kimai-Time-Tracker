@@ -2,7 +2,7 @@ import path from 'path';
 import React, {useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import {Linking, StyleSheet, View} from 'react-native';
-import {Button, Portal, Text, TextInput, useTheme} from 'react-native-paper';
+import {Button, Portal, TextInput, useTheme} from 'react-native-paper';
 
 import {
 	selectIsUserLoggingIn,
@@ -20,7 +20,11 @@ import {QrScanner} from './QrScanner';
 
 const styles = StyleSheet.create({
 	inputContainer: {
-		marginVertical: 10,
+		marginHorizontal: 10,
+		marginVertical: 8,
+	},
+	input: {
+		marginVertical: 6,
 	},
 	actionButton: {
 		marginHorizontal: 10,
@@ -92,9 +96,14 @@ export const AccountScreen = () => {
 				{t('scanQrCode')}
 			</Button>
 			<View style={styles.inputContainer}>
-				<Text>{t('enterServerUrl')}</Text>
 				<TextInput
+					label={t('enterServerUrl')}
+					mode="outlined"
+					style={styles.input}
 					value={serverUrl}
+					keyboardType="url"
+					autoCapitalize="none"
+					autoCorrect={false}
 					onChangeText={(text) => {
 						setServerUrl(text);
 						setIsDirty(true);
@@ -105,9 +114,13 @@ export const AccountScreen = () => {
 				<Button onPress={onCreateApiToken}>{t('createApiToken')}</Button>
 			)}
 			<View style={styles.inputContainer}>
-				<Text>{t('enterApiToken')}</Text>
 				<TextInput
+					label={t('enterApiToken')}
+					mode="outlined"
+					style={styles.input}
 					value={apiToken}
+					autoCapitalize="none"
+					autoCorrect={false}
 					onChangeText={(text) => {
 						setApiToken(text);
 						setIsDirty(true);
