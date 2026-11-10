@@ -15,6 +15,11 @@ export type CreateActivityPayload = {
 	comment?: string | null;
 	visible?: boolean;
 	billable?: boolean;
+	project?: number | null;
+	color?: string | null;
+	budget?: number | null;
+	timeBudget?: number | null;
+	budgetType?: string | null;
 };
 
 const createActivityBody = (payload: CreateActivityPayload) => {
@@ -31,7 +36,21 @@ const createActivityBody = (payload: CreateActivityPayload) => {
 	if (payload.comment !== undefined && payload.comment !== null) {
 		body.comment = payload.comment;
 	}
-
+	if (payload.project !== undefined && payload.project !== null) {
+		body.project = payload.project;
+	}
+	if (payload.color) {
+		body.color = payload.color;
+	}
+	if (payload.budget !== undefined && payload.budget !== null) {
+		body.budget = payload.budget;
+	}
+	if (payload.timeBudget !== undefined && payload.timeBudget !== null) {
+		body.timeBudget = payload.timeBudget;
+	}
+	if (payload.budgetType) {
+		body.budgetType = payload.budgetType;
+	}
 	return body;
 };
 
@@ -54,7 +73,11 @@ const createLocalActivity = (
 		currency: '',
 		metaFields: [],
 		teams: [],
-		color: null,
+		color: payload.color ?? null,
+		project: payload.project ?? null,
+		budget: payload.budget,
+		timeBudget: payload.timeBudget,
+		budgetType: payload.budgetType,
 	};
 };
 
@@ -104,11 +127,17 @@ export const updateActivity = createAppAsyncThunk(
 					comment: activity.comment,
 					visible: activity.visible,
 					billable: activity.billable,
+					project: activity.project ?? null,
+					color: activity.color,
+					budget: activity.budget ?? null,
+					timeBudget: activity.timeBudget ?? null,
+					budgetType: activity.budgetType ?? null,
 				},
 			);
 			dispatch(activityUpdated(response));
 		} catch (error: any) {
 			console.warn(`Got error on update request: ${error.toString()}`);
+			throw error;
 		}
 	},
 );

@@ -9,6 +9,10 @@ export type Activity = {
 	metaFields: Array<unknown>;
 	teams: Array<unknown>;
 	color: string | null;
+	project?: number | null;
+	budget?: number | null;
+	timeBudget?: number | null;
+	budgetType?: string | null;
 };
 
 export type ActivitiesState = {

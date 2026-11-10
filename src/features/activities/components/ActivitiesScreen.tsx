@@ -16,7 +16,7 @@ import {activitySelected} from '../context/activitiesSlice';
 import {fetchActivities} from '../middleware/activitiesThunks';
 import {Activity} from '../types';
 import {ActivityItemContextMenu} from './ActivityItemContextMenu';
-import {AddActivityModal} from './AddActivityModal';
+import {ActivityModal} from './ActivityModal';
 
 const styles = StyleSheet.create({
 	fab: {
@@ -98,10 +98,7 @@ export const ActivitiesScreen = () => {
 				onPress={onShowAddModal}
 				style={styles.fab}
 			/>
-			<AddActivityModal
-				visible={addModalVisible}
-				onHideModal={onHideAddModal}
-			/>
+			<ActivityModal visible={addModalVisible} onHideModal={onHideAddModal} />
 		</BaseScreen>
 	);
 };

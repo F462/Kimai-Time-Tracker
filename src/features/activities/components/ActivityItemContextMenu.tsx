@@ -5,7 +5,7 @@ import {useAppDispatch} from 'src/features/data/context/store';
 import {EntityItemContextMenu} from 'src/ui/EntityItemContextMenu';
 import {removeActivity} from '../middleware/activitiesThunks';
 import {Activity} from '../types';
-import {EditActivityModal} from './EditActivityModal';
+import {ActivityModal} from './ActivityModal';
 
 type ActivityItemContextMenuProps = {
 	activity: Activity;
@@ -34,7 +34,7 @@ export const ActivityItemContextMenu = ({
 
 	return (
 		<>
-			<EditActivityModal
+			<ActivityModal
 				activity={activity}
 				visible={editModalVisible}
 				onHideModal={onHideEditModal}

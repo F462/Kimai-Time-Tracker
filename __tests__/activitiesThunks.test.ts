@@ -89,6 +89,71 @@ describe('createActivity', () => {
 		expect(store.getState().activities.activities[-1]).toEqual(result.payload);
 	});
 
+	it('sends project, color, and budget settings to Kimai', async () => {
+		(api.isConfigured as jest.Mock).mockReturnValue(true);
+		(api.post as jest.Mock).mockResolvedValue(
+			makeActivity(12, 'Scoped activity'),
+		);
+		const store = configureTestStore() as TestStore;
+
+		await store.dispatch(
+			createActivity({
+				name: 'Scoped activity',
+				number: '0010',
+				comment: 'Description',
+				project: 4,
+				color: '#336699',
+				budget: 125.5,
+				timeBudget: 5400,
+				budgetType: 'month',
+				visible: false,
+				billable: false,
+			}),
+		);
+
+		expect(api.post).toHaveBeenCalledWith('api/activities', {
+			name: 'Scoped activity',
+			visible: false,
+			billable: false,
+			number: '0010',
+			comment: 'Description',
+			project: 4,
+			color: '#336699',
+			budget: 125.5,
+			timeBudget: 5400,
+			budgetType: 'month',
+		});
+	});
+
+	it('updates all activity fields represented by the shared modal', async () => {
+		(api.isConfigured as jest.Mock).mockReturnValue(true);
+		const activity = {
+			...makeActivity(12, 'Activity'),
+			project: 4,
+			color: '#336699',
+			budget: 125.5,
+			timeBudget: 5400,
+			budgetType: 'month',
+		};
+		(api.patch as jest.Mock).mockResolvedValue(activity);
+		const store = configureTestStore() as TestStore;
+
+		await store.dispatch(updateActivity(activity));
+
+		expect(api.patch).toHaveBeenCalledWith('api/activities/12', {
+			name: 'Activity',
+			number: null,
+			comment: null,
+			visible: true,
+			billable: true,
+			project: 4,
+			color: '#336699',
+			budget: 125.5,
+			timeBudget: 5400,
+			budgetType: 'month',
+		});
+	});
+
 	it('keeps unsynced local activities when server activities are received', () => {
 		const store = configureTestStore() as TestStore;
 		const localActivity = makeActivity(-1, 'Local activity');
