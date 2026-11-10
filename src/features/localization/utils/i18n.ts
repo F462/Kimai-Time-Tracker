@@ -26,7 +26,6 @@ const i18nextOptions: InitOptions = {
 		escapeValue: false,
 		skipOnVariables: false,
 	},
-	compatibilityJSON: 'v4',
 };
 
 i18n.use(initReactI18next).init(i18nextOptions).catch(console.error);
