@@ -9,6 +9,11 @@ export const selectAppTheme = createSelector(
 	(settings) => settings.appTheme,
 );
 
+export const selectIsDarkOledEnabled = createSelector(
+	[selectSettingsState],
+	(settings) => settings.isDarkOledEnabled === true,
+);
+
 export const selectIsBiometricsToUnlockEnabled = createSelector(
 	[selectSettingsState],
 	(settings) => settings.isBiometricsToUnlockEnabled,

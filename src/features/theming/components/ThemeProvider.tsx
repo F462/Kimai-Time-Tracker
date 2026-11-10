@@ -10,7 +10,10 @@ import {
 } from 'react-native-paper';
 
 import {useAppSelector} from 'src/features/data/context/store';
-import {selectAppTheme} from 'src/features/settings/context/settingsSelectors';
+import {
+	selectAppTheme,
+	selectIsDarkOledEnabled,
+} from 'src/features/settings/context/settingsSelectors';
 import {AppTheme} from 'src/features/settings/types';
 
 const {LightTheme: navigationLightTheme, DarkTheme: navigationDarkTheme} =
@@ -115,23 +118,27 @@ const combinedDarkOledTheme = deepmerge(combinedDarkTheme, {
 
 export const ThemeProvider = ({children}: React.PropsWithChildren<{}>) => {
 	const appThemeSetting = useAppSelector(selectAppTheme);
+	const isDarkOledEnabled = useAppSelector(selectIsDarkOledEnabled);
 
 	const theme = useMemo(() => {
+		let isDark: boolean;
 		switch (appThemeSetting) {
-			case AppTheme.SYSTEM:
-				if (Appearance.getColorScheme() === 'dark') {
-					return combinedDarkTheme;
-				} else {
-					return combinedLightTheme;
-				}
-			case AppTheme.LIGHT:
-				return combinedLightTheme;
 			case AppTheme.DARK:
-				return combinedDarkTheme;
-			case AppTheme.DARK_OLED:
-				return combinedDarkOledTheme;
+				isDark = true;
+				break;
+			case AppTheme.SYSTEM:
+				isDark = Appearance.getColorScheme() === 'dark';
+				break;
+			default:
+				isDark = false;
+				break;
 		}
-	}, [appThemeSetting]);
+
+		if (!isDark) {
+			return combinedLightTheme;
+		}
+		return isDarkOledEnabled ? combinedDarkOledTheme : combinedDarkTheme;
+	}, [appThemeSetting, isDarkOledEnabled]);
 
 	return <PaperProvider theme={theme}>{children}</PaperProvider>;
 };

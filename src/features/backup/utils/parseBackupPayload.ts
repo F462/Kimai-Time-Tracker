@@ -100,13 +100,25 @@ const normalizeSettings = (value: unknown): unknown => {
 		DEFAULT_WORK_HOURS,
 	);
 
+	// Older backups stored the OLED preference as a distinct theme value.
+	const isLegacyDarkOled = value.appTheme === 'dark_oled';
+	const validThemes = ['system', 'light', 'dark'];
+	let normalizedTheme: string;
+	if (isLegacyDarkOled) {
+		normalizedTheme = 'dark';
+	} else if (validThemes.includes(value.appTheme as string)) {
+		normalizedTheme = value.appTheme as string;
+	} else {
+		normalizedTheme = 'system';
+	}
+
 	return {
 		...value,
-		appTheme: ['system', 'light', 'dark', 'dark_oled'].includes(
-			value.appTheme as string,
-		)
-			? value.appTheme
-			: 'system',
+		appTheme: normalizedTheme,
+		isDarkOledEnabled:
+			typeof value.isDarkOledEnabled === 'boolean'
+				? value.isDarkOledEnabled
+				: isLegacyDarkOled,
 		isBiometricsToUnlockEnabled:
 			typeof value.isBiometricsToUnlockEnabled === 'boolean'
 				? value.isBiometricsToUnlockEnabled

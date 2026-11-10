@@ -2,7 +2,6 @@ export enum AppTheme {
 	SYSTEM = 'system',
 	LIGHT = 'light',
 	DARK = 'dark',
-	DARK_OLED = 'dark_oled',
 }
 
 export const WORK_DAYS = [
@@ -22,6 +21,7 @@ export type AutomaticBackupIntervalDays = 0 | 1 | 7 | 14 | 30;
 
 export type SettingsState = {
 	appTheme: AppTheme;
+	isDarkOledEnabled: boolean;
 	isBiometricsToUnlockEnabled: boolean;
 	automaticBackupIntervalDays: AutomaticBackupIntervalDays;
 	lastAutomaticBackupAt: number | null;

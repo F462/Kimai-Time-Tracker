@@ -21,11 +21,13 @@ import {
 	selectAppTheme,
 	selectAutomaticBackupIntervalDays,
 	selectIsBiometricsToUnlockEnabled,
+	selectIsDarkOledEnabled,
 } from '../context/settingsSelectors';
 import {
 	appThemeSet,
 	automaticBackupIntervalDaysSet,
 	biometricsToUnlockEnabledStateSet,
+	darkOledEnabledSet,
 } from '../context/settingsSlice';
 import {AppTheme, AutomaticBackupIntervalDays} from '../types';
 
@@ -64,13 +66,41 @@ const ThemeSelection = () => {
 			dropdownIconColor={dynamicStyles.themePicker.color}
 			mode="dropdown"
 			onValueChange={(itemValue: AppTheme) => dispatch(appThemeSet(itemValue))}>
-			{Object.values(AppTheme).map((themeValue) => (
+			{[AppTheme.SYSTEM, AppTheme.LIGHT, AppTheme.DARK].map((themeValue) => (
 				<Picker.Item
 					label={t(`appThemeValues.${themeValue}`)}
 					value={themeValue}
 				/>
 			))}
 		</Picker>
+	);
+};
+
+const DarkOledIcon = () => <List.Icon icon="brightness-4" />;
+const DarkOledSwitch = () => {
+	const dispatch = useAppDispatch();
+	const isDarkOledEnabled = useAppSelector(selectIsDarkOledEnabled);
+	const appThemeSetting = useAppSelector(selectAppTheme);
+
+	return (
+		<Switch
+			value={isDarkOledEnabled}
+			disabled={appThemeSetting === AppTheme.LIGHT}
+			onValueChange={(newValue) => {
+				dispatch(darkOledEnabledSet(newValue));
+			}}
+		/>
+	);
+};
+const DarkOledItem = () => {
+	const {t} = useTranslation();
+	return (
+		<List.Item
+			title={t('darkOled')}
+			description={t('darkOledDescription')}
+			left={DarkOledIcon}
+			right={DarkOledSwitch}
+		/>
 	);
 };
 
@@ -84,6 +114,7 @@ const DisplaySection = () => {
 				left={LightDarkIcon}
 				right={ThemeSelection}
 			/>
+			<DarkOledItem />
 		</List.Section>
 	);
 };

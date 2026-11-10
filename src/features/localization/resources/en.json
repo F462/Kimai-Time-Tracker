@@ -2,10 +2,11 @@
 	"appTheme": "App theme",
 	"appThemeValues": {
 		"dark": "Dark",
-		"dark_oled": "Dark OLED",
 		"light": "Light",
 		"system": "System"
 	},
+	"darkOled": "Dark OLED (deep black)",
+	"darkOledDescription": "Uses a true black background in dark mode",
 	"appVersion": "App version {{version}}",
 	"billable": "Billable",
 	"billableHelp": "If this is off, all future time entries for this customer are marked as not billable.",

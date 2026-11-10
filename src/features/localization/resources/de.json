@@ -2,10 +2,11 @@
 	"appTheme": "App-Thema",
 	"appThemeValues": {
 		"dark": "Dunkel",
-		"dark_oled": "Dunkel OLED",
 		"light": "Hell",
 		"system": "System"
 	},
+	"darkOled": "OLED (tiefes Schwarz)",
+	"darkOledDescription": "Verwendet einen tiefschwarzen Hintergrund im dunklen Modus",
 	"appVersion": "App-Version {{version}}",
 	"billable": "Abrechenbar",
 	"billableHelp": "Falls die Einstellung aus ist, werden alle zukünftig erfassten Zeiteinträge als nicht abrechenbar markiert.",

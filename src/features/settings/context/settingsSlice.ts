@@ -21,6 +21,7 @@ const DEFAULT_WORK_CONTRACT_HOURS: WorkContractHours = {
 
 const initialState: SettingsState = {
 	appTheme: AppTheme.SYSTEM,
+	isDarkOledEnabled: false,
 	isBiometricsToUnlockEnabled: false,
 	automaticBackupIntervalDays: 0,
 	lastAutomaticBackupAt: null,
@@ -37,6 +38,12 @@ const settingsSlice = createSlice({
 	reducers: {
 		appThemeSet: (state, {payload: appTheme}: PayloadAction<AppTheme>) => {
 			state.appTheme = appTheme;
+		},
+		darkOledEnabledSet: (
+			state,
+			{payload: isDarkOledEnabled}: PayloadAction<boolean>,
+		) => {
+			state.isDarkOledEnabled = isDarkOledEnabled;
 		},
 		biometricsToUnlockEnabledStateSet: (
 			state,
@@ -140,6 +147,7 @@ const settingsSlice = createSlice({
 
 export const {
 	appThemeSet,
+	darkOledEnabledSet,
 	biometricsToUnlockEnabledStateSet,
 	automaticBackupIntervalDaysSet,
 	automaticBackupCompleted,
