@@ -26,6 +26,8 @@ import {
 	synchronizeWorkContractHours,
 } from 'src/features/settings/middleware/settingsThunks';
 import {useStyle} from 'src/features/theming/utils/useStyle';
+import {selectHasUnsynchronizedUsers} from 'src/features/users/context/usersSelectors';
+import {synchronizeLocalUsers} from 'src/features/users/middleware/usersThunks';
 
 const styles = StyleSheet.create({
 	modal: {
@@ -208,12 +210,48 @@ const LocalProjectsJob = () => {
 	);
 };
 
+const LocalUsersJobIcon = () => <List.Icon icon="account-multiple-outline" />;
+
+const LocalUsersJobAction = () => {
+	const {t} = useTranslation();
+	const dispatch = useAppDispatch();
+	const isSyncPending = useAppSelector(selectHasUnsynchronizedUsers);
+
+	return (
+		<IconButton
+			icon={isSyncPending ? 'cloud-upload-outline' : 'check'}
+			disabled={!isSyncPending}
+			accessibilityLabel={t(isSyncPending ? 'synchronize' : 'entitySyncDone')}
+			onPress={() => {
+				dispatch(synchronizeLocalUsers())
+					.unwrap()
+					.catch(() => undefined);
+			}}
+		/>
+	);
+};
+
+const LocalUsersJob = () => {
+	const {t} = useTranslation();
+	const isSyncPending = useAppSelector(selectHasUnsynchronizedUsers);
+
+	return (
+		<List.Item
+			title={t('screenTitles.Users')}
+			description={t(isSyncPending ? 'entitySyncPending' : 'entitySyncDone')}
+			left={LocalUsersJobIcon}
+			right={LocalUsersJobAction}
+		/>
+	);
+};
+
 type SyncJob = {
 	key: string;
 	Component: React.ComponentType;
 };
 
 const syncJobs: SyncJob[] = [
+	{key: 'users', Component: LocalUsersJob},
 	{key: 'customers', Component: LocalCustomersJob},
 	{key: 'projects', Component: LocalProjectsJob},
 	{key: 'workContract', Component: WorkContractJob},

@@ -13,6 +13,13 @@ export const selectUserList = createSelector([selectUsers], (users) =>
 	Object.values(users),
 );
 
+export const selectHasUnsynchronizedUsers = createSelector(
+	[selectUsersState],
+	({users, pendingUpdates}) =>
+		Object.values(users).some((user) => user.id < 0) ||
+		Object.keys(pendingUpdates ?? {}).length > 0,
+);
+
 export const selectSelectedUserId = createSelector(
 	[selectUsersState],
 	(users) => users.selectedUserId,

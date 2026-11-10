@@ -21,6 +21,26 @@ export type UserPreference = {
 	value: string | null;
 };
 
+export type UserUpdateChanges = {
+	alias?: string;
+	title?: string;
+	accountNumber?: string;
+	color?: string | null;
+	email?: string;
+	language?: string;
+	locale?: string;
+	timezone?: string;
+	supervisor?: number | null;
+	roles?: Array<string>;
+	enabled?: boolean;
+	teams?: Array<number>;
+};
+
+export type PendingUserUpdate = {
+	changes: UserUpdateChanges;
+	previousTeams: Array<number>;
+};
+
 export type User = {
 	id: number;
 	username: string;
@@ -38,6 +58,7 @@ export type User = {
 	enabled?: boolean;
 	systemAccount?: boolean;
 	roles?: Array<string>;
+	requiresPasswordReset?: boolean;
 	supervisor?: UserReference | null;
 	teams?: Array<UserTeam>;
 	memberships?: Array<UserMembership>;
@@ -46,5 +67,6 @@ export type User = {
 
 export type UsersState = {
 	users: {[id: number]: User};
+	pendingUpdates: {[id: number]: PendingUserUpdate};
 	selectedUserId: number | undefined;
 };

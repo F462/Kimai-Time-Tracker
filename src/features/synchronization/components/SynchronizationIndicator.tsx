@@ -12,6 +12,7 @@ import {
 	selectHasWorkContractHoursSyncStatus,
 	selectIsWorkContractHoursSyncInProgress,
 } from 'src/features/settings/context/settingsSelectors';
+import {selectHasUnsynchronizedUsers} from 'src/features/users/context/usersSelectors';
 import {selectAreAllTimesheetsInSync} from '../context/synchronizationSelectors';
 import {SynchronizeModal} from './SynchronizeModal';
 
@@ -26,6 +27,7 @@ export const SynchronizationIndicator = () => {
 	const hasUnsynchronizedProjects = useAppSelector(
 		selectHasUnsynchronizedProjects,
 	);
+	const hasUnsynchronizedUsers = useAppSelector(selectHasUnsynchronizedUsers);
 	const isInternetReachable = useAppSelector(selectIsInternetReachable);
 	const isUserLoggedIn = useAppSelector(selectIsUserLoggedIn);
 	const isUserLoggingIn = useAppSelector(selectIsUserLoggingIn);
@@ -53,7 +55,11 @@ export const SynchronizationIndicator = () => {
 				};
 			} else if (isUserLoggingIn === true) {
 				return {iconString: 'cloud-refresh'};
-			} else if (hasUnsynchronizedCustomers || hasUnsynchronizedProjects) {
+			} else if (
+				hasUnsynchronizedCustomers ||
+				hasUnsynchronizedProjects ||
+				hasUnsynchronizedUsers
+			) {
 				return {
 					iconString: 'cloud-upload-outline',
 					iconCallback: () => setSyncModalVisible(true),
@@ -81,6 +87,7 @@ export const SynchronizationIndicator = () => {
 		areAllTimesheetsInSync,
 		hasUnsynchronizedCustomers,
 		hasUnsynchronizedProjects,
+		hasUnsynchronizedUsers,
 		isInternetReachable,
 		isUserLoggedIn,
 		isUserLoggingIn,

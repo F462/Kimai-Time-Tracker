@@ -1,4 +1,5 @@
 import {configureStore} from '@reduxjs/toolkit';
+import EncryptedStorage from 'react-native-encrypted-storage';
 
 import {api} from 'src/features/account/utils/ApiClient';
 import type {AppDispatch} from 'src/features/data/context/store';
@@ -9,6 +10,7 @@ import {
 import {
 	createUser,
 	fetchUsers,
+	synchronizeLocalUsers,
 	updateUser,
 } from 'src/features/users/middleware/usersThunks';
 import {User} from 'src/features/users/types';
@@ -18,9 +20,19 @@ jest.mock('src/features/account/utils/ApiClient', () => ({
 		get: jest.fn(),
 		post: jest.fn(),
 		patch: jest.fn(),
+		delete: jest.fn(),
 		isConfigured: jest.fn(),
 	},
 	ApiClient: {getInstance: jest.fn()},
+}));
+
+jest.mock('react-native-encrypted-storage', () => ({
+	__esModule: true,
+	default: {
+		getItem: jest.fn(),
+		setItem: jest.fn(),
+		removeItem: jest.fn(),
+	},
 }));
 
 const makeUser = (): User => ({
@@ -48,6 +60,10 @@ type TestStore = Omit<ReturnType<typeof configureTestStore>, 'dispatch'> & {
 describe('user thunks', () => {
 	beforeEach(() => {
 		jest.clearAllMocks();
+		(api.isConfigured as jest.Mock).mockReturnValue(true);
+		(EncryptedStorage.getItem as jest.Mock).mockResolvedValue(null);
+		(EncryptedStorage.setItem as jest.Mock).mockResolvedValue(undefined);
+		(EncryptedStorage.removeItem as jest.Mock).mockResolvedValue(undefined);
 	});
 
 	it('fetches full users and indexes them by id', async () => {
@@ -86,6 +102,62 @@ describe('user thunks', () => {
 		);
 	});
 
+	it('creates a local user when no backend is configured', async () => {
+		const store = configureTestStore() as TestStore;
+		(api.isConfigured as jest.Mock).mockReturnValue(false);
+
+		const user = await store
+			.dispatch(
+				createUser({
+					username: 'offline-user',
+					email: 'offline@example.com',
+					plainPassword: 'local-password',
+					language: 'en',
+					locale: 'en_US',
+					timezone: 'Europe/Berlin',
+				}),
+			)
+			.unwrap();
+
+		expect(api.post).not.toHaveBeenCalled();
+		expect(user.id).toBeLessThan(0);
+		expect(store.getState().users.users[user.id].username).toBe('offline-user');
+		expect(JSON.stringify(store.getState().users)).not.toContain(
+			'local-password',
+		);
+	});
+
+	it('synchronizes a local user using its encrypted password', async () => {
+		const store = configureTestStore() as TestStore;
+		(api.isConfigured as jest.Mock).mockReturnValue(false);
+		const localUser = await store
+			.dispatch(
+				createUser({
+					username: 'offline-user',
+					email: 'offline@example.com',
+					plainPassword: 'local-password',
+					language: 'en',
+					locale: 'en_US',
+					timezone: 'Europe/Berlin',
+				}),
+			)
+			.unwrap();
+		const syncedUser = {...makeUser(), id: 25, username: 'offline-user'};
+		(api.isConfigured as jest.Mock).mockReturnValue(true);
+		(EncryptedStorage.getItem as jest.Mock).mockResolvedValue('local-password');
+		(api.post as jest.Mock).mockResolvedValue(syncedUser);
+
+		await store.dispatch(synchronizeLocalUsers());
+
+		expect(api.post).toHaveBeenCalledWith(
+			'api/users',
+			expect.objectContaining({plainPassword: 'local-password'}),
+		);
+		expect(store.getState().users.users[localUser.id]).toBeUndefined();
+		expect(store.getState().users.users[syncedUser.id]).toEqual(syncedUser);
+		expect(EncryptedStorage.removeItem).toHaveBeenCalled();
+	});
+
 	it('patches user fields and stores the updated user', async () => {
 		const user = makeUser();
 		(api.patch as jest.Mock).mockResolvedValue(user);
@@ -111,7 +183,7 @@ describe('user thunks', () => {
 		const store = configureTestStore() as TestStore;
 
 		await store.dispatch(
-			updateUser({id: user.id, alias: user.alias, enabled: true}),
+			updateUser({id: user.id, alias: user.alias ?? undefined, enabled: true}),
 		);
 
 		expect(api.patch).toHaveBeenCalledWith(`api/users/${user.id}`, {
@@ -128,6 +200,63 @@ describe('user thunks', () => {
 
 		expect(api.patch).toHaveBeenCalledWith(`api/users/${user.id}`, {
 			color: null,
+		});
+	});
+
+	it('updates a user locally and queues the change when offline', async () => {
+		const user = makeUser();
+		const store = configureTestStore() as TestStore;
+		store.dispatch(usersReceived([user]));
+		(api.isConfigured as jest.Mock).mockReturnValue(false);
+
+		await store.dispatch(updateUser({id: user.id, alias: 'Offline edit'}));
+
+		expect(api.patch).not.toHaveBeenCalled();
+		expect(store.getState().users.users[user.id].alias).toBe('Offline edit');
+		expect(store.getState().users.pendingUpdates[user.id].changes).toEqual({
+			alias: 'Offline edit',
+		});
+	});
+
+	it('synchronizes a queued user edit and clears its pending state', async () => {
+		const user = makeUser();
+		const store = configureTestStore() as TestStore;
+		store.dispatch(usersReceived([user]));
+		(api.isConfigured as jest.Mock).mockReturnValue(false);
+		await store.dispatch(updateUser({id: user.id, alias: 'Offline edit'}));
+		(api.isConfigured as jest.Mock).mockReturnValue(true);
+		(api.patch as jest.Mock).mockResolvedValue({
+			...user,
+			alias: 'Offline edit',
+		});
+
+		await store.dispatch(synchronizeLocalUsers());
+
+		expect(api.patch).toHaveBeenCalledWith(`api/users/${user.id}`, {
+			alias: 'Offline edit',
+		});
+		expect(store.getState().users.pendingUpdates[user.id]).toBeUndefined();
+	});
+
+	it('omits enabled when synchronizing a queued edit for the current user', async () => {
+		const user = makeUser();
+		const store = configureTestStore() as TestStore;
+		store.dispatch(usersReceived([user]));
+		(api.isConfigured as jest.Mock).mockReturnValue(false);
+		await store.dispatch(
+			updateUser({id: user.id, alias: 'Offline edit', enabled: false}),
+		);
+		(api.isConfigured as jest.Mock).mockReturnValue(true);
+		(api.get as jest.Mock).mockResolvedValue({id: user.id});
+		(api.patch as jest.Mock).mockResolvedValue({
+			...user,
+			alias: 'Offline edit',
+		});
+
+		await store.dispatch(synchronizeLocalUsers());
+
+		expect(api.patch).toHaveBeenCalledWith(`api/users/${user.id}`, {
+			alias: 'Offline edit',
 		});
 	});
 
