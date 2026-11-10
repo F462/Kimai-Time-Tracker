@@ -8,6 +8,7 @@ import {ProjectsScreen} from 'src/features/projects/components/ProjectsScreen';
 import {SettingsScreen} from 'src/features/settings/components/SettingsScreen';
 import {WorkContractScreen} from 'src/features/settings/components/WorkContractScreen';
 import {TimesheetsScreen} from 'src/features/timesheets/components/TimesheetsScreen';
+import {UsersScreen} from 'src/features/users/components/UsersScreen';
 import {createDrawerIconFunction} from './components/DrawerItemIcon';
 import {ScreenParameters} from './ScreenParameters';
 
@@ -84,6 +85,13 @@ export const screens: Array<{
 		component: TimesheetsScreen,
 		options: {
 			drawerIcon: createDrawerIconFunction('calendar-clock'),
+		},
+	},
+	{
+		name: 'Users',
+		component: UsersScreen,
+		options: {
+			drawerIcon: createDrawerIconFunction('account-multiple-outline'),
 		},
 	},
 ];

@@ -66,6 +66,7 @@ export const DefaultDrawerContent = ({
 			'Overview',
 			'Projects',
 			'Timesheets',
+			'Users',
 		].map((routeName) => (
 			<DefaultDrawerItem routeName={routeName} key={routeName} />
 		));

@@ -89,6 +89,7 @@ describe('user thunks', () => {
 	it('patches user fields and stores the updated user', async () => {
 		const user = makeUser();
 		(api.patch as jest.Mock).mockResolvedValue(user);
+		(api.get as jest.Mock).mockResolvedValue({id: user.id + 1});
 		const store = configureTestStore() as TestStore;
 		store.dispatch(usersReceived([{...user, alias: 'Old name'}]));
 
@@ -101,5 +102,66 @@ describe('user thunks', () => {
 			enabled: false,
 		});
 		expect(store.getState().users.users[user.id]).toEqual(user);
+	});
+
+	it('omits enabled when patching the currently authenticated user', async () => {
+		const user = makeUser();
+		(api.get as jest.Mock).mockResolvedValue({id: user.id});
+		(api.patch as jest.Mock).mockResolvedValue(user);
+		const store = configureTestStore() as TestStore;
+
+		await store.dispatch(
+			updateUser({id: user.id, alias: user.alias, enabled: true}),
+		);
+
+		expect(api.patch).toHaveBeenCalledWith(`api/users/${user.id}`, {
+			alias: user.alias,
+		});
+	});
+
+	it('preserves a null color when patching a user without a selected color', async () => {
+		const user = makeUser();
+		(api.patch as jest.Mock).mockResolvedValue(user);
+		const store = configureTestStore() as TestStore;
+
+		await store.dispatch(updateUser({id: user.id, color: null}));
+
+		expect(api.patch).toHaveBeenCalledWith(`api/users/${user.id}`, {
+			color: null,
+		});
+	});
+
+	it('assigns selected teams through the team membership endpoint', async () => {
+		const user = makeUser();
+		(api.post as jest.Mock)
+			.mockResolvedValueOnce(user)
+			.mockResolvedValueOnce({});
+		(api.get as jest.Mock).mockResolvedValue([user]);
+		const store = configureTestStore() as TestStore;
+
+		await store.dispatch(
+			createUser({
+				username: user.username,
+				email: user.email,
+				plainPassword: 'a-temporary-password',
+				language: 'en',
+				locale: 'en_US',
+				timezone: 'Europe/Berlin',
+				teams: [3],
+			}),
+		);
+
+		expect(api.post).toHaveBeenNthCalledWith(1, 'api/users', {
+			username: user.username,
+			email: user.email,
+			plainPassword: 'a-temporary-password',
+			language: 'en',
+			locale: 'en_US',
+			timezone: 'Europe/Berlin',
+		});
+		expect((api.post as jest.Mock).mock.calls[1][0]).toBe(
+			'api/teams/3/members/14',
+		);
+		expect(api.get).toHaveBeenCalledWith('api/users?full=1');
 	});
 });

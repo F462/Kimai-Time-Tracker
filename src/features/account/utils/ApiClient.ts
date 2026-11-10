@@ -116,7 +116,17 @@ export class ApiClient {
 					if (details.length > 0) {
 						errorMessage = `${errorMessage}: ${details.join('; ')}`;
 					}
-				} else if (
+				}
+				const formErrors = errorData?.errors?.errors;
+				if (Array.isArray(formErrors) && formErrors.length > 0) {
+					const details = formErrors
+						.filter((detail: unknown) => typeof detail === 'string')
+						.join('; ');
+					if (details.length > 0) {
+						errorMessage = `${errorMessage}: ${details}`;
+					}
+				}
+				if (
 					Array.isArray(errorData?.violations) &&
 					errorData.violations.length > 0
 				) {
