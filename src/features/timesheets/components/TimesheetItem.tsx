@@ -147,8 +147,6 @@ const SynchronizationStateIcon = ({
 		switch (synchronizationState) {
 			case SyncState.FAILED:
 				return theme.colors.error;
-			case SyncState.DONE:
-				return theme.colors.primary;
 			default:
 				return theme.colors.onSurfaceVariant;
 		}
