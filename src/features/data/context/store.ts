@@ -44,6 +44,7 @@ import {
 	timesheetsReducer,
 	timesheetsUpdated,
 } from 'src/features/timesheets/context/timesheetsSlice';
+import {usersReducer} from 'src/features/users/context/usersSlice';
 import {startRootListener} from '../middleware/rootListener';
 
 const persistConfig = {
@@ -100,6 +101,7 @@ const appReducer = combineReducers({
 	settings: settingsReducer,
 	synchronization: synchronizationReducer,
 	timesheets: timesheetsReducer,
+	users: usersReducer,
 });
 
 export const rootReducer = (
