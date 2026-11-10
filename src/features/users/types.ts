@@ -38,6 +38,7 @@ export type UserUpdateChanges = {
 
 export type PendingUserUpdate = {
 	changes: UserUpdateChanges;
+	originalValues: UserUpdateChanges;
 	previousTeams: Array<number>;
 };
 

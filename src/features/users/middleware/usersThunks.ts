@@ -152,6 +152,59 @@ const updateLocalUser = (
 	return updatedUser;
 };
 
+const getOriginalValues = (
+	user: User,
+	changes: UserUpdateChanges,
+): UserUpdateChanges =>
+	Object.fromEntries(
+		Object.keys(changes).map((field) => {
+			if (field === 'teams') {
+				return [
+					field,
+					user.memberships?.map(({team}) => team.id) ??
+						user.teams?.map((team) => team.id) ??
+						[],
+				];
+			}
+			if (field === 'supervisor') {
+				return [field, user.supervisor?.id ?? null];
+			}
+			return [field, user[field as keyof User]];
+		}),
+	) as UserUpdateChanges;
+
+const getComparableValue = (value: unknown, field: string) => {
+	if (value === undefined || value === null) {
+		return null;
+	}
+	if (Array.isArray(value) && (field === 'roles' || field === 'teams')) {
+		return [...value].sort();
+	}
+	return value;
+};
+
+const hasServerChangedField = (
+	serverUser: User,
+	field: string,
+	originalValue: unknown,
+) => {
+	let serverValue: unknown;
+	if (field === 'teams') {
+		serverValue =
+			serverUser.memberships?.map(({team}) => team.id) ??
+			serverUser.teams?.map((team) => team.id) ??
+			[];
+	} else if (field === 'supervisor') {
+		serverValue = serverUser.supervisor?.id ?? null;
+	} else {
+		serverValue = serverUser[field as keyof User];
+	}
+	return (
+		JSON.stringify(getComparableValue(serverValue, field)) !==
+		JSON.stringify(getComparableValue(originalValue, field))
+	);
+};
+
 export const fetchUserTeams = createAppAsyncThunk(
 	'users/fetchUserTeams',
 	async () => api.get<Array<UserTeam>>('api/teams'),
@@ -199,6 +252,7 @@ export const createUser = createAppAsyncThunk<User, CreateUserPayload>(
 						userUpdateQueued({
 							userId: response.id,
 							changes: {teams},
+							originalValues: {teams: []},
 							previousTeams: [],
 						}),
 					);
@@ -232,6 +286,10 @@ export const updateUser = createAppAsyncThunk<User, UpdateUserPayload>(
 			...payload,
 			...(teams !== undefined ? {teams} : {}),
 		};
+		const originalValues = {
+			...(existingUser ? getOriginalValues(existingUser, changes) : {}),
+			...pendingUpdate?.originalValues,
+		};
 		const saveLocally = () => {
 			if (!existingUser) {
 				throw new Error('Cannot update a user that is not available locally.');
@@ -239,7 +297,14 @@ export const updateUser = createAppAsyncThunk<User, UpdateUserPayload>(
 			const updatedUser = updateLocalUser(existingUser, changes, state.users);
 			dispatch(userUpdated(updatedUser));
 			if (id >= 0) {
-				dispatch(userUpdateQueued({userId: id, changes, previousTeams}));
+				dispatch(
+					userUpdateQueued({
+						userId: id,
+						changes,
+						originalValues,
+						previousTeams,
+					}),
+				);
 			}
 			return updatedUser;
 		};
@@ -324,6 +389,7 @@ export const synchronizeLocalUsers = createAppAsyncThunk(
 							userUpdateQueued({
 								userId: response.id,
 								changes: {teams: teamIds},
+								originalValues: {teams: []},
 								previousTeams: [],
 							}),
 						);
@@ -342,8 +408,34 @@ export const synchronizeLocalUsers = createAppAsyncThunk(
 		);
 		for (const [userIdString, pending] of pendingUpdates) {
 			const userId = Number(userIdString);
-			const {teams, ...updatePayload} = pending.changes;
 			try {
+				const serverUser = await api.get<User>(
+					`api/users/${userId.toString()}`,
+				);
+				if (!serverUser) {
+					throw new Error(
+						`Could not load user ${userId} before synchronization.`,
+					);
+				}
+				const safeChanges = Object.fromEntries(
+					Object.entries(pending.changes).filter(([field]) =>
+						Object.prototype.hasOwnProperty.call(
+							pending.originalValues ?? {},
+							field,
+						),
+					),
+				) as UserUpdateChanges;
+				const conflictFilteredChanges = Object.fromEntries(
+					Object.entries(safeChanges).filter(
+						([field]) =>
+							!hasServerChangedField(
+								serverUser,
+								field,
+								pending.originalValues[field as keyof UserUpdateChanges],
+							),
+					),
+				) as UserUpdateChanges;
+				const {teams, ...updatePayload} = conflictFilteredChanges;
 				if (updatePayload.enabled !== undefined) {
 					try {
 						const currentUser = await api.get<{id: number} | undefined>(
@@ -356,14 +448,17 @@ export const synchronizeLocalUsers = createAppAsyncThunk(
 						// Continue with the queued fields if the current user cannot be read.
 					}
 				}
-				const response = await api.patch<User>(
-					`api/users/${userId.toString()}`,
-					updatePayload,
-				);
+				const response =
+					Object.keys(updatePayload).length > 0
+						? await api.patch<User>(
+								`api/users/${userId.toString()}`,
+								updatePayload,
+							)
+						: serverUser;
 				if (teams !== undefined) {
 					await syncUserTeams(userId, pending.previousTeams, teams);
 				}
-				dispatch(userUpdated(response));
+				dispatch(userUpdated({...serverUser, ...response}));
 				dispatch(userUpdateSynced(userId));
 			} catch (error: any) {
 				console.warn(`Could not synchronize user update: ${error.toString()}`);

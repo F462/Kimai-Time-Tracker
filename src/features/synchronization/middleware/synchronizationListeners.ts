@@ -10,12 +10,15 @@ import {
 	AppStartListening,
 	RootState,
 } from 'src/features/data/context/store';
+import {internetReachabilityChanged} from 'src/features/network/context/networkSlice';
 import {timesheetEdited} from 'src/features/timesheets/context/timesheetActions';
 import {
 	selectTimesheet,
 	selectTimesheetsToSynchronize,
 } from 'src/features/timesheets/context/timesheetsSelectors';
 import {Timesheet} from 'src/features/timesheets/types';
+import {selectHasUnsynchronizedUsers} from 'src/features/users/context/usersSelectors';
+import {synchronizeLocalUsers} from 'src/features/users/middleware/usersThunks';
 import {selectIsTimesheetSyncNeeded} from '../context/synchronizationSelectors';
 import {synchronizeTimesheet} from './synchronizationThunks';
 
@@ -78,10 +81,35 @@ const runSyncOnTimesheetStopped = (startListening: AppStartListening) => {
 	});
 };
 
+const runSyncOnReconnect = (startListening: AppStartListening) => {
+	startListening({
+		actionCreator: internetReachabilityChanged,
+		effect: async ({payload: isInternetReachable}, listenerApi) => {
+			if (isInternetReachable !== true) {
+				return;
+			}
+
+			const timesheetsToSynchronize = selectTimesheetsToSynchronize(
+				listenerApi.getState(),
+			);
+			for (const timesheet of Object.values(timesheetsToSynchronize)) {
+				if (selectIsTimesheetSyncNeeded(timesheet.id)(listenerApi.getState())) {
+					await syncTimesheet(listenerApi, timesheet);
+				}
+			}
+
+			if (selectHasUnsynchronizedUsers(listenerApi.getState())) {
+				await listenerApi.dispatch(synchronizeLocalUsers());
+			}
+		},
+	});
+};
+
 export const startSynchronizationListeners = (
 	startListening: AppStartListening,
 ) => {
 	runSyncOnAppStart(startListening);
+	runSyncOnReconnect(startListening);
 	runSyncOnTimesheetStarted(startListening);
 	runSyncOnTimesheetEdited(startListening);
 	runSyncOnTimesheetStopped(startListening);

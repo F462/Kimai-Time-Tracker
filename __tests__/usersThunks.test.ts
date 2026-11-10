@@ -225,6 +225,7 @@ describe('user thunks', () => {
 		(api.isConfigured as jest.Mock).mockReturnValue(false);
 		await store.dispatch(updateUser({id: user.id, alias: 'Offline edit'}));
 		(api.isConfigured as jest.Mock).mockReturnValue(true);
+		(api.get as jest.Mock).mockResolvedValue(user);
 		(api.patch as jest.Mock).mockResolvedValue({
 			...user,
 			alias: 'Offline edit',
@@ -247,7 +248,9 @@ describe('user thunks', () => {
 			updateUser({id: user.id, alias: 'Offline edit', enabled: false}),
 		);
 		(api.isConfigured as jest.Mock).mockReturnValue(true);
-		(api.get as jest.Mock).mockResolvedValue({id: user.id});
+		(api.get as jest.Mock)
+			.mockResolvedValueOnce(user)
+			.mockResolvedValueOnce({id: user.id});
 		(api.patch as jest.Mock).mockResolvedValue({
 			...user,
 			alias: 'Offline edit',
@@ -257,6 +260,50 @@ describe('user thunks', () => {
 
 		expect(api.patch).toHaveBeenCalledWith(`api/users/${user.id}`, {
 			alias: 'Offline edit',
+		});
+	});
+
+	it('discards queued fields that the server changed since the edit', async () => {
+		const user = makeUser();
+		const store = configureTestStore() as TestStore;
+		store.dispatch(usersReceived([user]));
+		(api.isConfigured as jest.Mock).mockReturnValue(false);
+		await store.dispatch(updateUser({id: user.id, alias: 'Client alias'}));
+		(api.isConfigured as jest.Mock).mockReturnValue(true);
+		const serverUser = {...user, alias: 'Server alias'};
+		(api.get as jest.Mock).mockResolvedValue(serverUser);
+
+		await store.dispatch(synchronizeLocalUsers());
+
+		expect(api.patch).not.toHaveBeenCalled();
+		expect(store.getState().users.users[user.id].alias).toBe('Server alias');
+		expect(store.getState().users.pendingUpdates[user.id]).toBeUndefined();
+	});
+
+	it('syncs non-conflicting fields and keeps server-changed fields', async () => {
+		const user = makeUser();
+		const store = configureTestStore() as TestStore;
+		store.dispatch(usersReceived([user]));
+		(api.isConfigured as jest.Mock).mockReturnValue(false);
+		await store.dispatch(
+			updateUser({id: user.id, alias: 'Client alias', title: 'Client title'}),
+		);
+		(api.isConfigured as jest.Mock).mockReturnValue(true);
+		const serverUser = {...user, alias: 'Server alias'};
+		(api.get as jest.Mock).mockResolvedValue(serverUser);
+		(api.patch as jest.Mock).mockResolvedValue({
+			...serverUser,
+			title: 'Client title',
+		});
+
+		await store.dispatch(synchronizeLocalUsers());
+
+		expect(api.patch).toHaveBeenCalledWith(`api/users/${user.id}`, {
+			title: 'Client title',
+		});
+		expect(store.getState().users.users[user.id]).toMatchObject({
+			alias: 'Server alias',
+			title: 'Client title',
 		});
 	});
 

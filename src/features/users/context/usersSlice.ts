@@ -36,10 +36,11 @@ const usersSlice = createSlice({
 		userUpdateQueued: (
 			state,
 			{
-				payload: {userId, changes, previousTeams},
+				payload: {userId, changes, originalValues, previousTeams},
 			}: PayloadAction<{
 				userId: number;
 				changes: UsersState['pendingUpdates'][number]['changes'];
+				originalValues: UsersState['pendingUpdates'][number]['originalValues'];
 				previousTeams: Array<number>;
 			}>,
 		) => {
@@ -47,6 +48,7 @@ const usersSlice = createSlice({
 			const existing = state.pendingUpdates[userId];
 			state.pendingUpdates[userId] = {
 				changes: {...existing?.changes, ...changes},
+				originalValues: {...existing?.originalValues, ...originalValues},
 				previousTeams: existing?.previousTeams ?? previousTeams,
 			};
 		},
