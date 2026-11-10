@@ -1,27 +1,12 @@
 import {configureStore} from '@reduxjs/toolkit';
 
 import {
-	migrateLegacyWorkingHours,
 	settingsReducer,
 	workContractHoursPerDaySet,
 } from 'src/features/settings/context/settingsSlice';
 
 const configureTestStore = () =>
 	configureStore({reducer: {settings: settingsReducer}});
-
-describe('migrateLegacyWorkingHours', () => {
-	it('applies legacy hours to weekdays and leaves weekends off', () => {
-		expect(migrateLegacyWorkingHours(7)).toEqual({
-			monday: 7,
-			tuesday: 7,
-			wednesday: 7,
-			thursday: 7,
-			friday: 7,
-			saturday: 0,
-			sunday: 0,
-		});
-	});
-});
 
 describe('workContractHoursPerDaySet', () => {
 	it('marks hours as pending only when they differ from the synchronized value', () => {

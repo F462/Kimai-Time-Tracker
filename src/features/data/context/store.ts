@@ -10,7 +10,6 @@ import {
 // eslint-disable-next-line no-restricted-imports
 import {TypedUseSelectorHook, useDispatch, useSelector} from 'react-redux';
 import {
-	createMigrate,
 	FLUSH,
 	PAUSE,
 	PERSIST,
@@ -33,10 +32,7 @@ import {networkReducer} from 'src/features/network/context/networkSlice';
 import {onboardingReducer} from 'src/features/onboarding/context/onboardingSlice';
 import {overviewReducer} from 'src/features/overview/context/overviewSlice';
 import {projectsReducer} from 'src/features/projects/context/projectsSlice';
-import {
-	migrateLegacyWorkingHours,
-	settingsReducer,
-} from 'src/features/settings/context/settingsSlice';
+import {settingsReducer} from 'src/features/settings/context/settingsSlice';
 import {ResetSyncStateTransform} from 'src/features/synchronization/context/ResetSyncStateTransform';
 import {synchronizationReducer} from 'src/features/synchronization/context/synchronizationSlice';
 import {SyncState} from 'src/features/synchronization/types';
@@ -49,7 +45,7 @@ import {startRootListener} from '../middleware/rootListener';
 
 const persistConfig = {
 	key: 'root',
-	version: 1,
+	version: 0,
 	// Disable the rehydration timeout. redux-persist schedules a setTimeout for
 	// this timeout when persistStore runs, and that timer is never cleaned up,
 	// which keeps the Jest worker process alive (test leak). Rehydration itself
@@ -57,30 +53,6 @@ const persistConfig = {
 	// timeout safety net.
 	timeout: 0,
 	storage: AsyncStorage,
-	migrate: createMigrate({
-		1: (state) => {
-			const persistedState = state as typeof state & {
-				settings?: Record<string, unknown>;
-			};
-			const settings = persistedState?.settings;
-			if (!settings || settings.workContractHoursPerDay) {
-				return persistedState;
-			}
-			const legacyHours = settings.standardWorkingHoursPerDay;
-			const settingsWithoutLegacyHours = {...settings};
-			delete settingsWithoutLegacyHours.standardWorkingHoursPerDay;
-
-			return {
-				...persistedState,
-				settings: {
-					...settingsWithoutLegacyHours,
-					workContractHoursPerDay: migrateLegacyWorkingHours(
-						typeof legacyHours === 'number' ? legacyHours : 8,
-					),
-				},
-			};
-		},
-	}),
 	// The overview is derived from the timesheets and the settings, so it is
 	// not persisted; it is re-calculated from the persisted timesheets on
 	// start-up.

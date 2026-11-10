@@ -161,11 +161,3 @@ export const {
 	workContractHoursSyncCompleted,
 } = settingsSlice.actions;
 export const settingsReducer = settingsSlice.reducer;
-
-export const migrateLegacyWorkingHours = (legacyHours: number) =>
-	Object.fromEntries(
-		WORK_DAYS.map((day) => [
-			day,
-			day === 'saturday' || day === 'sunday' ? 0 : legacyHours,
-		]),
-	) as WorkContractHours;
