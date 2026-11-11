@@ -15,6 +15,7 @@ export const buildBackupData = (state: RootState): BackupData => ({
 	activeTimesheet: state.activeTimesheet,
 	activities: state.activities,
 	customers: state.customers,
+	nfc: state.nfc,
 	onboarding: state.onboarding,
 	projects: state.projects,
 	settings: state.settings,

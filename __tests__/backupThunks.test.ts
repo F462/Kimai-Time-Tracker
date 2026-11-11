@@ -19,6 +19,7 @@ const backupState = (settings: RootState['settings']): RootState =>
 		appState: {},
 		customers: {},
 		network: {},
+		nfc: {tags: {}, isScanning: false},
 		onboarding: {},
 		overview: {},
 		projects: {},

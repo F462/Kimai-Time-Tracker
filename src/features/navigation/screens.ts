@@ -3,6 +3,7 @@ import {AccountScreen} from 'src/features/account/components/AccountScreen';
 import {ActiveTimesheetScreen} from 'src/features/activeTimesheet/components/ActiveTimesheetScreen';
 import {ActivitiesScreen} from 'src/features/activities/components/ActivitiesScreen';
 import {CustomersScreen} from 'src/features/customers/components/CustomersScreen';
+import {NfcTagsScreen} from 'src/features/nfc/components/NfcTagsScreen';
 import {OverviewScreen} from 'src/features/overview/components/OverviewScreen';
 import {ProjectsScreen} from 'src/features/projects/components/ProjectsScreen';
 import {SettingsScreen} from 'src/features/settings/components/SettingsScreen';
@@ -50,6 +51,13 @@ export const screens: Array<{
 		component: CustomersScreen,
 		options: {
 			drawerIcon: createDrawerIconFunction('face-agent'),
+		},
+	},
+	{
+		name: 'NfcTags',
+		component: NfcTagsScreen,
+		options: {
+			drawerIcon: createDrawerIconFunction('nfc-variant'),
 		},
 	},
 	{

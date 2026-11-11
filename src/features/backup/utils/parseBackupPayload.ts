@@ -152,6 +152,14 @@ const normalizeSettings = (value: unknown): unknown => {
 	};
 };
 
+const normalizeNfc = (value: unknown): Record<string, unknown> => {
+	const source = isRecord(value) ? value : {};
+	return {
+		tags: normalizeEntityMap(source.tags),
+		isScanning: false,
+	};
+};
+
 const normalizeMapSlice = (
 	value: unknown,
 	mapKey: string,
@@ -178,6 +186,7 @@ const normalizeBackupData = (value: unknown): BackupData | undefined => {
 		'activeTimesheet',
 		'activities',
 		'customers',
+		'nfc',
 		'onboarding',
 		'projects',
 		'settings',
@@ -267,6 +276,7 @@ const normalizeBackupData = (value: unknown): BackupData | undefined => {
 		activeTimesheet: normalizedActiveTimesheet,
 		activities: activities as BackupData['activities'],
 		customers: customers as BackupData['customers'],
+		nfc: normalizeNfc(value.nfc) as BackupData['nfc'],
 		onboarding,
 		projects: projects as BackupData['projects'],
 		settings: settings as BackupData['settings'],

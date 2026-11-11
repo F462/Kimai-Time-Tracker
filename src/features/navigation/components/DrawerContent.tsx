@@ -62,6 +62,7 @@ export const DefaultDrawerContent = ({
 		return [
 			'ActiveTimesheet',
 			'Activities',
+			'NfcTags',
 			'Customers',
 			'Overview',
 			'Projects',

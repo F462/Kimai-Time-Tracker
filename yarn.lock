@@ -9351,6 +9351,7 @@ __metadata:
     react-native-gesture-handler: "npm:^3.5.0"
     react-native-get-random-values: "npm:^2.1.0"
     react-native-localize: "npm:^3.7.2"
+    react-native-nfc-manager: "npm:^4.2.0"
     react-native-nitro-image: "npm:^0.15.2"
     react-native-nitro-modules: "npm:^0.37.2"
     react-native-notify-kit: "npm:^10.10.0"
@@ -11069,6 +11070,20 @@ __metadata:
     react-native-macos:
       optional: true
   checksum: 10c0/93c415fdf27096517c791cd24bebf7f6a764e5ab5c6d2f628cfe9be2b3a69e8dfd30f35aae8a36e4631933273eb8c6baec47f1befcafafcceb9f5423762f01c8
+  languageName: node
+  linkType: hard
+
+"react-native-nfc-manager@npm:^4.2.0":
+  version: 4.2.0
+  resolution: "react-native-nfc-manager@npm:4.2.0"
+  peerDependencies:
+    "@expo/config-plugins": "*"
+    react: ">=18.2"
+    react-native: ">=0.76"
+  peerDependenciesMeta:
+    "@expo/config-plugins":
+      optional: true
+  checksum: 10c0/10bbb7c5e8021921e5d44b46df0e810186d1c618f63190be51f8b8488d97c8265ccafa58d9b6bf44c5b9a1089fa88aec5657f8d60ed7ec9569bf3d84861d464f
   languageName: node
   linkType: hard
 

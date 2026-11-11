@@ -17,6 +17,7 @@ import {selectIsUserLoggedIn} from 'src/features/account/context/accountSelector
 import {selectIsSessionUnlocked} from 'src/features/appState/context/appStateSelectors';
 import {userUnlockedSession} from 'src/features/appState/context/appStateSlice';
 import {useAppDispatch, useAppSelector} from 'src/features/data/context/store';
+import {navigationRef} from '../context/navigationRef';
 import {ScreenParameters} from '../ScreenParameters';
 import {screens} from '../screens';
 import {DefaultHeader} from './DefaultHeader';
@@ -88,6 +89,7 @@ export const RootNavigation = () => {
 				<SessionUnlockComponent />
 			) : (
 				<NavigationContainer
+					ref={navigationRef}
 					theme={theme}
 					linking={linking}
 					onReady={() => {

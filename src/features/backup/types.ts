@@ -2,6 +2,7 @@ import type {AccountState} from 'src/features/account/types';
 import type {ActiveTimesheetState} from 'src/features/activeTimesheet/types';
 import type {ActivitiesState} from 'src/features/activities/types';
 import type {CustomersState} from 'src/features/customers/types';
+import type {NfcState} from 'src/features/nfc/types';
 import type {OnboardingState} from 'src/features/onboarding/types';
 import type {ProjectsState} from 'src/features/projects/types';
 import type {SettingsState} from 'src/features/settings/types';
@@ -20,6 +21,7 @@ export type BackupData = {
 	activeTimesheet: ActiveTimesheetState;
 	activities: ActivitiesState;
 	customers: CustomersState;
+	nfc: NfcState;
 	onboarding: OnboardingState;
 	projects: ProjectsState;
 	settings: SettingsState;

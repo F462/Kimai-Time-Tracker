@@ -32,7 +32,7 @@ export const ListItem = ({
 			style={combinedStyle}
 			onPress={onPress}
 			onLongPress={onLongPress}
-			disabled={onPress === undefined}>
+			disabled={onPress === undefined && onLongPress === undefined}>
 			{isSelected === undefined ? null : (
 				<RadioButton
 					status={isSelected ? 'checked' : 'unchecked'}

@@ -29,6 +29,7 @@ import {backupDataImported} from 'src/features/backup/context/backupActions';
 import {customersReducer} from 'src/features/customers/context/customersSlice';
 import {createLoggingMiddleware} from 'src/features/logging/middleware/middleware';
 import {networkReducer} from 'src/features/network/context/networkSlice';
+import {nfcReducer} from 'src/features/nfc/context/nfcSlice';
 import {onboardingReducer} from 'src/features/onboarding/context/onboardingSlice';
 import {overviewReducer} from 'src/features/overview/context/overviewSlice';
 import {projectsReducer} from 'src/features/projects/context/projectsSlice';
@@ -67,6 +68,7 @@ const appReducer = combineReducers({
 	appState: appStateReducer,
 	customers: customersReducer,
 	network: networkReducer,
+	nfc: nfcReducer,
 	onboarding: onboardingReducer,
 	overview: overviewReducer,
 	projects: projectsReducer,

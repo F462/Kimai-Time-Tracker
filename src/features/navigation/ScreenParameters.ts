@@ -4,6 +4,7 @@ export type ScreenParameters = {
 	ActiveTimesheet: undefined;
 	Activities: undefined;
 	Customers: undefined;
+	NfcTags: undefined;
 	Overview: undefined;
 	Projects: undefined;
 	Settings: undefined;

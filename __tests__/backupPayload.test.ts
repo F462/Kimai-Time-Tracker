@@ -15,6 +15,7 @@ const makeState = (): RootState =>
 		activeTimesheet: {activeTimesheetId: undefined},
 		activities: {activities: {7: {id: 7}}, selectedActivityId: 7},
 		customers: {customers: {3: {id: 3}}, selectedCustomerId: 3},
+		nfc: {tags: {}, isScanning: false},
 		onboarding: {hasDevelopmentWarningBeenShown: true},
 		projects: {projects: {5: {id: 5}}, selectedProjectId: 5},
 		settings: {appTheme: 'system'},
@@ -36,6 +37,7 @@ describe('buildBackupPayload', () => {
 		expect(data.activeTimesheet).toEqual(state.activeTimesheet);
 		expect(data.activities).toEqual(state.activities);
 		expect(data.customers).toEqual(state.customers);
+		expect(data.nfc).toEqual(state.nfc);
 		expect(data.onboarding).toEqual(state.onboarding);
 		expect(data.projects).toEqual(state.projects);
 		expect(data.settings).toEqual(state.settings);
