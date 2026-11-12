@@ -25,10 +25,16 @@ function App() {
 			<ThemeProvider>
 				<PersistGate loading={null} persistor={persistor}>
 					<SafeAreaProvider>
+						{/*
+							NFC must not depend on the notification permission
+							state: a tag can cold-start the app and has to be
+							processed before (and regardless of) the permission
+							prompt is resolved.
+						*/}
+						<NfcIntegration />
 						<NotificationPermissionGate>
 							<TimesheetWidgetIntegration />
 							<DailyWorkingHoursNotificationIntegration />
-							<NfcIntegration />
 							<Portal.Host>
 								<SessionLocker />
 								<Onboarding />
