@@ -1,10 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<tech-list>
-  <tech>android.nfc.tech.Ndef</tech>
-  <tech>android.nfc.tech.NdefFormatable</tech>
-  <tech>android.nfc.tech.NfcA</tech>
-  <tech>android.nfc.tech.NfcB</tech>
-  <tech>android.nfc.tech.NfcF</tech>
-  <tech>android.nfc.tech.NfcV</tech>
-  <tech>android.nfc.tech.IsoDep</tech>
-</tech-list>
+<!--
+  A single <tech-list> is an AND of its <tech> entries, so all technologies
+  in one list must be present on the tag. NfcA/NfcB/NfcF/NfcV are mutually
+  exclusive physical-layer standards, so they must each live in their own
+  <tech-list> (the lists are OR'd together) to match any common tag.
+-->
+<resources>
+  <tech-list>
+    <tech>android.nfc.tech.NfcA</tech>
+  </tech-list>
+  <tech-list>
+    <tech>android.nfc.tech.NfcB</tech>
+  </tech-list>
+  <tech-list>
+    <tech>android.nfc.tech.NfcF</tech>
+  </tech-list>
+  <tech-list>
+    <tech>android.nfc.tech.NfcV</tech>
+  </tech-list>
+</resources>
