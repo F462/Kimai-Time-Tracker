@@ -18,4 +18,10 @@ export type NfcState = {
 	tags: Record<string, NfcTag>;
 	/** Whether the app is waiting for a new NFC tag to be scanned. */
 	isScanning: boolean;
+	/**
+	 * The UID of the tag that is waiting to be (re-)programmed with the
+	 * `application/x.kimai` NDEF record, or `undefined` when no
+	 * re-programming is in progress. Mutually exclusive with {@link isScanning}.
+	 */
+	reprogrammingTagId?: string;
 };

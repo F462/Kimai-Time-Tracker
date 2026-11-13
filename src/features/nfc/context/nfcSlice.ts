@@ -5,6 +5,7 @@ import type {NfcState, NfcTag} from '../types';
 const initialState: NfcState = {
 	tags: {},
 	isScanning: false,
+	reprogrammingTagId: undefined,
 };
 
 export type NfcTagUpdate = {
@@ -41,9 +42,19 @@ const nfcSlice = createSlice({
 		},
 		nfcScanningStarted(state) {
 			state.isScanning = true;
+			// Scanning and re-programming are mutually exclusive modes.
+			state.reprogrammingTagId = undefined;
 		},
 		nfcScanningStopped(state) {
 			state.isScanning = false;
+		},
+		nfcReprogrammingStarted(state, action: PayloadAction<string>) {
+			state.reprogrammingTagId = action.payload;
+			// Scanning and re-programming are mutually exclusive modes.
+			state.isScanning = false;
+		},
+		nfcReprogrammingStopped(state) {
+			state.reprogrammingTagId = undefined;
 		},
 	},
 });
@@ -54,6 +65,8 @@ export const {
 	nfcTagRemoved,
 	nfcScanningStarted,
 	nfcScanningStopped,
+	nfcReprogrammingStarted,
+	nfcReprogrammingStopped,
 } = nfcSlice.actions;
 
 export const nfcReducer = nfcSlice.reducer;

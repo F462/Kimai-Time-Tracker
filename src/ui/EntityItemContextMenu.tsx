@@ -44,6 +44,21 @@ export type EntityItemContextMenuProps = {
 	 * When provided, an "Edit" entry is shown above "Delete".
 	 */
 	onEdit?: () => void;
+	/**
+	 * Optional: title of an additional action entry, e.g.
+	 * `t('nfc.reprogramTag')`. Must be provided together with {@link onAction}.
+	 */
+	actionTitle?: string;
+	/**
+	 * Optional: icon of the additional action entry. Defaults to `refresh`.
+	 */
+	actionIcon?: string;
+	/**
+	 * Optional: called when the user presses the additional action entry in
+	 * the menu. When provided together with {@link actionTitle}, the entry is
+	 * shown above "Edit".
+	 */
+	onAction?: () => void;
 };
 
 /**
@@ -64,6 +79,9 @@ export const EntityItemContextMenu = ({
 	onConfirmDelete,
 	editTitle,
 	onEdit,
+	actionTitle,
+	actionIcon,
+	onAction,
 }: EntityItemContextMenuProps) => {
 	const theme = useTheme();
 	const {t} = useTranslation();
@@ -89,6 +107,11 @@ export const EntityItemContextMenu = ({
 		onHideMenu();
 		onEdit?.();
 	}, [onHideMenu, onEdit]);
+
+	const onActionPressed = useCallback(() => {
+		onHideMenu();
+		onAction?.();
+	}, [onHideMenu, onAction]);
 
 	const dynamicStyles = useStyle(
 		() => ({
@@ -130,6 +153,13 @@ export const EntityItemContextMenu = ({
 				<Text variant="headlineSmall" style={styles.menuTitle}>
 					{title}
 				</Text>
+				{onAction && actionTitle && (
+					<List.Item
+						title={actionTitle}
+						onPress={onActionPressed}
+						left={(props) => createListIcon(props, actionIcon ?? 'refresh')}
+					/>
+				)}
 				{onEdit && (
 					<List.Item
 						title={editTitle ?? t('edit')}

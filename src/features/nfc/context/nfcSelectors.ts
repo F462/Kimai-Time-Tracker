@@ -24,4 +24,9 @@ export const selectIsNfcScanning = createSelector(
 	(nfc) => nfc.isScanning,
 );
 
+export const selectNfcReprogrammingTagId = createSelector(
+	[selectNfcState],
+	(nfc) => nfc.reprogrammingTagId,
+);
+
 export type {NfcTag};

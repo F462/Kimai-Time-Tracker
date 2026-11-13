@@ -48,16 +48,15 @@ const NfcManager = {
 	clearBackgroundTag: jest.fn(() => Promise.resolve()),
 	writeNdefMessage: jest.fn(() => Promise.resolve()),
 	getNdefMessage: jest.fn(() => Promise.resolve(null)),
-	getNdefStatus: jest.fn(() =>
-		Promise.resolve({status: 2, capacity: 160}),
-	),
+	getNdefStatus: jest.fn(() => Promise.resolve({status: 2, capacity: 160})),
 };
 
 const Ndef = {
-	mimeMediaRecord: jest.fn((mimeType, payload) => ({
-		tnf: 4,
-		type: mimeType,
-		id: [],
+	TNF_MIME_MEDIA: 2,
+	record: jest.fn((tnf, type, id, payload) => ({
+		tnf,
+		type,
+		id: id || [],
 		payload: payload || [],
 	})),
 	encodeMessage: jest.fn((records) => records || []),

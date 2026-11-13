@@ -55,6 +55,27 @@ export const NfcIntegration = () => {
 			}
 
 			const result = await dispatch(nfcTagDetected(tagId));
+			if (nfcTagDetected.fulfilled.match(result)) {
+				const payload = result.payload;
+				if (payload && payload.kind === 'registered') {
+					// The tag was added, but the NFC record could not be written
+					// to it; it will not open the app from the background.
+					if (!payload.programmed) {
+						Alert.alert(t('warning'), t('nfc.programFailed'), [
+							{
+								text: t('nfc.goToScreen'),
+								onPress: () => navigateToScreen('NfcTags'),
+							},
+						]);
+					}
+				} else if (payload && payload.kind === 'reprogrammed') {
+					Alert.alert(
+						payload.programmed ? t('nfc.programmedTitle') : t('warning'),
+						payload.programmed ? t('nfc.programmed') : t('nfc.programFailed'),
+					);
+				}
+				return;
+			}
 			if (nfcTagDetected.rejected.match(result)) {
 				if (typeof result.payload === 'string') {
 					Alert.alert(t('warning'), t(result.payload), [

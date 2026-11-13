@@ -37,26 +37,22 @@
         <data android:scheme="kimai" />
       </intent-filter>
       <!--
-        The MIME-scoped NDEF_DISCOVERED filter is what lets a tagged tap open
-        the app directly (no OS "Open with…" disambiguation dialog): only tags
-        carrying an NDEF record with the application/x.kimai MIME type match it,
-        and no other app declares that MIME type. The generic NDEF_DISCOVERED
-        and TAG_DISCOVERED filters below remain as fallbacks so unprogrammed
-        (legacy) tags are still routed here and can be re-programmed during
-        scanning.
+        Only the MIME-scoped NDEF_DISCOVERED filter is declared. Every tag in
+        the field is programmed by this app with an `application/x.kimai`
+        NDEF record, and no other app declares that MIME type, so a tap is
+        routed here directly (no OS "Open with…" dialog).
+
+        The generic NDEF_DISCOVERED / TAG_DISCOVERED fallbacks are deliberately
+        omitted: they only matter for tags that never received the MIME record
+        (e.g. read-only or non-NDEF hardware). Programming a fresh tag does not
+        depend on background dispatch — scanning runs in the foreground, where
+        `NfcManager.registerTagEvent()` arms its own broad dispatch
+        (NDEF `*/*`, TECH_Ndef, TAG_DISCOVERED) independently of this manifest.
       -->
       <intent-filter android:priority="1">
         <action android:name="android.nfc.action.NDEF_DISCOVERED" />
         <category android:name="android.intent.category.DEFAULT" />
         <data android:mimeType="application/x.kimai" />
-      </intent-filter>
-      <intent-filter>
-        <action android:name="android.nfc.action.NDEF_DISCOVERED" />
-        <category android:name="android.intent.category.DEFAULT" />
-      </intent-filter>
-      <intent-filter>
-        <action android:name="android.nfc.action.TAG_DISCOVERED" />
-        <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
     </activity>
     <receiver

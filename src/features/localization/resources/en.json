@@ -188,7 +188,12 @@
 		"noTags": "No NFC tags yet",
 		"noTagsHint": "Press the scan button and touch a physical NFC tag to register it.",
 		"scan": "Scan tag",
-		"scanning": "Waiting for an NFC tag… touch any NFC tag to add it."
+		"scanning": "Waiting for an NFC tag… touch any NFC tag to add it.",
+		"reprogramTag": "Re-program tag",
+		"reprogramming": "Waiting… touch the tag to write the NFC record to it.",
+		"programFailed": "The tag was registered, but the NFC record could not be written to it. It will not open the app from the background — foreground scanning still works.",
+		"programmedTitle": "Tag programmed",
+		"programmed": "The NFC record was written. The tag now opens the app directly from the background."
 	},
 	"save": "Save",
 	"scanQrCode": "Scan QR Code",

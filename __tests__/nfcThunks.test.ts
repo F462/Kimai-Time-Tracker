@@ -1,6 +1,6 @@
 import {configureStore} from '@reduxjs/toolkit';
-import {Ndef} from 'react-native-nfc-manager';
 import NfcManager from 'react-native-nfc-manager';
+import {Ndef} from 'react-native-nfc-manager';
 
 import {
 	activeTimesheetReducer,
@@ -13,11 +13,13 @@ import {
 import {AppDispatch} from 'src/features/data/context/store';
 import {
 	nfcReducer,
+	nfcReprogrammingStarted,
 	nfcScanningStarted,
 	nfcTagUpdated,
 } from 'src/features/nfc/context/nfcSlice';
 import {
 	nfcRegisterTag,
+	nfcReprogramTag,
 	nfcTagDetected,
 } from 'src/features/nfc/middleware/nfcThunks';
 import {
@@ -55,8 +57,10 @@ describe('nfcRegisterTag', () => {
 		const store = configureTestStore() as TestStore;
 		store.dispatch(nfcScanningStarted());
 
-		await store.dispatch(nfcRegisterTag(TAG_ID));
+		const result = await store.dispatch(nfcRegisterTag(TAG_ID));
 
+		expect(nfcRegisterTag.fulfilled.match(result)).toBe(true);
+		expect(result.payload).toEqual({id: TAG_ID, programmed: true});
 		const {tags, isScanning} = store.getState().nfc;
 		expect(isScanning).toBe(false);
 		expect(Object.keys(tags)).toEqual([TAG_ID]);
@@ -69,8 +73,10 @@ describe('nfcRegisterTag', () => {
 
 		await store.dispatch(nfcRegisterTag(TAG_ID));
 
-		expect(Ndef.mimeMediaRecord).toHaveBeenCalledWith(
+		expect(Ndef.record).toHaveBeenCalledWith(
+			Ndef.TNF_MIME_MEDIA,
 			'application/x.kimai',
+			expect.anything(),
 			expect.anything(),
 		);
 		expect(Ndef.encodeMessage).toHaveBeenCalledWith(expect.any(Array));
@@ -85,12 +91,46 @@ describe('nfcRegisterTag', () => {
 			new Error('Tag is read-only'),
 		);
 
-		await store.dispatch(nfcRegisterTag(TAG_ID));
+		const result = await store.dispatch(nfcRegisterTag(TAG_ID));
 
+		expect(nfcRegisterTag.fulfilled.match(result)).toBe(true);
+		// The failed programming is reported, not swallowed.
+		expect(result.payload).toEqual({id: TAG_ID, programmed: false});
 		const {tags, isScanning} = store.getState().nfc;
 		expect(isScanning).toBe(false);
 		expect(Object.keys(tags)).toEqual([TAG_ID]);
 		expect(tags[TAG_ID].name).toBe('NFC 1234');
+	});
+});
+
+describe('nfcReprogramTag', () => {
+	it('writes the application/x.kimai NDEF record and reports success', async () => {
+		const store = configureTestStore() as TestStore;
+
+		const result = await store.dispatch(nfcReprogramTag(TAG_ID));
+
+		expect(nfcReprogramTag.fulfilled.match(result)).toBe(true);
+		expect(result.payload).toEqual({id: TAG_ID, programmed: true});
+		expect(Ndef.record).toHaveBeenCalledWith(
+			Ndef.TNF_MIME_MEDIA,
+			'application/x.kimai',
+			expect.anything(),
+			expect.anything(),
+		);
+		expect(NfcManager.writeNdefMessage).toHaveBeenCalledWith(expect.any(Array));
+	});
+
+	it('reports a failed programming instead of throwing', async () => {
+		const store = configureTestStore() as TestStore;
+
+		(NfcManager.writeNdefMessage as jest.Mock).mockRejectedValueOnce(
+			new Error('Tag is read-only'),
+		);
+
+		const result = await store.dispatch(nfcReprogramTag(TAG_ID));
+
+		expect(nfcReprogramTag.fulfilled.match(result)).toBe(true);
+		expect(result.payload).toEqual({id: TAG_ID, programmed: false});
 	});
 });
 
@@ -102,8 +142,74 @@ describe('nfcTagDetected', () => {
 		const result = await store.dispatch(nfcTagDetected(TAG_ID));
 
 		expect(nfcTagDetected.fulfilled.match(result)).toBe(true);
+		expect(result.payload).toEqual({kind: 'registered', programmed: true});
 		expect(store.getState().nfc.isScanning).toBe(false);
 		expect(store.getState().nfc.tags[TAG_ID]).toBeDefined();
+	});
+
+	it('surfaces a failed programming of a newly registered tag', async () => {
+		const store = configureTestStore() as TestStore;
+		store.dispatch(nfcScanningStarted());
+
+		(NfcManager.writeNdefMessage as jest.Mock).mockRejectedValueOnce(
+			new Error('Tag is read-only'),
+		);
+
+		const result = await store.dispatch(nfcTagDetected(TAG_ID));
+
+		expect(nfcTagDetected.fulfilled.match(result)).toBe(true);
+		expect(result.payload).toEqual({kind: 'registered', programmed: false});
+	});
+
+	it('reprograms the designated tag while reprogramming mode is active', async () => {
+		const store = configureTestStore() as TestStore;
+		await store.dispatch(nfcRegisterTag(TAG_ID));
+		store.dispatch(nfcReprogrammingStarted(TAG_ID));
+
+		const result = await store.dispatch(nfcTagDetected(TAG_ID));
+
+		expect(nfcTagDetected.fulfilled.match(result)).toBe(true);
+		expect(result.payload).toEqual({kind: 'reprogrammed', programmed: true});
+		expect(store.getState().nfc.reprogrammingTagId).toBeUndefined();
+	});
+
+	it('stops reprogramming mode and reports failure when writing fails', async () => {
+		const store = configureTestStore() as TestStore;
+		await store.dispatch(nfcRegisterTag(TAG_ID));
+		store.dispatch(nfcReprogrammingStarted(TAG_ID));
+
+		(NfcManager.writeNdefMessage as jest.Mock).mockRejectedValueOnce(
+			new Error('Tag is read-only'),
+		);
+
+		const result = await store.dispatch(nfcTagDetected(TAG_ID));
+
+		expect(nfcTagDetected.fulfilled.match(result)).toBe(true);
+		expect(result.payload).toEqual({kind: 'reprogrammed', programmed: false});
+		expect(store.getState().nfc.reprogrammingTagId).toBeUndefined();
+	});
+
+	it('rejects when a different tag is touched during reprogramming', async () => {
+		const store = configureTestStore() as TestStore;
+		await store.dispatch(nfcRegisterTag(TAG_ID));
+		store.dispatch(nfcReprogrammingStarted(TAG_ID));
+
+		const result = await store.dispatch(nfcTagDetected('9999'));
+
+		expect(nfcTagDetected.rejected.match(result)).toBe(true);
+		expect(result.payload).toBe('nfc.unknownTag');
+	});
+
+	it('treats scanning and reprogramming as mutually exclusive modes', async () => {
+		const store = configureTestStore() as TestStore;
+
+		store.dispatch(nfcScanningStarted());
+		store.dispatch(nfcReprogrammingStarted(TAG_ID));
+		expect(store.getState().nfc.isScanning).toBe(false);
+		expect(store.getState().nfc.reprogrammingTagId).toBe(TAG_ID);
+
+		store.dispatch(nfcScanningStarted());
+		expect(store.getState().nfc.reprogrammingTagId).toBeUndefined();
 	});
 
 	it('stops the running timesheet when one is active', async () => {

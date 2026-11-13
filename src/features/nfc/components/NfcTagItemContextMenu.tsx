@@ -3,7 +3,7 @@ import {useTranslation} from 'react-i18next';
 
 import {useAppDispatch} from 'src/features/data/context/store';
 import {EntityItemContextMenu} from 'src/ui/EntityItemContextMenu';
-import {nfcTagRemoved} from '../context/nfcSlice';
+import {nfcReprogrammingStarted, nfcTagRemoved} from '../context/nfcSlice';
 import type {NfcTag} from '../types';
 import {NfcTagModal} from './NfcTagModal';
 
@@ -30,6 +30,10 @@ export const NfcTagItemContextMenu = ({
 		setEditModalVisible(true);
 	}, []);
 
+	const onReprogramPressed = useCallback(() => {
+		dispatch(nfcReprogrammingStarted(tag.id));
+	}, [dispatch, tag.id]);
+
 	const onHideEditModal = useCallback(() => setEditModalVisible(false), []);
 
 	return (
@@ -43,6 +47,9 @@ export const NfcTagItemContextMenu = ({
 				visible={visible}
 				onHideMenu={onHideMenu}
 				title={tag.name}
+				actionTitle={t('nfc.reprogramTag')}
+				actionIcon="refresh"
+				onAction={onReprogramPressed}
 				deleteTitle={t('nfc.deleteTag')}
 				deleteWarning={t('nfc.deleteTagWarning')}
 				onConfirmDelete={onConfirmDelete}

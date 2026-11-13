@@ -182,7 +182,12 @@
 		"noTags": "Noch keine NFC-Tags",
 		"noTagsHint": "Tippe auf „Tag scannen“ und berühre dann ein physisches NFC-Tag, um es zu registrieren.",
 		"scan": "Tag scannen",
-		"scanning": "Warte auf ein NFC-Tag… Berühre ein NFC-Tag, um es hinzuzufügen."
+		"scanning": "Warte auf ein NFC-Tag… Berühre ein NFC-Tag, um es hinzuzufügen.",
+		"reprogramTag": "Tag neu programmieren",
+		"reprogramming": "Warte… Berühre den Tag, um den NFC-Datensatz zu schreiben.",
+		"programFailed": "Der Tag wurde registriert, aber der NFC-Datensatz konnte nicht geschrieben werden. Er öffnet die App nicht aus dem Hintergrund — Scannen im Vordergrund funktioniert weiterhin.",
+		"programmedTitle": "Tag programmiert",
+		"programmed": "Der NFC-Datensatz wurde geschrieben. Der Tag öffnet die App nun direkt aus dem Hintergrund."
 	},
 	"name": "Name",
 	"number": "Nummer",

@@ -12,8 +12,16 @@ import {BaseScreen} from 'src/ui/BaseScreen';
 import {ColorIndicator} from 'src/ui/ColorIndicator';
 import {DividedList} from 'src/ui/DividedList';
 import {ListItem} from 'src/ui/ListItem';
-import {selectIsNfcScanning, selectNfcTagList} from '../context/nfcSelectors';
-import {nfcScanningStarted, nfcScanningStopped} from '../context/nfcSlice';
+import {
+	selectIsNfcScanning,
+	selectNfcReprogrammingTagId,
+	selectNfcTagList,
+} from '../context/nfcSelectors';
+import {
+	nfcReprogrammingStopped,
+	nfcScanningStarted,
+	nfcScanningStopped,
+} from '../context/nfcSlice';
 import type {NfcTag} from '../types';
 import {NfcTagItemContextMenu} from './NfcTagItemContextMenu';
 
@@ -208,6 +216,7 @@ export const NfcTagsScreen = () => {
 	const theme = useTheme();
 	const tags = useAppSelector(selectNfcTagList);
 	const isScanning = useAppSelector(selectIsNfcScanning);
+	const reprogrammingTagId = useAppSelector(selectNfcReprogrammingTagId);
 	const dynamicStyles = useStyle(
 		() => ({
 			helpText: {color: theme.colors.onSurfaceVariant},
@@ -216,13 +225,24 @@ export const NfcTagsScreen = () => {
 		[theme.colors.onSurfaceVariant, theme.colors.primaryContainer],
 	);
 
+	const isWaitingForTag = isScanning || reprogrammingTagId !== undefined;
+
+	let bannerText: string | undefined;
+	if (isScanning) {
+		bannerText = t('nfc.scanning');
+	} else if (reprogrammingTagId !== undefined) {
+		bannerText = t('nfc.reprogramming');
+	}
+
 	const onScan = useCallback(() => {
 		if (isScanning) {
 			dispatch(nfcScanningStopped());
+		} else if (reprogrammingTagId !== undefined) {
+			dispatch(nfcReprogrammingStopped());
 		} else {
 			dispatch(nfcScanningStarted());
 		}
-	}, [dispatch, isScanning]);
+	}, [dispatch, isScanning, reprogrammingTagId]);
 
 	if (tags.length === 0 && !isScanning) {
 		return (
@@ -245,19 +265,19 @@ export const NfcTagsScreen = () => {
 
 	return (
 		<BaseScreen>
-			{isScanning ? (
+			{bannerText !== undefined && (
 				<View style={[styles.banner, dynamicStyles.banner]}>
-					<Text variant="bodyMedium">{t('nfc.scanning')}</Text>
+					<Text variant="bodyMedium">{bannerText}</Text>
 				</View>
-			) : null}
+			)}
 			<DividedList
 				data={tags}
 				showDividers={false}
 				renderItem={({item}) => <NfcTagItem tag={item} />}
 			/>
 			<FAB
-				icon={isScanning ? 'stop' : 'nfc-variant'}
-				label={isScanning ? t('cancel') : t('nfc.scan')}
+				icon={isWaitingForTag ? 'stop' : 'nfc-variant'}
+				label={isWaitingForTag ? t('cancel') : t('nfc.scan')}
 				onPress={onScan}
 				style={styles.fab}
 			/>
