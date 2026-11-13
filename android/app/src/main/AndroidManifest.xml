@@ -36,21 +36,28 @@
         <category android:name="android.intent.category.BROWSABLE" />
         <data android:scheme="kimai" />
       </intent-filter>
-      <intent-filter>
-        <action android:name="android.nfc.action.TAG_DISCOVERED" />
+      <!--
+        The MIME-scoped NDEF_DISCOVERED filter is what lets a tagged tap open
+        the app directly (no OS "Open with…" disambiguation dialog): only tags
+        carrying an NDEF record with the application/x.kimai MIME type match it,
+        and no other app declares that MIME type. The generic NDEF_DISCOVERED
+        and TAG_DISCOVERED filters below remain as fallbacks so unprogrammed
+        (legacy) tags are still routed here and can be re-programmed during
+        scanning.
+      -->
+      <intent-filter android:priority="1">
+        <action android:name="android.nfc.action.NDEF_DISCOVERED" />
         <category android:name="android.intent.category.DEFAULT" />
+        <data android:mimeType="application/x.kimai" />
       </intent-filter>
       <intent-filter>
         <action android:name="android.nfc.action.NDEF_DISCOVERED" />
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
       <intent-filter>
-        <action android:name="android.nfc.action.TECH_DISCOVERED" />
+        <action android:name="android.nfc.action.TAG_DISCOVERED" />
         <category android:name="android.intent.category.DEFAULT" />
       </intent-filter>
-      <meta-data
-        android:name="android.nfc.action.TECH_DISCOVERED"
-        android:resource="@xml/nfc_tech_filter" />
     </activity>
     <receiver
       android:name=".TimesheetWidgetProvider"

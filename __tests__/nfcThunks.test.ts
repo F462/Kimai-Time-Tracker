@@ -1,4 +1,6 @@
 import {configureStore} from '@reduxjs/toolkit';
+import {Ndef} from 'react-native-nfc-manager';
+import NfcManager from 'react-native-nfc-manager';
 
 import {
 	activeTimesheetReducer,
@@ -52,6 +54,36 @@ describe('nfcRegisterTag', () => {
 	it('registers the tag with a default name and stops scanning', async () => {
 		const store = configureTestStore() as TestStore;
 		store.dispatch(nfcScanningStarted());
+
+		await store.dispatch(nfcRegisterTag(TAG_ID));
+
+		const {tags, isScanning} = store.getState().nfc;
+		expect(isScanning).toBe(false);
+		expect(Object.keys(tags)).toEqual([TAG_ID]);
+		expect(tags[TAG_ID].name).toBe('NFC 1234');
+	});
+
+	it('programs the tag with the application/x.kimai NDEF record', async () => {
+		const store = configureTestStore() as TestStore;
+		store.dispatch(nfcScanningStarted());
+
+		await store.dispatch(nfcRegisterTag(TAG_ID));
+
+		expect(Ndef.mimeMediaRecord).toHaveBeenCalledWith(
+			'application/x.kimai',
+			expect.anything(),
+		);
+		expect(Ndef.encodeMessage).toHaveBeenCalledWith(expect.any(Array));
+		expect(NfcManager.writeNdefMessage).toHaveBeenCalledWith(expect.any(Array));
+	});
+
+	it('still registers the tag when writing the NDEF record fails', async () => {
+		const store = configureTestStore() as TestStore;
+		store.dispatch(nfcScanningStarted());
+
+		(NfcManager.writeNdefMessage as jest.Mock).mockRejectedValueOnce(
+			new Error('Tag is read-only'),
+		);
 
 		await store.dispatch(nfcRegisterTag(TAG_ID));
 

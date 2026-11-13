@@ -46,7 +46,22 @@ const NfcManager = {
 	setEventListener: jest.fn(),
 	getBackgroundTag: jest.fn(() => Promise.resolve(null)),
 	clearBackgroundTag: jest.fn(() => Promise.resolve()),
+	writeNdefMessage: jest.fn(() => Promise.resolve()),
+	getNdefMessage: jest.fn(() => Promise.resolve(null)),
+	getNdefStatus: jest.fn(() =>
+		Promise.resolve({status: 2, capacity: 160}),
+	),
 };
 
-export {NfcError, NfcEvents, NfcTech};
+const Ndef = {
+	mimeMediaRecord: jest.fn((mimeType, payload) => ({
+		tnf: 4,
+		type: mimeType,
+		id: [],
+		payload: payload || [],
+	})),
+	encodeMessage: jest.fn((records) => records || []),
+};
+
+export {Ndef, NfcError, NfcEvents, NfcTech};
 export default NfcManager;
