@@ -245,6 +245,11 @@
 	"dailyWorkingHoursReachedBody": "Sie haben heute {{hours}} Stunden gearbeitet.",
 	"dailyWorkingHoursNotificationSettings": "Benachrichtigung zur täglichen Arbeitszeit",
 	"manageDailyWorkingHoursNotificationSettings": "Diese Benachrichtigung in den Systemeinstellungen verwalten oder deaktivieren.",
+	"activeTimesheetChannel": "Aktive Zeiterfassung",
+	"activeTimesheetNotificationTitle": "Zeiterfassung aktiv",
+	"activeTimesheetNotificationBody": "Aktuell: {{current}} · Heute: {{total}}",
+	"activeTimesheetNotificationSettings": "Benachrichtigung über aktive Zeiterfassung",
+	"manageActiveTimesheetNotificationSettings": "Zeigt die laufende Zeiterfassung und die Gesamtzeit des heutigen Arbeitstages in einer dauerhaften Benachrichtigung.",
 	"notificationsTitle": "Benachrichtigungen",
 	"workedTime": "Gearbeitete Zeit"
 }

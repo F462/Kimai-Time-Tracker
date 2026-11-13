@@ -23,6 +23,9 @@ const initialState: SettingsState = {
 	appTheme: AppTheme.SYSTEM,
 	isDarkOledEnabled: false,
 	isBiometricsToUnlockEnabled: false,
+	// The active-timesheet notification is a feature the user may rely on to
+	// keep an eye on the running timesheet, so it is on by default.
+	isActiveTimesheetNotificationEnabled: true,
 	automaticBackupIntervalDays: 0,
 	lastAutomaticBackupAt: null,
 	workContractHoursPerDay: DEFAULT_WORK_CONTRACT_HOURS,
@@ -50,6 +53,12 @@ const settingsSlice = createSlice({
 			{payload: biometricsEnabled}: PayloadAction<boolean>,
 		) => {
 			state.isBiometricsToUnlockEnabled = biometricsEnabled;
+		},
+		activeTimesheetNotificationEnabledSet: (
+			state,
+			{payload: enabled}: PayloadAction<boolean>,
+		) => {
+			state.isActiveTimesheetNotificationEnabled = enabled;
 		},
 		automaticBackupIntervalDaysSet: (
 			state,
@@ -149,6 +158,7 @@ export const {
 	appThemeSet,
 	darkOledEnabledSet,
 	biometricsToUnlockEnabledStateSet,
+	activeTimesheetNotificationEnabledSet,
 	automaticBackupIntervalDaysSet,
 	automaticBackupCompleted,
 	workContractHoursPerDaySet,

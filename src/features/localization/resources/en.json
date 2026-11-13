@@ -245,6 +245,11 @@
 	"dailyWorkingHoursReachedBody": "You have worked {{hours}} hours today.",
 	"dailyWorkingHoursNotificationSettings": "Daily working-hours notification",
 	"manageDailyWorkingHoursNotificationSettings": "Manage or turn off this notification in system settings.",
+	"activeTimesheetChannel": "Active timesheet",
+	"activeTimesheetNotificationTitle": "Time tracking active",
+	"activeTimesheetNotificationBody": "Current: {{current}} · Today: {{total}}",
+	"activeTimesheetNotificationSettings": "Active timesheet notification",
+	"manageActiveTimesheetNotificationSettings": "Show the running timesheet and today's workday total in a persistent notification.",
 	"notificationsTitle": "Notifications",
 	"workedTime": "Worked time"
 }

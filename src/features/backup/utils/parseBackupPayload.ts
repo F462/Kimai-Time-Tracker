@@ -123,6 +123,10 @@ const normalizeSettings = (value: unknown): unknown => {
 			typeof value.isBiometricsToUnlockEnabled === 'boolean'
 				? value.isBiometricsToUnlockEnabled
 				: false,
+		isActiveTimesheetNotificationEnabled:
+			typeof value.isActiveTimesheetNotificationEnabled === 'boolean'
+				? value.isActiveTimesheetNotificationEnabled
+				: true,
 		automaticBackupIntervalDays: [0, 1, 7, 14, 30].includes(
 			value.automaticBackupIntervalDays as number,
 		)

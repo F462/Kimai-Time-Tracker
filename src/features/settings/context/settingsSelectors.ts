@@ -19,6 +19,11 @@ export const selectIsBiometricsToUnlockEnabled = createSelector(
 	(settings) => settings.isBiometricsToUnlockEnabled,
 );
 
+export const selectIsActiveTimesheetNotificationEnabled = createSelector(
+	[selectSettingsState],
+	(settings) => settings.isActiveTimesheetNotificationEnabled === true,
+);
+
 export const selectAutomaticBackupIntervalDays = createSelector(
 	[selectSettingsState],
 	(settings) => settings.automaticBackupIntervalDays ?? 0,
